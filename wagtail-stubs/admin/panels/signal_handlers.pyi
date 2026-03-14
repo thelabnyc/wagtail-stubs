@@ -1,0 +1,3 @@
+from typing import Any
+
+def reset_edit_handler_cache(**kwargs: Any) -> None: ...

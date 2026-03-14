@@ -1,0 +1,33 @@
+from typing import Any, TypeVar, overload
+
+from django.db import models
+
+from wagtail.admin.admin_url_finder import ModelAdminURLFinder
+from wagtail.admin.menu import MenuItem
+
+_T = TypeVar("_T")
+
+class SettingMenuItem(MenuItem):
+    model: type[models.Model]
+    permission_policy: Any
+    def __init__(self, model: type[models.Model], icon: str = "cog", classname: str = "", **kwargs: Any) -> None: ...
+    def is_shown(self, request: Any) -> bool: ...
+
+class SiteSettingAdminURLFinder(ModelAdminURLFinder):
+    def construct_edit_url(self, instance: models.Model) -> str: ...
+
+class GenericSettingAdminURLFinder(ModelAdminURLFinder):
+    def construct_edit_url(self, instance: models.Model) -> str: ...
+
+class Registry(list[type[models.Model]]):
+    def __init__(self) -> None: ...
+    def register(self, model: type[models.Model], icon: str = "cog", **kwargs: Any) -> None: ...
+    def register_decorator(self, model: type[_T] | None = None, icon: str = "cog", **kwargs: Any) -> type[_T]: ...
+    def get_by_natural_key(self, app_label: str, model_name: str) -> type[models.Model]: ...
+
+registry: Registry
+
+@overload
+def register_setting(model: type[_T]) -> type[_T]: ...
+@overload
+def register_setting(model: None = None, icon: str = "cog", **kwargs: Any) -> Any: ...

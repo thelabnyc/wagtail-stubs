@@ -1,0 +1,88 @@
+from _typeshed import Incomplete
+from django.utils.functional import cached_property as cached_property
+from wagtail import hooks as hooks
+from wagtail.admin.ui.components import Component as Component
+from wagtail.models import DraftStateMixin as DraftStateMixin, LockableMixin as LockableMixin, WorkflowMixin as WorkflowMixin
+from wagtail.snippets.permissions import get_permission_name as get_permission_name
+
+class ActionMenuItem(Component):
+    order: int
+    template_name: str
+    label: str
+    name: Incomplete
+    classname: str
+    icon_name: str
+    def __init__(self, order=None) -> None: ...
+    def is_shown(self, context): ...
+    def get_context_data(self, parent_context): ...
+    def get_url(self, parent_context) -> None: ...
+
+class PublishMenuItem(ActionMenuItem):
+    name: str
+    label: Incomplete
+    icon_name: str
+    template_name: str
+    def is_shown(self, context): ...
+
+class SubmitForModerationMenuItem(ActionMenuItem):
+    name: str
+    label: Incomplete
+    icon_name: str
+    def is_shown(self, context): ...
+    def get_context_data(self, parent_context): ...
+
+class WorkflowMenuItem(ActionMenuItem):
+    template_name: str
+    name: Incomplete
+    label: Incomplete
+    launch_modal: Incomplete
+    icon_name: Incomplete
+    def __init__(self, name, label, launch_modal, *args, **kwargs) -> None: ...
+    def get_context_data(self, parent_context): ...
+    def is_shown(self, context): ...
+    def get_url(self, parent_context): ...
+
+class RestartWorkflowMenuItem(ActionMenuItem):
+    label: Incomplete
+    name: str
+    classname: str
+    icon_name: str
+    def is_shown(self, context): ...
+
+class CancelWorkflowMenuItem(ActionMenuItem):
+    label: Incomplete
+    name: str
+    icon_name: str
+    def is_shown(self, context): ...
+
+class UnpublishMenuItem(ActionMenuItem):
+    label: Incomplete
+    name: str
+    icon_name: str
+    def is_shown(self, context): ...
+    def get_url(self, context): ...
+
+class SaveMenuItem(ActionMenuItem):
+    name: str
+    label: Incomplete
+    icon_name: str
+    template_name: str
+
+class LockedMenuItem(ActionMenuItem):
+    name: str
+    label: Incomplete
+    template_name: str
+    def is_shown(self, context): ...
+
+def get_base_snippet_action_menu_items(model): ...
+
+class SnippetActionMenu:
+    template: str
+    request: Incomplete
+    context: Incomplete
+    menu_items: Incomplete
+    default_item: Incomplete
+    def __init__(self, request, **kwargs) -> None: ...
+    def render_html(self): ...
+    @cached_property
+    def media(self): ...

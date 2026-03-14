@@ -1,0 +1,3 @@
+from wagtail.permissions import page_permission_policy as page_permission_policy
+
+def get_site_for_user(user): ...

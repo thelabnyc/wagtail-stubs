@@ -1,0 +1,6 @@
+from django.views import View
+from wagtail.users.models import UserProfile as UserProfile
+
+class DismissiblesView(View):
+    def get(self, request, *args, **kwargs): ...
+    def patch(self, request, *args, **kwargs): ...

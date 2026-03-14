@@ -1,0 +1,3 @@
+from typing import Any
+
+def update_index_task(*args: Any, **kwargs: Any) -> None: ...

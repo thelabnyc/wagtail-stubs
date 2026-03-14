@@ -1,0 +1,3 @@
+from django.contrib.contenttypes.models import ContentType
+
+def get_default_page_content_type() -> ContentType: ...

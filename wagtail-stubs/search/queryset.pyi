@@ -1,0 +1,6 @@
+from typing import Any
+
+class SearchableQuerySetMixin:
+    def search(self, query: str | Any = ..., fields: list[str] | None = None, operator: str | None = None, order_by_relevance: bool = True, backend: str = "default") -> Any: ...
+
+def get_search_backend(backend: str = "default", **kwargs: Any) -> Any: ...

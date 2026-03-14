@@ -1,0 +1,3 @@
+from wagtail.models import Page as Page
+
+def set_page_position(request, page_to_move_id): ...

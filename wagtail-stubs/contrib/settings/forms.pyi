@@ -1,0 +1,19 @@
+from _typeshed import Incomplete
+from django import forms
+from wagtail.models import GroupSitePermission as GroupSitePermission, Site as Site
+
+class SiteSwitchForm(forms.Form):
+    site: Incomplete
+    def __init__(self, current_site, model, sites, **kwargs) -> None: ...
+    @classmethod
+    def get_change_url(cls, site, model): ...
+
+class SitePermissionForm(forms.Form):
+    template_name: str
+    sites: Incomplete
+    permission: Incomplete
+    instance: Incomplete
+    def __init__(self, *args, instance, **kwargs) -> None: ...
+    def get_existing_permissions(self): ...
+    def as_admin_panel(self): ...
+    def save(self) -> None: ...

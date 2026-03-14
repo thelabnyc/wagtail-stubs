@@ -1,0 +1,3 @@
+TAGS_AUTOCOMPLETE_LIMIT: int
+
+def autocomplete(request, app_name=None, model_name=None): ...

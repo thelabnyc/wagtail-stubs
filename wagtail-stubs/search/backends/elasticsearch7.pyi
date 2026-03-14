@@ -1,0 +1,11 @@
+from modelsearch.backends.elasticsearch7 import *
+from modelsearch.backends.elasticsearch7 import Elasticsearch7AutocompleteQueryCompiler as _Elasticsearch7AutocompleteQueryCompiler, Elasticsearch7SearchBackend as _Elasticsearch7SearchBackend, Elasticsearch7SearchQueryCompiler as _Elasticsearch7SearchQueryCompiler
+from wagtail.search.backends.deprecation import IndexOptionMixin as IndexOptionMixin, LegacyContentTypeMatchMixin as LegacyContentTypeMatchMixin
+
+class Elasticsearch7SearchQueryCompiler(LegacyContentTypeMatchMixin, _Elasticsearch7SearchQueryCompiler): ...
+class Elasticsearch7AutocompleteQueryCompiler(LegacyContentTypeMatchMixin, _Elasticsearch7AutocompleteQueryCompiler): ...
+
+class Elasticsearch7SearchBackend(IndexOptionMixin, _Elasticsearch7SearchBackend):
+    query_compiler_class = Elasticsearch7SearchQueryCompiler
+    autocomplete_query_compiler_class = Elasticsearch7AutocompleteQueryCompiler
+SearchBackend = Elasticsearch7SearchBackend

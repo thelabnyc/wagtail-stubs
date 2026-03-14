@@ -1,0 +1,63 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wagtail-stubs"
+version = "7.0.0"
+description = "PEP 561 type stubs for wagtail"
+readme = "README.md"
+license = { text = "ISC" }
+dependencies = [
+    "wagtail>=7.0,<7.1",
+    "django-stubs>=5.2.0",
+    "django-modelcluster-stubs>=6.4.0",
+    "django-treebeard-stubs>=5.0.0",
+    "django-permissionedforms-stubs>=0.1.0",
+    "telepath-stubs>=0.3.0",
+    "laces-stubs>=0.1.0",
+    "willow-stubs>=1.13.0",
+]
+requires-python = ">=3.12"
+
+[[project.authors]]
+name = "thelab"
+email = "thelabdev@thelab.co"
+
+[project.urls]
+Homepage = "https://gitlab.com/thelabnyc/stubs/wagtail-stubs"
+Repository = "https://gitlab.com/thelabnyc/stubs/wagtail-stubs"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+    "django-stubs>=5.2.9",
+    "pytest>=8.0",
+    "pytest-mypy-plugins>=3.0",
+    "tox>=4.49.0",
+    "tox-uv>=1.33.1",
+    "ruff>=0.15.5",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["wagtail-stubs"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "PYI"]
+
+[tool.ruff.lint.isort]
+from-first = true
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+annotated_tag = true
+gpg_sign = true
+tag_format = "v$version"
+update_changelog_on_bump = true
+changelog_merge_prerelease = true
+version_provider = "pep621"
+version_scheme = "pep440"
+version_files = ["pyproject.toml:version"]

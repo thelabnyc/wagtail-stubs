@@ -1,0 +1,2 @@
+from wagtail.signals import init_new_page as init_new_page
+from wagtail.utils.deprecation import RemovedInWagtail80Warning as RemovedInWagtail80Warning

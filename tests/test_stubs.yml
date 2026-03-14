@@ -1,0 +1,103 @@
+- case: page_model
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import Page
+    page = Page()
+    reveal_type(page.title)  # N: Revealed type is "builtins.str"
+
+- case: stream_field
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.fields import StreamField
+    from wagtail.blocks import CharBlock, StructBlock
+    field = StreamField([("text", CharBlock())])
+
+- case: register_hook
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail import hooks
+    @hooks.register("after_create_page")
+    def my_hook(request: object, page: object) -> None:
+        pass
+
+- case: panels
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
+    panels = [
+        FieldPanel("title"),
+        MultiFieldPanel([
+            FieldPanel("date"),
+        ], heading="Date"),
+    ]
+
+- case: blocks
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.blocks import StructBlock, CharBlock, StreamBlock
+    class PersonBlock(StructBlock):
+        first_name = CharBlock()
+        last_name = CharBlock()
+    class ContentStream(StreamBlock):
+        person = PersonBlock()
+
+- case: image_model
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.images.models import Image, AbstractImage
+
+- case: snippet
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.snippets.models import register_snippet
+    from django.db import models
+    @register_snippet
+    class Advert(models.Model):
+        text = models.CharField(max_length=255)
+
+- case: search_index
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.search import index
+    field = index.SearchField("title")
+    reveal_type(field)  # N: Revealed type is "wagtail.search.index.SearchField"

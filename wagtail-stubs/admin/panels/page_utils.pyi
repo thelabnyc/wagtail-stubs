@@ -1,0 +1,3 @@
+from typing import Any
+
+def _get_page_edit_handler(cls: type) -> Any: ...

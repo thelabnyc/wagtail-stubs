@@ -1,0 +1,3 @@
+from .base import Panel
+
+class CommentPanel(Panel): ...

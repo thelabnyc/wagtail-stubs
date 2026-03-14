@@ -1,0 +1,3 @@
+from django.forms import widgets
+
+class AdminAutoHeightTextInput(widgets.Textarea): ...

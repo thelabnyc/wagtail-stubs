@@ -1,0 +1,5 @@
+from _typeshed import Incomplete
+from wagtail.documents import get_document_model_string as get_document_model_string
+from wagtail.permission_policies.collections import CollectionOwnershipPermissionPolicy as CollectionOwnershipPermissionPolicy
+
+permission_policy: Incomplete

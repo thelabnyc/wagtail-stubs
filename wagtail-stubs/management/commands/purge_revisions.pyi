@@ -1,0 +1,9 @@
+from django.core.management.base import BaseCommand
+from wagtail.models import Revision as Revision, WorkflowState as WorkflowState
+
+class Command(BaseCommand):
+    help: str
+    def add_arguments(self, parser) -> None: ...
+    def handle(self, *args, **options) -> None: ...
+
+def purge_revisions(days=None, pages: bool = True, non_pages: bool = True): ...

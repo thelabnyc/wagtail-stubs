@@ -1,0 +1,99 @@
+from _typeshed import Incomplete
+from django.utils.functional import cached_property as cached_property, classproperty
+from django_filters.filters import ChoiceFilter, ModelMultipleChoiceFilter
+from wagtail import hooks as hooks
+from wagtail.admin.filters import DateRangePickerWidget as DateRangePickerWidget, MultipleContentTypeFilter as MultipleContentTypeFilter, MultipleUserFilter as MultipleUserFilter, WagtailFilterSet as WagtailFilterSet
+from wagtail.admin.ui.components import MediaContainer as MediaContainer
+from wagtail.admin.ui.side_panels import PageStatusSidePanel as PageStatusSidePanel
+from wagtail.admin.ui.tables import DateColumn as DateColumn
+from wagtail.admin.ui.tables.pages import BulkActionsColumn as BulkActionsColumn, NavigateToChildrenColumn as NavigateToChildrenColumn, PageStatusColumn as PageStatusColumn, PageTable as PageTable, PageTitleColumn as PageTitleColumn, PageTypeColumn as PageTypeColumn, ParentPageColumn as ParentPageColumn
+from wagtail.admin.views import generic as generic
+from wagtail.models import Page as Page, PageLogEntry as PageLogEntry, Site as Site, get_page_content_types as get_page_content_types
+from wagtail.permissions import page_permission_policy as page_permission_policy
+
+class SiteFilter(ModelMultipleChoiceFilter):
+    def get_filter_predicate(self, v): ...
+
+class HasChildPagesFilter(ChoiceFilter):
+    def filter(self, qs, value): ...
+
+class EditedByFilter(MultipleUserFilter):
+    def filter(self, qs, value): ...
+
+class PageFilterSet(WagtailFilterSet):
+    latest_revision_created_at: Incomplete
+    owner: Incomplete
+    edited_by: Incomplete
+    site: Incomplete
+    has_child_pages: Incomplete
+    class Meta:
+        model = Page
+        fields: Incomplete
+
+class GenericPageFilterSet(PageFilterSet):
+    content_type: Incomplete
+
+class PageListingMixin:
+    template_name: str
+    context_object_name: str
+    table_class = PageTable
+    filterset_class = GenericPageFilterSet
+    default_ordering: str
+    model = Page
+    is_searchable: bool
+    columns: Incomplete
+    @cached_property
+    def i18n_enabled(self): ...
+    @cached_property
+    def show_locale_labels(self): ...
+    def get_valid_orderings(self): ...
+    def get_ordering(self): ...
+    def annotate_queryset(self, pages): ...
+    def order_queryset(self, queryset): ...
+    def search_queryset(self, queryset): ...
+    def get_table_kwargs(self): ...
+    def get_context_data(self, **kwargs): ...
+
+class IndexView(PageListingMixin, generic.IndexView):
+    permission_policy = page_permission_policy
+    any_permission_required: Incomplete
+    template_name: str
+    results_template_name: str
+    paginate_by: int
+    table_classname: str
+    filterset_class = PageFilterSet
+    @classproperty
+    def columns(cls): ...
+    def get_base_queryset(self): ...
+
+class ExplorableIndexView(IndexView):
+    template_name: str
+    results_template_name: str
+    index_url_name: str
+    index_results_url_name: str
+    page_title: Incomplete
+    filterset_class = GenericPageFilterSet
+    sort_order_field: str
+    @classproperty
+    def columns(cls): ...
+    parent_page: Incomplete
+    scheduled_page: Incomplete
+    locale: Incomplete
+    translations: Incomplete
+    def get(self, request, parent_page_id=None): ...
+    @cached_property
+    def is_searching_whole_tree(self): ...
+    @cached_property
+    def show_locale_labels(self): ...
+    def get_base_queryset(self): ...
+    def search_queryset(self, queryset): ...
+    def get_index_url(self): ...
+    def get_index_results_url(self): ...
+    def get_history_url(self): ...
+    def get_reorder_url(self): ...
+    def get_table_kwargs(self): ...
+    def get_ordering(self): ...
+    def get_page_subtitle(self): ...
+    def get_context_data(self, **kwargs): ...
+    def get_side_panels(self): ...
+    def get_translations(self): ...

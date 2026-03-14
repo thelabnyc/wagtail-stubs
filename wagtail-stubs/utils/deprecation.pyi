@@ -1,0 +1,13 @@
+from _typeshed import Incomplete
+
+class RemovedInWagtail80Warning(DeprecationWarning): ...
+removed_in_next_version_warning = RemovedInWagtail80Warning
+
+class RemovedInWagtail90Warning(PendingDeprecationWarning): ...
+
+class MovedDefinitionHandler:
+    real_module: Incomplete
+    moved_definitions: Incomplete
+    warning_class: Incomplete
+    def __init__(self, real_module, moved_definitions, warning_class) -> None: ...
+    def __getattr__(self, name): ...

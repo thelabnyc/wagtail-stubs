@@ -1,0 +1,2 @@
+from wagtail.admin.telepath.widgets import CheckboxInputAdapter as CheckboxInputAdapter, RadioSelectAdapter as RadioSelectAdapter, SelectAdapter as SelectAdapter, ValidationErrorAdapter as ValidationErrorAdapter, WidgetAdapter as WidgetAdapter
+from wagtail.utils.deprecation import RemovedInWagtail80Warning as RemovedInWagtail80Warning

@@ -1,0 +1,13 @@
+from _typeshed import Incomplete
+from wagtail.actions.unpublish import UnpublishAction as UnpublishAction, UnpublishPermissionError as UnpublishPermissionError
+from wagtail.signals import page_unpublished as page_unpublished
+
+logger: Incomplete
+
+class UnpublishPagePermissionError(UnpublishPermissionError): ...
+
+class UnpublishPageAction(UnpublishAction):
+    include_descendants: Incomplete
+    def __init__(self, page, set_expired: bool = False, commit: bool = True, user=None, log_action: bool = True, include_descendants: bool = False) -> None: ...
+    def check(self, skip_permission_checks: bool = False) -> None: ...
+    def execute(self, skip_permission_checks: bool = False) -> None: ...

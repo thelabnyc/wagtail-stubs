@@ -1,0 +1,16 @@
+from _typeshed import Incomplete
+from collections.abc import Generator
+from django.core.paginator import Paginator
+from django.utils.functional import cached_property as cached_property
+
+class WagtailPaginator(Paginator):
+    num_page_buttons: int
+    @cached_property
+    def model(self): ...
+    @cached_property
+    def verbose_name(self): ...
+    @cached_property
+    def verbose_name_plural(self): ...
+    @cached_property
+    def items_count_label(self): ...
+    def get_elided_page_range(self, page_number) -> Generator[Incomplete, Incomplete, Incomplete]: ...

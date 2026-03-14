@@ -1,0 +1,3 @@
+from ..v2.views import DocumentsAPIViewSet as DocumentsAPIViewSet
+
+class DocumentsAdminAPIViewSet(DocumentsAPIViewSet): ...
