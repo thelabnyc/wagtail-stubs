@@ -1,3 +1,3 @@
-from _typeshed import Incomplete
+from typing import Any
 
-AdminDocumentChooser: Incomplete
+AdminDocumentChooser: type[Any]

@@ -1,4 +1,5 @@
-from _typeshed import Incomplete
+import logging
+import re
 from collections.abc import Generator, Iterable
 from contextlib import contextmanager
 from django.core.cache.backends.base import BaseCache
@@ -18,8 +19,8 @@ from wagtail.search import index as index
 from wagtail.search.queryset import SearchableQuerySetMixin as SearchableQuerySetMixin
 from wagtail.utils.file import hash_filelike as hash_filelike
 
-logger: Incomplete
-IMAGE_FORMAT_EXTENSIONS: Incomplete
+logger: logging.Logger
+IMAGE_FORMAT_EXTENSIONS: dict[str, str]
 
 class SourceImageIOError(IOError): ...
 
@@ -32,12 +33,12 @@ def get_rendition_storage(): ...
 
 class ImageFileMixin:
     def is_stored_locally(self): ...
-    file_size: Incomplete
-    def get_file_size(self): ...
+    file_size: int | None
+    def get_file_size(self) -> int | None: ...
     @contextmanager
-    def open_file(self) -> Generator[Incomplete]: ...
+    def open_file(self) -> Generator[Any]: ...
     @contextmanager
-    def get_willow_image(self) -> Generator[Incomplete]: ...
+    def get_willow_image(self) -> Generator[Any]: ...
 
 class WagtailImageFieldFile(models.fields.files.ImageFieldFile):
     def get_image_dimensions(self): ...
@@ -46,30 +47,30 @@ class WagtailImageField(models.ImageField):
     attr_class = WagtailImageFieldFile
 
 class AbstractImage(ImageFileMixin, CollectionMember, index.Indexed, models.Model):
-    title: Incomplete
-    file: Incomplete
-    description: Incomplete
-    width: Incomplete
-    height: Incomplete
-    created_at: Incomplete
-    uploaded_by_user: Incomplete
-    tags: Incomplete
-    focal_point_x: Incomplete
-    focal_point_y: Incomplete
-    focal_point_width: Incomplete
-    focal_point_height: Incomplete
-    file_size: Incomplete
-    file_hash: Incomplete
-    objects: Incomplete
+    title: models.CharField[str, str]
+    file: WagtailImageField
+    description: models.CharField[str, str]
+    width: models.IntegerField[int, int]
+    height: models.IntegerField[int, int]
+    created_at: models.DateTimeField[Any, Any]
+    uploaded_by_user: models.ForeignKey[Any, Any]
+    tags: Any  # TaggableManager
+    focal_point_x: models.PositiveIntegerField[int | None, int | None]
+    focal_point_y: models.PositiveIntegerField[int | None, int | None]
+    focal_point_width: models.PositiveIntegerField[int | None, int | None]
+    focal_point_height: models.PositiveIntegerField[int | None, int | None]
+    file_size: models.PositiveIntegerField[int | None, int | None]
+    file_hash: models.CharField[str, str]
+    objects: ImageQuerySet
     decorative: bool
-    contextual_alt_text: Incomplete
+    contextual_alt_text: str | None
     def __init__(self, *args, **kwargs) -> None: ...
     def get_file_hash(self): ...
     def get_upload_to(self, filename): ...
     def get_usage(self): ...
     @property
     def usage_url(self): ...
-    search_fields: Incomplete
+    search_fields: list[Any]
     def __eq__(self, other): ...
     def __hash__(self): ...
     def get_rect(self): ...
@@ -100,18 +101,18 @@ class AbstractImage(ImageFileMixin, CollectionMember, index.Indexed, models.Mode
         abstract: bool
 
 class Image(AbstractImage):
-    admin_form_fields: Incomplete
+    admin_form_fields: tuple[str, ...]
     class Meta(AbstractImage.Meta):
-        verbose_name: Incomplete
-        verbose_name_plural: Incomplete
-        permissions: Incomplete
+        verbose_name: str
+        verbose_name_plural: str
+        permissions: list[tuple[str, str]]
 
 class Filter:
-    spec_pattern: Incomplete
-    pipe_spec_pattern: Incomplete
-    expanding_spec_pattern: Incomplete
-    pipe_expanding_spec_pattern: Incomplete
-    spec: Incomplete
+    spec_pattern: re.Pattern[str]
+    pipe_spec_pattern: re.Pattern[str]
+    expanding_spec_pattern: re.Pattern[str]
+    pipe_expanding_spec_pattern: re.Pattern[str]
+    spec: str
     def __init__(self, spec=None) -> None: ...
     @classmethod
     def expand_spec(self, spec: str | Iterable[str]) -> list[str]: ...
@@ -130,8 +131,8 @@ class Filter:
     def __hash__(self): ...
 
 class ResponsiveImage:
-    renditions: Incomplete
-    attrs: Incomplete
+    renditions: list[AbstractRendition]
+    attrs: dict[str, Any] | None
     def __init__(self, renditions: dict[str, AbstractRendition], attrs: dict[str, Any] | None = None) -> None: ...
     @classmethod
     def get_width_srcset(cls, renditions_list: list[AbstractRendition]): ...
@@ -140,23 +141,23 @@ class ResponsiveImage:
     def __eq__(self, other: ResponsiveImage): ...
 
 class FileFormat(NamedTuple):
-    name: Incomplete
-    mime_type: Incomplete
+    name: str
+    mime_type: str
 
 class Picture(ResponsiveImage):
-    source_format_order: Incomplete
-    formats: Incomplete
+    source_format_order: list[FileFormat]
+    formats: dict[str, list[AbstractRendition]]
     def __init__(self, renditions: dict[str, AbstractRendition], attrs: dict[str, Any] | None = None) -> None: ...
     def get_formats(self, renditions: dict[str, AbstractRendition]) -> dict[str, list[AbstractRendition]]: ...
     def get_fallback_format(self): ...
     def __html__(self): ...
 
 class AbstractRendition(ImageFileMixin, models.Model):
-    filter_spec: Incomplete
-    file: Incomplete
-    width: Incomplete
-    height: Incomplete
-    focal_point_key: Incomplete
+    filter_spec: models.CharField[str, str]
+    file: WagtailImageField
+    width: models.IntegerField[int, int]
+    height: models.IntegerField[int, int]
+    focal_point_key: models.CharField[str, str]
     wagtail_reference_index_ignore: bool
     @property
     def url(self): ...
@@ -193,6 +194,6 @@ class AbstractRendition(ImageFileMixin, models.Model):
         abstract: bool
 
 class Rendition(AbstractRendition):
-    image: Incomplete
+    image: models.ForeignKey[Image, Image]
     class Meta:
-        unique_together: Incomplete
+        unique_together: tuple[tuple[str, ...], ...]

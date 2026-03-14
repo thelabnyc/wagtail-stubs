@@ -1,7 +1,8 @@
-from _typeshed import Incomplete
+import re
+
 from wagtail import hooks as hooks
 
-icon_comment_pattern: Incomplete
+icon_comment_pattern: re.Pattern[str]
 
 def get_icons(): ...
 def get_icon_sprite_hash(): ...

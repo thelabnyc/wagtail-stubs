@@ -1,7 +1,6 @@
 import functools
-from _typeshed import Incomplete
 
-WAGTAILADMIN_PROVIDED_LANGUAGES: Incomplete
+WAGTAILADMIN_PROVIDED_LANGUAGES: list[tuple[str, str]]
 
 def get_js_translation_strings(): ...
 def get_available_admin_languages(): ...

@@ -1,5 +1,5 @@
-from _typeshed import Incomplete
+from typing import IO
 
-HASH_READ_SIZE: Incomplete
+HASH_READ_SIZE: int
 
-def hash_filelike(filelike): ...
+def hash_filelike(filelike: IO[bytes]) -> str: ...

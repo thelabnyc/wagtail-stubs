@@ -1,5 +1,5 @@
 import django_filters
-from _typeshed import Incomplete
+from typing import Any
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.filters import DateRangePickerWidget as DateRangePickerWidget, RelatedFilterMixin as RelatedFilterMixin, WagtailFilterSet as WagtailFilterSet
@@ -16,10 +16,10 @@ from wagtail.search import index as index
 from wagtail.users.forms import UserCreationForm as UserCreationForm, UserEditForm as UserEditForm
 from wagtail.users.utils import user_can_delete_user as user_can_delete_user
 
-User: Incomplete
-add_user_perm: Incomplete
-change_user_perm: Incomplete
-delete_user_perm: Incomplete
+User: Any
+add_user_perm: str
+change_user_perm: str
+delete_user_perm: str
 
 class UserColumn(TitleColumn):
     cell_template_name: str
@@ -27,19 +27,19 @@ class UserColumn(TitleColumn):
 class GroupFilter(RelatedFilterMixin, django_filters.ModelMultipleChoiceFilter): ...
 
 class UserFilterSet(WagtailFilterSet):
-    is_superuser: Incomplete
-    last_login: Incomplete
+    is_superuser: django_filters.BooleanFilter
+    last_login: django_filters.DateFromToRangeFilter
     def __init__(self, data=None, queryset=None, *, request=None, prefix=None, is_searching: bool = False) -> None: ...
     class Meta:
         model = User
-        fields: Incomplete
+        fields: list[str]
 
 class IndexView(generic.IndexView):
     template_name: str
     results_template_name: str
-    add_item_label: Incomplete
+    add_item_label: str
     context_object_name: str
-    page_title: Incomplete
+    page_title: str
     show_other_searches: bool
     @cached_property
     def columns(self): ...
@@ -54,18 +54,18 @@ class IndexView(generic.IndexView):
     def order_queryset(self, queryset): ...
 
 class CreateView(generic.CreateView):
-    success_message: Incomplete
-    page_title: Incomplete
+    success_message: str
+    page_title: str
     def run_before_hook(self): ...
     def run_after_hook(self): ...
 
 class EditView(generic.EditView):
-    success_message: Incomplete
-    error_message: Incomplete
+    success_message: str
+    error_message: str
     context_object_name: str
-    object: Incomplete
-    can_delete: Incomplete
-    editing_self: Incomplete
+    object: Any
+    can_delete: bool
+    editing_self: bool
     def setup(self, request, *args, **kwargs) -> None: ...
     def save_instance(self): ...
     def get_form_kwargs(self): ...
@@ -75,10 +75,10 @@ class EditView(generic.EditView):
     def get_context_data(self, **kwargs): ...
 
 class DeleteView(generic.DeleteView):
-    page_title: Incomplete
-    success_message: Incomplete
+    page_title: str
+    success_message: str
     context_object_name: str
-    object: Incomplete
+    object: Any
     def dispatch(self, request, *args, **kwargs): ...
     def run_before_hook(self): ...
     def run_after_hook(self): ...
@@ -89,11 +89,11 @@ class HistoryView(generic.HistoryView):
 class UserViewSet(ModelViewSet):
     icon: str
     model = User
-    ordering: Incomplete
+    ordering: str
     add_to_reference_index: bool
     filterset_class = UserFilterSet
     menu_name: str
-    menu_label: Incomplete
+    menu_label: str
     menu_order: int
     add_to_settings_menu: bool
     index_view_class = IndexView

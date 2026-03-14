@@ -1,7 +1,7 @@
-from _typeshed import Incomplete
+from rest_framework.serializers import Serializer
 
 class APIAction:
-    serializer: Incomplete
-    view: Incomplete
-    request: Incomplete
+    serializer: type[Serializer] | None
+    view: object
+    request: object
     def __init__(self, view, request) -> None: ...

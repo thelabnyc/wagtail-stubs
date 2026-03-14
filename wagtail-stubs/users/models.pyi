@@ -1,37 +1,35 @@
-from _typeshed import Incomplete
 from django.db import models
 from wagtail.admin.localization import get_available_admin_languages as get_available_admin_languages
 
 def upload_avatar_to(instance, filename): ...
 
 class UserProfile(models.Model):
-    user: Incomplete
-    submitted_notifications: Incomplete
-    approved_notifications: Incomplete
-    rejected_notifications: Incomplete
-    updated_comments_notifications: Incomplete
-    preferred_language: Incomplete
-    current_time_zone: Incomplete
-    avatar: Incomplete
-    dismissibles: Incomplete
+    user: models.OneToOneField
+    submitted_notifications: models.BooleanField
+    approved_notifications: models.BooleanField
+    rejected_notifications: models.BooleanField
+    updated_comments_notifications: models.BooleanField
+    preferred_language: models.CharField
+    current_time_zone: models.CharField
+    avatar: models.ImageField
+    dismissibles: models.JSONField
     class AdminColorThemes(models.TextChoices):
         SYSTEM = ...
         LIGHT = ...
         DARK = ...
-    theme: Incomplete
+    theme: models.CharField
     class AdminContrastThemes(models.TextChoices):
         SYSTEM = ...
         MORE_CONTRAST = ...
-    contrast: Incomplete
+    contrast: models.CharField
     class AdminDensityThemes(models.TextChoices):
         DEFAULT = ...
         SNUG = ...
-    density: Incomplete
-    keyboard_shortcuts: Incomplete
+    density: models.CharField
     @classmethod
     def get_for_user(cls, user): ...
     def get_preferred_language(self): ...
     def get_current_time_zone(self): ...
     class Meta:
-        verbose_name: Incomplete
-        verbose_name_plural: Incomplete
+        verbose_name: str
+        verbose_name_plural: str

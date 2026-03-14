@@ -1,6 +1,9 @@
-from _typeshed import Incomplete
+from collections.abc import Callable
+from typing import Any, Literal
 
-VERSION: Incomplete
-__version__: Incomplete
+from django.http import HttpRequest, HttpResponse
 
-def sendfile(request, filename, attachment: bool = False, attachment_filename=None, mimetype=None, encoding=None, backend=None): ...
+VERSION: tuple[int, int, int]
+__version__: str
+
+def sendfile(request: HttpRequest, filename: str, attachment: bool = False, attachment_filename: str | Literal[False] | None = None, mimetype: str | None = None, encoding: str | None = None, backend: Callable[..., HttpResponse] | None = None) -> HttpResponse: ...

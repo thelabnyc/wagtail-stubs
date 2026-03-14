@@ -1,4 +1,4 @@
-from _typeshed import Incomplete
+import django_filters
 from wagtail.admin.views.generic import history as history
 from wagtail.admin.views.pages.utils import GenericPageBreadcrumbsMixin as GenericPageBreadcrumbsMixin
 from wagtail.admin.widgets import BooleanRadioSelect as BooleanRadioSelect
@@ -6,7 +6,7 @@ from wagtail.models import Page as Page, PageLogEntry as PageLogEntry
 from wagtail.permissions import page_permission_policy as page_permission_policy
 
 class PageHistoryFilterSet(history.HistoryFilterSet):
-    is_commenting_action: Incomplete
+    is_commenting_action: django_filters.BooleanFilter
     def filter_is_commenting_action(self, queryset, name, value): ...
 
 class PageWorkflowHistoryViewMixin:
@@ -31,7 +31,7 @@ class PageHistoryView(GenericPageBreadcrumbsMixin, history.HistoryView):
     model = Page
     pk_url_kwarg: str
     permission_policy = page_permission_policy
-    any_permission_required: Incomplete
+    any_permission_required: set[str]
     history_url_name: str
     history_results_url_name: str
     edit_url_name: str

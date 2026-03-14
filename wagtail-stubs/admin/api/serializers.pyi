@@ -1,5 +1,4 @@
-from _typeshed import Incomplete
-from rest_framework.fields import Field
+from rest_framework.fields import Field, ReadOnlyField
 from wagtail.api.v2.serializers import PageSerializer as PageSerializer, get_serializer_class as get_serializer_class
 from wagtail.api.v2.utils import get_full_url as get_full_url
 from wagtail.models import Page as Page
@@ -27,9 +26,9 @@ class PageTranslationsField(Field):
     def to_representation(self, page): ...
 
 class AdminPageSerializer(PageSerializer):
-    status: Incomplete
-    children: Incomplete
-    descendants: Incomplete
-    ancestors: Incomplete
-    translations: Incomplete
-    admin_display_title: Incomplete
+    status: PageStatusField
+    children: PageChildrenField
+    descendants: PageDescendantsField
+    ancestors: PageAncestorsField
+    translations: PageTranslationsField
+    admin_display_title: ReadOnlyField

@@ -17,4 +17,3 @@ task_submitted: Signal
 task_cancelled: Signal
 pre_validate_delete: Signal
 copy_for_translation_done: Signal
-init_new_page: Signal

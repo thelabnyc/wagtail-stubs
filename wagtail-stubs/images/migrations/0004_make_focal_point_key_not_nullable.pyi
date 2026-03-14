@@ -1,9 +1,9 @@
-from _typeshed import Incomplete
+from typing import Any
 from django.db import migrations
 
 def remove_duplicate_renditions(apps, schema_editor) -> None: ...
 def reverse_remove_duplicate_renditions(*args, **kwargs) -> None: ...
 
 class Migration(migrations.Migration):
-    dependencies: Incomplete
-    operations: Incomplete
+    dependencies: list[tuple[str, str]]
+    operations: list[Any]

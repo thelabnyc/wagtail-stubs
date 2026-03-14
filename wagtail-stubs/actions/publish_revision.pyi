@@ -1,24 +1,32 @@
-from _typeshed import Incomplete
-from django.core.exceptions import PermissionDenied
-from wagtail.log_actions import log as log
-from wagtail.models import Revision as Revision
-from wagtail.permission_policies.base import ModelPermissionPolicy as ModelPermissionPolicy
-from wagtail.signals import published as published
-from wagtail.utils.timestamps import ensure_utc as ensure_utc
+import logging
 
-logger: Incomplete
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.core.exceptions import PermissionDenied
+from django.db import models
+
+from wagtail.models import Revision
+from wagtail.permission_policies.base import ModelPermissionPolicy
+
+logger: logging.Logger
 
 class PublishPermissionError(PermissionDenied): ...
 
 class PublishRevisionAction:
-    revision: Incomplete
-    object: Incomplete
-    permission_policy: Incomplete
-    user: Incomplete
-    changed: Incomplete
-    log_action: Incomplete
-    previous_revision: Incomplete
-    def __init__(self, revision: Revision, user=None, changed: bool = True, log_action: bool = True, previous_revision: Revision | None = None) -> None: ...
+    revision: Revision
+    object: models.Model
+    permission_policy: ModelPermissionPolicy
+    user: AbstractBaseUser | None
+    changed: bool
+    log_action: bool
+    previous_revision: Revision | None
+    def __init__(
+        self,
+        revision: Revision,
+        user: AbstractBaseUser | None = None,
+        changed: bool = True,
+        log_action: bool = True,
+        previous_revision: Revision | None = None,
+    ) -> None: ...
     def check(self, skip_permission_checks: bool = False) -> None: ...
     def log_scheduling_action(self) -> None: ...
-    def execute(self, skip_permission_checks: bool = False): ...
+    def execute(self, skip_permission_checks: bool = False) -> None: ...

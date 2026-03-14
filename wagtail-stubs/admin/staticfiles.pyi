@@ -1,7 +1,6 @@
-from _typeshed import Incomplete
 from wagtail import __version__ as __version__
 
-use_version_strings: Incomplete
-VERSION_HASH: Incomplete
+use_version_strings: bool
+VERSION_HASH: str | None
 
 def versioned_static(path) -> None: ...

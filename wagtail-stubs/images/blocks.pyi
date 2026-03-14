@@ -1,8 +1,7 @@
 from .shortcuts import get_rendition_or_not_found as get_rendition_or_not_found
-from _typeshed import Incomplete
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.compare import BlockComparison as BlockComparison, StructBlockComparison as StructBlockComparison
-from wagtail.admin.telepath import register as register
+from wagtail.telepath import register as register
 from wagtail.blocks import BooleanBlock as BooleanBlock, CharBlock as CharBlock, ChooserBlock as ChooserBlock, StructBlock as StructBlock
 from wagtail.blocks.struct_block import StructBlockAdapter as StructBlockAdapter, StructBlockValidationError as StructBlockValidationError
 from wagtail.images.models import AbstractImage as AbstractImage
@@ -22,9 +21,9 @@ class ImageChooserBlockComparison(BlockComparison):
     def htmldiff(self): ...
 
 class ImageBlock(StructBlock):
-    image: Incomplete
-    decorative: Incomplete
-    alt_text: Incomplete
+    image: ImageChooserBlock
+    decorative: BooleanBlock
+    alt_text: CharBlock
     def __init__(self, required: bool = True, **kwargs) -> None: ...
     def deconstruct(self): ...
     def deconstruct_with_lookup(self, lookup): ...

@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from django.contrib.auth.models import Group
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
@@ -15,47 +14,47 @@ class PermissionPanelFormsMixin:
     def get_permission_panel_form_kwargs(self, cls): ...
     @cached_property
     def permission_panel_forms(self): ...
-    produced_error_message: Incomplete
+    produced_error_message: bool
     def is_valid(self, form): ...
     def process_form(self): ...
     def get_context_data(self, **kwargs): ...
 
 class IndexView(generic.IndexView):
-    page_title: Incomplete
-    add_item_label: Incomplete
-    search_box_placeholder: Incomplete
-    search_fields: Incomplete
+    page_title: str
+    add_item_label: str
+    search_box_placeholder: str
+    search_fields: list[str]
     context_object_name: str
     paginate_by: int
-    columns: Incomplete
+    columns: list[TitleColumn]
 
 class CreateView(PermissionPanelFormsMixin, generic.CreateView):
-    page_title: Incomplete
-    success_message: Incomplete
-    object: Incomplete
+    page_title: str
+    success_message: str
+    object: Group
     def post(self, request, *args, **kwargs): ...
 
 class EditView(PermissionPanelFormsMixin, generic.EditView):
-    success_message: Incomplete
-    error_message: Incomplete
+    success_message: str
+    error_message: str
     context_object_name: str
     @cached_property
     def header_buttons(self): ...
-    object: Incomplete
+    object: Group
     def post(self, request, *args, **kwargs): ...
 
 class DeleteView(generic.DeleteView):
-    success_message: Incomplete
-    page_title: Incomplete
-    confirmation_message: Incomplete
+    success_message: str
+    page_title: str
+    confirmation_message: str
 
 class GroupViewSet(ModelViewSet):
     icon: str
     model = Group
-    ordering: Incomplete
+    ordering: list[str]
     add_to_reference_index: bool
     menu_name: str
-    menu_label: Incomplete
+    menu_label: str
     menu_order: int
     add_to_settings_menu: bool
     index_view_class = IndexView

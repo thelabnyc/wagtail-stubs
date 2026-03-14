@@ -1,19 +1,18 @@
 from .shortcuts import get_rendition_or_not_found as get_rendition_or_not_found
-from _typeshed import Incomplete
 from wagtail.utils.apps import get_app_submodules as get_app_submodules
 
 class Format:
-    name: Incomplete
-    label: Incomplete
-    classname: Incomplete
-    filter_spec: Incomplete
+    name: str
+    label: str
+    classname: str
+    filter_spec: str
     def __init__(self, name, label, classname, filter_spec) -> None: ...
     def editor_attributes(self, image, alt_text): ...
     def image_to_editor_html(self, image, alt_text): ...
     def image_to_html(self, image, alt_text, extra_attributes=None): ...
 
-FORMATS: Incomplete
-FORMATS_BY_NAME: Incomplete
+FORMATS: list[Format]
+FORMATS_BY_NAME: dict[str, Format]
 
 def register_image_format(format) -> None: ...
 def unregister_image_format(format_name) -> None: ...

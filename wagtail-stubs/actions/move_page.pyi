@@ -1,17 +1,29 @@
-from _typeshed import Incomplete
-from django.core.exceptions import PermissionDenied
-from wagtail.log_actions import log as log
-from wagtail.signals import post_page_move as post_page_move, pre_page_move as pre_page_move
+import logging
 
-logger: Incomplete
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.core.exceptions import PermissionDenied
+
+from wagtail.models import Page
+
+logger: logging.Logger
 
 class MovePagePermissionError(PermissionDenied): ...
 
 class MovePageAction:
-    page: Incomplete
-    target: Incomplete
-    pos: Incomplete
-    user: Incomplete
-    def __init__(self, page, target, pos=None, user=None) -> None: ...
-    def check(self, parent_after, skip_permission_checks: bool = False) -> None: ...
-    def execute(self, skip_permission_checks: bool = False): ...
+    page: Page
+    target: Page
+    pos: str | None
+    user: AbstractBaseUser | None
+    def __init__(
+        self,
+        page: Page,
+        target: Page,
+        pos: str | None = None,
+        user: AbstractBaseUser | None = None,
+    ) -> None: ...
+    def check(
+        self,
+        parent_after: Page,
+        skip_permission_checks: bool = False,
+    ) -> None: ...
+    def execute(self, skip_permission_checks: bool = False) -> None: ...

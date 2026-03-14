@@ -1,25 +1,23 @@
-from _typeshed import Incomplete
-
 class Vector:
-    x: Incomplete
-    y: Incomplete
+    x: float
+    y: float
     def __init__(self, x, y) -> None: ...
     def __iter__(self): ...
     def __getitem__(self, key): ...
     def __eq__(self, other): ...
 
 class Rect:
-    left: Incomplete
-    top: Incomplete
-    right: Incomplete
-    bottom: Incomplete
+    left: float
+    top: float
+    right: float
+    bottom: float
     def __init__(self, left, top, right, bottom) -> None: ...
-    size: Incomplete
+    size: Vector
     @property
     def width(self): ...
     @property
     def height(self): ...
-    centroid: Incomplete
+    centroid: Vector
     @property
     def x(self): ...
     @property

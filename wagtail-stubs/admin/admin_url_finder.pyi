@@ -1,11 +1,10 @@
-from _typeshed import Incomplete
 from wagtail.hooks import search_for_hooks as search_for_hooks
 from wagtail.utils.registry import ObjectTypeRegistry as ObjectTypeRegistry
 
 class ModelAdminURLFinder:
-    edit_url_name: Incomplete
-    permission_policy: Incomplete
-    user: Incomplete
+    edit_url_name: str | None
+    permission_policy: object | None
+    user: object | None
     def __init__(self, user=None) -> None: ...
     def construct_edit_url(self, instance): ...
     def get_edit_url(self, instance): ...
@@ -14,12 +13,12 @@ class NullAdminURLFinder:
     def __init__(self, user=None) -> None: ...
     def get_edit_url(self, instance) -> None: ...
 
-finder_classes: Incomplete
+finder_classes: ObjectTypeRegistry
 
 def register_admin_url_finder(model, handler) -> None: ...
 
 class AdminURLFinder:
-    user: Incomplete
-    finders_by_model: Incomplete
+    user: object | None
+    finders_by_model: dict[type, ModelAdminURLFinder | NullAdminURLFinder]
     def __init__(self, user=None) -> None: ...
     def get_edit_url(self, instance): ...

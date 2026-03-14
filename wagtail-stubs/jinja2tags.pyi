@@ -1,10 +1,13 @@
-from .templatetags.wagtailcore_tags import fullpageurl as fullpageurl, pageurl as pageurl, richtext as richtext, slugurl as slugurl, wagtail_site as wagtail_site, wagtail_version as wagtail_version
-from _typeshed import Incomplete
+from typing import Any
+
+from jinja2 import Environment
 from jinja2.ext import Extension
+from markupsafe import Markup
 
 class WagtailCoreExtension(Extension):
-    tags: Incomplete
-    def __init__(self, environment) -> None: ...
-    def parse(self, parser): ...
-    def parse_include_block(self, parser): ...
+    tags: set[str]
+    def __init__(self, environment: Environment) -> None: ...
+    def parse(self, parser: Any) -> Any: ...
+    def parse_include_block(self, parser: Any) -> Any: ...
+
 core = WagtailCoreExtension

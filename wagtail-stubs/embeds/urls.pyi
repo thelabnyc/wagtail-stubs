@@ -1,5 +1,5 @@
-from _typeshed import Incomplete
+from django.urls import URLPattern, URLResolver
 from wagtail.embeds.views import chooser as chooser
 
 app_name: str
-urlpatterns: Incomplete
+urlpatterns: list[URLPattern | URLResolver]

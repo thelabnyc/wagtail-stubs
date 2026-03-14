@@ -1,4 +1,4 @@
-from _typeshed import Incomplete
+from django.db import models
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin import messages as messages
 from wagtail.admin.auth import PermissionPolicyChecker as PermissionPolicyChecker
@@ -14,28 +14,28 @@ from wagtail.images.permissions import permission_policy as permission_policy
 from wagtail.images.utils import generate_signature as generate_signature
 from wagtail.models import ReferenceIndex as ReferenceIndex, Site as Site
 
-permission_checker: Incomplete
-Image: Incomplete
-USAGE_PAGE_SIZE: Incomplete
+permission_checker: PermissionPolicyChecker
+Image: type[models.Model]
+USAGE_PAGE_SIZE: int
 
 class ImagesFilterSet(BaseMediaFilterSet):
     permission_policy = permission_policy
     class Meta:
         model = Image
-        fields: Incomplete
+        fields: list[str]
 
 class IndexView(generic.IndexView):
-    ORDERING_OPTIONS: Incomplete
+    ORDERING_OPTIONS: dict[str, str]
     default_ordering: str
     context_object_name: str
     permission_policy = permission_policy
-    any_permission_required: Incomplete
+    any_permission_required: list[str]
     model = Image
     filterset_class = ImagesFilterSet
     show_other_searches: bool
     header_icon: str
-    page_title: Incomplete
-    add_item_label: Incomplete
+    page_title: str
+    add_item_label: str
     index_url_name: str
     index_results_url_name: str
     add_url_name: str
@@ -72,7 +72,7 @@ class TitleColumnWithFilename(TitleColumn):
 class EditView(generic.EditView):
     permission_policy = permission_policy
     pk_url_kwarg: str
-    error_message: Incomplete
+    error_message: str
     template_name: str
     index_url_name: str
     edit_url_name: str
@@ -93,23 +93,23 @@ class EditView(generic.EditView):
     def get_context_data(self, **kwargs): ...
 
 class URLGeneratorView(generic.InspectView):
-    any_permission_required: Incomplete
-    model: Incomplete
+    any_permission_required: list[str]
+    model: type[models.Model]
     pk_url_kwarg: str
     header_icon: str
     output_only: bool
-    page_title: Incomplete
+    page_title: str
     template_name: str
     output_template_name: str
     index_url_name: str
     edit_url_name: str
-    invalid_filter_error: Incomplete
+    invalid_filter_error: str
     def get_page_subtitle(self): ...
     def get_fields(self): ...
     def get_template_names(self): ...
-    object: Incomplete
-    filter_spec: Incomplete
-    form: Incomplete
+    object: models.Model
+    filter_spec: str
+    form: URLGeneratorForm
     def get(self, request, image_id, *args, **kwargs): ...
     def get_context_data(self, **kwargs): ...
     def get_filter_spec(self, filter_method, width, height, closeness): ...
@@ -117,7 +117,7 @@ class URLGeneratorView(generic.InspectView):
 def preview(request, image_id, filter_spec): ...
 
 class DeleteView(generic.DeleteView):
-    model: Incomplete
+    model: type[models.Model]
     pk_url_kwarg: str
     permission_policy = permission_policy
     permission_required: str
@@ -126,7 +126,7 @@ class DeleteView(generic.DeleteView):
     usage_url_name: str
     delete_url_name: str
     index_url_name: str
-    page_title: Incomplete
+    page_title: str
     def user_has_permission(self, permission): ...
     @property
     def confirmation_message(self): ...
@@ -137,7 +137,7 @@ class CreateView(generic.CreateView):
     index_url_name: str
     add_url_name: str
     edit_url_name: str
-    error_message: Incomplete
+    error_message: str
     template_name: str
     header_icon: str
     @cached_property
@@ -148,7 +148,7 @@ class CreateView(generic.CreateView):
     def get_success_message(self, instance): ...
 
 class UsageView(generic.UsageView):
-    model: Incomplete
+    model: type[models.Model]
     paginate_by = USAGE_PAGE_SIZE
     pk_url_kwarg: str
     permission_policy = permission_policy

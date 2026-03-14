@@ -1,13 +1,14 @@
+import logging
 import types
-from _typeshed import Incomplete
+from django.core.mail import EmailBackend
 from wagtail.coreutils import camelcase_to_underscore as camelcase_to_underscore
 from wagtail.models import AbstractGroupApprovalTask as AbstractGroupApprovalTask, Page as Page, TaskState as TaskState, WorkflowState as WorkflowState
 from wagtail.users.models import UserProfile as UserProfile
 
-logger: Incomplete
+logger: logging.Logger
 
 class OpenedConnection:
-    connection: Incomplete
+    connection: EmailBackend
     def __init__(self, connection) -> None: ...
     def __enter__(self): ...
     def __exit__(self, type: type[BaseException] | None, value: BaseException | None, traceback: types.TracebackType | None): ...
@@ -18,7 +19,7 @@ def send_notification(recipient_users, notification, extra_context): ...
 class Notifier:
     notification: str
     template_directory: str
-    valid_classes: Incomplete
+    valid_classes: tuple[type, ...]
     def __init__(self, valid_classes) -> None: ...
     def can_handle(self, instance, **kwargs): ...
     def get_valid_recipients(self, instance, **kwargs): ...

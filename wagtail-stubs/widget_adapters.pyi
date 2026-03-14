@@ -1,2 +1,27 @@
-from wagtail.admin.telepath.widgets import CheckboxInputAdapter as CheckboxInputAdapter, RadioSelectAdapter as RadioSelectAdapter, SelectAdapter as SelectAdapter, ValidationErrorAdapter as ValidationErrorAdapter, WidgetAdapter as WidgetAdapter
-from wagtail.utils.deprecation import RemovedInWagtail80Warning as RemovedInWagtail80Warning
+from django import forms
+from django.core.exceptions import ValidationError
+from django.utils.functional import cached_property
+
+from wagtail.telepath import Adapter
+
+class WidgetAdapter(Adapter):
+    js_constructor: str
+    def js_args(self, widget: forms.Widget) -> list[object]: ...
+    def get_media(self, widget: forms.Widget) -> forms.Media: ...
+    @cached_property
+    def media(self) -> forms.Media: ...
+
+class CheckboxInputAdapter(WidgetAdapter):
+    js_constructor: str
+
+class RadioSelectAdapter(WidgetAdapter):
+    js_constructor: str
+
+class SelectAdapter(WidgetAdapter):
+    js_constructor: str
+
+class ValidationErrorAdapter(Adapter):
+    js_constructor: str
+    def js_args(self, error: ValidationError) -> list[list[str]]: ...
+    @cached_property
+    def media(self) -> forms.Media: ...

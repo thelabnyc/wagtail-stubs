@@ -1,3 +1,82 @@
-from django.db import models
+from collections.abc import Iterator
+from typing import Any, overload
+import uuid
 
-class ReferenceIndex(models.Model): ...
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+from django.db.models import Field
+from django.utils.functional import cached_property
+
+class ReferenceGroups:
+    qs: models.QuerySet[ReferenceIndex]
+    def __init__(self, qs: models.QuerySet[ReferenceIndex]) -> None: ...
+    def __iter__(self) -> Iterator[tuple[models.Model, list[ReferenceIndex]]]: ...
+    def __len__(self) -> int: ...
+    @cached_property
+    def is_protected(self) -> bool: ...
+    def count(self) -> int: ...
+    @overload
+    def __getitem__(self, key: int) -> tuple[models.Model, list[ReferenceIndex]]: ...
+    @overload
+    def __getitem__(self, key: slice) -> list[tuple[models.Model, list[ReferenceIndex]]]: ...
+
+class ReferenceIndexQuerySet(models.QuerySet["ReferenceIndex"]):
+    def group_by_source_object(self) -> ReferenceGroups: ...
+
+class ReferenceIndex(models.Model):
+    content_type: models.ForeignKey[ContentType, ContentType]
+    base_content_type: models.ForeignKey[ContentType, ContentType]
+    object_id: models.CharField[str, str]
+    to_content_type: models.ForeignKey[ContentType, ContentType]
+    to_object_id: models.CharField[str, str]
+    model_path: models.TextField[str, str]
+    content_path: models.TextField[str, str]
+    content_path_hash: models.UUIDField[uuid.UUID, uuid.UUID]
+
+    objects: models.Manager[ReferenceIndex]  # type: ignore[assignment]
+
+    wagtail_reference_index_ignore: bool
+    tracked_models: set[type[models.Model]]
+    indexed_models: set[type[models.Model]]
+
+    class Meta:
+        unique_together: list[tuple[str, ...]]
+
+    @classmethod
+    def model_is_indexable(
+        cls, model: type[models.Model], allow_child_models: bool = False
+    ) -> bool: ...
+    @classmethod
+    def register_model(cls, model: type[models.Model]) -> None: ...
+    @classmethod
+    def is_indexed(cls, model: type[models.Model]) -> bool: ...
+    @classmethod
+    def create_or_update_for_object(cls, object: models.Model) -> None: ...
+    @classmethod
+    def remove_for_object(cls, object: models.Model) -> None: ...
+    @classmethod
+    def get_references_for_object(
+        cls, object: models.Model
+    ) -> models.QuerySet[ReferenceIndex]: ...
+    @classmethod
+    def get_references_to(
+        cls, object: models.Model
+    ) -> models.QuerySet[ReferenceIndex]: ...
+    @classmethod
+    def get_grouped_references_to(
+        cls, object: models.Model
+    ) -> ReferenceGroups: ...
+    @cached_property
+    def model_name(self) -> str: ...
+    @cached_property
+    def related_field_model_name(self) -> str: ...
+    @cached_property
+    def on_delete(self) -> Any: ...
+    @cached_property
+    def source_field(self) -> Field[Any, Any]: ...
+    @cached_property
+    def related_field(self) -> Field[Any, Any]: ...
+    @cached_property
+    def reverse_related_field(self) -> models.ForeignObjectRel: ...
+    def describe_source_field(self) -> str: ...
+    def describe_on_delete(self) -> str: ...

@@ -1,7 +1,8 @@
 import abc
-from _typeshed import Incomplete
 from abc import ABC, abstractmethod
 from django import forms
+from django.db import models
+from django.http import HttpRequest
 from django.utils.functional import classproperty
 from django.views.generic import FormView
 from wagtail import hooks as hooks
@@ -18,15 +19,15 @@ class BulkAction(ABC, FormView, metaclass=abc.ABCMeta):
     @property
     @abstractmethod
     def aria_label(self): ...
-    extras: Incomplete
+    extras: dict
     action_priority: int
-    classes: Incomplete
+    classes: set
     form_class = forms.Form
-    cleaned_form: Incomplete
-    request: Incomplete
-    next_url: Incomplete
+    cleaned_form: forms.Form | None
+    request: HttpRequest
+    next_url: str
     num_parent_objects: int
-    model: Incomplete
+    model: type[models.Model]
     def __init__(self, request, model) -> None: ...
     @classproperty
     def models(cls): ...
@@ -41,10 +42,9 @@ class BulkAction(ABC, FormView, metaclass=abc.ABCMeta):
     def get_default_model(cls): ...
     def get_all_objects_in_listing_query(self, parent_id): ...
     def get_actionable_objects(self): ...
-    def annotate_items(self, items): ...
     def get_context_data(self, **kwargs): ...
     def prepare_action(self, objects, objects_without_access) -> None: ...
     def get_execution_context(self): ...
-    actionable_objects: Incomplete
+    actionable_objects: list
     def form_valid(self, form): ...
     def form_invalid(self, form): ...

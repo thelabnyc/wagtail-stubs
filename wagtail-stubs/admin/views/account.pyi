@@ -1,5 +1,6 @@
-from _typeshed import Incomplete
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.models import AbstractBaseUser
+from django.http import HttpRequest
 from django.views.generic.base import TemplateView
 from functools import cached_property as cached_property
 from wagtail import hooks as hooks
@@ -19,25 +20,25 @@ def email_management_enabled(): ...
 def password_reset_enabled(): ...
 
 class SettingsTab:
-    name: Incomplete
-    title: Incomplete
-    order: Incomplete
+    name: str
+    title: str
+    order: int
     def __init__(self, name, title, order: int = 0) -> None: ...
 
-profile_tab: Incomplete
-notifications_tab: Incomplete
+profile_tab: SettingsTab
+notifications_tab: SettingsTab
 
 class BaseSettingsPanel:
     name: str
     title: str
     tab = profile_tab
-    help_text: Incomplete
+    help_text: str | None
     template_name: str
-    form_class: Incomplete
+    form_class: type | None
     form_object: str
-    request: Incomplete
-    user: Incomplete
-    profile: Incomplete
+    request: HttpRequest
+    user: AbstractBaseUser
+    profile: UserProfile
     def __init__(self, request, user, profile) -> None: ...
     def is_active(self): ...
     def get_form(self): ...
@@ -53,7 +54,7 @@ class NameEmailSettingsPanel(BaseSettingsPanel):
 
 class AvatarSettingsPanel(BaseSettingsPanel):
     name: str
-    title: Incomplete
+    title: str
     order: int
     template_name: str
     form_class = AvatarPreferencesForm
@@ -61,7 +62,7 @@ class AvatarSettingsPanel(BaseSettingsPanel):
 
 class NotificationsSettingsPanel(BaseSettingsPanel):
     name: str
-    title: Incomplete
+    title: str
     tab = notifications_tab
     order: int
     form_class = NotificationPreferencesForm
@@ -70,7 +71,7 @@ class NotificationsSettingsPanel(BaseSettingsPanel):
 
 class LocaleSettingsPanel(BaseSettingsPanel):
     name: str
-    title: Incomplete
+    title: str
     order: int
     form_class = LocalePreferencesForm
     form_object: str
@@ -78,14 +79,14 @@ class LocaleSettingsPanel(BaseSettingsPanel):
 
 class ThemeSettingsPanel(BaseSettingsPanel):
     name: str
-    title: Incomplete
+    title: str
     order: int
     form_class = ThemePreferencesForm
     form_object: str
 
 class ChangePasswordPanel(BaseSettingsPanel):
     name: str
-    title: Incomplete
+    title: str
     order: int
     form_class = PasswordChangeForm
     def is_active(self): ...
@@ -93,7 +94,7 @@ class ChangePasswordPanel(BaseSettingsPanel):
 
 class AccountView(WagtailAdminTemplateMixin, TemplateView):
     template_name: str
-    page_title: Incomplete
+    page_title: str
     header_icon: str
     def get_breadcrumbs_items(self): ...
     def get_context_data(self, **kwargs): ...
@@ -110,7 +111,7 @@ class PasswordResetView(PasswordResetEnabledViewMixin, auth_views.PasswordResetV
     template_name: str
     email_template_name: str
     subject_template_name: str
-    success_url: Incomplete
+    success_url: str
     def get_form_class(self): ...
 
 class PasswordResetDoneView(PasswordResetEnabledViewMixin, auth_views.PasswordResetDoneView):
@@ -118,7 +119,7 @@ class PasswordResetDoneView(PasswordResetEnabledViewMixin, auth_views.PasswordRe
 
 class PasswordResetConfirmView(PasswordResetEnabledViewMixin, auth_views.PasswordResetConfirmView):
     template_name: str
-    success_url: Incomplete
+    success_url: str
 
 class PasswordResetCompleteView(PasswordResetEnabledViewMixin, auth_views.PasswordResetCompleteView):
     template_name: str
@@ -132,6 +133,5 @@ class LoginView(auth_views.LoginView):
     def get_context_data(self, **kwargs): ...
 
 class LogoutView(auth_views.LogoutView):
-    @property
-    def next_page(self): ...
+    next_page: str
     def dispatch(self, request, *args, **kwargs): ...

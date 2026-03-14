@@ -1,4 +1,5 @@
-from _typeshed import Incomplete
+from typing import Any
+
 from django.db import migrations
 
 def add_image_permissions_to_admin_groups(apps, schema_editor) -> None: ...
@@ -8,6 +9,6 @@ def copy_image_permissions_to_collections(apps, schema_editor) -> None: ...
 def remove_image_permissions_from_collections(apps, schema_editor) -> None: ...
 
 class Migration(migrations.Migration):
-    replaces: Incomplete
-    dependencies: Incomplete
-    operations: Incomplete
+    replaces: list[tuple[str, str]]
+    dependencies: list[tuple[str, str]]
+    operations: list[Any]

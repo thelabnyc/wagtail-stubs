@@ -1,10 +1,13 @@
-from _typeshed import Incomplete
-from wagtail.actions.publish_revision import PublishPermissionError as PublishPermissionError, PublishRevisionAction as PublishRevisionAction
-from wagtail.signals import page_published as page_published
+import logging
 
-logger: Incomplete
+from wagtail.actions.publish_revision import (
+    PublishPermissionError as PublishPermissionError,
+    PublishRevisionAction,
+)
+
+logger: logging.Logger
 
 class PublishPagePermissionError(PublishPermissionError): ...
 
 class PublishPageRevisionAction(PublishRevisionAction):
-    def check(self, skip_permission_checks: bool = False): ...
+    def check(self, skip_permission_checks: bool = False) -> None: ...

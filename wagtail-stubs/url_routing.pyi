@@ -1,8 +1,10 @@
-from _typeshed import Incomplete
+from typing import Any
+
+from wagtail.models import Page
 
 class RouteResult:
-    page: Incomplete
-    args: Incomplete
-    kwargs: Incomplete
-    def __init__(self, page, args=None, kwargs=None) -> None: ...
-    def __getitem__(self, index): ...
+    page: Page
+    args: list[Any]
+    kwargs: dict[str, Any]
+    def __init__(self, page: Page, args: list[Any] | None = None, kwargs: dict[str, Any] | None = None) -> None: ...
+    def __getitem__(self, index: int) -> Any: ...

@@ -1,45 +1,45 @@
-from _typeshed import Incomplete
 from collections.abc import Mapping
-from django.utils.functional import cached_property as cached_property
 from typing import Any
+
+from django.utils.functional import cached_property as cached_property
 from wagtail.admin.staticfiles import versioned_static as versioned_static
-from wagtail.admin.telepath import Adapter as Adapter, adapter as adapter
+from wagtail.telepath import Adapter as Adapter, adapter as adapter
 
 class BaseSidebarAdapter(Adapter):
     @cached_property
     def media(self): ...
 
 class MenuItem:
-    name: Incomplete
-    label: Incomplete
-    icon_name: Incomplete
-    classname: Incomplete
-    attrs: Incomplete
+    name: str
+    label: str
+    icon_name: str
+    classname: str
+    attrs: Mapping[str, Any]
     def __init__(self, name: str, label: str, icon_name: str = '', classname: str = '', attrs: Mapping[str, Any] = None) -> None: ...
     def js_args(self): ...
 
 class LinkMenuItem(MenuItem):
-    url: Incomplete
+    url: str
     def __init__(self, name: str, label: str, url: str, icon_name: str = '', classname: str = '', attrs: Mapping[str, Any] = None) -> None: ...
     def js_args(self): ...
     def __eq__(self, other): ...
 
 class ActionMenuItem(MenuItem):
-    action: Incomplete
-    method: Incomplete
+    action: str
+    method: str
     def __init__(self, name: str, label: str, action: str, icon_name: str = '', classname: str = '', method: str = 'POST', attrs: Mapping[str, Any] = None) -> None: ...
     def js_args(self): ...
     def __eq__(self, other): ...
 
 class SubMenuItem(MenuItem):
-    menu_items: Incomplete
-    footer_text: Incomplete
+    menu_items: list[MenuItem]
+    footer_text: str
     def __init__(self, name: str, label: str, menu_items: list[MenuItem], icon_name: str = '', classname: str = '', footer_text: str = '', attrs: Mapping[str, Any] = None) -> None: ...
     def js_args(self): ...
     def __eq__(self, other): ...
 
 class PageExplorerMenuItem(LinkMenuItem):
-    start_page_id: Incomplete
+    start_page_id: int
     def __init__(self, name: str, label: str, url: str, start_page_id: int, icon_name: str = '', classname: str = '', attrs: Mapping[str, Any] = None) -> None: ...
     def js_args(self): ...
     def __eq__(self, other): ...
@@ -48,13 +48,13 @@ class WagtailBrandingModule:
     def js_args(self): ...
 
 class SearchModule:
-    search_area: Incomplete
+    search_area: Any
     def __init__(self, search_area) -> None: ...
     def js_args(self): ...
 
 class MainMenuModule:
-    menu_items: Incomplete
-    account_menu_items: Incomplete
-    user: Incomplete
+    menu_items: list[MenuItem]
+    account_menu_items: list[MenuItem]
+    user: Any
     def __init__(self, menu_items: list[MenuItem], account_menu_items: list[MenuItem], user) -> None: ...
     def js_args(self): ...

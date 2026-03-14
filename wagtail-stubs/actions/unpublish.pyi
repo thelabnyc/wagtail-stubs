@@ -1,18 +1,26 @@
-from _typeshed import Incomplete
-from django.core.exceptions import PermissionDenied
-from wagtail.log_actions import log as log
-from wagtail.signals import unpublished as unpublished
+import logging
 
-logger: Incomplete
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.core.exceptions import PermissionDenied
+from django.db import models
+
+logger: logging.Logger
 
 class UnpublishPermissionError(PermissionDenied): ...
 
 class UnpublishAction:
-    object: Incomplete
-    set_expired: Incomplete
-    commit: Incomplete
-    user: Incomplete
-    log_action: Incomplete
-    def __init__(self, object, set_expired: bool = False, commit: bool = True, user=None, log_action: bool = True) -> None: ...
+    object: models.Model
+    set_expired: bool
+    commit: bool
+    user: AbstractBaseUser | None
+    log_action: bool | str
+    def __init__(
+        self,
+        object: models.Model,
+        set_expired: bool = False,
+        commit: bool = True,
+        user: AbstractBaseUser | None = None,
+        log_action: bool | str = True,
+    ) -> None: ...
     def check(self, skip_permission_checks: bool = False) -> None: ...
     def execute(self, skip_permission_checks: bool = False) -> None: ...

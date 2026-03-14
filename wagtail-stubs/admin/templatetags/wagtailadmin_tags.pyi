@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from django import template
 from django.template.defaultfilters import stringfilter
 from wagtail import hooks as hooks
@@ -7,7 +6,7 @@ from wagtail.admin.icons import get_icon_sprite_url as get_icon_sprite_url
 from wagtail.admin.localization import get_js_translation_strings as get_js_translation_strings
 from wagtail.admin.menu import admin_menu as admin_menu
 from wagtail.admin.search import admin_search_areas as admin_search_areas
-from wagtail.admin.telepath import JSContext as JSContext
+from wagtail.telepath import JSContext as JSContext
 from wagtail.admin.ui import sidebar as sidebar
 from wagtail.admin.ui.menus import MenuItem as MenuItem
 from wagtail.admin.utils import get_admin_base_url as get_admin_base_url, get_keyboard_key_labels_from_request as get_keyboard_key_labels_from_request, get_latest_str as get_latest_str, get_user_display_name as get_user_display_name
@@ -19,7 +18,7 @@ from wagtail.coreutils import camelcase_to_underscore as camelcase_to_underscore
 from wagtail.models import Locale as Locale, Page as Page, PageViewRestriction as PageViewRestriction
 from wagtail.users.utils import get_gravatar_url as get_gravatar_url
 
-register: Incomplete
+register: template.Library
 
 def breadcrumbs(items, is_expanded: bool = False, classname=None, icon_name=None): ...
 def page_breadcrumbs(context, page, url_name, url_root_name=None, include_self: bool = True, is_expanded: bool = False, querystring_value: str = '', trailing_breadcrumb_title=None, classname=None, icon_name=None): ...
@@ -97,9 +96,9 @@ def wagtail_config(context): ...
 def resolve_url(url): ...
 
 class FragmentNode(template.Node):
-    nodelist: Incomplete
-    target_var: Incomplete
-    stripped: Incomplete
+    nodelist: template.NodeList
+    target_var: str
+    stripped: bool
     def __init__(self, nodelist, target_var, stripped: bool = False) -> None: ...
     def render(self, context): ...
 
@@ -107,10 +106,10 @@ def fragment(parser, token): ...
 
 class BlockInclusionNode(template.Node):
     content_var: str
-    nodelist: Incomplete
-    template: Incomplete
-    extra_context: Incomplete
-    target_var: Incomplete
+    nodelist: template.NodeList
+    template: str
+    extra_context: dict[str, object]
+    target_var: str | None
     def __init__(self, nodelist, template, extra_context, target_var=None) -> None: ...
     def get_context_data(self, parent_context): ...
     def render(self, context): ...

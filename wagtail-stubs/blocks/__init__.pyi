@@ -1,6 +1,6 @@
 from .base import BaseBlock as BaseBlock, Block as Block, BlockField as BlockField, BlockWidget as BlockWidget, BoundBlock as BoundBlock, DeclarativeSubBlocksMetaclass as DeclarativeSubBlocksMetaclass
 from .field_block import BlockQuoteBlock as BlockQuoteBlock, BooleanBlock as BooleanBlock, CharBlock as CharBlock, ChoiceBlock as ChoiceBlock, ChooserBlock as ChooserBlock, DateBlock as DateBlock, DateTimeBlock as DateTimeBlock, DecimalBlock as DecimalBlock, EmailBlock as EmailBlock, FieldBlock as FieldBlock, FloatBlock as FloatBlock, IntegerBlock as IntegerBlock, MultipleChoiceBlock as MultipleChoiceBlock, PageChooserBlock as PageChooserBlock, RawHTMLBlock as RawHTMLBlock, RegexBlock as RegexBlock, RichTextBlock as RichTextBlock, TextBlock as TextBlock, TimeBlock as TimeBlock, URLBlock as URLBlock
-from .list_block import ListBlock as ListBlock, ListBlockValidationError as ListBlockValidationError, ListValue as ListValue
+from .list_block import ListBlock as ListBlock, ListBlockValidationError as ListBlockValidationError
 from .static_block import StaticBlock as StaticBlock
 from .stream_block import BaseStreamBlock as BaseStreamBlock, StreamBlock as StreamBlock, StreamBlockValidationError as StreamBlockValidationError, StreamValue as StreamValue
-from .struct_block import BaseStructBlock as BaseStructBlock, BlockGroup as BlockGroup, StructBlock as StructBlock, StructBlockValidationError as StructBlockValidationError, StructValue as StructValue
+from .struct_block import BaseStructBlock as BaseStructBlock, StructBlock as StructBlock, StructBlockValidationError as StructBlockValidationError, StructValue as StructValue

@@ -1,4 +1,4 @@
-from _typeshed import Incomplete
+from django.contrib.contenttypes.models import ContentType
 from django.db.models.query import QuerySet
 from django.utils.functional import classproperty
 from typing import Any
@@ -15,22 +15,22 @@ def page_filter_search(q, pages, all_pages=None, ordering=None): ...
 
 class SearchView(PageListingMixin, PermissionCheckedMixin, BaseListingView):
     permission_policy = page_permission_policy
-    any_permission_required: Incomplete
+    any_permission_required: set[str]
     paginate_by: int
-    page_title: Incomplete
+    page_title: str
     header_icon: str
     index_url_name: str
     index_results_url_name: str
     is_searchable: bool
     is_searching: bool
-    filterset_class: Incomplete
+    filterset_class: None
     template_name: str
     results_template_name: str
     @classproperty
     def columns(cls): ...
-    content_types: Incomplete
-    ordering: Incomplete
-    selected_content_type: Incomplete
+    content_types: list[tuple[ContentType, int]]
+    ordering: str | None
+    selected_content_type: ContentType | None
     def get(self, request): ...
     def get_queryset(self) -> QuerySet[Any]: ...
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...

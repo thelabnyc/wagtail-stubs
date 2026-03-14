@@ -1,9 +1,10 @@
-from _typeshed import Incomplete
-from modelsearch.apps import ModelSearchAppConfig
+from typing import Any
 
-class WagtailSearchAppConfig(ModelSearchAppConfig):
+from django.apps import AppConfig
+
+class WagtailSearchAppConfig(AppConfig):
     name: str
     label: str
-    verbose_name: Incomplete
-    backend_setting_name: str
-    default: bool
+    verbose_name: str
+    default_auto_field: str
+    def ready(self) -> None: ...

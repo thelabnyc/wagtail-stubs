@@ -1,18 +1,17 @@
-from _typeshed import Incomplete
 from django import template
 from wagtail.images.models import Filter as Filter, Picture as Picture, ResponsiveImage as ResponsiveImage
 from wagtail.images.shortcuts import get_rendition_or_not_found as get_rendition_or_not_found, get_renditions_or_not_found as get_renditions_or_not_found
 from wagtail.images.views.serve import generate_image_url as generate_image_url
 
-register: Incomplete
+register: template.Library
 
 def image(parser, token): ...
 
 class ImageNode(template.Node):
-    image_expr: Incomplete
-    output_var_name: Incomplete
-    attrs: Incomplete
-    filter_specs: Incomplete
+    image_expr: template.base.FilterExpression
+    output_var_name: str | None
+    attrs: dict[str, template.base.FilterExpression]
+    filter_specs: list[str]
     def __init__(self, image_expr, filter_specs, output_var_name=None, attrs=None) -> None: ...
     def get_filter(self): ...
     def validate_image(self, context): ...

@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from django.utils.functional import cached_property as cached_property
 from django.views.generic import FormView
 from wagtail.admin.forms.pages import ParentChooserForm as ParentChooserForm
@@ -9,8 +8,8 @@ from wagtail.permissions import page_permission_policy as page_permission_policy
 class ChooseParentView(WagtailAdminTemplateMixin, FormView):
     template_name: str
     model = Page
-    index_url_name: Incomplete
-    page_title: Incomplete
+    index_url_name: str | None
+    page_title: str
     def get_valid_parent_pages(self, user): ...
     def get(self, request, *args, **kwargs): ...
     def get_form(self): ...

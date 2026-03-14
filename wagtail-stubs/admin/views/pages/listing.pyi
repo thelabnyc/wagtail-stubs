@@ -1,6 +1,5 @@
-from _typeshed import Incomplete
 from django.utils.functional import cached_property as cached_property, classproperty
-from django_filters.filters import ChoiceFilter, ModelMultipleChoiceFilter
+from django_filters.filters import ChoiceFilter, DateFromToRangeFilter, ModelMultipleChoiceFilter
 from wagtail import hooks as hooks
 from wagtail.admin.filters import DateRangePickerWidget as DateRangePickerWidget, MultipleContentTypeFilter as MultipleContentTypeFilter, MultipleUserFilter as MultipleUserFilter, WagtailFilterSet as WagtailFilterSet
 from wagtail.admin.ui.components import MediaContainer as MediaContainer
@@ -21,17 +20,17 @@ class EditedByFilter(MultipleUserFilter):
     def filter(self, qs, value): ...
 
 class PageFilterSet(WagtailFilterSet):
-    latest_revision_created_at: Incomplete
-    owner: Incomplete
-    edited_by: Incomplete
-    site: Incomplete
-    has_child_pages: Incomplete
+    latest_revision_created_at: DateFromToRangeFilter
+    owner: MultipleUserFilter
+    edited_by: EditedByFilter
+    site: SiteFilter
+    has_child_pages: HasChildPagesFilter
     class Meta:
         model = Page
-        fields: Incomplete
+        fields: list[str]
 
 class GenericPageFilterSet(PageFilterSet):
-    content_type: Incomplete
+    content_type: MultipleContentTypeFilter
 
 class PageListingMixin:
     template_name: str
@@ -41,7 +40,7 @@ class PageListingMixin:
     default_ordering: str
     model = Page
     is_searchable: bool
-    columns: Incomplete
+    columns: list
     @cached_property
     def i18n_enabled(self): ...
     @cached_property
@@ -56,7 +55,7 @@ class PageListingMixin:
 
 class IndexView(PageListingMixin, generic.IndexView):
     permission_policy = page_permission_policy
-    any_permission_required: Incomplete
+    any_permission_required: set[str]
     template_name: str
     results_template_name: str
     paginate_by: int
@@ -71,15 +70,15 @@ class ExplorableIndexView(IndexView):
     results_template_name: str
     index_url_name: str
     index_results_url_name: str
-    page_title: Incomplete
+    page_title: str
     filterset_class = GenericPageFilterSet
     sort_order_field: str
     @classproperty
     def columns(cls): ...
-    parent_page: Incomplete
-    scheduled_page: Incomplete
-    locale: Incomplete
-    translations: Incomplete
+    parent_page: Page
+    scheduled_page: Page | None
+    locale: object | None
+    translations: list
     def get(self, request, parent_page_id=None): ...
     @cached_property
     def is_searching_whole_tree(self): ...

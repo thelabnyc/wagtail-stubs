@@ -1,15 +1,15 @@
-from _typeshed import Incomplete
 from django.utils.functional import cached_property as cached_property
 from wagtail import blocks as blocks
 from wagtail.embeds.format import embed_to_frontend_html as embed_to_frontend_html
 
 class EmbedValue:
-    url: Incomplete
-    max_width: Incomplete
-    max_height: Incomplete
-    def __init__(self, url, max_width=None, max_height=None) -> None: ...
+    url: str
+    max_width: int | None
+    max_height: int | None
+    def __init__(self, url: str, max_width: int | None = None, max_height: int | None = None) -> None: ...
     @cached_property
-    def html(self): ...
+    def html(self) -> str: ...
+    def __str__(self) -> str: ...
 
 class EmbedBlock(blocks.URLBlock):
     def get_default(self): ...

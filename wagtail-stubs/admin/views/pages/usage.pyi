@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from django.utils.functional import cached_property as cached_property, classproperty
 from typing import Any
 from wagtail.admin.views import generic as generic
@@ -11,16 +10,16 @@ from wagtail.permissions import page_permission_policy as page_permission_policy
 
 class ContentTypeUseView(PageListingMixin, PermissionCheckedMixin, BaseListingView):
     permission_policy = page_permission_policy
-    any_permission_required: Incomplete
+    any_permission_required: set[str]
     index_url_name: str
     index_results_url_name: str
-    page_title: Incomplete
+    page_title: str
     header_icon: str
     paginate_by: int
     filterset_class = PageFilterSet
     @classproperty
     def columns(cls): ...
-    page_class: Incomplete
+    page_class: type[Page]
     def get(self, request, *, content_type_app_name, content_type_model_name): ...
     def get_page_subtitle(self): ...
     @cached_property

@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from wagtail import hooks as hooks
 from wagtail.actions.unpublish_page import UnpublishPageAction as UnpublishPageAction
 from wagtail.admin.utils import get_valid_next_url_from_request as get_valid_next_url_from_request
@@ -11,7 +10,7 @@ class Unpublish(UnpublishView):
     edit_url_name: str
     unpublish_url_name: str
     usage_url_name: str
-    success_message: Incomplete
+    success_message: str
     template_name: str
     header_icon: str
     def setup(self, request, page_id, *args, **kwargs): ...

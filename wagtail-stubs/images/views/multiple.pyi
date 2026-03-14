@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from wagtail.admin.views.generic.base import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
 from wagtail.admin.views.generic.multiple_upload import AddView as BaseAddView, CreateFromUploadView as BaseCreateFromUploadView, DeleteUploadView as BaseDeleteUploadView, DeleteView as BaseDeleteView, EditView as BaseEditView
 from wagtail.images import get_image_model as get_image_model
@@ -7,10 +6,10 @@ from wagtail.images.permissions import ImagesPermissionPolicyGetter as ImagesPer
 from wagtail.images.utils import find_image_duplicates as find_image_duplicates, get_accept_attributes as get_accept_attributes, get_allowed_image_extensions as get_allowed_image_extensions
 
 class AddView(WagtailAdminTemplateMixin, BaseAddView):
-    permission_policy: Incomplete
+    permission_policy: ImagesPermissionPolicyGetter
     template_name: str
     header_icon: str
-    page_title: Incomplete
+    page_title: str
     index_url_name: str
     edit_object_url_name: str
     delete_object_url_name: str

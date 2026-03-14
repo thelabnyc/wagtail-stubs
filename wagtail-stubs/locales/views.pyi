@@ -1,8 +1,9 @@
+from typing import Any
+
 from .forms import LocaleForm as LocaleForm
 from .utils import get_locale_usage as get_locale_usage
-from _typeshed import Incomplete
+from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponseBase
-from typing import Any
 from wagtail.admin import messages as messages
 from wagtail.admin.ui.tables import Column as Column, TitleColumn as TitleColumn
 from wagtail.admin.views import generic as generic
@@ -13,40 +14,40 @@ from wagtail.permissions import locale_permission_policy as locale_permission_po
 
 class LanguageTitleColumn(TitleColumn):
     cell_template_name: str
-    def get_value(self, locale): ...
+    def get_value(self, locale: Any) -> Any: ...
 
 class LocaleUsageColumn(Column):
-    def get_value(self, locale): ...
+    def get_value(self, locale: Any) -> str: ...
 
 class IndexView(generic.IndexView):
-    page_title: Incomplete
-    add_item_label: Incomplete
+    page_title: str
+    add_item_label: str
     context_object_name: str
-    queryset: Incomplete
+    queryset: QuerySet[Locale]
     default_ordering: str
-    columns: Incomplete
+    columns: list[Column]
     def get_add_url(self) -> str | None: ...
 
 class CreateView(generic.CreateView):
-    page_title: Incomplete
-    success_message: Incomplete
+    page_title: str
+    success_message: str
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponseBase: ...
 
 class EditView(generic.EditView):
-    success_message: Incomplete
-    error_message: Incomplete
+    success_message: str
+    error_message: str
     context_object_name: str
-    queryset: Incomplete
+    queryset: QuerySet[Locale]
 
 class DeleteView(generic.DeleteView):
-    success_message: Incomplete
-    page_title: Incomplete
-    confirmation_message: Incomplete
-    queryset: Incomplete
-    cannot_delete_message: Incomplete
-    def can_delete(self, locale): ...
-    def get_context_data(self, object=None): ...
-    def form_valid(self, form): ...
+    success_message: str
+    page_title: str
+    confirmation_message: str
+    queryset: QuerySet[Locale]
+    cannot_delete_message: str
+    def can_delete(self, locale: Any) -> bool: ...
+    def get_context_data(self, object: Any = None) -> dict[str, Any]: ...
+    def form_valid(self, form: Any) -> Any: ...
 
 class LocaleViewSet(ModelViewSet):
     icon: str

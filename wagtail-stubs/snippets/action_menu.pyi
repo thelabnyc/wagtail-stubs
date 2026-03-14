@@ -1,4 +1,5 @@
-from _typeshed import Incomplete
+from typing import Any
+from django.http import HttpRequest
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.ui.components import Component as Component
@@ -9,7 +10,7 @@ class ActionMenuItem(Component):
     order: int
     template_name: str
     label: str
-    name: Incomplete
+    name: str | None
     classname: str
     icon_name: str
     def __init__(self, order=None) -> None: ...
@@ -19,44 +20,44 @@ class ActionMenuItem(Component):
 
 class PublishMenuItem(ActionMenuItem):
     name: str
-    label: Incomplete
+    label: str
     icon_name: str
     template_name: str
     def is_shown(self, context): ...
 
 class SubmitForModerationMenuItem(ActionMenuItem):
     name: str
-    label: Incomplete
+    label: str
     icon_name: str
     def is_shown(self, context): ...
     def get_context_data(self, parent_context): ...
 
 class WorkflowMenuItem(ActionMenuItem):
     template_name: str
-    name: Incomplete
-    label: Incomplete
-    launch_modal: Incomplete
-    icon_name: Incomplete
+    name: str
+    label: str
+    launch_modal: bool
+    icon_name: str
     def __init__(self, name, label, launch_modal, *args, **kwargs) -> None: ...
     def get_context_data(self, parent_context): ...
     def is_shown(self, context): ...
     def get_url(self, parent_context): ...
 
 class RestartWorkflowMenuItem(ActionMenuItem):
-    label: Incomplete
+    label: str
     name: str
     classname: str
     icon_name: str
     def is_shown(self, context): ...
 
 class CancelWorkflowMenuItem(ActionMenuItem):
-    label: Incomplete
+    label: str
     name: str
     icon_name: str
     def is_shown(self, context): ...
 
 class UnpublishMenuItem(ActionMenuItem):
-    label: Incomplete
+    label: str
     name: str
     icon_name: str
     def is_shown(self, context): ...
@@ -64,13 +65,13 @@ class UnpublishMenuItem(ActionMenuItem):
 
 class SaveMenuItem(ActionMenuItem):
     name: str
-    label: Incomplete
+    label: str
     icon_name: str
     template_name: str
 
 class LockedMenuItem(ActionMenuItem):
     name: str
-    label: Incomplete
+    label: str
     template_name: str
     def is_shown(self, context): ...
 
@@ -78,10 +79,10 @@ def get_base_snippet_action_menu_items(model): ...
 
 class SnippetActionMenu:
     template: str
-    request: Incomplete
-    context: Incomplete
-    menu_items: Incomplete
-    default_item: Incomplete
+    request: HttpRequest
+    context: dict[str, Any]
+    menu_items: list[ActionMenuItem]
+    default_item: ActionMenuItem | None
     def __init__(self, request, **kwargs) -> None: ...
     def render_html(self): ...
     @cached_property

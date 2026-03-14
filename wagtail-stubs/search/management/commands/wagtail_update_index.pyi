@@ -1,1 +1,1 @@
-from modelsearch.management.commands.rebuild_modelsearch_index import *
+from wagtail.search.management.commands.update_index import Command as Command

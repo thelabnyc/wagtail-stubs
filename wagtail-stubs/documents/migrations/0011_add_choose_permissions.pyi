@@ -1,4 +1,4 @@
-from _typeshed import Incomplete
+from typing import Any
 from django.db import migrations
 
 def add_choose_permission_to_admin_groups(apps, _schema_editor) -> None: ...
@@ -8,5 +8,5 @@ def copy_choose_permission_to_collections(apps, _schema_editor) -> None: ...
 def remove_choose_permission_from_collections(apps, _schema_editor) -> None: ...
 
 class Migration(migrations.Migration):
-    dependencies: Incomplete
-    operations: Incomplete
+    dependencies: list[tuple[str, str]]
+    operations: list[Any]

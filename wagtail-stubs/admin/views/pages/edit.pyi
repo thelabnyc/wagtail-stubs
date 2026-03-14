@@ -1,4 +1,4 @@
-from _typeshed import Incomplete
+from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import cached_property as cached_property
 from django.views.generic.base import View
 from wagtail.actions.publish_page_revision import PublishPageRevisionAction as PublishPageRevisionAction
@@ -6,13 +6,13 @@ from wagtail.admin import messages as messages
 from wagtail.admin.action_menu import PageActionMenu as PageActionMenu
 from wagtail.admin.mail import send_notification as send_notification
 from wagtail.admin.models import EditingSession as EditingSession
-from wagtail.admin.telepath import JSContext as JSContext
+from wagtail.telepath import JSContext as JSContext
 from wagtail.admin.ui.autosave import AutosaveIndicator as AutosaveIndicator
 from wagtail.admin.ui.components import MediaContainer as MediaContainer
 from wagtail.admin.ui.editing_sessions import EditingSessionsModule as EditingSessionsModule
 from wagtail.admin.ui.side_panels import ChecksSidePanel as ChecksSidePanel, CommentsSidePanel as CommentsSidePanel, PageStatusSidePanel as PageStatusSidePanel, PreviewSidePanel as PreviewSidePanel
 from wagtail.admin.utils import get_valid_next_url_from_request as get_valid_next_url_from_request
-from wagtail.admin.views.generic import HookResponseMixin as HookResponseMixin, JsonPostResponseMixin as JsonPostResponseMixin
+from wagtail.admin.views.generic import HookResponseMixin as HookResponseMixin
 from wagtail.admin.views.generic.base import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
 from wagtail.exceptions import PageClassNotFoundError as PageClassNotFoundError
 from wagtail.locks import BasicLock as BasicLock, ScheduledForPublishLock as ScheduledForPublishLock, WorkflowLock as WorkflowLock
@@ -35,33 +35,33 @@ class EditView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMix
     def get_page_for_status(self): ...
     def get_object(self): ...
     def get_edit_url(self): ...
-    real_page_record: Incomplete
-    latest_revision: Incomplete
-    scheduled_revision: Incomplete
-    page_content_type: Incomplete
-    page_class: Incomplete
-    revision_id: Incomplete
-    is_reverting: Incomplete
-    previous_revision: Incomplete
-    page: Incomplete
-    parent: Incomplete
-    scheduled_page: Incomplete
-    page_perms: Incomplete
-    lock: Incomplete
-    locked_for_user: Incomplete
-    next_url: Incomplete
-    edit_handler: Incomplete
-    form_class: Incomplete
-    workflow_state: Incomplete
-    locale: Incomplete
-    translations: Incomplete
-    workflow_tasks: Incomplete
+    real_page_record: Page
+    latest_revision: Revision | None
+    scheduled_revision: Revision | None
+    page_content_type: ContentType
+    page_class: type[Page] | None
+    revision_id: str | None
+    is_reverting: bool
+    previous_revision: Revision | None
+    page: Page
+    parent: Page
+    scheduled_page: Page | None
+    page_perms: object
+    lock: object | None
+    locked_for_user: bool
+    next_url: str | None
+    edit_handler: object
+    form_class: type
+    workflow_state: WorkflowState | None
+    locale: object | None
+    translations: list
+    workflow_tasks: list
     has_unsaved_changes: bool
-    errors_debug: Incomplete
-    autosave_interval: Incomplete
-    autosave_enabled: Incomplete
+    errors_debug: str | None
+    autosave_interval: object
+    autosave_enabled: object
     def dispatch(self, request, page_id, **kwargs): ...
-    form: Incomplete
+    form: object
     def get(self, request, *args, **kwargs): ...
     def add_cancel_workflow_confirmation_message(self) -> None: ...
     @cached_property
@@ -73,7 +73,7 @@ class EditView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMix
     @cached_property
     def is_out_of_date(self): ...
     def post(self, request, *args, **kwargs): ...
-    workflow_action: Incomplete
+    workflow_action: str
     def workflow_action_is_valid(self): ...
     @cached_property
     def action_name_and_method(self): ...
@@ -81,7 +81,7 @@ class EditView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMix
     def action_name(self): ...
     @property
     def action_method(self): ...
-    has_content_changes: Incomplete
+    has_content_changes: bool
     def form_valid(self, form): ...
     def save_action(self): ...
     def publish_action(self): ...

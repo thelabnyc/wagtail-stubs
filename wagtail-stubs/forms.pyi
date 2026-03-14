@@ -1,12 +1,11 @@
-from _typeshed import Incomplete
 from django import forms
 
 class PasswordViewRestrictionForm(forms.Form):
-    password: Incomplete
-    return_url: Incomplete
-    restriction: Incomplete
-    def __init__(self, *args, **kwargs) -> None: ...
-    def clean_password(self): ...
+    password: forms.CharField
+    return_url: forms.CharField
+    restriction: object
+    def __init__(self, *args: object, **kwargs: object) -> None: ...
+    def clean_password(self) -> str: ...
 
 class TaskStateCommentForm(forms.Form):
-    comment: Incomplete
+    comment: forms.CharField

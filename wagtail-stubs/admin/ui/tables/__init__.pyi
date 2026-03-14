@@ -1,5 +1,7 @@
-from _typeshed import Incomplete
-from collections.abc import Generator, Mapping
+from collections import OrderedDict
+from collections.abc import Callable, Generator, Mapping
+from typing import Any
+
 from django.forms import MediaDefiningClass
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.ui.components import Component as Component
@@ -8,25 +10,25 @@ from wagtail.models import Locale as Locale
 
 class BaseColumn(metaclass=MediaDefiningClass):
     class Header:
-        column: Incomplete
+        column: BaseColumn
         def __init__(self, column) -> None: ...
         def render_html(self, parent_context): ...
     class Cell:
-        column: Incomplete
-        instance: Incomplete
+        column: BaseColumn
+        instance: Any
         def __init__(self, column, instance) -> None: ...
         def render_html(self, parent_context): ...
     header_template_name: str
-    cell_template_name: Incomplete
-    name: Incomplete
-    accessor: Incomplete
-    label: Incomplete
-    classname: Incomplete
-    sort_key: Incomplete
-    header: Incomplete
-    width: Incomplete
-    ascending_title_text: Incomplete
-    descending_title_text: Incomplete
+    cell_template_name: str | None
+    name: str
+    accessor: str | Callable[..., Any]
+    label: str
+    classname: str | None
+    sort_key: str | None
+    header: BaseColumn.Header
+    width: str | None
+    ascending_title_text: str | None
+    descending_title_text: str | None
     def __init__(self, name, label=None, accessor=None, classname=None, sort_key=None, width=None, ascending_title_text=None, descending_title_text=None) -> None: ...
     def get_header_context_data(self, parent_context): ...
     @cached_property
@@ -48,18 +50,18 @@ class NumberColumn(Column):
     def get_cell_context_data(self, instance, parent_context): ...
 
 class ButtonsColumnMixin:
-    buttons: Incomplete
+    buttons: list[Any]
     def get_cell_context_data(self, instance, parent_context): ...
     def get_buttons(self, instance, parent_context): ...
 
 class TitleColumn(Column):
     cell_template_name: str
-    empty_value_display: Incomplete
-    url_name: Incomplete
-    label_prefix: Incomplete
-    link_attrs: Incomplete
-    link_classname: Incomplete
-    id_accessor: Incomplete
+    empty_value_display: str
+    url_name: str | None
+    label_prefix: str | None
+    link_attrs: dict[str, Any]
+    link_classname: str | None
+    id_accessor: str
     def __init__(self, name, url_name=None, get_url=None, get_title_id=None, label_prefix=None, get_label_id=None, link_classname=None, link_attrs=None, id_accessor: str = 'pk', **kwargs) -> None: ...
     def get_cell_context_data(self, instance, parent_context): ...
     def get_link_attrs(self, instance, parent_context): ...
@@ -69,13 +71,13 @@ class TitleColumn(Column):
 
 class StatusFlagColumn(Column):
     cell_template_name: str
-    true_label: Incomplete
-    false_label: Incomplete
+    true_label: str | None
+    false_label: str | None
     def __init__(self, name, true_label=None, false_label=None, **kwargs) -> None: ...
 
 class StatusTagColumn(Column):
     cell_template_name: str
-    primary: Incomplete
+    primary: Any
     def __init__(self, name, primary=None, **kwargs) -> None: ...
     def get_primary(self, instance): ...
     def get_cell_context_data(self, instance, parent_context): ...
@@ -100,14 +102,14 @@ class UpdatedAtColumn(DateColumn):
 
 class UserColumn(Column):
     cell_template_name: str
-    blank_display_name: Incomplete
+    blank_display_name: str
     def __init__(self, name, blank_display_name: str = '', **kwargs) -> None: ...
     def get_cell_context_data(self, instance, parent_context): ...
 
 class BulkActionsCheckboxColumn(BaseColumn):
     header_template_name: str
     cell_template_name: str
-    obj_type: Incomplete
+    obj_type: str
     def __init__(self, *args, obj_type, **kwargs) -> None: ...
     def get_aria_describedby(self, instance): ...
     def get_cell_context_data(self, instance, parent_context): ...
@@ -117,7 +119,7 @@ class UsageCountColumn(Column):
 
 class ReferencesColumn(Column):
     cell_template_name: str
-    describe_on_delete: Incomplete
+    describe_on_delete: bool
     def __init__(self, name, label=None, accessor=None, classname=None, sort_key=None, width=None, get_url=None, describe_on_delete: bool = False) -> None: ...
     def get_edit_url(self, instance): ...
     def get_cell_context_data(self, instance, parent_context): ...
@@ -134,21 +136,21 @@ class Table(Component):
     template_name: str
     classname: str
     header_row_classname: str
-    ascending_title_text_format: Incomplete
-    descending_title_text_format: Incomplete
-    columns: Incomplete
-    caption: Incomplete
-    data: Incomplete
-    base_url: Incomplete
-    ordering: Incomplete
-    base_attrs: Incomplete
+    ascending_title_text_format: str
+    descending_title_text_format: str
+    columns: OrderedDict[str, BaseColumn]
+    caption: str | None
+    data: Any
+    base_url: str | None
+    ordering: str | None
+    base_attrs: dict[str, Any]
     def __init__(self, columns, data, template_name=None, base_url=None, ordering=None, classname=None, attrs=None, caption=None) -> None: ...
     def get_caption(self): ...
     def get_context_data(self, parent_context): ...
     @property
     def media(self): ...
     @property
-    def rows(self) -> Generator[Incomplete]: ...
+    def rows(self) -> Generator[Table.Row]: ...
     @property
     def row_count(self): ...
     @property
@@ -159,10 +161,10 @@ class Table(Component):
     def get_ascending_title_text(self, column): ...
     def get_descending_title_text(self, column): ...
     class Row(Mapping):
-        table: Incomplete
-        columns: Incomplete
-        instance: Incomplete
-        index: Incomplete
+        table: Table
+        columns: OrderedDict[str, BaseColumn]
+        instance: Any
+        index: int
         def __init__(self, table, instance, index) -> None: ...
         def __len__(self) -> int: ...
         def __getitem__(self, key): ...

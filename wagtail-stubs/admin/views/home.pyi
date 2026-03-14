@@ -1,5 +1,5 @@
-from _typeshed import Incomplete
 from collections.abc import Mapping
+from django.contrib.auth.models import AbstractBaseUser
 from django.views.generic.base import TemplateView
 from typing import Any
 from wagtail import hooks as hooks
@@ -12,7 +12,7 @@ from wagtail.admin.views.generic import WagtailAdminTemplateMixin as WagtailAdmi
 from wagtail.models import Page as Page, PageLogEntry as PageLogEntry, Revision as Revision, TaskState as TaskState, WorkflowState as WorkflowState, get_default_page_content_type as get_default_page_content_type
 from wagtail.permissions import page_permission_policy as page_permission_policy
 
-User: Incomplete
+User: type[AbstractBaseUser]
 
 class UpgradeNotificationPanel(Component):
     template_name: str
@@ -59,7 +59,7 @@ class RecentEditsPanel(Component):
 
 class HomeView(WagtailAdminTemplateMixin, TemplateView):
     template_name: str
-    page_title: Incomplete
+    page_title: str
     permission_policy = page_permission_policy
     def get_context_data(self, **kwargs): ...
     def get_media(self, panels=None): ...

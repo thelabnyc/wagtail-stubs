@@ -1,81 +1,77 @@
-from _typeshed import Incomplete
-
-animoto: Incomplete
-audioboom: Incomplete
-cacoo: Incomplete
-chirb: Incomplete
-circuitlab: Incomplete
-clickthrough: Incomplete
-clikthrough: Incomplete
-collegehumor: Incomplete
-coub: Incomplete
-crowdsignal: Incomplete
-crowd_ranking: Incomplete
-dailymile: Incomplete
-dailymotion: Incomplete
-datastudio: Incomplete
-deviantart: Incomplete
-dipdive: Incomplete
-dipity: Incomplete
-dotsub: Incomplete
-etsy: Incomplete
-five_hundred_px: Incomplete
-five_min: Incomplete
-flickr: Incomplete
-funny_or_die: Incomplete
-geograph_gg: Incomplete
-geograph_uk: Incomplete
-github_gist: Incomplete
-gmep: Incomplete
-hlipp: Incomplete
-huffduffer: Incomplete
-hulu: Incomplete
-ifixit: Incomplete
-ifttt: Incomplete
-iheart: Incomplete
-issuu: Incomplete
-justin_tv: Incomplete
-kickstarter: Incomplete
-kinomap: Incomplete
-loom: Incomplete
-major_league_gaming: Incomplete
-meetup: Incomplete
-minoto: Incomplete
-mixcloud: Incomplete
-mobypicture: Incomplete
-nfb: Incomplete
-official_fm: Incomplete
-opera: Incomplete
-photobucket: Incomplete
-pinterest: Incomplete
-reddit: Incomplete
-roomshare: Incomplete
-sapo: Incomplete
-screenr: Incomplete
-scribd: Incomplete
-shoudio: Incomplete
-sketchfab: Incomplete
-skitch: Incomplete
-slideshare: Incomplete
-smugmug: Incomplete
-soundcloud: Incomplete
-speakerdeck: Incomplete
-spotify: Incomplete
-ted: Incomplete
-tidal: Incomplete
-tumblr: Incomplete
-twenty_three_hq: Incomplete
-twitter: Incomplete
-urtak: Incomplete
-ustream: Incomplete
-videojug: Incomplete
-viddler: Incomplete
-vidyard: Incomplete
-vimeo: Incomplete
-vzaar: Incomplete
-wistia: Incomplete
-wordpress: Incomplete
-yandex: Incomplete
-yfrog: Incomplete
-youtube: Incomplete
-all_providers: Incomplete
+animoto: dict[str, str | list[str]]
+audioboom: dict[str, str | list[str]]
+cacoo: dict[str, str | list[str]]
+chirb: dict[str, str | list[str]]
+circuitlab: dict[str, str | list[str]]
+clickthrough: dict[str, str | list[str]]
+clikthrough: dict[str, str | list[str]]
+collegehumor: dict[str, str | list[str]]
+coub: dict[str, str | list[str]]
+crowdsignal: dict[str, str | list[str]]
+crowd_ranking: dict[str, str | list[str]]
+dailymile: dict[str, str | list[str]]
+dailymotion: dict[str, str | list[str]]
+datastudio: dict[str, str | list[str]]
+deviantart: dict[str, str | list[str]]
+dipdive: dict[str, str | list[str]]
+dipity: dict[str, str | list[str]]
+dotsub: dict[str, str | list[str]]
+etsy: dict[str, str | list[str]]
+five_hundred_px: dict[str, str | list[str]]
+five_min: dict[str, str | list[str]]
+flickr: dict[str, str | list[str]]
+funny_or_die: dict[str, str | list[str]]
+geograph_gg: dict[str, str | list[str]]
+geograph_uk: dict[str, str | list[str]]
+github_gist: dict[str, str | list[str]]
+gmep: dict[str, str | list[str]]
+hlipp: dict[str, str | list[str]]
+huffduffer: dict[str, str | list[str]]
+hulu: dict[str, str | list[str]]
+ifixit: dict[str, str | list[str]]
+ifttt: dict[str, str | list[str]]
+issuu: dict[str, str | list[str]]
+justin_tv: dict[str, str | list[str]]
+kickstarter: dict[str, str | list[str]]
+kinomap: dict[str, str | list[str]]
+major_league_gaming: dict[str, str | list[str]]
+meetup: dict[str, str | list[str]]
+minoto: dict[str, str | list[str]]
+mixcloud: dict[str, str | list[str]]
+mobypicture: dict[str, str | list[str]]
+nfb: dict[str, str | list[str]]
+official_fm: dict[str, str | list[str]]
+opera: dict[str, str | list[str]]
+photobucket: dict[str, str | list[str]]
+pinterest: dict[str, str | list[str]]
+reddit: dict[str, str | list[str]]
+roomshare: dict[str, str | list[str]]
+sapo: dict[str, str | list[str]]
+screenr: dict[str, str | list[str]]
+scribd: dict[str, str | list[str]]
+shoudio: dict[str, str | list[str]]
+sketchfab: dict[str, str | list[str]]
+skitch: dict[str, str | list[str]]
+slideshare: dict[str, str | list[str]]
+smugmug: dict[str, str | list[str]]
+soundcloud: dict[str, str | list[str]]
+speakerdeck: dict[str, str | list[str]]
+spotify: dict[str, str | list[str]]
+ted: dict[str, str | list[str]]
+tidal: dict[str, str | list[str]]
+tumblr: dict[str, str | list[str]]
+twenty_three_hq: dict[str, str | list[str]]
+twitter: dict[str, str | list[str]]
+urtak: dict[str, str | list[str]]
+ustream: dict[str, str | list[str]]
+videojug: dict[str, str | list[str]]
+viddler: dict[str, str | list[str]]
+vidyard: dict[str, str | list[str]]
+vimeo: dict[str, str | list[str]]
+vzaar: dict[str, str | list[str]]
+wistia: dict[str, str | list[str]]
+wordpress: dict[str, str | list[str]]
+yandex: dict[str, str | list[str]]
+yfrog: dict[str, str | list[str]]
+youtube: dict[str, str | list[str]]
+all_providers: list[dict[str, str | list[str]]]

@@ -1,5 +1,5 @@
 import django_filters
-from _typeshed import Incomplete
+from collections.abc import Callable
 from django.utils.functional import cached_property as cached_property
 from django_filters.widgets import SuffixedMultiWidget
 from wagtail.admin.models import popular_tags_for_model as popular_tags_for_model
@@ -10,13 +10,13 @@ from wagtail.models import Locale as Locale
 
 class DateRangePickerWidget(SuffixedMultiWidget):
     template_name: str
-    suffixes: Incomplete
+    suffixes: list[str]
     def __init__(self, attrs=None) -> None: ...
     def decompress(self, value): ...
 
 class NumberRangeWidget(SuffixedMultiWidget):
     template_name: str
-    suffixes: Incomplete
+    suffixes: list[str]
     def __init__(self, attrs=None) -> None: ...
     def decompress(self, value): ...
 
@@ -26,7 +26,7 @@ class FilteredModelChoiceIterator(django_filters.fields.ModelChoiceIterator):
 class FilteredModelChoiceField(django_filters.fields.ModelChoiceField):
     widget = FilteredSelect
     iterator = FilteredModelChoiceIterator
-    filter_accessor: Incomplete
+    filter_accessor: str | Callable[..., object]
     def __init__(self, *args, **kwargs) -> None: ...
     def get_filter_value(self, obj): ...
 
@@ -71,13 +71,13 @@ class CollectionFilter(django_filters.ModelChoiceFilter):
     field_class = CollectionChoiceField
 
 class RelatedFilterMixin:
-    use_subquery: Incomplete
+    use_subquery: bool
     def __init__(self, *args, use_subquery: bool = False, **kwargs) -> None: ...
     def filter(self, qs, value): ...
 
 class PopularTagsFilter(RelatedFilterMixin, django_filters.MultipleChoiceFilter): ...
 
 class BaseMediaFilterSet(WagtailFilterSet):
-    permission_policy: Incomplete
-    usage_count: Incomplete
+    permission_policy: object | None
+    usage_count: bool
     def __init__(self, data=None, queryset=None, *, request=None, prefix=None, is_searching=None) -> None: ...

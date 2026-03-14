@@ -1,12 +1,12 @@
-from _typeshed import Incomplete
-from wagtail import hooks as hooks
-from wagtail.admin.viewsets.base import ViewSetGroup as ViewSetGroup
+from django.urls import URLPattern
+
+from wagtail.admin.viewsets.base import ViewSet, ViewSetGroup as ViewSetGroup
 
 class ViewSetRegistry:
-    viewsets: Incomplete
+    viewsets: list[ViewSet]
     def __init__(self) -> None: ...
     def populate(self) -> None: ...
-    def register(self, viewset): ...
-    def get_urlpatterns(self): ...
+    def register(self, viewset: ViewSet | ViewSetGroup) -> ViewSet | None: ...
+    def get_urlpatterns(self) -> list[URLPattern]: ...
 
-viewsets: Incomplete
+viewsets: ViewSetRegistry

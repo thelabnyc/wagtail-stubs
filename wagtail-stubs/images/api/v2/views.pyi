@@ -1,15 +1,15 @@
 from ... import get_image_model as get_image_model
 from .serializers import ImageSerializer as ImageSerializer
-from _typeshed import Incomplete
+from django.db import models
 from wagtail.api.v2.filters import FieldsFilter as FieldsFilter, OrderingFilter as OrderingFilter, SearchFilter as SearchFilter
 from wagtail.api.v2.views import BaseAPIViewSet as BaseAPIViewSet
 
 class ImagesAPIViewSet(BaseAPIViewSet):
     base_serializer_class = ImageSerializer
-    filter_backends: Incomplete
-    body_fields: Incomplete
-    meta_fields: Incomplete
-    listing_default_fields: Incomplete
-    nested_default_fields: Incomplete
+    filter_backends: list[type[FieldsFilter | OrderingFilter | SearchFilter]]
+    body_fields: list[str]
+    meta_fields: list[str]
+    listing_default_fields: list[str]
+    nested_default_fields: list[str]
     name: str
-    model: Incomplete
+    model: type[models.Model]

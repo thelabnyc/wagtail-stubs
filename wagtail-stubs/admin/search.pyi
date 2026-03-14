@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from django.forms import MediaDefiningClass
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
@@ -6,13 +5,13 @@ from wagtail.admin.forms.search import SearchForm as SearchForm
 
 class SearchArea(metaclass=MediaDefiningClass):
     template: str
-    label: Incomplete
-    url: Incomplete
-    classname: Incomplete
-    icon_name: Incomplete
-    name: Incomplete
-    order: Incomplete
-    attr_string: Incomplete
+    label: str
+    url: str
+    classname: str
+    icon_name: str
+    name: str
+    order: int
+    attr_string: str
     def __init__(self, label, url, name=None, classname: str = '', icon_name: str = '', attrs=None, order: int = 1000) -> None: ...
     def __lt__(self, other): ...
     def __le__(self, other): ...
@@ -24,8 +23,8 @@ class SearchArea(metaclass=MediaDefiningClass):
     def render_html(self, request, query, current=None): ...
 
 class Search:
-    register_hook_name: Incomplete
-    construct_hook_name: Incomplete
+    register_hook_name: str
+    construct_hook_name: str | None
     def __init__(self, register_hook_name, construct_hook_name=None) -> None: ...
     @cached_property
     def registered_search_areas(self): ...
@@ -35,4 +34,4 @@ class Search:
     def media(self): ...
     def render_html(self, request, current=None): ...
 
-admin_search_areas: Incomplete
+admin_search_areas: Search

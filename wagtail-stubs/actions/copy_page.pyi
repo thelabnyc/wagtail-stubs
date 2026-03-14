@@ -1,27 +1,43 @@
-from _typeshed import Incomplete
-from django.core.exceptions import PermissionDenied
-from wagtail.log_actions import log as log
-from wagtail.models.i18n import TranslatableMixin as TranslatableMixin
-from wagtail.signals import page_published as page_published
+import logging
+import uuid
+from collections.abc import Callable, Sequence
 
-logger: Incomplete
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.core.exceptions import PermissionDenied
+
+from wagtail.models import Page
+
+logger: logging.Logger
 
 class CopyPageIntegrityError(RuntimeError): ...
 class CopyPagePermissionError(PermissionDenied): ...
 
 class CopyPageAction:
-    page: Incomplete
-    to: Incomplete
-    update_attrs: Incomplete
-    exclude_fields: Incomplete
-    recursive: Incomplete
-    copy_revisions: Incomplete
-    keep_live: Incomplete
-    user: Incomplete
-    process_child_object: Incomplete
-    log_action: Incomplete
-    reset_translation_key: Incomplete
-    def __init__(self, page, to=None, update_attrs=None, exclude_fields=None, recursive: bool = False, copy_revisions: bool = True, keep_live: bool = True, user=None, process_child_object=None, log_action: str = 'wagtail.copy', reset_translation_key: bool = True) -> None: ...
-    def generate_translation_key(self, old_uuid): ...
+    page: Page
+    to: Page | None
+    update_attrs: dict[str, object] | None
+    exclude_fields: Sequence[str] | None
+    recursive: bool
+    copy_revisions: bool
+    keep_live: bool
+    user: AbstractBaseUser | None
+    process_child_object: Callable[..., object] | None
+    log_action: str | None
+    reset_translation_key: bool
+    def __init__(
+        self,
+        page: Page,
+        to: Page | None = None,
+        update_attrs: dict[str, object] | None = None,
+        exclude_fields: Sequence[str] | None = None,
+        recursive: bool = False,
+        copy_revisions: bool = True,
+        keep_live: bool = True,
+        user: AbstractBaseUser | None = None,
+        process_child_object: Callable[..., object] | None = None,
+        log_action: str | None = "wagtail.copy",
+        reset_translation_key: bool = True,
+    ) -> None: ...
+    def generate_translation_key(self, old_uuid: uuid.UUID) -> uuid.UUID: ...
     def check(self, skip_permission_checks: bool = False) -> None: ...
-    def execute(self, skip_permission_checks: bool = False): ...
+    def execute(self, skip_permission_checks: bool = False) -> Page: ...

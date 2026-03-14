@@ -1,9 +1,9 @@
-from _typeshed import Incomplete
+from typing import Any
 from django.db import migrations
 
 def add_document_permissions_to_admin_groups(apps, schema_editor) -> None: ...
 def remove_document_permissions(apps, schema_editor) -> None: ...
 
 class Migration(migrations.Migration):
-    dependencies: Incomplete
-    operations: Incomplete
+    dependencies: list[tuple[str, str]]
+    operations: list[Any]

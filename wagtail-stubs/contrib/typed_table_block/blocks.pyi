@@ -3,7 +3,7 @@ from collections.abc import Generator
 from django.core.exceptions import ValidationError
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.staticfiles import versioned_static as versioned_static
-from wagtail.admin.telepath import Adapter as Adapter, register as register
+from wagtail.telepath import Adapter as Adapter, register as register
 from wagtail.blocks.base import Block as Block, DeclarativeSubBlocksMetaclass as DeclarativeSubBlocksMetaclass, get_error_json_data as get_error_json_data, get_error_list_json_data as get_error_list_json_data, get_help_icon as get_help_icon
 
 class TypedTableBlockValidationError(ValidationError):
@@ -39,8 +39,6 @@ class BaseTypedTableBlock(Block):
     def deconstruct_with_lookup(self, lookup): ...
     def check(self, **kwargs): ...
     def render_basic(self, value, context=None): ...
-    def get_searchable_content(self, value): ...
-    def extract_references(self, value) -> Generator[Incomplete]: ...
     class Meta:
         default: Incomplete
         icon: str

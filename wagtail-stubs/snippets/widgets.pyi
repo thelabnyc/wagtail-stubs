@@ -1,7 +1,7 @@
-from _typeshed import Incomplete
+from django.db import models
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.staticfiles import versioned_static as versioned_static
-from wagtail.admin.telepath import register as register
+from wagtail.telepath import register as register
 from wagtail.admin.widgets import BaseChooser as BaseChooser, BaseChooserAdapter as BaseChooserAdapter
 from wagtail.admin.widgets.button import Button as Button
 from wagtail.utils.deprecation import RemovedInWagtail80Warning as RemovedInWagtail80Warning
@@ -10,10 +10,10 @@ class AdminSnippetChooser(BaseChooser):
     display_title_key: str
     classname: str
     js_constructor: str
-    model: Incomplete
-    choose_one_text: Incomplete
-    choose_another_text: Incomplete
-    link_to_chosen_text: Incomplete
+    model: type[models.Model]
+    choose_one_text: str
+    choose_another_text: str
+    link_to_chosen_text: str
     def __init__(self, model, **kwargs) -> None: ...
     def get_chooser_modal_url(self): ...
     @cached_property

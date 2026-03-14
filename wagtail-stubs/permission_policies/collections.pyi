@@ -1,0 +1,101 @@
+from collections.abc import Iterable
+
+from django.contrib.auth.models import AbstractBaseUser
+from django.db.models import Model, QuerySet
+
+from wagtail.models import Collection, GroupCollectionPermission
+from wagtail.permission_policies.base import BaseDjangoAuthPermissionPolicy
+
+class CollectionPermissionLookupMixin:
+    permission_cache_name: str
+
+    def get_all_permissions_for_user(
+        self, user: AbstractBaseUser
+    ) -> QuerySet[GroupCollectionPermission]: ...
+    def collections_user_has_any_permission_for(
+        self, user: AbstractBaseUser, actions: Iterable[str]
+    ) -> QuerySet[Collection]: ...
+    def collections_user_has_permission_for(
+        self, user: AbstractBaseUser, action: str
+    ) -> QuerySet[Collection]: ...
+
+class CollectionPermissionPolicy(
+    CollectionPermissionLookupMixin, BaseDjangoAuthPermissionPolicy
+):
+    def user_has_permission(self, user: AbstractBaseUser, action: str) -> bool: ...
+    def user_has_any_permission(
+        self, user: AbstractBaseUser, actions: Iterable[str]
+    ) -> bool: ...
+    def users_with_any_permission(
+        self, actions: Iterable[str]
+    ) -> QuerySet[AbstractBaseUser]: ...
+    def user_has_permission_for_instance(
+        self, user: AbstractBaseUser, action: str, instance: Model
+    ) -> bool: ...
+    def user_has_any_permission_for_instance(
+        self, user: AbstractBaseUser, actions: Iterable[str], instance: Model
+    ) -> bool: ...
+    def instances_user_has_any_permission_for(
+        self, user: AbstractBaseUser, actions: Iterable[str]
+    ) -> QuerySet[Model]: ...
+    def users_with_any_permission_for_instance(
+        self, actions: Iterable[str], instance: Model
+    ) -> QuerySet[AbstractBaseUser]: ...
+
+class CollectionOwnershipPermissionPolicy(
+    CollectionPermissionLookupMixin, BaseDjangoAuthPermissionPolicy
+):
+    owner_field_name: str
+
+    def __init__(
+        self,
+        model: type[Model] | str,
+        auth_model: type[Model] | str | None = None,
+        owner_field_name: str = "owner",
+    ) -> None: ...
+    def check_model(self, model: type[Model]) -> None: ...
+    def user_has_permission(self, user: AbstractBaseUser, action: str) -> bool: ...
+    def users_with_any_permission(
+        self, actions: Iterable[str]
+    ) -> QuerySet[AbstractBaseUser]: ...
+    def user_has_permission_for_instance(
+        self, user: AbstractBaseUser, action: str, instance: Model
+    ) -> bool: ...
+    def user_has_any_permission_for_instance(
+        self, user: AbstractBaseUser, actions: Iterable[str], instance: Model
+    ) -> bool: ...
+    def instances_user_has_any_permission_for(
+        self, user: AbstractBaseUser, actions: Iterable[str]
+    ) -> QuerySet[Model]: ...
+    def users_with_any_permission_for_instance(
+        self, actions: Iterable[str], instance: Model
+    ) -> QuerySet[AbstractBaseUser]: ...
+    def collections_user_has_any_permission_for(
+        self, user: AbstractBaseUser, actions: Iterable[str]
+    ) -> QuerySet[Collection]: ...
+
+class CollectionManagementPermissionPolicy(
+    CollectionPermissionLookupMixin, BaseDjangoAuthPermissionPolicy
+):
+    def user_has_permission(self, user: AbstractBaseUser, action: str) -> bool: ...
+    def user_has_any_permission(
+        self, user: AbstractBaseUser, actions: Iterable[str]
+    ) -> bool: ...
+    def users_with_any_permission(
+        self, actions: Iterable[str]
+    ) -> QuerySet[AbstractBaseUser]: ...
+    def user_has_permission_for_instance(
+        self, user: AbstractBaseUser, action: str, instance: Collection
+    ) -> bool: ...
+    def user_has_any_permission_for_instance(
+        self, user: AbstractBaseUser, actions: Iterable[str], instance: Collection
+    ) -> bool: ...
+    def users_with_any_permission_for_instance(
+        self, actions: Iterable[str], instance: Collection
+    ) -> QuerySet[AbstractBaseUser]: ...
+    def instances_user_has_permission_for(
+        self, user: AbstractBaseUser, action: str
+    ) -> QuerySet[Collection]: ...
+    def instances_user_has_any_permission_for(
+        self, user: AbstractBaseUser, actions: Iterable[str]
+    ) -> QuerySet[Collection]: ...

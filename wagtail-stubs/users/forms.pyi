@@ -1,14 +1,14 @@
-from _typeshed import Incomplete
 from django import forms
 from django.contrib.auth.models import Group
 from django.db import transaction
+from typing import Any
 from wagtail import hooks as hooks
 from wagtail.admin.forms.formsets import BaseFormSetMixin as BaseFormSetMixin
 from wagtail.admin.widgets import AdminPageChooser as AdminPageChooser
 from wagtail.models import GroupPagePermission as GroupPagePermission, PAGE_PERMISSION_CODENAMES as PAGE_PERMISSION_CODENAMES, PAGE_PERMISSION_TYPES as PAGE_PERMISSION_TYPES, Page as Page
 
-User: Incomplete
-standard_fields: Incomplete
+User: Any
+standard_fields: set[str]
 
 class UsernameForm(forms.ModelForm):
     def __init__(self, *args, **kwargs) -> None: ...
@@ -22,13 +22,13 @@ class UserForm(UsernameForm):
     def password_required(self): ...
     @property
     def password_enabled(self): ...
-    error_messages: Incomplete
-    email: Incomplete
-    first_name: Incomplete
-    last_name: Incomplete
-    password1: Incomplete
-    password2: Incomplete
-    is_superuser: Incomplete
+    error_messages: dict[str, str]
+    email: forms.EmailField
+    first_name: forms.CharField
+    last_name: forms.CharField
+    password1: forms.CharField
+    password2: forms.CharField
+    is_superuser: forms.BooleanField
     def __init__(self, *args, **kwargs) -> None: ...
     def clean_password2(self): ...
     def validate_password(self) -> None: ...
@@ -37,41 +37,41 @@ class UserForm(UsernameForm):
 class UserCreationForm(UserForm):
     class Meta:
         model = User
-        fields: Incomplete
-        widgets: Incomplete
+        fields: set[str]
+        widgets: dict[str, type[forms.Widget]]
 
 class UserEditForm(UserForm):
     password_required: bool
     def __init__(self, *args, **kwargs) -> None: ...
     class Meta:
         model = User
-        fields: Incomplete
-        widgets: Incomplete
+        fields: set[str]
+        widgets: dict[str, type[forms.Widget]]
 
 class GroupForm(forms.ModelForm):
-    registered_permissions: Incomplete
+    registered_permissions: Any
     def __init__(self, *args, **kwargs) -> None: ...
     required_css_class: str
-    error_messages: Incomplete
-    is_superuser: Incomplete
+    error_messages: dict[str, str]
+    is_superuser: forms.BooleanField
     class Meta:
         model = Group
-        fields: Incomplete
-        widgets: Incomplete
+        fields: tuple[str, ...]
+        widgets: dict[str, forms.Widget]
     def clean_name(self): ...
     def save(self, commit: bool = True): ...
 
 class PagePermissionsForm(forms.Form):
-    page: Incomplete
-    permissions: Incomplete
+    page: forms.ModelChoiceField
+    permissions: forms.ModelMultipleChoiceField
 
 class BaseGroupPagePermissionFormSet(BaseFormSetMixin, forms.BaseFormSet):
     permission_types = PAGE_PERMISSION_TYPES
-    instance: Incomplete
+    instance: Group
     def __init__(self, data=None, files=None, instance=None, prefix: str = 'page_permissions') -> None: ...
     def clean(self) -> None: ...
     @transaction.atomic
     def save(self) -> None: ...
     def as_admin_panel(self): ...
 
-GroupPagePermissionFormSet: Incomplete
+GroupPagePermissionFormSet: type[BaseGroupPagePermissionFormSet]

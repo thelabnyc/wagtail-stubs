@@ -2,8 +2,8 @@ from _typeshed import Incomplete
 from django import forms
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.staticfiles import versioned_static as versioned_static
-from wagtail.admin.telepath import register as register
-from wagtail.admin.telepath.widgets import WidgetAdapter as WidgetAdapter
+from wagtail.telepath import register as register
+from wagtail.widget_adapters import WidgetAdapter as WidgetAdapter
 from wagtail.blocks import FieldBlock as FieldBlock
 
 DEFAULT_TABLE_OPTIONS: Incomplete

@@ -1,11 +1,14 @@
-from modelsearch.backends.opensearch3 import *
-from modelsearch.backends.opensearch3 import OpenSearch3AutocompleteQueryCompiler as _OpenSearch3AutocompleteQueryCompiler, OpenSearch3SearchBackend as _OpenSearch3SearchBackend, OpenSearch3SearchQueryCompiler as _OpenSearch3SearchQueryCompiler
-from wagtail.search.backends.deprecation import IndexOptionMixin as IndexOptionMixin, LegacyContentTypeMatchMixin as LegacyContentTypeMatchMixin
+from wagtail.search.backends.elasticsearch8 import (
+    Elasticsearch8AutocompleteQueryCompiler,
+    Elasticsearch8SearchBackend,
+    Elasticsearch8SearchQueryCompiler,
+)
 
-class OpenSearch3SearchQueryCompiler(LegacyContentTypeMatchMixin, _OpenSearch3SearchQueryCompiler): ...
-class OpenSearch3AutocompleteQueryCompiler(LegacyContentTypeMatchMixin, _OpenSearch3AutocompleteQueryCompiler): ...
+class OpenSearch3SearchQueryCompiler(Elasticsearch8SearchQueryCompiler): ...
+class OpenSearch3AutocompleteQueryCompiler(Elasticsearch8AutocompleteQueryCompiler): ...
 
-class OpenSearch3SearchBackend(IndexOptionMixin, _OpenSearch3SearchBackend):
-    query_compiler_class = OpenSearch3SearchQueryCompiler
-    autocomplete_query_compiler_class = OpenSearch3AutocompleteQueryCompiler
+class OpenSearch3SearchBackend(Elasticsearch8SearchBackend):
+    query_compiler_class: type[OpenSearch3SearchQueryCompiler]
+    autocomplete_query_compiler_class: type[OpenSearch3AutocompleteQueryCompiler]
+
 SearchBackend = OpenSearch3SearchBackend

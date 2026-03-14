@@ -1,8 +1,7 @@
-from _typeshed import Incomplete
 from wagtail.compat import AUTH_USER_APP_LABEL as AUTH_USER_APP_LABEL, AUTH_USER_MODEL_NAME as AUTH_USER_MODEL_NAME
 from wagtail.coreutils import safe_md5 as safe_md5
 
-delete_user_perm: Incomplete
+delete_user_perm: str
 
 def user_can_delete_user(current_user, user_to_delete): ...
 def get_gravatar_url(email, size: int = 50, default_params=None): ...

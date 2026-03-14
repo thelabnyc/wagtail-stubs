@@ -1,7 +1,8 @@
+from typing import Any
+
 from .. import get_document_model as get_document_model
 from ..forms import get_document_form as get_document_form, get_document_multi_form as get_document_multi_form
 from ..permissions import permission_policy as permission_policy
-from _typeshed import Incomplete
 from wagtail.admin.views.generic.base import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
 from wagtail.admin.views.generic.multiple_upload import AddView as BaseAddView, CreateFromUploadView as BaseCreateFromUploadView, DeleteUploadView as BaseDeleteUploadView, DeleteView as BaseDeleteView, EditView as BaseEditView
 
@@ -9,7 +10,7 @@ class AddView(WagtailAdminTemplateMixin, BaseAddView):
     permission_policy = permission_policy
     template_name: str
     header_icon: str
-    page_title: Incomplete
+    page_title: str
     index_url_name: str
     edit_object_url_name: str
     delete_object_url_name: str

@@ -1,4 +1,4 @@
-from _typeshed import Incomplete
+from django.db import models
 from django.utils.functional import cached_property as cached_property
 from django.views.generic.base import View
 from wagtail.admin.auth import PermissionPolicyChecker as PermissionPolicyChecker
@@ -14,15 +14,15 @@ from wagtail.images.permissions import permission_policy as permission_policy
 from wagtail.images.utils import find_image_duplicates as find_image_duplicates
 from wagtail.models import ReferenceIndex as ReferenceIndex
 
-permission_checker: Incomplete
+permission_checker: PermissionPolicyChecker
 
 class ImageChosenResponseMixin(ChosenResponseMixin):
     def get_chosen_response_data(self, image, preview_image_filter: str = 'max-165x165'): ...
 
 class ImageCreationFormMixin(CreationFormMixin):
     creation_tab_id: str
-    create_action_label: Incomplete
-    create_action_clicked_label: Incomplete
+    create_action_label: str
+    create_action_clicked_label: str
     permission_policy = permission_policy
     def get_creation_form_class(self): ...
     def get_creation_form_kwargs(self): ...
@@ -39,7 +39,7 @@ class BaseImageChooseView(BaseChooseView):
     def get_filter_form(self): ...
     @cached_property
     def collections(self): ...
-    model: Incomplete
+    model: type[models.Model]
     def get(self, request): ...
     def get_usage_counts(self, results): ...
     def get_context_data(self, **kwargs): ...
@@ -61,30 +61,30 @@ class ImageChooseView(ImageChooseViewMixin, ImageCreationFormMixin, BaseImageCho
 class ImageChooseResultsView(ChooseResultsViewMixin, ImageCreationFormMixin, BaseImageChooseView): ...
 
 class ImageChosenView(ChosenViewMixin, ImageChosenResponseMixin, View):
-    model: Incomplete
+    model: type[models.Model]
     def get(self, request, *args, pk, **kwargs): ...
 
 class ImageChosenMultipleView(ChosenMultipleViewMixin, ImageChosenResponseMixin, View):
-    model: Incomplete
+    model: type[models.Model]
     def get(self, request, *args, **kwargs): ...
 
 class SelectFormatResponseMixin(PreserveURLParametersMixin):
     def render_select_format_response(self, image, form): ...
 
 class ImageUploadViewMixin(SelectFormatResponseMixin, CreateViewMixin):
-    model: Incomplete
+    model: type[models.Model]
     def get(self, request): ...
-    form: Incomplete
+    form: ImageInsertionForm
     def post(self, request): ...
     def render_duplicate_found_response(self, request, new_image, existing_image): ...
 
 class ImageUploadView(ImageUploadViewMixin, ImageCreationFormMixin, ImageChosenResponseMixin, View): ...
 
 class ImageSelectFormatView(SelectFormatResponseMixin, ImageChosenResponseMixin, View):
-    model: Incomplete
+    model: type[models.Model] | None
     def get(self, request, image_id): ...
     def get_chosen_response_data(self, image): ...
-    form: Incomplete
+    form: ImageInsertionForm
     def post(self, request, image_id): ...
 
 class ImageChooserViewSet(ChooserViewSet):
@@ -96,15 +96,15 @@ class ImageChooserViewSet(ChooserViewSet):
     select_format_view_class = ImageSelectFormatView
     permission_policy = permission_policy
     register_widget: bool
-    preserve_url_parameters: Incomplete
+    preserve_url_parameters: list[str]
     icon: str
-    choose_one_text: Incomplete
-    create_action_label: Incomplete
-    create_action_clicked_label: Incomplete
-    choose_another_text: Incomplete
-    edit_item_text: Incomplete
+    choose_one_text: str
+    create_action_label: str
+    create_action_clicked_label: str
+    choose_another_text: str
+    edit_item_text: str
     @property
     def select_format_view(self): ...
     def get_urlpatterns(self): ...
 
-viewset: Incomplete
+viewset: ImageChooserViewSet

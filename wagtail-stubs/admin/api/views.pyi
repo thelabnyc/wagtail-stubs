@@ -9,20 +9,20 @@ from .actions.revert_to_page_revision import RevertToPageRevisionAPIAction as Re
 from .actions.unpublish import UnpublishPageAPIAction as UnpublishPageAPIAction
 from .filters import ForExplorerFilter as ForExplorerFilter, HasChildrenFilter as HasChildrenFilter
 from .serializers import AdminPageSerializer as AdminPageSerializer
-from _typeshed import Incomplete
+from rest_framework.authentication import SessionAuthentication
 from wagtail.api.v2.views import PagesAPIViewSet as PagesAPIViewSet
 from wagtail.models import Page as Page
 
 class PagesAdminAPIViewSet(PagesAPIViewSet):
     base_serializer_class = AdminPageSerializer
-    authentication_classes: Incomplete
-    actions: Incomplete
-    filter_backends: Incomplete
-    meta_fields: Incomplete
-    body_fields: Incomplete
-    listing_default_fields: Incomplete
-    detail_only_fields: Incomplete
-    known_query_parameters: Incomplete
+    authentication_classes: list[type[SessionAuthentication]]
+    actions: dict[str, type]
+    filter_backends: list[type]
+    meta_fields: list[str]
+    body_fields: list[str]
+    listing_default_fields: list[str]
+    detail_only_fields: list[str]
+    known_query_parameters: frozenset[str]
     @classmethod
     def get_detail_default_fields(cls, model): ...
     def get_root_page(self): ...

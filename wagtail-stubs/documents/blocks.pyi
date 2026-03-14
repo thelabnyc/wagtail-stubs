@@ -1,3 +1,3 @@
-from _typeshed import Incomplete
+from typing import Any
 
-DocumentChooserBlock: Incomplete
+DocumentChooserBlock: type[Any]

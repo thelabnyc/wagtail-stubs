@@ -1,32 +1,45 @@
-from typing import Any
-
 class SearchQuery:
     def __and__(self, other: SearchQuery) -> And: ...
     def __or__(self, other: SearchQuery) -> Or: ...
     def __invert__(self) -> Not: ...
 
 class PlainText(SearchQuery):
+    OPERATORS: list[str]
+    DEFAULT_OPERATOR: str
+    query_string: str
+    operator: str
+    boost: float
     def __init__(self, query_string: str, operator: str = ..., boost: float = 1.0) -> None: ...
 
 class Phrase(SearchQuery):
-    def __init__(self, query_string: str, boost: float = 1.0) -> None: ...
+    query_string: str
+    def __init__(self, query_string: str) -> None: ...
 
 class Fuzzy(SearchQuery):
-    def __init__(self, query_string: str, max_edits: int = 2, prefix_length: int = 0, boost: float = 1.0) -> None: ...
+    OPERATORS: list[str]
+    DEFAULT_OPERATOR: str
+    query_string: str
+    operator: str
+    def __init__(self, query_string: str, operator: str = ...) -> None: ...
 
 class Boost(SearchQuery):
-    def __init__(self, subquery: SearchQuery, boost: float = 1.0) -> None: ...
+    subquery: SearchQuery
+    boost: float
+    def __init__(self, subquery: SearchQuery, boost: float) -> None: ...
 
 class And(SearchQuery):
+    subqueries: list[SearchQuery]
     def __init__(self, subqueries: list[SearchQuery]) -> None: ...
 
 class Or(SearchQuery):
+    subqueries: list[SearchQuery]
     def __init__(self, subqueries: list[SearchQuery]) -> None: ...
 
 class Not(SearchQuery):
+    subquery: SearchQuery
     def __init__(self, subquery: SearchQuery) -> None: ...
 
 class MatchAll(SearchQuery): ...
 
 MATCH_ALL: MatchAll
-MATCH_NONE: SearchQuery
+MATCH_NONE: Not

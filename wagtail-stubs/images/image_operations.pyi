@@ -1,19 +1,18 @@
-from _typeshed import Incomplete
 from wagtail.images.exceptions import InvalidFilterSpecError as InvalidFilterSpecError
 from wagtail.images.rect import Rect as Rect, Vector as Vector
 from wagtail.images.utils import parse_color_string as parse_color_string
 
 class Operation:
-    method: Incomplete
-    args: Incomplete
+    method: str
+    args: tuple[str, ...]
     def __init__(self, method, *args) -> None: ...
     def construct(self, *args) -> None: ...
 
 class ImageTransform:
-    image_is_svg: Incomplete
-    size: Incomplete
-    scale: Incomplete
-    offset: Incomplete
+    image_is_svg: bool
+    size: tuple[int, int]
+    scale: tuple[float, float]
+    offset: tuple[float, float]
     def __init__(self, size, image_is_svg: bool = False) -> None: ...
     def clone(self): ...
     def resize(self, size): ...
@@ -26,26 +25,26 @@ class TransformOperation(Operation):
     def run(self, image, transform) -> None: ...
 
 class FillOperation(TransformOperation):
-    vary_fields: Incomplete
-    width: Incomplete
-    height: Incomplete
+    vary_fields: tuple[str, ...]
+    width: int
+    height: int
     crop_closeness: int
     def construct(self, size, *extra) -> None: ...
     def run(self, transform, image): ...
 
 class MinMaxOperation(TransformOperation):
-    width: Incomplete
-    height: Incomplete
+    width: int
+    height: int
     def construct(self, size) -> None: ...
     def run(self, transform, image): ...
 
 class WidthHeightOperation(TransformOperation):
-    size: Incomplete
+    size: int
     def construct(self, size) -> None: ...
     def run(self, transform, image): ...
 
 class ScaleOperation(TransformOperation):
-    percent: Incomplete
+    percent: float
     def construct(self, percent) -> None: ...
     def run(self, transform, image): ...
 
@@ -57,28 +56,28 @@ class DoNothingOperation(FilterOperation):
     def run(self, willow, image, env): ...
 
 class JPEGQualityOperation(FilterOperation):
-    quality: Incomplete
+    quality: int
     def construct(self, quality) -> None: ...
     def run(self, willow, image, env) -> None: ...
 
 class AvifQualityOperation(FilterOperation):
-    quality: Incomplete
+    quality: int
     def construct(self, quality) -> None: ...
     def run(self, willow, image, env) -> None: ...
 
 class WebPQualityOperation(FilterOperation):
-    quality: Incomplete
+    quality: int
     def construct(self, quality) -> None: ...
     def run(self, willow, image, env) -> None: ...
 
 class FormatOperation(FilterOperation):
-    supported_formats: Incomplete
-    format: Incomplete
-    options: Incomplete
+    supported_formats: list[str]
+    format: str
+    options: tuple[str, ...]
     def construct(self, format, *options) -> None: ...
     def run(self, willow, image, env) -> None: ...
 
 class BackgroundColorOperation(FilterOperation):
-    color: Incomplete
+    color: tuple[int, int, int]
     def construct(self, color_string) -> None: ...
     def run(self, willow, image, env): ...

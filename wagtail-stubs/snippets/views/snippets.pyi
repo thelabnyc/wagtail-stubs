@@ -1,4 +1,5 @@
-from _typeshed import Incomplete
+from typing import Any
+from django.db import models
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.checks import check_panels_in_model as check_panels_in_model
@@ -25,11 +26,11 @@ def get_snippet_model_from_url_params(app_name, model_name): ...
 def get_snippet_models_for_index_view(): ...
 
 class ModelIndexView(generic.BaseListingView):
-    page_title: Incomplete
+    page_title: str
     header_icon: str
     index_url_name: str
     default_ordering: str
-    snippet_types: Incomplete
+    snippet_types: list[dict[str, Any]]
     def setup(self, request, *args, **kwargs) -> None: ...
     def dispatch(self, request, *args, **kwargs): ...
     def get_list_url(self, model): ...
@@ -41,7 +42,7 @@ class ModelIndexView(generic.BaseListingView):
 
 class IndexView(generic.IndexViewOptionalFeaturesMixin, generic.IndexView):
     view_name: str
-    queryset: Incomplete
+    queryset: Any
     def get_base_queryset(self): ...
     @cached_property
     def columns(self): ...
@@ -118,46 +119,46 @@ class ReorderView(generic.ReorderView):
     def permission_required(self): ...
 
 class SnippetViewSet(ModelViewSet):
-    model: Incomplete
+    model: type[models.Model] | None
     chooser_per_page: int
-    admin_url_namespace: Incomplete
-    base_url_path: Incomplete
-    chooser_admin_url_namespace: Incomplete
-    chooser_base_url_path: Incomplete
-    index_view_class = IndexView
-    add_view_class = CreateView
-    copy_view_class = CopyView
-    edit_view_class = EditView
-    delete_view_class = DeleteView
-    usage_view_class = UsageView
-    history_view_class = HistoryView
-    inspect_view_class = InspectView
-    reorder_view_class = ReorderView
-    revisions_view_class = PreviewRevisionView
-    revisions_compare_view_class = RevisionsCompareView
-    revisions_unschedule_view_class = RevisionsUnscheduleView
-    unpublish_view_class = UnpublishView
-    preview_on_add_view_class = PreviewOnCreateView
-    preview_on_edit_view_class = PreviewOnEditView
-    lock_view_class = LockView
-    unlock_view_class = UnlockView
-    workflow_action_view_class = WorkflowActionView
-    collect_workflow_action_data_view_class = CollectWorkflowActionDataView
-    confirm_workflow_cancellation_view_class = ConfirmWorkflowCancellationView
-    workflow_preview_view_class = WorkflowPreviewView
-    workflow_history_view_class = WorkflowHistoryView
-    workflow_history_detail_view_class = WorkflowHistoryDetailView
-    chooser_viewset_class = SnippetChooserViewSet
+    admin_url_namespace: str | None
+    base_url_path: str | None
+    chooser_admin_url_namespace: str | None
+    chooser_base_url_path: str | None
+    index_view_class: type[IndexView]
+    add_view_class: type[CreateView]
+    copy_view_class: type[CopyView]
+    edit_view_class: type[EditView]
+    delete_view_class: type[DeleteView]
+    usage_view_class: type[UsageView]
+    history_view_class: type[HistoryView]
+    inspect_view_class: type[InspectView]
+    reorder_view_class: type[ReorderView]
+    revisions_view_class: type[PreviewRevisionView]
+    revisions_compare_view_class: type[RevisionsCompareView]
+    revisions_unschedule_view_class: type[RevisionsUnscheduleView]
+    unpublish_view_class: type[UnpublishView]
+    preview_on_add_view_class: type[PreviewOnCreateView]
+    preview_on_edit_view_class: type[PreviewOnEditView]
+    lock_view_class: type[LockView]
+    unlock_view_class: type[UnlockView]
+    workflow_action_view_class: type[WorkflowActionView]
+    collect_workflow_action_data_view_class: type[CollectWorkflowActionDataView]
+    confirm_workflow_cancellation_view_class: type[ConfirmWorkflowCancellationView]
+    workflow_preview_view_class: type[WorkflowPreviewView]
+    workflow_history_view_class: type[WorkflowHistoryView]
+    workflow_history_detail_view_class: type[WorkflowHistoryDetailView]
+    chooser_viewset_class: type[SnippetChooserViewSet]
     template_prefix: str
-    model_opts: Incomplete
-    app_label: Incomplete
-    model_name: Incomplete
-    preview_enabled: Incomplete
-    revision_enabled: Incomplete
-    draftstate_enabled: Incomplete
-    workflow_enabled: Incomplete
-    locking_enabled: Incomplete
-    menu_item_is_registered: Incomplete
+    model_opts: Any
+    app_label: str
+    model_name: str
+    preview_enabled: bool
+    revision_enabled: bool
+    draftstate_enabled: bool
+    workflow_enabled: bool
+    locking_enabled: bool
+    menu_item_is_registered: bool
     def __init__(self, **kwargs) -> None: ...
     @cached_property
     def url_prefix(self): ...

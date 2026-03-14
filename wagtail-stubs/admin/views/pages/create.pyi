@@ -1,9 +1,9 @@
-from _typeshed import Incomplete
+from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import cached_property as cached_property
 from django.views.generic.base import View
 from wagtail.admin import messages as messages
 from wagtail.admin.action_menu import PageActionMenu as PageActionMenu
-from wagtail.admin.telepath import JSContext as JSContext
+from wagtail.telepath import JSContext as JSContext
 from wagtail.admin.ui.autosave import AutosaveIndicator as AutosaveIndicator
 from wagtail.admin.ui.components import MediaContainer as MediaContainer
 from wagtail.admin.ui.side_panels import ChecksSidePanel as ChecksSidePanel, CommentsSidePanel as CommentsSidePanel, PageStatusSidePanel as PageStatusSidePanel, PreviewSidePanel as PreviewSidePanel
@@ -17,23 +17,23 @@ def add_subpage(request, parent_page_id): ...
 
 class CreateView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMixin, View):
     template_name: str
-    page_title: Incomplete
+    page_title: str
     edit_url_name: str
-    parent_page: Incomplete
-    parent_page_perms: Incomplete
-    page_content_type: Incomplete
-    page_class: Incomplete
-    locale: Incomplete
-    page: Incomplete
-    translations: Incomplete
-    edit_handler: Incomplete
-    form_class: Incomplete
-    subscription: Incomplete
-    next_url: Incomplete
-    autosave_interval: Incomplete
-    autosave_enabled: Incomplete
+    parent_page: Page
+    parent_page_perms: object
+    page_content_type: ContentType
+    page_class: type[Page]
+    locale: Locale | None
+    page: Page
+    translations: list
+    edit_handler: object
+    form_class: type
+    subscription: PageSubscription
+    next_url: str | None
+    autosave_interval: object
+    autosave_enabled: object
     def dispatch(self, request, content_type_app_name, content_type_model_name, parent_page_id): ...
-    form: Incomplete
+    form: object
     def post(self, request): ...
     @cached_property
     def action_name_and_method(self): ...

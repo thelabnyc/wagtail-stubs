@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from wagtail import hooks as hooks
 from wagtail.admin import messages as messages
 from wagtail.admin.forms.collections import CollectionForm as CollectionForm
@@ -14,10 +13,10 @@ class Index(IndexView):
     results_template_name: str
     add_url_name: str
     index_url_name: str
-    page_title: Incomplete
-    add_item_label: Incomplete
+    page_title: str
+    add_item_label: str
     header_icon: str
-    columns: Incomplete
+    columns: list[TitleColumn]
     def get_queryset(self): ...
     def get_table(self, object_list): ...
 
@@ -25,8 +24,8 @@ class Create(CreateView):
     permission_policy = collection_permission_policy
     model = Collection
     form_class = CollectionForm
-    page_title: Incomplete
-    success_message: Incomplete
+    page_title: str
+    success_message: str
     add_url_name: str
     edit_url_name: str
     index_url_name: str
@@ -39,8 +38,8 @@ class Edit(EditView):
     model = Collection
     form_class = CollectionForm
     template_name: str
-    success_message: Incomplete
-    error_message: Incomplete
+    success_message: str
+    error_message: str
     edit_url_name: str
     index_url_name: str
     delete_url_name: str
@@ -53,16 +52,16 @@ class Edit(EditView):
 class Delete(DeleteView):
     permission_policy = collection_permission_policy
     model = Collection
-    success_message: Incomplete
+    success_message: str
     index_url_name: str
     edit_url_name: str
     delete_url_name: str
-    page_title: Incomplete
-    confirmation_message: Incomplete
+    page_title: str
+    confirmation_message: str
     header_icon: str
     def get_queryset(self): ...
     def get_collection_contents(self): ...
     template_name: str
     def get_context_data(self, **kwargs): ...
-    object: Incomplete
+    object: Collection
     def post(self, request, pk): ...

@@ -1,8 +1,7 @@
-from _typeshed import Incomplete
 from wagtail.models import ReferenceIndex as ReferenceIndex
 
 class ReferenceIndexMixin:
-    object_references: Incomplete
+    object_references: dict
     is_protected: bool
     def annotate_items(self, items): ...
     def get_context_data(self, **kwargs): ...

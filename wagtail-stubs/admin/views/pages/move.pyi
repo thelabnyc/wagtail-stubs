@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormMixin
 from wagtail import hooks as hooks
@@ -10,8 +9,8 @@ from wagtail.models import Page as Page
 class MoveChooseDestination(TemplateView, FormMixin):
     template_name: str
     form_class = MoveForm
-    page_to_move: Incomplete
-    page_perms: Incomplete
+    page_to_move: Page
+    page_perms: object
     def setup(self, request, *args, **kwargs) -> None: ...
     def get_form_kwargs(self): ...
     def get_context_data(self, **kwargs): ...

@@ -10,7 +10,7 @@ from .panels import CommentPanelPlaceholder as CommentPanelPlaceholder, PanelPla
 from .preview import PreviewableMixin as PreviewableMixin
 from .reference_index import ReferenceIndex as ReferenceIndex
 from .revisions import PageRevisionsManager as PageRevisionsManager, Revision as Revision, RevisionMixin as RevisionMixin, RevisionQuerySet as RevisionQuerySet, RevisionsManager as RevisionsManager
-from .sites import GroupSitePermission as GroupSitePermission, Site as Site, SiteManager as SiteManager, SiteRootPath as SiteRootPath
+from .sites import Site as Site, SiteManager as SiteManager, SiteRootPath as SiteRootPath
 from .specific import SpecificMixin as SpecificMixin
 from .view_restrictions import BaseViewRestriction as BaseViewRestriction
 from .workflows import AbstractGroupApprovalTask as AbstractGroupApprovalTask, AbstractWorkflow as AbstractWorkflow, BaseTaskStateManager as BaseTaskStateManager, GroupApprovalTask as GroupApprovalTask, Task as Task, TaskManager as TaskManager, TaskQuerySet as TaskQuerySet, TaskState as TaskState, TaskStateManager as TaskStateManager, TaskStateQuerySet as TaskStateQuerySet, Workflow as Workflow, WorkflowContentType as WorkflowContentType, WorkflowManager as WorkflowManager, WorkflowMixin as WorkflowMixin, WorkflowState as WorkflowState, WorkflowStateManager as WorkflowStateManager, WorkflowStateQuerySet as WorkflowStateQuerySet, WorkflowTask as WorkflowTask
