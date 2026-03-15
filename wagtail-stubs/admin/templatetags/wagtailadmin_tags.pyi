@@ -1,4 +1,5 @@
 from django import template
+from django.template.base import FilterExpression
 from django.template.defaultfilters import stringfilter
 from wagtail import hooks as hooks
 from wagtail.admin.admin_url_finder import AdminURLFinder as AdminURLFinder
@@ -108,7 +109,7 @@ class BlockInclusionNode(template.Node):
     content_var: str
     nodelist: template.NodeList
     template: str
-    extra_context: dict[str, object]
+    extra_context: dict[str, FilterExpression]
     target_var: str | None
     def __init__(self, nodelist, template, extra_context, target_var=None) -> None: ...
     def get_context_data(self, parent_context): ...

@@ -30,7 +30,7 @@ class Revision(models.Model):
     created_at: models.DateTimeField[datetime.datetime, datetime.datetime]
     user: models.ForeignKey[AbstractBaseUser | None, AbstractBaseUser | None]
     object_str: models.TextField[str, str]
-    content: models.JSONField[Any, Any]
+    content: models.JSONField[dict[str, Any], dict[str, Any]]
     approved_go_live_at: models.DateTimeField[
         datetime.datetime | None, datetime.datetime | None
     ]
@@ -47,7 +47,7 @@ class Revision(models.Model):
     def save(self, user: AbstractBaseUser | None = None, *args: Any, **kwargs: Any) -> None: ...  # type: ignore[override]
     def as_object(self) -> models.Model: ...
     def is_latest_revision(self) -> bool: ...
-    def delete(self, using: Any | None = None, keep_parents: bool = False) -> tuple[int, dict[str, int]]: ...
+    def delete(self, using: str | None = None, keep_parents: bool = False) -> tuple[int, dict[str, int]]: ...
     def publish(
         self,
         user: AbstractBaseUser | None = None,

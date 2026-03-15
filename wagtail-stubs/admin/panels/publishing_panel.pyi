@@ -1,9 +1,13 @@
+from collections.abc import Sequence
 from typing import Any
 
+from django.forms import Form
+
+from .base import Panel
 from .group import MultiFieldPanel
 
 class PublishingPanel(MultiFieldPanel):
-    def __init__(self, **kwargs: Any) -> None: ...
+    def __init__(self, **kwargs: str | Sequence[Panel] | type[Form] | dict[str, str] | None) -> None: ...
     @property
     def clean_name(self) -> str: ...
 

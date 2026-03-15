@@ -5,6 +5,7 @@ from typing import Any
 
 from django import forms
 from django.db.models import Model
+from django.forms.utils import _DataT, _FilesT
 from django.utils.functional import cached_property
 from django.utils.safestring import SafeString
 
@@ -36,16 +37,18 @@ __all__ = [
     "BlockQuoteBlock",
 ]
 
+_Validator = Callable[[Any], None]
+
 class FieldBlock(Block):
     field: forms.Field
     def id_for_label(self, prefix: str) -> str | None: ...
     def value_from_form(self, value: Any) -> Any: ...
     def value_for_form(self, value: Any) -> Any: ...
     def value_from_datadict(
-        self, data: dict[str, Any], files: dict[str, Any], prefix: str
+        self, data: _DataT, files: _FilesT, prefix: str
     ) -> Any: ...
     def value_omitted_from_data(
-        self, data: dict[str, Any], files: dict[str, Any], prefix: str
+        self, data: _DataT, files: _FilesT, prefix: str
     ) -> bool: ...
     def clean(self, value: Any) -> Any: ...
     @property
@@ -68,11 +71,11 @@ class CharBlock(FieldBlock):
         help_text: str | None = None,
         max_length: int | None = None,
         min_length: int | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         search_index: bool = True,
         **kwargs: Any,
     ) -> None: ...
-    def get_searchable_content(self, value: Any) -> list[str]: ...
+    def get_searchable_content(self, value: str) -> list[str]: ...
 
 class TextBlock(FieldBlock):
     field_options: dict[str, Any]
@@ -86,15 +89,15 @@ class TextBlock(FieldBlock):
         max_length: int | None = None,
         min_length: int | None = None,
         search_index: bool = True,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
     @cached_property
     def field(self) -> forms.CharField: ...  # type: ignore[override]
-    def get_searchable_content(self, value: Any) -> list[str]: ...
+    def get_searchable_content(self, value: str) -> list[str]: ...
 
 class BlockQuoteBlock(TextBlock):
-    def render_basic(self, value: Any, context: dict[str, Any] | None = None) -> str: ...
+    def render_basic(self, value: str, context: dict[str, Any] | None = None) -> str: ...
 
 class FloatBlock(FieldBlock):
     field: forms.FloatField
@@ -103,7 +106,7 @@ class FloatBlock(FieldBlock):
         required: bool = True,
         max_value: float | None = None,
         min_value: float | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         *args: Any,
         **kwargs: Any,
     ) -> None: ...
@@ -118,11 +121,11 @@ class DecimalBlock(FieldBlock):
         min_value: Decimal | int | float | None = None,
         max_digits: int | None = None,
         decimal_places: int | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         *args: Any,
         **kwargs: Any,
     ) -> None: ...
-    def to_python(self, value: Any) -> Decimal | None: ...
+    def to_python(self, value: str | int | float | Decimal | None) -> Decimal | None: ...
 
 class RegexBlock(FieldBlock):
     field: forms.RegexField
@@ -134,7 +137,7 @@ class RegexBlock(FieldBlock):
         max_length: int | None = None,
         min_length: int | None = None,
         error_messages: dict[str, str] | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         *args: Any,
         **kwargs: Any,
     ) -> None: ...
@@ -147,7 +150,7 @@ class URLBlock(FieldBlock):
         help_text: str | None = None,
         max_length: int | None = None,
         min_length: int | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
 
@@ -169,12 +172,12 @@ class DateBlock(FieldBlock):
         required: bool = True,
         help_text: str | None = None,
         format: str | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
     @cached_property
     def field(self) -> forms.DateField: ...  # type: ignore[override]
-    def to_python(self, value: Any) -> datetime.date | None: ...
+    def to_python(self, value: str | datetime.date | None) -> datetime.date | None: ...
 
 class TimeBlock(FieldBlock):
     field_options: dict[str, Any]
@@ -184,12 +187,12 @@ class TimeBlock(FieldBlock):
         required: bool = True,
         help_text: str | None = None,
         format: str | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
     @cached_property
     def field(self) -> forms.TimeField: ...  # type: ignore[override]
-    def to_python(self, value: Any) -> datetime.time | None: ...
+    def to_python(self, value: str | datetime.time | None) -> datetime.time | None: ...
 
 class DateTimeBlock(FieldBlock):
     field_options: dict[str, Any]
@@ -199,12 +202,12 @@ class DateTimeBlock(FieldBlock):
         required: bool = True,
         help_text: str | None = None,
         format: str | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
     @cached_property
     def field(self) -> forms.DateTimeField: ...  # type: ignore[override]
-    def to_python(self, value: Any) -> datetime.datetime | None: ...
+    def to_python(self, value: str | datetime.datetime | None) -> datetime.datetime | None: ...
 
 class EmailBlock(FieldBlock):
     field: forms.EmailField
@@ -212,7 +215,7 @@ class EmailBlock(FieldBlock):
         self,
         required: bool = True,
         help_text: str | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
 
@@ -224,15 +227,15 @@ class IntegerBlock(FieldBlock):
         help_text: str | None = None,
         min_value: int | None = None,
         max_value: int | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
 
 _ChoiceType = (
     list[tuple[str, str]]
     | list[tuple[str, list[tuple[str, str]]]]
-    | Iterable[tuple[Any, Any]]
-    | Callable[[], Iterable[tuple[Any, Any]]]
+    | Iterable[tuple[str, str | list[tuple[str, str]]]]
+    | Callable[[], Iterable[tuple[str, str | list[tuple[str, str]]]]]
 )
 
 class BaseChoiceBlock(FieldBlock):
@@ -241,24 +244,24 @@ class BaseChoiceBlock(FieldBlock):
     def __init__(
         self,
         choices: _ChoiceType | None = None,
-        default: Any = None,
+        default: str | None = None,
         required: bool = True,
         help_text: str | None = None,
         search_index: bool = True,
         widget: type[forms.Widget] | forms.Widget | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
 
 class ChoiceBlock(BaseChoiceBlock):
     def get_field(self, **kwargs: Any) -> forms.ChoiceField: ...
     def deconstruct(self) -> tuple[str, list[Any], dict[str, Any]]: ...
-    def get_searchable_content(self, value: Any) -> list[str]: ...
+    def get_searchable_content(self, value: str) -> list[str]: ...
 
 class MultipleChoiceBlock(BaseChoiceBlock):
     def get_field(self, **kwargs: Any) -> forms.MultipleChoiceField: ...
     def deconstruct(self) -> tuple[str, list[Any], dict[str, Any]]: ...
-    def get_searchable_content(self, value: Any) -> list[str]: ...
+    def get_searchable_content(self, value: str | list[str]) -> list[str]: ...
 
 class RichTextBlock(FieldBlock):
     field_options: dict[str, Any]
@@ -273,11 +276,11 @@ class RichTextBlock(FieldBlock):
         editor: str = "default",
         features: list[str] | None = None,
         max_length: int | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         search_index: bool = True,
         **kwargs: Any,
     ) -> None: ...
-    def to_python(self, value: Any) -> RichText: ...
+    def to_python(self, value: str | RichText) -> RichText: ...
     def get_prep_value(self, value: RichText) -> str: ...
     def normalize(self, value: str | RichText) -> RichText: ...
     @cached_property
@@ -285,7 +288,7 @@ class RichTextBlock(FieldBlock):
     def value_for_form(self, value: RichText) -> str: ...
     def value_from_form(self, value: str) -> RichText: ...
     def get_searchable_content(self, value: RichText) -> list[str]: ...
-    def extract_references(self, value: RichText) -> Iterator[tuple[Any, ...]]: ...
+    def extract_references(self, value: RichText) -> Iterator[tuple[str, str, str, str]]: ...
 
 class RawHTMLBlock(FieldBlock):
     field: forms.CharField
@@ -295,25 +298,25 @@ class RawHTMLBlock(FieldBlock):
         help_text: str | None = None,
         max_length: int | None = None,
         min_length: int | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
     def get_default(self) -> SafeString: ...
-    def to_python(self, value: Any) -> SafeString: ...
-    def normalize(self, value: Any) -> SafeString: ...
-    def get_prep_value(self, value: Any) -> str: ...
-    def value_for_form(self, value: Any) -> str: ...
-    def value_from_form(self, value: Any) -> SafeString: ...
+    def to_python(self, value: str) -> SafeString: ...
+    def normalize(self, value: str | SafeString) -> SafeString: ...
+    def get_prep_value(self, value: str | SafeString) -> str: ...
+    def value_for_form(self, value: str | SafeString) -> str: ...
+    def value_from_form(self, value: str) -> SafeString: ...
 
 class ChooserBlock(FieldBlock):
     _required: bool
     _help_text: str | None
-    _validators: Sequence[Any]
+    _validators: Sequence[_Validator]
     def __init__(
         self,
         required: bool = True,
         help_text: str | None = None,
-        validators: Sequence[Any] = (),
+        validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
     @cached_property
@@ -322,14 +325,14 @@ class ChooserBlock(FieldBlock):
     def model_class(self) -> type[Model]: ...
     @cached_property
     def field(self) -> forms.ModelChoiceField: ...  # type: ignore[override]
-    def to_python(self, value: Any) -> Model | None: ...
-    def bulk_to_python(self, values: list[Any]) -> list[Model | None]: ...
-    def get_prep_value(self, value: Model | None) -> Any: ...
-    def value_from_form(self, value: Any) -> Model | None: ...
-    def get_form_state(self, value: Any) -> Any: ...
-    def clean(self, value: Any) -> Any: ...
+    def to_python(self, value: int | str | None) -> Model | None: ...
+    def bulk_to_python(self, values: list[int | str | None]) -> list[Model | None]: ...
+    def get_prep_value(self, value: Model | None) -> int | str | None: ...
+    def value_from_form(self, value: int | str | Model | None) -> Model | None: ...
+    def get_form_state(self, value: Model | None) -> dict[str, Any] | None: ...
+    def clean(self, value: Model | int | str | None) -> Model | None: ...
     def extract_references(
-        self, value: Any
+        self, value: Model | None
     ) -> Iterator[tuple[type[Model], str, str, str]]: ...
 
 class PageChooserBlock(ChooserBlock):
@@ -348,8 +351,8 @@ class PageChooserBlock(ChooserBlock):
     def target_models(self) -> list[type[Model]]: ...
     @cached_property
     def widget(self) -> forms.Widget: ...
-    def get_form_state(self, value: Any) -> dict[str, Any] | None: ...
-    def render_basic(self, value: Any, context: dict[str, Any] | None = None) -> str: ...
+    def get_form_state(self, value: Model | None) -> dict[str, str | int] | None: ...
+    def render_basic(self, value: Model | None, context: dict[str, Any] | None = None) -> str: ...
     def deconstruct(self) -> tuple[str, list[Any], dict[str, Any]]: ...
 
 DECONSTRUCT_ALIASES: dict[type[Block], str]

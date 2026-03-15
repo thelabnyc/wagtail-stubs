@@ -2,7 +2,11 @@ from typing import Any
 
 from django import forms
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
+from django.forms.renderers import BaseRenderer
+from django.forms.utils import ErrorList
 from django.utils.functional import cached_property
+from django.utils.safestring import SafeString
 
 from wagtail.admin.forms.formsets import BaseFormSetMixin
 from wagtail.admin.panels import ObjectList
@@ -40,15 +44,15 @@ class WorkflowContentTypeForm(forms.Form):
 
     class CheckboxSelectMultiple(forms.CheckboxSelectMultiple):
         option_template_name: str
-        def get_errors_by_id(self, errors: Any) -> dict[Any, list[Any]]: ...
+        def get_errors_by_id(self, errors: ErrorList) -> dict[int | None, list[ValidationError]]: ...
         def render_with_errors(
             self,
             name: str,
-            value: Any,
+            value: list[str],
             attrs: dict[str, Any] | None = None,
-            renderer: Any = None,
-            errors: Any = None,
-        ) -> str: ...
+            renderer: BaseRenderer | None = None,
+            errors: ErrorList | None = None,
+        ) -> SafeString: ...
 
     content_types: ContentTypeMultipleChoiceField
     workflow: Workflow | None

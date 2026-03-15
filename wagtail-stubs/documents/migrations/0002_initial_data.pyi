@@ -1,4 +1,4 @@
-from typing import Any
+from django.db.migrations.operations.base import Operation
 from django.db import migrations
 
 def add_document_permissions_to_admin_groups(apps, schema_editor) -> None: ...
@@ -6,4 +6,4 @@ def remove_document_permissions(apps, schema_editor) -> None: ...
 
 class Migration(migrations.Migration):
     dependencies: list[tuple[str, str]]
-    operations: list[Any]
+    operations: list[Operation]

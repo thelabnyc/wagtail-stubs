@@ -1,5 +1,5 @@
 import django_filters
-from typing import Any
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.filters import DateRangePickerWidget as DateRangePickerWidget, RelatedFilterMixin as RelatedFilterMixin, WagtailFilterSet as WagtailFilterSet
@@ -16,7 +16,7 @@ from wagtail.search import index as index
 from wagtail.users.forms import UserCreationForm as UserCreationForm, UserEditForm as UserEditForm
 from wagtail.users.utils import user_can_delete_user as user_can_delete_user
 
-User: Any
+User: type[AbstractBaseUser]
 add_user_perm: str
 change_user_perm: str
 delete_user_perm: str
@@ -63,7 +63,7 @@ class EditView(generic.EditView):
     success_message: str
     error_message: str
     context_object_name: str
-    object: Any
+    object: AbstractBaseUser
     can_delete: bool
     editing_self: bool
     def setup(self, request, *args, **kwargs) -> None: ...
@@ -78,7 +78,7 @@ class DeleteView(generic.DeleteView):
     page_title: str
     success_message: str
     context_object_name: str
-    object: Any
+    object: AbstractBaseUser
     def dispatch(self, request, *args, **kwargs): ...
     def run_before_hook(self): ...
     def run_after_hook(self): ...

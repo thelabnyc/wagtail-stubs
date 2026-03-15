@@ -1,3 +1,4 @@
+from typing import Any
 import logging
 import uuid
 from collections.abc import Callable, Sequence
@@ -15,26 +16,26 @@ class CopyPagePermissionError(PermissionDenied): ...
 class CopyPageAction:
     page: Page
     to: Page | None
-    update_attrs: dict[str, object] | None
+    update_attrs: dict[str, Any] | None
     exclude_fields: Sequence[str] | None
     recursive: bool
     copy_revisions: bool
     keep_live: bool
     user: AbstractBaseUser | None
-    process_child_object: Callable[..., object] | None
+    process_child_object: Callable[..., Any] | None
     log_action: str | None
     reset_translation_key: bool
     def __init__(
         self,
         page: Page,
         to: Page | None = None,
-        update_attrs: dict[str, object] | None = None,
+        update_attrs: dict[str, Any] | None = None,
         exclude_fields: Sequence[str] | None = None,
         recursive: bool = False,
         copy_revisions: bool = True,
         keep_live: bool = True,
         user: AbstractBaseUser | None = None,
-        process_child_object: Callable[..., object] | None = None,
+        process_child_object: Callable[..., Any] | None = None,
         log_action: str | None = "wagtail.copy",
         reset_translation_key: bool = True,
     ) -> None: ...

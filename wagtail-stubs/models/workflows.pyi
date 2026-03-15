@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth.models import AbstractBaseUser, Group
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.core.checks import CheckMessage
 from django.db import models
 from django.utils.functional import _StrPromise, cached_property
 from modelcluster.fields import ParentalKey
@@ -15,7 +16,7 @@ from wagtail.locks import BaseLock, WorkflowLock
 from wagtail.models.orderable import Orderable
 from wagtail.models.revisions import Revision
 from wagtail.models.specific import SpecificMixin
-from wagtail.query import SpecificQuerySetMixin
+from wagtail.query import PageQuerySet, SpecificQuerySetMixin
 
 # ---------------------------------------------------------------------------
 # WorkflowContentType
@@ -114,7 +115,7 @@ class AbstractWorkflow(ClusterableModel):
     def tasks(self) -> models.QuerySet[Task]: ...
     def start(self, obj: models.Model, user: AbstractBaseUser) -> WorkflowState: ...
     def deactivate(self, user: AbstractBaseUser | None = None) -> None: ...
-    def all_pages(self) -> models.QuerySet[Any]: ...
+    def all_pages(self) -> PageQuerySet: ...
 
     class Meta:
         verbose_name: _StrPromise
@@ -343,7 +344,7 @@ class TaskState(SpecificMixin, models.Model):
 
 class WorkflowMixin:
     @classmethod
-    def check(cls, **kwargs: Any) -> list[Any]: ...
+    def check(cls, **kwargs: Any) -> list[CheckMessage]: ...
     @classmethod
     def get_default_workflow(cls) -> Workflow | None: ...
     @property

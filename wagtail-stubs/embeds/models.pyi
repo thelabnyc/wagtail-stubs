@@ -1,4 +1,4 @@
-from typing import Any
+import datetime
 
 from django.db import models
 
@@ -16,8 +16,8 @@ class Embed(models.Model):
     thumbnail_url: models.TextField[str, str]
     width: models.IntegerField[int | None, int | None]
     height: models.IntegerField[int | None, int | None]
-    last_updated: models.DateTimeField[Any, Any]
-    cache_until: models.DateTimeField[Any, Any]
+    last_updated: models.DateTimeField[datetime.datetime, datetime.datetime]
+    cache_until: models.DateTimeField[datetime.datetime | None, datetime.datetime | None]
     class Meta:
         verbose_name: str
         verbose_name_plural: str

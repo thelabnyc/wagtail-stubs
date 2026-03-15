@@ -1,4 +1,6 @@
 from collections.abc import Generator
+from typing import Any
+
 from django.utils.dateformat import Formatter
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.widgets.button import Button as Button
@@ -19,8 +21,8 @@ class SpreadsheetExportMixin:
     FORMAT_CSV: str
     FORMATS: tuple[str, str]
     list_export: list[str]
-    custom_field_preprocess: dict[str, dict[str, object]]
-    custom_value_preprocess: dict[type | tuple[type, ...], dict[str, object | None]]
+    custom_field_preprocess: dict[str, dict[str, Any]]
+    custom_value_preprocess: dict[type | tuple[type, ...], dict[str, Any]]
     export_headings: dict[str, str]
     export_buttons_template_name: str
     export_filename: str
@@ -31,7 +33,7 @@ class SpreadsheetExportMixin:
     def to_row_dict(self, item): ...
     def get_preprocess_function(self, field, value, export_format): ...
     def preprocess_field_value(self, field, value, export_format): ...
-    def generate_xlsx_row(self, worksheet, row_dict, date_format=None) -> Generator[object]: ...
+    def generate_xlsx_row(self, worksheet, row_dict, date_format=None) -> Generator[Any]: ...
     def write_csv_row(self, writer, row_dict): ...
     def get_heading(self, queryset, field): ...
     def stream_csv(self, queryset) -> Generator[bytes]: ...

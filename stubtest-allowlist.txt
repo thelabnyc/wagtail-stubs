@@ -73,6 +73,7 @@ wagtail.admin.panels.publishing_panel
 wagtail.admin.panels.signal_handlers
 wagtail.admin.panels.title_field_panel
 wagtail.admin.rich_text
+wagtail.admin.rich_text.converters.editor_html
 wagtail.admin.search
 wagtail.admin.signal_handlers
 wagtail.admin.site_summary

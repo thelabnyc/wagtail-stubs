@@ -1,3 +1,4 @@
+from typing import Any
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.functional import cached_property
@@ -6,7 +7,7 @@ from wagtail.telepath import Adapter
 
 class WidgetAdapter(Adapter):
     js_constructor: str
-    def js_args(self, widget: forms.Widget) -> list[object]: ...
+    def js_args(self, widget: forms.Widget) -> list[Any]: ...
     def get_media(self, widget: forms.Widget) -> forms.Media: ...
     @cached_property
     def media(self) -> forms.Media: ...

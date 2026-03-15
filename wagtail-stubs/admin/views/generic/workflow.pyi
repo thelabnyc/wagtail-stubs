@@ -1,6 +1,5 @@
 from typing import Any
 
-from django.db import models
 from django.forms import Form
 from django.http import HttpRequest, HttpResponse
 from django.views import View

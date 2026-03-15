@@ -1,13 +1,16 @@
+import datetime
 import logging
 import re
 from collections.abc import Generator, Iterable
 from contextlib import contextmanager
+from django.contrib.auth.models import AbstractBaseUser
 from django.core.cache.backends.base import BaseCache
 from django.core.files import File
 from django.db import models
 from django.utils.functional import cached_property as cached_property, classproperty
 from io import BytesIO
-from typing import Any, NamedTuple
+from typing import NamedTuple
+from taggit.managers import TaggableManager
 from wagtail import hooks as hooks
 from wagtail.coreutils import string_to_ascii as string_to_ascii
 from wagtail.images.exceptions import InvalidFilterSpecError as InvalidFilterSpecError, UnknownOutputImageFormatError as UnknownOutputImageFormatError
@@ -18,6 +21,7 @@ from wagtail.models import CollectionMember as CollectionMember, ReferenceIndex 
 from wagtail.search import index as index
 from wagtail.search.queryset import SearchableQuerySetMixin as SearchableQuerySetMixin
 from wagtail.utils.file import hash_filelike as hash_filelike
+from willow.image import Image as WillowImage
 
 logger: logging.Logger
 IMAGE_FORMAT_EXTENSIONS: dict[str, str]
@@ -36,9 +40,9 @@ class ImageFileMixin:
     file_size: int | None
     def get_file_size(self) -> int | None: ...
     @contextmanager
-    def open_file(self) -> Generator[Any]: ...
+    def open_file(self) -> Generator[File]: ...
     @contextmanager
-    def get_willow_image(self) -> Generator[Any]: ...
+    def get_willow_image(self) -> Generator[WillowImage]: ...
 
 class WagtailImageFieldFile(models.fields.files.ImageFieldFile):
     def get_image_dimensions(self): ...
@@ -52,9 +56,9 @@ class AbstractImage(ImageFileMixin, CollectionMember, index.Indexed, models.Mode
     description: models.CharField[str, str]
     width: models.IntegerField[int, int]
     height: models.IntegerField[int, int]
-    created_at: models.DateTimeField[Any, Any]
-    uploaded_by_user: models.ForeignKey[Any, Any]
-    tags: Any  # TaggableManager
+    created_at: models.DateTimeField[datetime.datetime, datetime.datetime]
+    uploaded_by_user: models.ForeignKey[AbstractBaseUser | None, AbstractBaseUser | None]
+    tags: TaggableManager
     focal_point_x: models.PositiveIntegerField[int | None, int | None]
     focal_point_y: models.PositiveIntegerField[int | None, int | None]
     focal_point_width: models.PositiveIntegerField[int | None, int | None]
@@ -70,7 +74,7 @@ class AbstractImage(ImageFileMixin, CollectionMember, index.Indexed, models.Mode
     def get_usage(self): ...
     @property
     def usage_url(self): ...
-    search_fields: list[Any]
+    search_fields: list[index.BaseField | index.RelatedFields]
     def __eq__(self, other): ...
     def __hash__(self): ...
     def get_rect(self): ...
@@ -132,8 +136,8 @@ class Filter:
 
 class ResponsiveImage:
     renditions: list[AbstractRendition]
-    attrs: dict[str, Any] | None
-    def __init__(self, renditions: dict[str, AbstractRendition], attrs: dict[str, Any] | None = None) -> None: ...
+    attrs: dict[str, str | int | bool] | None
+    def __init__(self, renditions: dict[str, AbstractRendition], attrs: dict[str, str | int | bool] | None = None) -> None: ...
     @classmethod
     def get_width_srcset(cls, renditions_list: list[AbstractRendition]): ...
     def __html__(self): ...
@@ -147,7 +151,7 @@ class FileFormat(NamedTuple):
 class Picture(ResponsiveImage):
     source_format_order: list[FileFormat]
     formats: dict[str, list[AbstractRendition]]
-    def __init__(self, renditions: dict[str, AbstractRendition], attrs: dict[str, Any] | None = None) -> None: ...
+    def __init__(self, renditions: dict[str, AbstractRendition], attrs: dict[str, str | int | bool] | None = None) -> None: ...
     def get_formats(self, renditions: dict[str, AbstractRendition]) -> dict[str, list[AbstractRendition]]: ...
     def get_fallback_format(self): ...
     def __html__(self): ...

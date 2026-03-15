@@ -1,4 +1,4 @@
-from typing import Any
+from django.db.migrations.operations.base import Operation
 from django.db import migrations
 
 def remove_duplicate_renditions(apps, schema_editor) -> None: ...
@@ -6,4 +6,4 @@ def reverse_remove_duplicate_renditions(*args, **kwargs) -> None: ...
 
 class Migration(migrations.Migration):
     dependencies: list[tuple[str, str]]
-    operations: list[Any]
+    operations: list[Operation]

@@ -1,5 +1,6 @@
 import datetime
-from typing import Any, Sequence
+from collections.abc import Callable, Sequence
+from typing import Any
 
 from django.contrib.auth.models import AbstractBaseUser, Group, Permission
 from django.contrib.contenttypes.models import ContentType
@@ -20,6 +21,7 @@ from wagtail.models.audit_log import (
 from wagtail.models.draft_state import DraftStateMixin
 from wagtail.models.i18n import Locale, TranslatableMixin
 from wagtail.models.locking import LockableMixin
+from wagtail.models.panels import PanelPlaceholder
 from wagtail.models.preview import PreviewableMixin
 from wagtail.models.revisions import Revision, RevisionMixin
 from wagtail.models.sites import Site
@@ -84,7 +86,7 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
     slug: models.SlugField[str, str]
     content_type: models.ForeignKey[ContentType, ContentType]
     url_path: models.TextField[str, str]
-    owner: models.ForeignKey[Any, Any]
+    owner: models.ForeignKey[AbstractBaseUser | None, AbstractBaseUser | None]
     seo_title: models.CharField[str, str]
     show_in_menus: models.BooleanField[bool | int, bool]
     search_description: models.TextField[str, str]
@@ -101,9 +103,9 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
     admin_default_ordering: str
     exclude_fields_in_copy: list[str]
     default_exclude_fields_in_copy: list[str]
-    content_panels: list[Any]
-    promote_panels: list[Any]
-    settings_panels: list[Any]
+    content_panels: list[PanelPlaceholder]
+    promote_panels: list[PanelPlaceholder]
+    settings_panels: list[PanelPlaceholder]
     template: str
     ajax_template: str | None
     show_in_menus_default: bool
@@ -156,7 +158,7 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
     def __init__(self, *args: Any, **kwargs: Any) -> None: ...
     def __str__(self) -> str: ...
     @property
-    def revisions(self) -> Any: ...
+    def revisions(self) -> models.QuerySet[Revision]: ...
     def get_base_content_type(self) -> ContentType: ...
     def get_content_type(self) -> ContentType: ...
     def set_url_path(self, parent: Page | None) -> str: ...
@@ -264,7 +266,7 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
     def cache_key(self) -> str: ...
     def get_sitemap_urls(
         self, request: HttpRequest | None = None
-    ) -> list[dict[str, Any]]: ...
+    ) -> list[dict[str, str | datetime.datetime]]: ...
     def get_ancestors(self, inclusive: bool = False) -> PageQuerySet: ...
     def get_descendants(self, inclusive: bool = False) -> PageQuerySet: ...
     def get_siblings(self, inclusive: bool = True) -> PageQuerySet: ...
@@ -298,7 +300,7 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
         copy_revisions: bool = True,
         keep_live: bool = True,
         user: AbstractBaseUser | None = None,
-        process_child_object: Any | None = None,
+        process_child_object: Callable[..., None] | None = None,
         exclude_fields: list[str] | None = None,
         log_action: str | None = "wagtail.copy",
         reset_translation_key: bool = True,
@@ -437,7 +439,7 @@ class PageLogEntry(BaseLogEntry):
 
 class Comment(ClusterableModel):
     page: ParentalKey[Page, Page]
-    user: models.ForeignKey[Any, Any]
+    user: models.ForeignKey[AbstractBaseUser, AbstractBaseUser]
     text: models.TextField[str, str]
     contentpath: models.TextField[str, str]
     position: models.TextField[str, str]
@@ -447,7 +449,7 @@ class Comment(ClusterableModel):
     resolved_at: models.DateTimeField[
         datetime.datetime | None, datetime.datetime | None
     ]
-    resolved_by: models.ForeignKey[Any, Any]
+    resolved_by: models.ForeignKey[AbstractBaseUser | None, AbstractBaseUser | None]
 
     def __str__(self) -> str: ...
     def save(  # type: ignore[override]
@@ -481,7 +483,7 @@ class Comment(ClusterableModel):
 
 class CommentReply(models.Model):
     comment: ParentalKey[Comment, Comment]
-    user: models.ForeignKey[Any, Any]
+    user: models.ForeignKey[AbstractBaseUser, AbstractBaseUser]
     text: models.TextField[str, str]
     created_at: models.DateTimeField[datetime.datetime, datetime.datetime]
     updated_at: models.DateTimeField[datetime.datetime, datetime.datetime]
@@ -508,7 +510,7 @@ class CommentReply(models.Model):
         verbose_name_plural: str
 
 class PageSubscription(models.Model):
-    user: models.ForeignKey[Any, Any]
+    user: models.ForeignKey[AbstractBaseUser, AbstractBaseUser]
     page: models.ForeignKey[Page, Page]
     comment_notifications: models.BooleanField[bool | int, bool]
     wagtail_reference_index_ignore: bool

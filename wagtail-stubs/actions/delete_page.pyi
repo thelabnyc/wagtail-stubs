@@ -1,3 +1,4 @@
+from typing import Any
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.exceptions import PermissionDenied
 
@@ -12,8 +13,8 @@ class DeletePageAction:
     def check(self, skip_permission_checks: bool = False) -> None: ...
     def execute(
         self,
-        *args: object,
+        *args: Any,
         skip_permission_checks: bool = False,
-        **kwargs: object,
+        **kwargs: Any,
     ) -> tuple[int, dict[str, int]]: ...
     def log_deletion(self, page: Page) -> None: ...

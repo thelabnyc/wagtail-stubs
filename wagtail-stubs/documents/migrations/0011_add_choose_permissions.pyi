@@ -1,4 +1,4 @@
-from typing import Any
+from django.db.migrations.operations.base import Operation
 from django.db import migrations
 
 def add_choose_permission_to_admin_groups(apps, _schema_editor) -> None: ...
@@ -9,4 +9,4 @@ def remove_choose_permission_from_collections(apps, _schema_editor) -> None: ...
 
 class Migration(migrations.Migration):
     dependencies: list[tuple[str, str]]
-    operations: list[Any]
+    operations: list[Operation]

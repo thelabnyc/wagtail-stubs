@@ -1,10 +1,13 @@
+from typing import Any
 from django import forms
+
+from wagtail.models import BaseViewRestriction
 
 class PasswordViewRestrictionForm(forms.Form):
     password: forms.CharField
     return_url: forms.CharField
-    restriction: object
-    def __init__(self, *args: object, **kwargs: object) -> None: ...
+    restriction: BaseViewRestriction
+    def __init__(self, *args: Any, **kwargs: Any) -> None: ...
     def clean_password(self) -> str: ...
 
 class TaskStateCommentForm(forms.Form):

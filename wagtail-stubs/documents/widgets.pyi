@@ -1,3 +1,3 @@
-from typing import Any
+from wagtail.admin.widgets import BaseChooser
 
-AdminDocumentChooser: type[Any]
+AdminDocumentChooser: type[BaseChooser]

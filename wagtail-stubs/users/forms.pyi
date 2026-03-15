@@ -1,13 +1,14 @@
 from django import forms
-from django.contrib.auth.models import Group
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import Group, Permission
 from django.db import transaction
-from typing import Any
+from django.db.models import QuerySet
 from wagtail import hooks as hooks
 from wagtail.admin.forms.formsets import BaseFormSetMixin as BaseFormSetMixin
 from wagtail.admin.widgets import AdminPageChooser as AdminPageChooser
 from wagtail.models import GroupPagePermission as GroupPagePermission, PAGE_PERMISSION_CODENAMES as PAGE_PERMISSION_CODENAMES, PAGE_PERMISSION_TYPES as PAGE_PERMISSION_TYPES, Page as Page
 
-User: Any
+User: type[AbstractBaseUser]
 standard_fields: set[str]
 
 class UsernameForm(forms.ModelForm):
@@ -49,7 +50,7 @@ class UserEditForm(UserForm):
         widgets: dict[str, type[forms.Widget]]
 
 class GroupForm(forms.ModelForm):
-    registered_permissions: Any
+    registered_permissions: QuerySet[Permission]
     def __init__(self, *args, **kwargs) -> None: ...
     required_css_class: str
     error_messages: dict[str, str]

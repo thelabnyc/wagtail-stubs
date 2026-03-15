@@ -1,6 +1,7 @@
 from typing import Any, TypeVar, overload
 
 from django.db import models
+from django.http import HttpRequest
 
 from wagtail.admin.admin_url_finder import ModelAdminURLFinder
 from wagtail.admin.menu import MenuItem
@@ -11,7 +12,7 @@ class SettingMenuItem(MenuItem):
     model: type[models.Model]
     permission_policy: Any
     def __init__(self, model: type[models.Model], icon: str = "cog", classname: str = "", **kwargs: Any) -> None: ...
-    def is_shown(self, request: Any) -> bool: ...
+    def is_shown(self, request: HttpRequest) -> bool: ...
 
 class SiteSettingAdminURLFinder(ModelAdminURLFinder):
     def construct_edit_url(self, instance: models.Model) -> str: ...

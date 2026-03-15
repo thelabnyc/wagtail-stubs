@@ -1,4 +1,4 @@
-from typing import Any
+from django.db.migrations.operations.base import Operation
 
 from django.db import migrations
 
@@ -11,4 +11,4 @@ def remove_image_permissions_from_collections(apps, schema_editor) -> None: ...
 class Migration(migrations.Migration):
     replaces: list[tuple[str, str]]
     dependencies: list[tuple[str, str]]
-    operations: list[Any]
+    operations: list[Operation]

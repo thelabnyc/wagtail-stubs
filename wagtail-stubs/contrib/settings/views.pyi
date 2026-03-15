@@ -9,6 +9,7 @@ from wagtail.admin import messages as messages
 from wagtail.admin.panels import ObjectList as ObjectList, extract_panel_definitions_from_model_class as extract_panel_definitions_from_model_class
 from wagtail.admin.views import generic as generic
 from wagtail.models import Site as Site
+from wagtail.permission_policies import ModelPermissionPolicy
 
 def get_model_from_url_params(app_name: str, model_name: str) -> type: ...
 def get_setting_edit_handler(model: type) -> ObjectList: ...
@@ -22,7 +23,7 @@ class EditView(generic.EditView):
     app_name: str
     model_name: str
     model: type
-    permission_policy: Any
+    permission_policy: ModelPermissionPolicy
     pk: Any
     def setup(self, request: HttpRequest, app_name: str, model_name: str, *args: Any, **kwargs: Any) -> None: ...
     def get_header_icon(self) -> str | None: ...

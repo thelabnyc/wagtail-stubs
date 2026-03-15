@@ -5,7 +5,7 @@ from wagtail.blocks.base import Block
 
 class BlockDefinitionLookup:
     blocks: dict[int, tuple[str, list[Any], dict[str, Any]]]
-    block_classes: dict[str, type[Any]]
+    block_classes: dict[str, type[Block]]
     def __init__(
         self, blocks: dict[int, tuple[str, list[Any], dict[str, Any]]]
     ) -> None: ...

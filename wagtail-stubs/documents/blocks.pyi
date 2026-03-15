@@ -1,3 +1,3 @@
-from typing import Any
+from wagtail.blocks import ChooserBlock
 
-DocumentChooserBlock: type[Any]
+DocumentChooserBlock: type[ChooserBlock]

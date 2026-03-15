@@ -1,5 +1,4 @@
 from collections.abc import Sequence
-from typing import Any
 
 from django.db import models
 

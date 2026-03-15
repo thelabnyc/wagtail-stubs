@@ -1,8 +1,11 @@
+from collections.abc import Iterable, Mapping
 from typing import Any, Self
 
 from django import forms
 from django.core import checks
 from django.core.exceptions import ValidationError
+from django.forms.renderers import BaseRenderer
+from django.forms.utils import ErrorList, _DataT, _FilesT
 from django.utils.functional import cached_property
 from wagtail.blocks.definition_lookup import (
     BlockDefinitionLookup,
@@ -21,7 +24,7 @@ __all__ = [
 DECONSTRUCT_ALIASES: dict[type, str]
 
 def get_error_json_data(error: ValidationError) -> dict[str, Any]: ...
-def get_error_list_json_data(error_list: forms.utils.ErrorList) -> list[str]: ...
+def get_error_list_json_data(error_list: ErrorList) -> list[str]: ...
 def get_help_icon() -> str: ...
 
 class BaseBlock(type):
@@ -38,7 +41,7 @@ class Block(metaclass=BaseBlock):
     DEFAULT_PREVIEW_TEMPLATE: str
     MUTABLE_META_ATTRIBUTES: list[str]
     label: str
-    meta: Any
+    meta: Block.Meta
 
     class Meta:
         label: str | None
@@ -54,9 +57,9 @@ class Block(metaclass=BaseBlock):
     ) -> Block: ...
     def set_name(self, name: str) -> None: ...
     def set_meta_options(self, opts: dict[str, Any]) -> None: ...
-    def value_from_datadict(self, data: Any, files: Any, prefix: str) -> Any: ...
+    def value_from_datadict(self, data: _DataT, files: _FilesT, prefix: str) -> Any: ...
     def value_omitted_from_data(
-        self, data: Any, files: Any, name: str
+        self, data: _DataT, files: _FilesT, name: str
     ) -> bool: ...
     def bind(
         self,
@@ -93,7 +96,7 @@ class Block(metaclass=BaseBlock):
     ) -> Any: ...
     def render_basic(self, value: Any, context: dict[str, Any] | None = ...) -> str: ...
     def get_searchable_content(self, value: Any) -> list[str]: ...
-    def extract_references(self, value: Any) -> list[Any]: ...
+    def extract_references(self, value: Any) -> Iterable[tuple[type, str, str, str]]: ...
     def get_block_by_content_path(
         self, value: Any, path_elements: list[str]
     ) -> BoundBlock | None: ...
@@ -134,7 +137,7 @@ class DeclarativeSubBlocksMetaclass(BaseBlock):
 class BlockWidget(forms.Widget):
     block_def: Block
     def __init__(
-        self, block_def: Block, attrs: dict[str, Any] | None = ...
+        self, block_def: Block, attrs: dict[str, str] | None = ...
     ) -> None: ...
     @property
     def js_context(self) -> Any: ...
@@ -145,21 +148,21 @@ class BlockWidget(forms.Widget):
         self,
         name: str,
         value: Any,
-        attrs: dict[str, Any] | None = ...,
-        errors: Any | None = ...,
-        renderer: Any | None = ...,
+        attrs: dict[str, str] | None = ...,
+        errors: ErrorList | None = ...,
+        renderer: BaseRenderer | None = ...,
     ) -> str: ...
     def render(  # type: ignore[override]
         self,
         name: str,
         value: Any,
-        attrs: dict[str, Any] | None = ...,
-        renderer: Any | None = ...,
+        attrs: dict[str, str] | None = ...,
+        renderer: BaseRenderer | None = ...,
     ) -> str: ...
     @cached_property
     def media(self) -> forms.Media: ...  # type: ignore[override]
-    def value_from_datadict(self, data: Any, files: Any, name: str) -> Any: ...
-    def value_omitted_from_data(self, data: Any, files: Any, name: str) -> bool: ...
+    def value_from_datadict(self, data: _DataT, files: _FilesT, name: str) -> Any: ...
+    def value_omitted_from_data(self, data: _DataT, files: _FilesT, name: str) -> bool: ...
 
 class BlockField(forms.Field):
     block: Block

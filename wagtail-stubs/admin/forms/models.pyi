@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from typing import Any
 
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -18,8 +19,8 @@ from wagtail.utils.registry import ModelFieldRegistry
 
 registry: ModelFieldRegistry
 
-FORM_FIELD_OVERRIDES: dict[type, Any]
-DIRECT_FORM_FIELD_OVERRIDES: dict[type, Any]
+FORM_FIELD_OVERRIDES: dict[type, dict[str, Any]]
+DIRECT_FORM_FIELD_OVERRIDES: dict[type, dict[str, Any]]
 
 def register_form_field_override(
     db_field_class: type[Field[Any, Any]],
@@ -27,7 +28,7 @@ def register_form_field_override(
     override: dict[str, Any] | None = None,
     exact_class: bool = False,
 ) -> None: ...
-def formfield_for_dbfield(db_field: Field[Any, Any], **kwargs: Any) -> FormField: ...
+def formfield_for_dbfield(db_field: Field[Any, Any], **kwargs: Any) -> FormField | None: ...
 
 class WagtailAdminModelFormOptions(PermissionedFormOptionsMixin, ClusterFormOptions):
     defer_required_on_fields: list[str]
@@ -51,7 +52,7 @@ class WagtailAdminModelForm(
     def restore_required_fields(self) -> None: ...
 
     class Meta:
-        formfield_callback: Any
+        formfield_callback: Callable[..., FormField | None]
 
 class WagtailAdminDraftStateFormMixin:
     @property

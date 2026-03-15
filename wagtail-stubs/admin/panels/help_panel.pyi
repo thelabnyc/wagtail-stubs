@@ -1,5 +1,7 @@
 from typing import Any
 
+from django.forms import Form
+
 from .base import Panel
 
 class HelpPanel(Panel):
@@ -10,9 +12,9 @@ class HelpPanel(Panel):
         self,
         content: str = "",
         template: str = "wagtailadmin/panels/help_panel.html",
-        **kwargs: Any,
+        **kwargs: str | type[Form] | dict[str, str] | None,
     ) -> None: ...
-    def clone_kwargs(self) -> dict[str, Any]: ...
+    def clone_kwargs(self) -> dict[str, str | type[Form] | dict[str, str] | None]: ...
     @property
     def clean_name(self) -> str: ...
 

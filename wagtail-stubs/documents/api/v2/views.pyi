@@ -1,4 +1,4 @@
-from typing import Any
+from django.db import models
 
 from ... import get_document_model as get_document_model
 from .serializers import DocumentSerializer as DocumentSerializer
@@ -13,4 +13,4 @@ class DocumentsAPIViewSet(BaseAPIViewSet):
     listing_default_fields: list[str]
     nested_default_fields: list[str]
     name: str
-    model: type[Any]
+    model: type[models.Model]

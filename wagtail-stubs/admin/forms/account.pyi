@@ -1,5 +1,3 @@
-from typing import Any
-
 from django import forms
 from django.contrib.auth.models import AbstractBaseUser
 
@@ -13,7 +11,7 @@ class NotificationPreferencesForm(forms.ModelForm[UserProfile]):
     class Meta:
         model: type[UserProfile]
         fields: list[str]
-        widgets: dict[str, Any]
+        widgets: dict[str, forms.Widget]
 
 class LocalePreferencesForm(forms.ModelForm[UserProfile]):
     preferred_language: forms.ChoiceField

@@ -1,5 +1,7 @@
 from typing import Any
 
+from django import forms
+
 from .field_panel import FieldPanel
 
 class TitleFieldPanel(FieldPanel):
@@ -9,14 +11,14 @@ class TitleFieldPanel(FieldPanel):
 
     def __init__(
         self,
-        *args: Any,
+        *args: str | forms.Widget | type[forms.Widget] | bool | None,
         apply_if_live: bool = False,
         classname: str = "title",
         placeholder: bool | str = True,
         targets: list[str] = ...,
-        **kwargs: Any,
+        **kwargs: str | type[forms.Form] | dict[str, str] | None,
     ) -> None: ...
-    def clone_kwargs(self) -> dict[str, Any]: ...
+    def clone_kwargs(self) -> dict[str, str | bool | list[str] | type[forms.Widget] | forms.Widget | None]: ...
 
     class BoundPanel(FieldPanel.BoundPanel):
         apply_actions: list[str]
