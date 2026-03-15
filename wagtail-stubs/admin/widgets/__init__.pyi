@@ -1,9 +1,9 @@
-from wagtail.admin.widgets.auto_height_text import *
-from wagtail.admin.widgets.boolean_radio_select import *
-from wagtail.admin.widgets.button import *
-from wagtail.admin.widgets.chooser import *
-from wagtail.admin.widgets.datetime import *
-from wagtail.admin.widgets.filtered_select import *
-from wagtail.admin.widgets.slug import *
-from wagtail.admin.widgets.switch import *
-from wagtail.admin.widgets.tags import *
+from wagtail.admin.widgets.auto_height_text import *  # noqa: F403
+from wagtail.admin.widgets.boolean_radio_select import *  # noqa: F403
+from wagtail.admin.widgets.button import *  # noqa: F403
+from wagtail.admin.widgets.chooser import *  # noqa: F403
+from wagtail.admin.widgets.datetime import *  # noqa: F403
+from wagtail.admin.widgets.filtered_select import *  # noqa: F403
+from wagtail.admin.widgets.slug import *  # noqa: F403
+from wagtail.admin.widgets.switch import *  # noqa: F403
+from wagtail.admin.widgets.tags import *  # noqa: F403

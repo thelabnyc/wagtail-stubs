@@ -1,1 +1,1 @@
-from wagtail.blocks import *
+from wagtail.blocks import *  # noqa: F403

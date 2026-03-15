@@ -2,12 +2,12 @@ from collections import OrderedDict
 from collections.abc import Generator, Iterable
 from typing import Any, TypeVar
 
-_T = TypeVar("_T")
-
 from django.core.management.base import BaseCommand, CommandParser
 from django.db import models, transaction
 from django.db.models import QuerySet
 from wagtail.search.backends.base import BaseSearchBackend, NullIndex
+
+_T = TypeVar("_T")
 
 DEFAULT_CHUNK_SIZE: int
 

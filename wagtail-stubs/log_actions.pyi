@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Self
 import types
 import uuid
 
@@ -19,7 +19,7 @@ class LogContext:
     user: AbstractBaseUser | None
     uuid: uuid.UUID | None
     def __init__(self, user: AbstractBaseUser | None = None, generate_uuid: bool = True) -> None: ...
-    def __enter__(self) -> LogContext: ...
+    def __enter__(self) -> Self: ...
     def __exit__(
         self, type: type[BaseException] | None, value: BaseException | None, traceback: types.TracebackType | None
     ) -> None: ...
