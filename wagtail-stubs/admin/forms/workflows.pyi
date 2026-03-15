@@ -8,7 +8,7 @@ from django.forms.utils import ErrorList
 from django.utils.functional import cached_property
 from django.utils.safestring import SafeString
 from wagtail.admin.forms.formsets import BaseFormSetMixin
-from wagtail.admin.panels import ObjectList
+from wagtail.admin.panels.group import ObjectList
 from wagtail.models import Page, Task, Workflow, WorkflowPage
 
 class TaskChooserSearchForm(forms.Form):

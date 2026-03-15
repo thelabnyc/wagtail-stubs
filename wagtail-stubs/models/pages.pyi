@@ -20,6 +20,7 @@ from wagtail.models.audit_log import (
 from wagtail.models.draft_state import DraftStateMixin
 from wagtail.models.i18n import Locale, TranslatableMixin
 from wagtail.models.locking import LockableMixin
+from wagtail.admin.panels.base import Panel
 from wagtail.models.panels import PanelPlaceholder
 from wagtail.models.preview import PreviewableMixin
 from wagtail.models.revisions import Revision, RevisionMixin
@@ -76,6 +77,7 @@ class AbstractPage(
 
 class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
     # ---- model fields ----
+    id: int
     title: models.CharField[str, str]
     draft_title: models.CharField[str, str]
     slug: models.SlugField[str, str]
@@ -96,9 +98,9 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
     admin_default_ordering: str
     exclude_fields_in_copy: list[str]
     default_exclude_fields_in_copy: list[str]
-    content_panels: list[PanelPlaceholder]
-    promote_panels: list[PanelPlaceholder]
-    settings_panels: list[PanelPlaceholder]
+    content_panels: list[Panel | PanelPlaceholder]
+    promote_panels: list[Panel | PanelPlaceholder]
+    settings_panels: list[Panel | PanelPlaceholder]
     template: str
     ajax_template: str | None
     show_in_menus_default: bool
@@ -232,7 +234,7 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
     def get_cache_key_components(self) -> list[Any]: ...
     @property
     def cache_key(self) -> str: ...
-    def get_sitemap_urls(self, request: HttpRequest | None = None) -> list[dict[str, str | datetime.datetime]]: ...
+    def get_sitemap_urls(self, request: HttpRequest | None = None) -> list[dict[str, Any]]: ...
     def get_ancestors(self, inclusive: bool = False) -> PageQuerySet: ...
     def get_descendants(self, inclusive: bool = False) -> PageQuerySet: ...
     def get_siblings(self, inclusive: bool = True) -> PageQuerySet: ...
@@ -289,6 +291,7 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
         exclude_fields: list[str] | None = None,
     ) -> Page: ...
     def get_parent(self, *, update: bool = False) -> Page | None: ...
+    def get_translations(self, inclusive: bool = False) -> PageQuerySet: ...
 
     class Meta:
         verbose_name: str

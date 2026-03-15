@@ -6,7 +6,7 @@ import datetime
 from django import forms
 from django.db.models import Model
 from django.forms.utils import _DataT, _FilesT
-from django.utils.functional import cached_property
+from django.utils.functional import _StrPromise, cached_property
 from django.utils.safestring import SafeString
 from wagtail.rich_text import RichText
 from wagtail.telepath import Adapter
@@ -63,7 +63,7 @@ class CharBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         max_length: int | None = None,
         min_length: int | None = None,
         validators: Sequence[_Validator] = (),
@@ -79,7 +79,7 @@ class TextBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         rows: int = 1,
         max_length: int | None = None,
         min_length: int | None = None,
@@ -111,7 +111,7 @@ class DecimalBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         max_value: Decimal | float | None = None,
         min_value: Decimal | float | None = None,
         max_digits: int | None = None,
@@ -128,7 +128,7 @@ class RegexBlock(FieldBlock):
         self,
         regex: str,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         max_length: int | None = None,
         min_length: int | None = None,
         error_messages: dict[str, str] | None = None,
@@ -142,7 +142,7 @@ class URLBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         max_length: int | None = None,
         min_length: int | None = None,
         validators: Sequence[_Validator] = (),
@@ -154,7 +154,7 @@ class BooleanBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         **kwargs: Any,
     ) -> None: ...
     def get_form_state(self, value: Any) -> bool: ...
@@ -165,7 +165,7 @@ class DateBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         format: str | None = None,
         validators: Sequence[_Validator] = (),
         **kwargs: Any,
@@ -180,7 +180,7 @@ class TimeBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         format: str | None = None,
         validators: Sequence[_Validator] = (),
         **kwargs: Any,
@@ -195,7 +195,7 @@ class DateTimeBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         format: str | None = None,
         validators: Sequence[_Validator] = (),
         **kwargs: Any,
@@ -209,7 +209,7 @@ class EmailBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
@@ -219,18 +219,20 @@ class IntegerBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         min_value: int | None = None,
         max_value: int | None = None,
         validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
 
+type _StrOrPromise = str | _StrPromise
+
 type _ChoiceType = (
-    list[tuple[str, str]]
-    | list[tuple[str, list[tuple[str, str]]]]
-    | Iterable[tuple[str, str | list[tuple[str, str]]]]
-    | Callable[[], Iterable[tuple[str, str | list[tuple[str, str]]]]]
+    list[tuple[_StrOrPromise, _StrOrPromise]]
+    | list[tuple[_StrOrPromise, list[tuple[_StrOrPromise, _StrOrPromise]]]]
+    | Iterable[tuple[_StrOrPromise, _StrOrPromise | list[tuple[_StrOrPromise, _StrOrPromise]]]]
+    | Callable[[], Iterable[tuple[_StrOrPromise, _StrOrPromise | list[tuple[_StrOrPromise, _StrOrPromise]]]]]
 )
 
 class BaseChoiceBlock(FieldBlock):
@@ -241,7 +243,7 @@ class BaseChoiceBlock(FieldBlock):
         choices: _ChoiceType | None = None,
         default: str | None = None,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         search_index: bool = True,
         widget: type[forms.Widget] | forms.Widget | None = None,
         validators: Sequence[_Validator] = (),
@@ -267,7 +269,7 @@ class RichTextBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         editor: str = "default",
         features: list[str] | None = None,
         max_length: int | None = None,
@@ -290,7 +292,7 @@ class RawHTMLBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         max_length: int | None = None,
         min_length: int | None = None,
         validators: Sequence[_Validator] = (),
@@ -305,12 +307,12 @@ class RawHTMLBlock(FieldBlock):
 
 class ChooserBlock(FieldBlock):
     _required: bool
-    _help_text: str | None
+    _help_text: str | _StrPromise | None
     _validators: Sequence[_Validator]
     def __init__(
         self,
         required: bool = True,
-        help_text: str | None = None,
+        help_text: str | _StrPromise | None = None,
         validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...

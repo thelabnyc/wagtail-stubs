@@ -11,7 +11,7 @@ from django.utils.functional import _StrPromise, cached_property
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.forms import TaskStateCommentForm
-from wagtail.locks import BaseLock, WorkflowLock
+from wagtail.locks import BaseLock
 from wagtail.models.orderable import Orderable
 from wagtail.models.revisions import Revision
 from wagtail.models.specific import SpecificMixin
@@ -321,4 +321,4 @@ class WorkflowMixin:
     def current_workflow_task(self) -> Task | None: ...
     @property
     def status_string(self) -> _StrPromise: ...
-    def get_lock(self) -> WorkflowLock | BaseLock | None: ...
+    def get_lock(self) -> BaseLock | None: ...

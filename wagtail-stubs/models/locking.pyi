@@ -2,9 +2,9 @@ from typing import Any, Self
 import datetime
 
 from django.contrib.auth.models import AbstractBaseUser
-from django.core.checks import Error
+from django.core.checks import CheckMessage
 from django.db import models
-from wagtail.locks import BasicLock
+from wagtail.locks import BaseLock
 
 class LockableMixin(models.Model):
     locked: models.BooleanField[bool, bool]
@@ -15,8 +15,8 @@ class LockableMixin(models.Model):
         abstract: bool
 
     @classmethod
-    def check(cls, **kwargs: Any) -> list[Error]: ...
+    def check(cls, **kwargs: Any) -> list[CheckMessage]: ...
     @classmethod
-    def _check_revision_mixin(cls) -> list[Error]: ...
+    def _check_revision_mixin(cls) -> list[CheckMessage]: ...
     def with_content_json(self, content: dict[str, Any]) -> Self: ...
-    def get_lock(self) -> BasicLock | None: ...
+    def get_lock(self) -> BaseLock | None: ...

@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models.fields.files import FieldFile
 from django.forms import FileInput
 from wagtail.admin.forms.collections import (
     BaseCollectionMemberForm as BaseCollectionMemberForm,
@@ -21,7 +22,7 @@ def formfield_for_dbfield(db_field, **kwargs): ...
 
 class BaseImageForm(BaseCollectionMemberForm):
     permission_policy = images_permission_policy
-    original_file: str
+    original_file: FieldFile
     def __init__(self, *args, **kwargs) -> None: ...
     def save(self, commit: bool = True): ...
     class Meta:
