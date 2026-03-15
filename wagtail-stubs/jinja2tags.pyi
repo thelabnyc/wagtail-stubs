@@ -2,7 +2,6 @@ from typing import Any
 
 from jinja2 import Environment
 from jinja2.ext import Extension
-from markupsafe import Markup
 
 class WagtailCoreExtension(Extension):
     tags: set[str]

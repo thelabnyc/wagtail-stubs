@@ -1,9 +1,18 @@
-from .views import SubmitPageTranslationView as SubmitPageTranslationView, SubmitSnippetTranslationView as SubmitSnippetTranslationView
-from _typeshed import Incomplete
 from collections.abc import Generator
+
+from _typeshed import Incomplete
 from wagtail import hooks as hooks
 from wagtail.admin.ui.menus import MenuItem as MenuItem
-from wagtail.models import Locale as Locale, Page as Page, TranslatableMixin as TranslatableMixin
+from wagtail.models import Locale as Locale
+from wagtail.models import Page as Page
+from wagtail.models import TranslatableMixin as TranslatableMixin
+
+from .views import (
+    SubmitPageTranslationView as SubmitPageTranslationView,
+)
+from .views import (
+    SubmitSnippetTranslationView as SubmitSnippetTranslationView,
+)
 
 def register_admin_urls(): ...
 def register_submit_translation_permission(): ...

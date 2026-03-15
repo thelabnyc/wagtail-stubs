@@ -21,6 +21,7 @@ class Embed(models.Model):
     class Meta:
         verbose_name: str
         verbose_name_plural: str
+
     @property
     def ratio(self) -> float | None: ...
     @property

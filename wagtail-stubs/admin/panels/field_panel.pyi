@@ -1,11 +1,10 @@
-import functools
 from typing import Any
+import functools
 
 from django import forms
 from django.db import models
 from django.forms.boundfield import BoundField
 from django.utils.functional import cached_property
-
 from wagtail.admin.compare import FieldComparison
 
 from .base import Panel

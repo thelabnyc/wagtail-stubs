@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
-from wagtail.models import PageLogEntry as PageLogEntry, Revision as Revision
+from wagtail.models import PageLogEntry as PageLogEntry
+from wagtail.models import Revision as Revision
 
 def get_comparison(page, revision_a, revision_b): ...
 

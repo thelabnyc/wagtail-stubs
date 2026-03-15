@@ -7,7 +7,8 @@ from django.template.backends.base import _EngineTemplate
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.ui.components import Component as Component
 from wagtail.admin.widgets.button import Button
-from wagtail.coreutils import get_locales_display_names as get_locales_display_names, multigetattr as multigetattr
+from wagtail.coreutils import get_locales_display_names as get_locales_display_names
+from wagtail.coreutils import multigetattr as multigetattr
 from wagtail.models import Locale as Locale
 
 class BaseColumn(metaclass=MediaDefiningClass):
@@ -15,11 +16,13 @@ class BaseColumn(metaclass=MediaDefiningClass):
         column: BaseColumn
         def __init__(self, column: BaseColumn) -> None: ...
         def render_html(self, parent_context: dict[str, Any]) -> str: ...
+
     class Cell:
         column: BaseColumn
         instance: Any
         def __init__(self, column: BaseColumn, instance: Any) -> None: ...
         def render_html(self, parent_context: dict[str, Any]) -> str: ...
+
     header_template_name: str
     cell_template_name: str | None
     name: str
@@ -31,7 +34,17 @@ class BaseColumn(metaclass=MediaDefiningClass):
     width: str | None
     ascending_title_text: str | None
     descending_title_text: str | None
-    def __init__(self, name: str, label: str | None = None, accessor: str | Callable[..., Any] | None = None, classname: str | None = None, sort_key: str | None = None, width: str | None = None, ascending_title_text: str | None = None, descending_title_text: str | None = None) -> None: ...
+    def __init__(
+        self,
+        name: str,
+        label: str | None = None,
+        accessor: str | Callable[..., Any] | None = None,
+        classname: str | None = None,
+        sort_key: str | None = None,
+        width: str | None = None,
+        ascending_title_text: str | None = None,
+        descending_title_text: str | None = None,
+    ) -> None: ...
     def get_header_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
     @cached_property
     def header_template(self) -> _EngineTemplate: ...
@@ -64,7 +77,19 @@ class TitleColumn(Column):
     link_attrs: dict[str, str]
     link_classname: str | None
     id_accessor: str
-    def __init__(self, name: str, url_name: str | None = None, get_url: Callable[[Any], str | None] | None = None, get_title_id: Callable[[Any], str | None] | None = None, label_prefix: str | None = None, get_label_id: Callable[[Any], str | None] | None = None, link_classname: str | None = None, link_attrs: dict[str, str] | None = None, id_accessor: str = 'pk', **kwargs: Any) -> None: ...
+    def __init__(
+        self,
+        name: str,
+        url_name: str | None = None,
+        get_url: Callable[[Any], str | None] | None = None,
+        get_title_id: Callable[[Any], str | None] | None = None,
+        label_prefix: str | None = None,
+        get_label_id: Callable[[Any], str | None] | None = None,
+        link_classname: str | None = None,
+        link_attrs: dict[str, str] | None = None,
+        id_accessor: str = "pk",
+        **kwargs: Any,
+    ) -> None: ...
     def get_cell_context_data(self, instance: Any, parent_context: dict[str, Any]) -> dict[str, Any]: ...
     def get_link_attrs(self, instance: Any, parent_context: dict[str, Any]) -> dict[str, str]: ...
     def get_link_url(self, instance: Any, parent_context: dict[str, Any]) -> str | None: ...
@@ -75,7 +100,9 @@ class StatusFlagColumn(Column):
     cell_template_name: str
     true_label: str | None
     false_label: str | None
-    def __init__(self, name: str, true_label: str | None = None, false_label: str | None = None, **kwargs: Any) -> None: ...
+    def __init__(
+        self, name: str, true_label: str | None = None, false_label: str | None = None, **kwargs: Any
+    ) -> None: ...
 
 class StatusTagColumn(Column):
     cell_template_name: str
@@ -105,7 +132,7 @@ class UpdatedAtColumn(DateColumn):
 class UserColumn(Column):
     cell_template_name: str
     blank_display_name: str
-    def __init__(self, name: str, blank_display_name: str = '', **kwargs: Any) -> None: ...
+    def __init__(self, name: str, blank_display_name: str = "", **kwargs: Any) -> None: ...
     def get_cell_context_data(self, instance: Any, parent_context: dict[str, Any]) -> dict[str, Any]: ...
 
 class BulkActionsCheckboxColumn(BaseColumn):
@@ -122,7 +149,17 @@ class UsageCountColumn(Column):
 class ReferencesColumn(Column):
     cell_template_name: str
     describe_on_delete: bool
-    def __init__(self, name: str, label: str | None = None, accessor: str | Callable[..., Any] | None = None, classname: str | None = None, sort_key: str | None = None, width: str | None = None, get_url: Callable[[Any], str | None] | None = None, describe_on_delete: bool = False) -> None: ...
+    def __init__(
+        self,
+        name: str,
+        label: str | None = None,
+        accessor: str | Callable[..., Any] | None = None,
+        classname: str | None = None,
+        sort_key: str | None = None,
+        width: str | None = None,
+        get_url: Callable[[Any], str | None] | None = None,
+        describe_on_delete: bool = False,
+    ) -> None: ...
     def get_edit_url(self, instance: Any) -> str | None: ...
     def get_cell_context_data(self, instance: Any, parent_context: dict[str, Any]) -> dict[str, Any]: ...
 
@@ -146,7 +183,17 @@ class Table(Component):
     base_url: str | None
     ordering: str | None
     base_attrs: dict[str, str]
-    def __init__(self, columns: Sequence[BaseColumn], data: Sequence[Any], template_name: str | None = None, base_url: str | None = None, ordering: str | None = None, classname: str | None = None, attrs: dict[str, str] | None = None, caption: str | None = None) -> None: ...
+    def __init__(
+        self,
+        columns: Sequence[BaseColumn],
+        data: Sequence[Any],
+        template_name: str | None = None,
+        base_url: str | None = None,
+        ordering: str | None = None,
+        classname: str | None = None,
+        attrs: dict[str, str] | None = None,
+        caption: str | None = None,
+    ) -> None: ...
     def get_caption(self) -> str | None: ...
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
     @property

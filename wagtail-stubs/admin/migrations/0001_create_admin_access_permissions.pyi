@@ -1,4 +1,5 @@
 from typing import Any
+
 from django.db import migrations
 
 def create_admin_access_permissions(apps, schema_editor) -> None: ...

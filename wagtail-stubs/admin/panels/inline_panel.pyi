@@ -1,11 +1,10 @@
-import functools
 from typing import Any
+import functools
 
 from django.db.models.fields.reverse_related import ForeignObjectRel
-from django.forms.formsets import BaseFormSet
 from django.forms.forms import BaseForm
+from django.forms.formsets import BaseFormSet
 from django.utils.functional import cached_property
-
 from wagtail.admin.compare import ChildRelationComparison
 
 from .base import Panel
@@ -34,7 +33,9 @@ class InlinePanel(Panel):
     def panel_definitions(self) -> list[Panel]: ...
     @cached_property
     def child_edit_handler(self) -> Panel: ...
-    def get_form_options(self) -> dict[str, dict[str, dict[str, list[str] | dict[str, str] | int | bool | type | None]]]: ...
+    def get_form_options(
+        self,
+    ) -> dict[str, dict[str, dict[str, list[str] | dict[str, str] | int | bool | type | None]]]: ...
     def on_model_bound(self) -> None: ...
     def classes(self) -> list[str]: ...
 

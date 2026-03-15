@@ -1,6 +1,6 @@
 from typing import Any
-from django import forms
 
+from django import forms
 from wagtail.models import BaseViewRestriction
 
 class PasswordViewRestrictionForm(forms.Form):

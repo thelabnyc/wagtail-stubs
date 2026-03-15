@@ -1,14 +1,13 @@
-import functools
-import re
 from collections.abc import Callable, Iterable
 from hashlib import _Hash
 from typing import Any
+import functools
+import re
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Model
 from django.db.models.base import ModelBase
 from django.http import HttpRequest
-
 from wagtail.models import Page, Site
 
 WAGTAIL_APPEND_SLASH: bool
@@ -32,7 +31,6 @@ class InvokeViaAttributeShortcut:
     def __getattr__(self, name: str) -> Any: ...
 
 def find_available_slug(parent: Page, requested_slug: str, ignore_page_id: int | None = None) -> str: ...
-
 @functools.cache
 def get_content_languages() -> dict[str, str]: ...
 def get_supported_content_language_variant(lang_code: str, strict: bool = False) -> str: ...
@@ -64,4 +62,6 @@ class BatchCreator(BatchProcessor):
     def extend(self, iterable: Iterable[Model | dict[str, Any]]) -> None: ...
     def get_summary(self) -> str: ...
 
-def make_wagtail_template_fragment_key(fragment_name: str, page: Page, site: Site, vary_on: list[str] | None = None) -> str: ...
+def make_wagtail_template_fragment_key(
+    fragment_name: str, page: Page, site: Site, vary_on: list[str] | None = None
+) -> str: ...

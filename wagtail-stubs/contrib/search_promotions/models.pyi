@@ -1,6 +1,11 @@
 from _typeshed import Incomplete
 from django.db import models
-from wagtail.search.utils import MAX_QUERY_STRING_LENGTH as MAX_QUERY_STRING_LENGTH, normalise_query_string as normalise_query_string
+from wagtail.search.utils import (
+    MAX_QUERY_STRING_LENGTH as MAX_QUERY_STRING_LENGTH,
+)
+from wagtail.search.utils import (
+    normalise_query_string as normalise_query_string,
+)
 
 class Query(models.Model):
     query_string: Incomplete
@@ -37,8 +42,6 @@ class SearchPromotion(models.Model):
     def title(self): ...
     @property
     def link(self) -> str: ...
-    def __repr__(self) -> str: ...
-    def __str__(self) -> str: ...
     class Meta:
         ordering: Incomplete
         verbose_name: Incomplete

@@ -1,18 +1,17 @@
-import datetime
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from decimal import Decimal
 from typing import Any
+import datetime
 
 from django import forms
 from django.db.models import Model
 from django.forms.utils import _DataT, _FilesT
 from django.utils.functional import cached_property
 from django.utils.safestring import SafeString
-
 from wagtail.rich_text import RichText
 from wagtail.telepath import Adapter
 
-from .base import Block, BoundBlock
+from .base import Block
 
 __all__ = [
     "FieldBlock",
@@ -37,19 +36,15 @@ __all__ = [
     "BlockQuoteBlock",
 ]
 
-_Validator = Callable[[Any], None]
+type _Validator = Callable[[Any], None]
 
 class FieldBlock(Block):
     field: forms.Field
     def id_for_label(self, prefix: str) -> str | None: ...
     def value_from_form(self, value: Any) -> Any: ...
     def value_for_form(self, value: Any) -> Any: ...
-    def value_from_datadict(
-        self, data: _DataT, files: _FilesT, prefix: str
-    ) -> Any: ...
-    def value_omitted_from_data(
-        self, data: _DataT, files: _FilesT, prefix: str
-    ) -> bool: ...
+    def value_from_datadict(self, data: _DataT, files: _FilesT, prefix: str) -> Any: ...
+    def value_omitted_from_data(self, data: _DataT, files: _FilesT, prefix: str) -> bool: ...
     def clean(self, value: Any) -> Any: ...
     @property
     def required(self) -> bool: ...
@@ -117,15 +112,15 @@ class DecimalBlock(FieldBlock):
         self,
         required: bool = True,
         help_text: str | None = None,
-        max_value: Decimal | int | float | None = None,
-        min_value: Decimal | int | float | None = None,
+        max_value: Decimal | float | None = None,
+        min_value: Decimal | float | None = None,
         max_digits: int | None = None,
         decimal_places: int | None = None,
         validators: Sequence[_Validator] = (),
         *args: Any,
         **kwargs: Any,
     ) -> None: ...
-    def to_python(self, value: str | int | float | Decimal | None) -> Decimal | None: ...
+    def to_python(self, value: str | float | Decimal | None) -> Decimal | None: ...
 
 class RegexBlock(FieldBlock):
     field: forms.RegexField
@@ -231,7 +226,7 @@ class IntegerBlock(FieldBlock):
         **kwargs: Any,
     ) -> None: ...
 
-_ChoiceType = (
+type _ChoiceType = (
     list[tuple[str, str]]
     | list[tuple[str, list[tuple[str, str]]]]
     | Iterable[tuple[str, str | list[tuple[str, str]]]]
@@ -331,9 +326,7 @@ class ChooserBlock(FieldBlock):
     def value_from_form(self, value: int | str | Model | None) -> Model | None: ...
     def get_form_state(self, value: Model | None) -> dict[str, Any] | None: ...
     def clean(self, value: Model | int | str | None) -> Model | None: ...
-    def extract_references(
-        self, value: Model | None
-    ) -> Iterator[tuple[type[Model], str, str, str]]: ...
+    def extract_references(self, value: Model | None) -> Iterator[tuple[type[Model], str, str, str]]: ...
 
 class PageChooserBlock(ChooserBlock):
     page_type: list[str | type[Model]]

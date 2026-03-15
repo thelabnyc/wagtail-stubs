@@ -1,9 +1,17 @@
 from django.db import models
+from wagtail.api.v2.filters import (
+    FieldsFilter as FieldsFilter,
+)
+from wagtail.api.v2.filters import (
+    OrderingFilter as OrderingFilter,
+)
+from wagtail.api.v2.filters import (
+    SearchFilter as SearchFilter,
+)
+from wagtail.api.v2.views import BaseAPIViewSet as BaseAPIViewSet
 
 from ... import get_document_model as get_document_model
 from .serializers import DocumentSerializer as DocumentSerializer
-from wagtail.api.v2.filters import FieldsFilter as FieldsFilter, OrderingFilter as OrderingFilter, SearchFilter as SearchFilter
-from wagtail.api.v2.views import BaseAPIViewSet as BaseAPIViewSet
 
 class DocumentsAPIViewSet(BaseAPIViewSet):
     base_serializer_class = DocumentSerializer

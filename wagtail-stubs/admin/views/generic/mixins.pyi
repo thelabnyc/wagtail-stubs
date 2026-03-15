@@ -1,12 +1,9 @@
-from __future__ import annotations
-
 from typing import Any
 
 from django.db import models
 from django.forms import Form
 from django.http import HttpRequest, HttpResponse
 from django.utils.functional import cached_property
-
 from wagtail.admin.panels import Panel
 from wagtail.admin.ui.editing_sessions import EditingSessionsModule
 from wagtail.admin.ui.tables import Column

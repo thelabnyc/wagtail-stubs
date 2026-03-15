@@ -7,14 +7,41 @@ from django.forms import Form
 from django.http import HttpRequest, HttpResponse
 from django.utils.functional import cached_property as cached_property
 from django.views.generic.base import View
-
 from wagtail.admin.staticfiles import versioned_static as versioned_static
-from wagtail.admin.ui.tables import Column as Column, DateColumn as DateColumn, DownloadColumn as DownloadColumn
-from wagtail.admin.views.generic.chooser import BaseChooseView as BaseChooseView, ChooseResultsViewMixin as ChooseResultsViewMixin, ChooseViewMixin as ChooseViewMixin, ChosenResponseMixin as ChosenResponseMixin, ChosenViewMixin as ChosenViewMixin, CreateViewMixin as CreateViewMixin, CreationFormMixin as CreationFormMixin
+from wagtail.admin.ui.tables import Column as Column
+from wagtail.admin.ui.tables import DateColumn as DateColumn
+from wagtail.admin.ui.tables import DownloadColumn as DownloadColumn
+from wagtail.admin.views.generic.chooser import (
+    BaseChooseView as BaseChooseView,
+)
+from wagtail.admin.views.generic.chooser import (
+    ChooseResultsViewMixin as ChooseResultsViewMixin,
+)
+from wagtail.admin.views.generic.chooser import (
+    ChooseViewMixin as ChooseViewMixin,
+)
+from wagtail.admin.views.generic.chooser import (
+    ChosenResponseMixin as ChosenResponseMixin,
+)
+from wagtail.admin.views.generic.chooser import (
+    ChosenViewMixin as ChosenViewMixin,
+)
+from wagtail.admin.views.generic.chooser import (
+    CreateViewMixin as CreateViewMixin,
+)
+from wagtail.admin.views.generic.chooser import (
+    CreationFormMixin as CreationFormMixin,
+)
 from wagtail.admin.viewsets.chooser import ChooserViewSet as ChooserViewSet
-from wagtail.admin.widgets import BaseChooser as BaseChooser, BaseChooserAdapter as BaseChooserAdapter
+from wagtail.admin.widgets import BaseChooser as BaseChooser
+from wagtail.admin.widgets import BaseChooserAdapter as BaseChooserAdapter
 from wagtail.blocks import ChooserBlock as ChooserBlock
-from wagtail.documents import get_document_model as get_document_model, get_document_model_string as get_document_model_string
+from wagtail.documents import (
+    get_document_model as get_document_model,
+)
+from wagtail.documents import (
+    get_document_model_string as get_document_model_string,
+)
 from wagtail.documents.permissions import permission_policy as permission_policy
 from wagtail.models.media import Collection
 

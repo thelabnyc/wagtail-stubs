@@ -1,5 +1,7 @@
+from wagtail.embeds.exceptions import EmbedException as EmbedException
+from wagtail.embeds.exceptions import EmbedNotFoundException as EmbedNotFoundException
+
 from .oembed import OEmbedFinder as OEmbedFinder
-from wagtail.embeds.exceptions import EmbedException as EmbedException, EmbedNotFoundException as EmbedNotFoundException
 
 class AccessDeniedFacebookOEmbedException(EmbedException): ...
 
@@ -11,4 +13,5 @@ class FacebookOEmbedFinder(OEmbedFinder):
     omitscript: bool
     def __init__(self, omitscript: bool = False, app_id: str | None = None, app_secret: str | None = None) -> None: ...
     def find_embed(self, url, max_width=None, max_height=None): ...
+
 embed_finder_class = FacebookOEmbedFinder

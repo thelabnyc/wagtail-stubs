@@ -1,9 +1,13 @@
-from .models import Redirect as Redirect
-from _typeshed import Incomplete
 from collections.abc import Iterable
+
+from _typeshed import Incomplete
 from wagtail.contrib.frontend_cache.utils import PurgeBatch as PurgeBatch
-from wagtail.coreutils import BatchCreator as BatchCreator, get_dummy_request as get_dummy_request
-from wagtail.models import Page as Page, Site as Site
+from wagtail.coreutils import BatchCreator as BatchCreator
+from wagtail.coreutils import get_dummy_request as get_dummy_request
+from wagtail.models import Page as Page
+from wagtail.models import Site as Site
+
+from .models import Redirect as Redirect
 
 logger: Incomplete
 

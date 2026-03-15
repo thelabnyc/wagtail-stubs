@@ -1,11 +1,10 @@
+from collections.abc import Callable, Sequence
 from typing import Any
 import logging
 import uuid
-from collections.abc import Callable, Sequence
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.exceptions import PermissionDenied
-
 from wagtail.models import Page
 
 logger: logging.Logger

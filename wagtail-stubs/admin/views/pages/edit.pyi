@@ -15,13 +15,62 @@ from wagtail.admin.models import EditingSession as EditingSession
 from wagtail.admin.panels.base import Panel
 from wagtail.admin.ui.components import MediaContainer as MediaContainer
 from wagtail.admin.ui.editing_sessions import EditingSessionsModule as EditingSessionsModule
-from wagtail.admin.ui.side_panels import ChecksSidePanel as ChecksSidePanel, CommentsSidePanel as CommentsSidePanel, PageStatusSidePanel as PageStatusSidePanel, PreviewSidePanel as PreviewSidePanel
+from wagtail.admin.ui.side_panels import (
+    ChecksSidePanel as ChecksSidePanel,
+)
+from wagtail.admin.ui.side_panels import (
+    CommentsSidePanel as CommentsSidePanel,
+)
+from wagtail.admin.ui.side_panels import (
+    PageStatusSidePanel as PageStatusSidePanel,
+)
+from wagtail.admin.ui.side_panels import (
+    PreviewSidePanel as PreviewSidePanel,
+)
 from wagtail.admin.utils import get_valid_next_url_from_request as get_valid_next_url_from_request
 from wagtail.admin.views.generic import HookResponseMixin as HookResponseMixin
 from wagtail.admin.views.generic.base import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
 from wagtail.exceptions import PageClassNotFoundError as PageClassNotFoundError
-from wagtail.locks import BaseLock, BasicLock as BasicLock, ScheduledForPublishLock as ScheduledForPublishLock, WorkflowLock as WorkflowLock
-from wagtail.models import COMMENTS_RELATION_NAME as COMMENTS_RELATION_NAME, Comment as Comment, CommentReply as CommentReply, Locale, Page as Page, PageSubscription as PageSubscription, Revision as Revision, Task, WorkflowState as WorkflowState, get_default_page_content_type as get_default_page_content_type
+from wagtail.locks import (
+    BaseLock,
+)
+from wagtail.locks import (
+    BasicLock as BasicLock,
+)
+from wagtail.locks import (
+    ScheduledForPublishLock as ScheduledForPublishLock,
+)
+from wagtail.locks import (
+    WorkflowLock as WorkflowLock,
+)
+from wagtail.models import (
+    COMMENTS_RELATION_NAME as COMMENTS_RELATION_NAME,
+)
+from wagtail.models import (
+    Comment as Comment,
+)
+from wagtail.models import (
+    CommentReply as CommentReply,
+)
+from wagtail.models import (
+    Locale,
+    Task,
+)
+from wagtail.models import (
+    Page as Page,
+)
+from wagtail.models import (
+    PageSubscription as PageSubscription,
+)
+from wagtail.models import (
+    Revision as Revision,
+)
+from wagtail.models import (
+    WorkflowState as WorkflowState,
+)
+from wagtail.models import (
+    get_default_page_content_type as get_default_page_content_type,
+)
 from wagtail.models.pages import PagePermissionTester
 from wagtail.utils.timestamps import render_timestamp as render_timestamp
 
@@ -32,8 +81,12 @@ class EditView(WagtailAdminTemplateMixin, HookResponseMixin, View):
     def get_template_names(self) -> list[str]: ...
     def add_save_confirmation_message(self) -> None: ...
     def get_commenting_changes(self) -> dict[str, list[Comment | tuple[Comment, list[CommentReply]]]]: ...
-    def send_commenting_notifications(self, changes: dict[str, list[Comment | tuple[Comment, list[CommentReply]]]]) -> None: ...
-    def log_commenting_changes(self, changes: dict[str, list[Comment | tuple[Comment, list[CommentReply]]]], revision: Revision) -> None: ...
+    def send_commenting_notifications(
+        self, changes: dict[str, list[Comment | tuple[Comment, list[CommentReply]]]]
+    ) -> None: ...
+    def log_commenting_changes(
+        self, changes: dict[str, list[Comment | tuple[Comment, list[CommentReply]]]], revision: Revision
+    ) -> None: ...
     def get_edit_message_button(self) -> messages.button: ...
     def get_view_draft_message_button(self) -> messages.button: ...
     def get_view_live_message_button(self) -> messages.button: ...

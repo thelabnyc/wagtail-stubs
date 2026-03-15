@@ -1,5 +1,5 @@
-from django.db.migrations.operations.base import Operation
 from django.db import migrations
+from django.db.migrations.operations.base import Operation
 
 def get_image_permissions(apps): ...
 def copy_image_permissions_to_collections(apps, schema_editor) -> None: ...

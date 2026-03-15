@@ -10,6 +10,15 @@ class PageMenuItem(MenuItem):
     link_rel: str
     page: Page
     next_url: str | None
-    def __init__(self, label: str | None = None, url: str | None = None, icon_name: str | None = None, priority: int | None = None, *, page: Page, next_url: str | None = None) -> None: ...
+    def __init__(
+        self,
+        label: str | None = None,
+        url: str | None = None,
+        icon_name: str | None = None,
+        priority: int | None = None,
+        *,
+        page: Page,
+        next_url: str | None = None,
+    ) -> None: ...
     @cached_property
     def url(self) -> str | None: ...

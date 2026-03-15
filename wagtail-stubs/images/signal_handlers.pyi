@@ -1,6 +1,7 @@
-from .tasks import set_image_focal_point_task as set_image_focal_point_task
 from wagtail.images import get_image_model as get_image_model
 from wagtail.tasks import delete_file_from_storage_task as delete_file_from_storage_task
+
+from .tasks import set_image_focal_point_task as set_image_focal_point_task
 
 def post_delete_file_cleanup(instance, **kwargs): ...
 def post_delete_purge_rendition_cache(instance, **kwargs) -> None: ...

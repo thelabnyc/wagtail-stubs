@@ -1,4 +1,5 @@
-from wagtail.compat import AUTH_USER_APP_LABEL as AUTH_USER_APP_LABEL, AUTH_USER_MODEL_NAME as AUTH_USER_MODEL_NAME
+from wagtail.compat import AUTH_USER_APP_LABEL as AUTH_USER_APP_LABEL
+from wagtail.compat import AUTH_USER_MODEL_NAME as AUTH_USER_MODEL_NAME
 from wagtail.coreutils import safe_md5 as safe_md5
 
 delete_user_perm: str

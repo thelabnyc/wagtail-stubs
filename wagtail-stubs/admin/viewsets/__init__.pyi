@@ -1,6 +1,6 @@
 from django.urls import URLPattern
-
-from wagtail.admin.viewsets.base import ViewSet, ViewSetGroup as ViewSetGroup
+from wagtail.admin.viewsets.base import ViewSet
+from wagtail.admin.viewsets.base import ViewSetGroup as ViewSetGroup
 
 class ViewSetRegistry:
     viewsets: list[ViewSet]

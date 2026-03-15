@@ -6,7 +6,6 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.http.request import QueryDict
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView, View
-
 from wagtail.blocks.base import Block
 
 from .permissions import PermissionCheckedMixin

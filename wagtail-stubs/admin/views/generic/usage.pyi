@@ -2,7 +2,6 @@ from typing import Any
 
 from django.db import models
 from django.utils.functional import cached_property
-
 from wagtail.admin.ui import tables
 from wagtail.admin.widgets.button import HeaderButton
 from wagtail.models.reference_index import ReferenceGroups
@@ -34,4 +33,6 @@ class UsageView(PermissionCheckedMixin, BaseObjectMixin, BaseListingView):
     @cached_property
     def columns(self) -> list[tables.Column]: ...
     def get_table(self, object_list: ReferenceGroups, **kwargs: Any) -> tables.Table: ...
-    def get_context_data(self, *args: Any, object_list: list[dict[str, Any]] | None = None, **kwargs: Any) -> dict[str, Any]: ...
+    def get_context_data(
+        self, *args: Any, object_list: list[dict[str, Any]] | None = None, **kwargs: Any
+    ) -> dict[str, Any]: ...

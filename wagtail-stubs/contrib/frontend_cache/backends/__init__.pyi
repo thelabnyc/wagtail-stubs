@@ -1,5 +1,5 @@
-from .base import *
 from .azure import *
-from .http import *
+from .base import *
 from .cloudflare import *
 from .cloudfront import *
+from .http import *

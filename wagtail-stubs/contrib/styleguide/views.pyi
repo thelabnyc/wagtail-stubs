@@ -7,7 +7,24 @@ from wagtail.admin.forms.search import SearchForm as SearchForm
 from wagtail.admin.rich_text import get_rich_text_editor_widget as get_rich_text_editor_widget
 from wagtail.admin.staticfiles import versioned_static as versioned_static
 from wagtail.admin.views.generic import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
-from wagtail.admin.widgets import AdminAutoHeightTextInput as AdminAutoHeightTextInput, AdminDateInput as AdminDateInput, AdminDateTimeInput as AdminDateTimeInput, AdminPageChooser as AdminPageChooser, AdminTimeInput as AdminTimeInput, SwitchInput as SwitchInput
+from wagtail.admin.widgets import (
+    AdminAutoHeightTextInput as AdminAutoHeightTextInput,
+)
+from wagtail.admin.widgets import (
+    AdminDateInput as AdminDateInput,
+)
+from wagtail.admin.widgets import (
+    AdminDateTimeInput as AdminDateTimeInput,
+)
+from wagtail.admin.widgets import (
+    AdminPageChooser as AdminPageChooser,
+)
+from wagtail.admin.widgets import (
+    AdminTimeInput as AdminTimeInput,
+)
+from wagtail.admin.widgets import (
+    SwitchInput as SwitchInput,
+)
 from wagtail.compat import URLField as URLField
 from wagtail.documents.widgets import AdminDocumentChooser as AdminDocumentChooser
 from wagtail.images.widgets import AdminImageChooser as AdminImageChooser

@@ -1,5 +1,5 @@
-import datetime
 from typing import Any, ClassVar, Self
+import datetime
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -16,9 +16,7 @@ class RevisionQuerySet(models.QuerySet["Revision"]):
     def for_instance(self, instance: models.Model) -> RevisionQuerySet: ...
 
 class RevisionsManager(models.Manager["Revision"]):
-    def previous_revision_id_subquery(
-        self, revision_fk_name: str = "revision"
-    ) -> Subquery: ...
+    def previous_revision_id_subquery(self, revision_fk_name: str = "revision") -> Subquery: ...
 
 class PageRevisionsManager(RevisionsManager):
     def get_queryset(self) -> RevisionQuerySet: ...
@@ -31,9 +29,7 @@ class Revision(models.Model):
     user: models.ForeignKey[AbstractBaseUser | None, AbstractBaseUser | None]
     object_str: models.TextField[str, str]
     content: models.JSONField[dict[str, Any], dict[str, Any]]
-    approved_go_live_at: models.DateTimeField[
-        datetime.datetime | None, datetime.datetime | None
-    ]
+    approved_go_live_at: models.DateTimeField[datetime.datetime | None, datetime.datetime | None]
 
     objects: RevisionsManager  # type: ignore[assignment]
     page_revisions: ClassVar[PageRevisionsManager]
@@ -58,7 +54,6 @@ class Revision(models.Model):
     ) -> None: ...
     def get_previous(self) -> Revision: ...
     def get_next(self) -> Revision: ...
-    def __str__(self) -> str: ...
 
     class Meta:
         verbose_name: str
@@ -77,9 +72,7 @@ class RevisionMixin(models.Model):
     def get_latest_revision_as_object(self) -> Self: ...
     def serializable_data(self) -> dict[str, Any]: ...
     @classmethod
-    def from_serializable_data(
-        cls, data: dict[str, Any], check_fks: bool = True, strict_fks: bool = False
-    ) -> Self: ...
+    def from_serializable_data(cls, data: dict[str, Any], check_fks: bool = True, strict_fks: bool = False) -> Self: ...
     def with_content_json(self, content: dict[str, Any]) -> Self: ...
     def save_revision(
         self,

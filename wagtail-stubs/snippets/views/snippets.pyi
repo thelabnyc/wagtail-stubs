@@ -1,24 +1,77 @@
 from typing import Any
+
 from django.db import models
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.checks import check_panels_in_model as check_panels_in_model
-from wagtail.admin.panels import ObjectList as ObjectList, extract_panel_definitions_from_model_class as extract_panel_definitions_from_model_class
+from wagtail.admin.panels import (
+    ObjectList as ObjectList,
+)
+from wagtail.admin.panels import (
+    extract_panel_definitions_from_model_class as extract_panel_definitions_from_model_class,
+)
 from wagtail.admin.ui.components import MediaContainer as MediaContainer
 from wagtail.admin.ui.menus import MenuItem as MenuItem
-from wagtail.admin.ui.side_panels import ChecksSidePanel as ChecksSidePanel, PreviewSidePanel as PreviewSidePanel
-from wagtail.admin.ui.tables import BulkActionsCheckboxColumn as BulkActionsCheckboxColumn, NumberColumn as NumberColumn, TitleColumn as TitleColumn
+from wagtail.admin.ui.side_panels import ChecksSidePanel as ChecksSidePanel
+from wagtail.admin.ui.side_panels import PreviewSidePanel as PreviewSidePanel
+from wagtail.admin.ui.tables import (
+    BulkActionsCheckboxColumn as BulkActionsCheckboxColumn,
+)
+from wagtail.admin.ui.tables import (
+    NumberColumn as NumberColumn,
+)
+from wagtail.admin.ui.tables import (
+    TitleColumn as TitleColumn,
+)
 from wagtail.admin.views import generic as generic
-from wagtail.admin.views.generic import history as history, lock as lock, workflow as workflow
+from wagtail.admin.views.generic import history as history
+from wagtail.admin.views.generic import lock as lock
+from wagtail.admin.views.generic import workflow as workflow
 from wagtail.admin.views.generic.permissions import PermissionCheckedMixin as PermissionCheckedMixin
-from wagtail.admin.views.generic.preview import PreviewOnCreate as PreviewOnCreate, PreviewOnEdit as PreviewOnEdit, PreviewRevision as PreviewRevision
+from wagtail.admin.views.generic.preview import (
+    PreviewOnCreate as PreviewOnCreate,
+)
+from wagtail.admin.views.generic.preview import (
+    PreviewOnEdit as PreviewOnEdit,
+)
+from wagtail.admin.views.generic.preview import (
+    PreviewRevision as PreviewRevision,
+)
 from wagtail.admin.viewsets import viewsets as viewsets
-from wagtail.admin.viewsets.model import ModelViewSet as ModelViewSet, ModelViewSetGroup as ModelViewSetGroup
-from wagtail.admin.widgets.button import BaseButton as BaseButton, Button as Button, ButtonWithDropdown as ButtonWithDropdown
-from wagtail.models import DraftStateMixin as DraftStateMixin, LockableMixin as LockableMixin, PreviewableMixin as PreviewableMixin, RevisionMixin as RevisionMixin, WorkflowMixin as WorkflowMixin
+from wagtail.admin.viewsets.model import ModelViewSet as ModelViewSet
+from wagtail.admin.viewsets.model import ModelViewSetGroup as ModelViewSetGroup
+from wagtail.admin.widgets.button import (
+    BaseButton as BaseButton,
+)
+from wagtail.admin.widgets.button import (
+    Button as Button,
+)
+from wagtail.admin.widgets.button import (
+    ButtonWithDropdown as ButtonWithDropdown,
+)
+from wagtail.models import (
+    DraftStateMixin as DraftStateMixin,
+)
+from wagtail.models import (
+    LockableMixin as LockableMixin,
+)
+from wagtail.models import (
+    PreviewableMixin as PreviewableMixin,
+)
+from wagtail.models import (
+    RevisionMixin as RevisionMixin,
+)
+from wagtail.models import (
+    WorkflowMixin as WorkflowMixin,
+)
 from wagtail.permissions import ModelPermissionPolicy as ModelPermissionPolicy
 from wagtail.snippets.action_menu import SnippetActionMenu as SnippetActionMenu
-from wagtail.snippets.models import SnippetAdminURLFinder as SnippetAdminURLFinder, get_snippet_models as get_snippet_models
+from wagtail.snippets.models import (
+    SnippetAdminURLFinder as SnippetAdminURLFinder,
+)
+from wagtail.snippets.models import (
+    get_snippet_models as get_snippet_models,
+)
 from wagtail.snippets.side_panels import SnippetStatusSidePanel as SnippetStatusSidePanel
 from wagtail.snippets.views.chooser import SnippetChooserViewSet as SnippetChooserViewSet
 

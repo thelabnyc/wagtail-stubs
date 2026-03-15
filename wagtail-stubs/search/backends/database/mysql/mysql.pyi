@@ -3,7 +3,6 @@ from typing import Any
 
 from django.db import models
 from django.db.models import QuerySet
-
 from wagtail.search.backends.base import BaseSearchBackend, BaseSearchQueryCompiler, BaseSearchResults
 from wagtail.search.index import AutocompleteField, BaseField, SearchField
 
@@ -33,7 +32,6 @@ class Index:
     def add_item(self, obj: models.Model) -> None: ...
     def add_items(self, model: type, objs: Iterable[models.Model]) -> None: ...
     def delete_item(self, item: models.Model) -> None: ...
-    def __str__(self) -> str: ...
 
 class MySQLSearchQueryCompiler(BaseSearchQueryCompiler):
     DEFAULT_OPERATOR: str

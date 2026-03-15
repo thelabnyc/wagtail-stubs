@@ -1,11 +1,10 @@
-import re
 from collections.abc import Callable, Iterator, Sequence
 from functools import partial
 from typing import Any, TypeVar
+import re
 
 from django.db.backends.base.base import BaseDatabaseWrapper
 from django.http import QueryDict
-
 from wagtail.search.index import BaseField, RelatedFields, SearchField
 from wagtail.search.query import SearchQuery
 

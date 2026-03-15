@@ -1,5 +1,6 @@
 from wagtail.images.exceptions import InvalidFilterSpecError as InvalidFilterSpecError
-from wagtail.images.rect import Rect as Rect, Vector as Vector
+from wagtail.images.rect import Rect as Rect
+from wagtail.images.rect import Vector as Vector
 from wagtail.images.utils import parse_color_string as parse_color_string
 
 class Operation:

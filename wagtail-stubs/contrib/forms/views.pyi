@@ -2,15 +2,26 @@ from _typeshed import Incomplete
 from django.utils.functional import classproperty
 from django.views.generic import TemplateView
 from wagtail.admin import messages as messages
-from wagtail.admin.filters import DateRangePickerWidget as DateRangePickerWidget, MultipleContentTypeFilter as MultipleContentTypeFilter, WagtailFilterSet as WagtailFilterSet
-from wagtail.admin.ui.tables import Column as Column, TitleColumn as TitleColumn
+from wagtail.admin.filters import (
+    DateRangePickerWidget as DateRangePickerWidget,
+)
+from wagtail.admin.filters import (
+    MultipleContentTypeFilter as MultipleContentTypeFilter,
+)
+from wagtail.admin.filters import (
+    WagtailFilterSet as WagtailFilterSet,
+)
+from wagtail.admin.ui.tables import Column as Column
+from wagtail.admin.ui.tables import TitleColumn as TitleColumn
 from wagtail.admin.utils import get_valid_next_url_from_request as get_valid_next_url_from_request
 from wagtail.admin.views.generic import PermissionCheckedMixin as PermissionCheckedMixin
 from wagtail.admin.views.generic.base import BaseListingView as BaseListingView
 from wagtail.admin.views.mixins import SpreadsheetExportMixin as SpreadsheetExportMixin
-from wagtail.admin.views.pages.listing import PageFilterSet as PageFilterSet, PageListingMixin as PageListingMixin
+from wagtail.admin.views.pages.listing import PageFilterSet as PageFilterSet
+from wagtail.admin.views.pages.listing import PageListingMixin as PageListingMixin
 from wagtail.contrib.forms.models import FormMixin as FormMixin
-from wagtail.contrib.forms.utils import get_form_types as get_form_types, get_forms_for_user as get_forms_for_user
+from wagtail.contrib.forms.utils import get_form_types as get_form_types
+from wagtail.contrib.forms.utils import get_forms_for_user as get_forms_for_user
 from wagtail.models import Page as Page
 from wagtail.permissions import page_permission_policy as page_permission_policy
 

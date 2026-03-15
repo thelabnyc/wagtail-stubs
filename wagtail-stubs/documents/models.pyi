@@ -7,8 +7,8 @@ from django.core.files.base import File
 from django.db import models
 from django.dispatch import Signal
 from taggit.managers import TaggableManager
-
-from wagtail.models import CollectionMember as CollectionMember, ReferenceIndex as ReferenceIndex
+from wagtail.models import CollectionMember as CollectionMember
+from wagtail.models import ReferenceIndex as ReferenceIndex
 from wagtail.models.reference_index import ReferenceGroups
 from wagtail.search import index as index
 from wagtail.search.queryset import SearchableQuerySetMixin as SearchableQuerySetMixin

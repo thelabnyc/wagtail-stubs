@@ -11,7 +11,14 @@ class EditingSessionsModule(Component):
     release_url: str
     sessions_list: EditingSessionsList
     revision_id: int | None
-    def __init__(self, current_session: EditingSession, ping_url: str, release_url: str, other_sessions: Sequence[EditingSession], revision_id: int | None = None) -> None: ...
+    def __init__(
+        self,
+        current_session: EditingSession,
+        ping_url: str,
+        release_url: str,
+        other_sessions: Sequence[EditingSession],
+        revision_id: int | None = None,
+    ) -> None: ...
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
 
 class EditingSessionsList(Component):

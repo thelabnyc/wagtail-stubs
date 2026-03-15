@@ -1,4 +1,5 @@
 from collections.abc import Callable
+
 from django.contrib.auth.models import AbstractBaseUser
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from wagtail.admin import messages as messages
@@ -7,8 +8,8 @@ from wagtail.log_actions import LogContext as LogContext
 from wagtail.permission_policies.base import BasePermissionPolicy
 from wagtail.permissions import page_permission_policy as page_permission_policy
 
-_ViewFunc = Callable[..., HttpResponse]
-_TestFunc = Callable[[AbstractBaseUser], bool]
+type _ViewFunc = Callable[..., HttpResponse]
+type _TestFunc = Callable[[AbstractBaseUser], bool]
 
 def permission_denied(request: HttpRequest) -> HttpResponseRedirect: ...
 def user_passes_test(test: _TestFunc) -> Callable[[_ViewFunc], _ViewFunc]: ...

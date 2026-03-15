@@ -1,9 +1,29 @@
-from wagtail.admin.forms.models import DIRECT_FORM_FIELD_OVERRIDES as DIRECT_FORM_FIELD_OVERRIDES, FORM_FIELD_OVERRIDES as FORM_FIELD_OVERRIDES
+from wagtail.admin.forms.models import (
+    DIRECT_FORM_FIELD_OVERRIDES as DIRECT_FORM_FIELD_OVERRIDES,
+)
+from wagtail.admin.forms.models import (
+    FORM_FIELD_OVERRIDES as FORM_FIELD_OVERRIDES,
+)
 
-from .base import Panel as Panel, get_form_for_model as get_form_for_model
+from .base import Panel as Panel
+from .base import get_form_for_model as get_form_for_model
 from .comment_panel import CommentPanel as CommentPanel
 from .field_panel import FieldPanel as FieldPanel
-from .group import FieldRowPanel as FieldRowPanel, MultiFieldPanel as MultiFieldPanel, ObjectList as ObjectList, PanelGroup as PanelGroup, TabbedInterface as TabbedInterface
+from .group import (
+    FieldRowPanel as FieldRowPanel,
+)
+from .group import (
+    MultiFieldPanel as MultiFieldPanel,
+)
+from .group import (
+    ObjectList as ObjectList,
+)
+from .group import (
+    PanelGroup as PanelGroup,
+)
+from .group import (
+    TabbedInterface as TabbedInterface,
+)
 from .help_panel import HelpPanel as HelpPanel
 from .inline_panel import InlinePanel as InlinePanel
 from .model_utils import extract_panel_definitions_from_model_class as extract_panel_definitions_from_model_class

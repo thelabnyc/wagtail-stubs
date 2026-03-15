@@ -1,18 +1,15 @@
-from __future__ import annotations
-
 from typing import Any
 
-import django_filters
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 from django.utils.functional import cached_property
-
 from wagtail.admin.filters import MultipleUserFilter, WagtailFilterSet
 from wagtail.admin.ui.tables import Column, UserColumn
 from wagtail.admin.views.generic.base import BaseListingView, BaseObjectMixin, WagtailAdminTemplateMixin
 from wagtail.admin.views.generic.permissions import PermissionCheckedMixin
 from wagtail.admin.widgets.button import HeaderButton
 from wagtail.models import BaseLogEntry, Revision, Task, TaskState, WorkflowState
+import django_filters
 
 def get_actions_for_filter(queryset: models.QuerySet[BaseLogEntry]) -> list[tuple[str, str]]: ...
 
@@ -76,7 +73,9 @@ class HistoryView(PermissionCheckedMixin, BaseObjectMixin, BaseListingView):
     def user_can_unschedule(self) -> bool: ...
     @cached_property
     def verbose_name_plural(self) -> str: ...
-    def get_context_data(self, *args: Any, object_list: models.QuerySet[BaseLogEntry] | None = None, **kwargs: Any) -> dict[str, Any]: ...
+    def get_context_data(
+        self, *args: Any, object_list: models.QuerySet[BaseLogEntry] | None = None, **kwargs: Any
+    ) -> dict[str, Any]: ...
     def get_base_queryset(self) -> models.QuerySet[BaseLogEntry]: ...
     def _annotate_queryset(self, queryset: models.QuerySet[BaseLogEntry]) -> models.QuerySet[BaseLogEntry]: ...
     def get_filterset_kwargs(self) -> dict[str, Any]: ...

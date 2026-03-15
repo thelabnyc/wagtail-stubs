@@ -4,7 +4,6 @@ from typing import Any
 from django.contrib.auth.models import Permission
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
-
 from wagtail.log_actions import LogActionRegistry
 from wagtail.models import Page
 

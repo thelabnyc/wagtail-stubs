@@ -1,9 +1,37 @@
 from wagtail.admin.views.generic.base import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
-from wagtail.admin.views.generic.multiple_upload import AddView as BaseAddView, CreateFromUploadView as BaseCreateFromUploadView, DeleteUploadView as BaseDeleteUploadView, DeleteView as BaseDeleteView, EditView as BaseEditView
+from wagtail.admin.views.generic.multiple_upload import (
+    AddView as BaseAddView,
+)
+from wagtail.admin.views.generic.multiple_upload import (
+    CreateFromUploadView as BaseCreateFromUploadView,
+)
+from wagtail.admin.views.generic.multiple_upload import (
+    DeleteUploadView as BaseDeleteUploadView,
+)
+from wagtail.admin.views.generic.multiple_upload import (
+    DeleteView as BaseDeleteView,
+)
+from wagtail.admin.views.generic.multiple_upload import (
+    EditView as BaseEditView,
+)
 from wagtail.images import get_image_model as get_image_model
-from wagtail.images.forms import get_image_form as get_image_form, get_image_multi_form as get_image_multi_form
-from wagtail.images.permissions import ImagesPermissionPolicyGetter as ImagesPermissionPolicyGetter, permission_policy as permission_policy
-from wagtail.images.utils import find_image_duplicates as find_image_duplicates, get_accept_attributes as get_accept_attributes, get_allowed_image_extensions as get_allowed_image_extensions
+from wagtail.images.forms import get_image_form as get_image_form
+from wagtail.images.forms import get_image_multi_form as get_image_multi_form
+from wagtail.images.permissions import (
+    ImagesPermissionPolicyGetter as ImagesPermissionPolicyGetter,
+)
+from wagtail.images.permissions import (
+    permission_policy as permission_policy,
+)
+from wagtail.images.utils import (
+    find_image_duplicates as find_image_duplicates,
+)
+from wagtail.images.utils import (
+    get_accept_attributes as get_accept_attributes,
+)
+from wagtail.images.utils import (
+    get_allowed_image_extensions as get_allowed_image_extensions,
+)
 
 class AddView(WagtailAdminTemplateMixin, BaseAddView):
     permission_policy: ImagesPermissionPolicyGetter

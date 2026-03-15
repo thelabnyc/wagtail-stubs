@@ -1,5 +1,5 @@
-from typing import Any
 from collections.abc import Sequence
+from typing import Any
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.db.models import QuerySet
@@ -7,28 +7,76 @@ from django.forms import Form
 from django.http import HttpRequest, HttpResponse, HttpResponseBase
 from django.views.generic.base import View
 from wagtail import hooks as hooks
-from wagtail.admin.forms.choosers import AnchorLinkChooserForm as AnchorLinkChooserForm, EmailLinkChooserForm as EmailLinkChooserForm, ExternalLinkChooserForm as ExternalLinkChooserForm, PhoneLinkChooserForm as PhoneLinkChooserForm
+from wagtail.admin.forms.choosers import (
+    AnchorLinkChooserForm as AnchorLinkChooserForm,
+)
+from wagtail.admin.forms.choosers import (
+    EmailLinkChooserForm as EmailLinkChooserForm,
+)
+from wagtail.admin.forms.choosers import (
+    ExternalLinkChooserForm as ExternalLinkChooserForm,
+)
+from wagtail.admin.forms.choosers import (
+    PhoneLinkChooserForm as PhoneLinkChooserForm,
+)
 from wagtail.admin.forms.search import SearchForm as SearchForm
 from wagtail.admin.modal_workflow import render_modal_workflow as render_modal_workflow
-from wagtail.admin.ui.tables import BaseColumn as BaseColumn, Column as Column, DateColumn as DateColumn, Table as Table
+from wagtail.admin.ui.tables import BaseColumn as BaseColumn
+from wagtail.admin.ui.tables import Column as Column
+from wagtail.admin.ui.tables import DateColumn as DateColumn
+from wagtail.admin.ui.tables import Table as Table
 from wagtail.coreutils import resolve_model_string as resolve_model_string
-from wagtail.models import Locale as Locale, Page as Page, Site as Site
+from wagtail.models import Locale as Locale
+from wagtail.models import Page as Page
+from wagtail.models import Site as Site
 
 def shared_context(request: HttpRequest, extra_context: dict[str, Any] | None = None) -> dict[str, Any]: ...
 def page_models_from_string(string: str) -> tuple[type[Page], ...]: ...
-def can_choose_page(page: Page, user: AbstractBaseUser, desired_classes: tuple[type[Page], ...], can_choose_root: bool = True, user_perm: str | bool | None = None, target_pages: QuerySet[Page] | None = None, match_subclass: bool = True) -> bool: ...
+def can_choose_page(
+    page: Page,
+    user: AbstractBaseUser,
+    desired_classes: tuple[type[Page], ...],
+    can_choose_root: bool = True,
+    user_perm: str | bool | None = None,
+    target_pages: QuerySet[Page] | None = None,
+    match_subclass: bool = True,
+) -> bool: ...
 
 class PageChooserTable(Table):
     classname: str
     show_locale_labels: bool
-    def __init__(self, columns: Sequence[BaseColumn], data: Sequence[Page], *, show_locale_labels: bool = False, template_name: str | None = None, base_url: str | None = None, ordering: str | None = None, classname: str | None = None, attrs: dict[str, str] | None = None, caption: str | None = None) -> None: ...
+    def __init__(
+        self,
+        columns: Sequence[BaseColumn],
+        data: Sequence[Page],
+        *,
+        show_locale_labels: bool = False,
+        template_name: str | None = None,
+        base_url: str | None = None,
+        ordering: str | None = None,
+        classname: str | None = None,
+        attrs: dict[str, str] | None = None,
+        caption: str | None = None,
+    ) -> None: ...
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
     def get_row_classname(self, page: Page) -> str: ...
 
 class PageTitleColumn(Column):
     cell_template_name: str
     is_multiple_choice: bool
-    def __init__(self, name: str, *, is_multiple_choice: bool = False, label: str | None = None, accessor: str | None = None, classname: str | None = None, sort_key: str | None = None, width: str | None = None, ascending_title_text: str | None = None, descending_title_text: str | None = None) -> None: ...
+    def __init__(
+        self,
+        name: str,
+        *,
+        is_multiple_choice: bool = False,
+        label: str | None = None,
+        accessor: str | None = None,
+        classname: str | None = None,
+        sort_key: str | None = None,
+        width: str | None = None,
+        ascending_title_text: str | None = None,
+        descending_title_text: str | None = None,
+    ) -> None: ...
     def get_value(self, instance: Page) -> str: ...
     def get_cell_context_data(self, instance: Page, parent_context: dict[str, Any]) -> dict[str, Any]: ...
 

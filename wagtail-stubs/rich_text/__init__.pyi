@@ -3,11 +3,14 @@ from collections.abc import Generator, Iterable, Sized
 from django.core.validators import MaxLengthValidator
 from django.db.models import Model
 from django.utils.safestring import SafeString
-
 from wagtail.rich_text.feature_registry import FeatureRegistry as FeatureRegistry
 from wagtail.rich_text.rewriters import (
     EmbedRewriter as EmbedRewriter,
+)
+from wagtail.rich_text.rewriters import (
     LinkRewriter as LinkRewriter,
+)
+from wagtail.rich_text.rewriters import (
     MultiRuleRewriter as MultiRuleRewriter,
 )
 
@@ -15,7 +18,7 @@ features: FeatureRegistry
 
 def get_rewriter() -> MultiRuleRewriter: ...
 def expand_db_html(html: str) -> str: ...
-def extract_references_from_rich_text(html: str) -> Generator[tuple[type[Model], str, str, str], None, None]: ...
+def extract_references_from_rich_text(html: str) -> Generator[tuple[type[Model], str, str, str]]: ...
 def get_text_for_indexing(richtext: str) -> str: ...
 
 class RichText:

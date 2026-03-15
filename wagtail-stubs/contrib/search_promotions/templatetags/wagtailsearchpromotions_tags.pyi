@@ -1,5 +1,6 @@
 from _typeshed import Incomplete
-from wagtail.contrib.search_promotions.models import Query as Query, SearchPromotion as SearchPromotion
+from wagtail.contrib.search_promotions.models import Query as Query
+from wagtail.contrib.search_promotions.models import SearchPromotion as SearchPromotion
 
 register: Incomplete
 

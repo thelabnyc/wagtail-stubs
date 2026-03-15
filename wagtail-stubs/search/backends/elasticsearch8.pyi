@@ -1,5 +1,4 @@
 from django.db import models
-
 from wagtail.search.backends.elasticsearch7 import (
     Elasticsearch7AutocompleteQueryCompiler,
     Elasticsearch7Index,

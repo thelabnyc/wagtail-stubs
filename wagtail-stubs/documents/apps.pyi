@@ -1,5 +1,6 @@
-from . import get_document_model as get_document_model
 from django.apps import AppConfig
+
+from . import get_document_model as get_document_model
 
 class WagtailDocsAppConfig(AppConfig):
     name: str

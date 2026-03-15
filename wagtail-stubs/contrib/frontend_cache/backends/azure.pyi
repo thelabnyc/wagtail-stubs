@@ -1,6 +1,6 @@
 from .base import BaseBackend
 
-__all__ = ['AzureBaseBackend', 'AzureFrontDoorBackend', 'AzureCdnBackend']
+__all__ = ["AzureBaseBackend", "AzureFrontDoorBackend", "AzureCdnBackend"]
 
 class AzureBaseBackend(BaseBackend):
     def __init__(self, params) -> None: ...

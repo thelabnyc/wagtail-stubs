@@ -12,7 +12,24 @@ from wagtail.admin.navigation import get_site_for_user as get_site_for_user
 from wagtail.admin.site_summary import SiteSummaryPanel as SiteSummaryPanel
 from wagtail.admin.ui.components import Component as Component
 from wagtail.admin.views.generic import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
-from wagtail.models import Page as Page, PageLogEntry as PageLogEntry, Revision as Revision, TaskState as TaskState, WorkflowState as WorkflowState, get_default_page_content_type as get_default_page_content_type
+from wagtail.models import (
+    Page as Page,
+)
+from wagtail.models import (
+    PageLogEntry as PageLogEntry,
+)
+from wagtail.models import (
+    Revision as Revision,
+)
+from wagtail.models import (
+    TaskState as TaskState,
+)
+from wagtail.models import (
+    WorkflowState as WorkflowState,
+)
+from wagtail.models import (
+    get_default_page_content_type as get_default_page_content_type,
+)
 from wagtail.permissions import page_permission_policy as page_permission_policy
 
 User: type[AbstractBaseUser]

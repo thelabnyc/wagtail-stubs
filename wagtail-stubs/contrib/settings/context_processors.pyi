@@ -1,7 +1,9 @@
-from .registry import registry as registry
 from _typeshed import Incomplete
-from wagtail.contrib.settings.models import BaseGenericSetting as BaseGenericSetting, BaseSiteSetting as BaseSiteSetting
+from wagtail.contrib.settings.models import BaseGenericSetting as BaseGenericSetting
+from wagtail.contrib.settings.models import BaseSiteSetting as BaseSiteSetting
 from wagtail.models import Site as Site
+
+from .registry import registry as registry
 
 class SettingProxy(dict):
     request_or_site: Incomplete

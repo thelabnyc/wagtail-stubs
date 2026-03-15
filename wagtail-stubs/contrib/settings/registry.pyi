@@ -2,7 +2,6 @@ from typing import Any, TypeVar, overload
 
 from django.db import models
 from django.http import HttpRequest
-
 from wagtail.admin.admin_url_finder import ModelAdminURLFinder
 from wagtail.admin.menu import MenuItem
 

@@ -1,5 +1,13 @@
 from _typeshed import Incomplete
-from wagtail.api.v2.filters import FieldsFilter as FieldsFilter, OrderingFilter as OrderingFilter, SearchFilter as SearchFilter
+from wagtail.api.v2.filters import (
+    FieldsFilter as FieldsFilter,
+)
+from wagtail.api.v2.filters import (
+    OrderingFilter as OrderingFilter,
+)
+from wagtail.api.v2.filters import (
+    SearchFilter as SearchFilter,
+)
 from wagtail.api.v2.serializers import BaseSerializer as BaseSerializer
 from wagtail.api.v2.views import BaseAPIViewSet as BaseAPIViewSet
 from wagtail.contrib.redirects.middleware import get_redirect as get_redirect

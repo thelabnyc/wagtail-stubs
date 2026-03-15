@@ -1,6 +1,13 @@
 from django import template
-from wagtail.images.models import Filter as Filter, Picture as Picture, ResponsiveImage as ResponsiveImage
-from wagtail.images.shortcuts import get_rendition_or_not_found as get_rendition_or_not_found, get_renditions_or_not_found as get_renditions_or_not_found
+from wagtail.images.models import Filter as Filter
+from wagtail.images.models import Picture as Picture
+from wagtail.images.models import ResponsiveImage as ResponsiveImage
+from wagtail.images.shortcuts import (
+    get_rendition_or_not_found as get_rendition_or_not_found,
+)
+from wagtail.images.shortcuts import (
+    get_renditions_or_not_found as get_renditions_or_not_found,
+)
 from wagtail.images.views.serve import generate_image_url as generate_image_url
 
 register: template.Library
@@ -24,4 +31,4 @@ class SrcsetImageNode(ImageNode):
 class PictureNode(SrcsetImageNode):
     def render(self, context): ...
 
-def image_url(image, filter_spec, viewname: str = 'wagtailimages_serve'): ...
+def image_url(image, filter_spec, viewname: str = "wagtailimages_serve"): ...

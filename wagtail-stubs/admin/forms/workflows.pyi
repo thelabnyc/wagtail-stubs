@@ -7,10 +7,9 @@ from django.forms.renderers import BaseRenderer
 from django.forms.utils import ErrorList
 from django.utils.functional import cached_property
 from django.utils.safestring import SafeString
-
 from wagtail.admin.forms.formsets import BaseFormSetMixin
 from wagtail.admin.panels import ObjectList
-from wagtail.models import Page, Task, Workflow, WorkflowContentType, WorkflowPage
+from wagtail.models import Page, Task, Workflow, WorkflowPage
 
 class TaskChooserSearchForm(forms.Form):
     q: forms.CharField
@@ -64,7 +63,5 @@ WorkflowPagesFormSet: type[BaseWorkflowPagesFormSet]
 
 class BaseTaskForm(forms.ModelForm[Task]): ...
 
-def get_task_form_class(
-    task_model: type[Task], for_edit: bool = False
-) -> type[BaseTaskForm]: ...
+def get_task_form_class(task_model: type[Task], for_edit: bool = False) -> type[BaseTaskForm]: ...
 def get_workflow_edit_handler() -> ObjectList: ...

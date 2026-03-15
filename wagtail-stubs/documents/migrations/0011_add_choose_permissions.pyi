@@ -1,5 +1,5 @@
-from django.db.migrations.operations.base import Operation
 from django.db import migrations
+from django.db.migrations.operations.base import Operation
 
 def add_choose_permission_to_admin_groups(apps, _schema_editor) -> None: ...
 def remove_choose_permission(apps, _schema_editor) -> None: ...

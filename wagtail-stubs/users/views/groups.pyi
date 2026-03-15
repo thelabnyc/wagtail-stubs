@@ -6,7 +6,8 @@ from wagtail.admin.utils import set_query_params as set_query_params
 from wagtail.admin.views import generic as generic
 from wagtail.admin.viewsets.model import ModelViewSet as ModelViewSet
 from wagtail.admin.widgets.button import HeaderButton as HeaderButton
-from wagtail.users.forms import GroupForm as GroupForm, GroupPagePermissionFormSet as GroupPagePermissionFormSet
+from wagtail.users.forms import GroupForm as GroupForm
+from wagtail.users.forms import GroupPagePermissionFormSet as GroupPagePermissionFormSet
 
 def get_permission_panel_classes(): ...
 

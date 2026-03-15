@@ -14,7 +14,9 @@ from wagtail.permissions import page_permission_policy as page_permission_policy
 from wagtail.search.query import MATCH_ALL as MATCH_ALL
 from wagtail.search.utils import parse_query_string as parse_query_string
 
-def page_filter_search(q: str, pages: QuerySet[Page], all_pages: QuerySet[Page] | None = None, ordering: str | None = None) -> tuple[QuerySet[Page], QuerySet[Page] | None]: ...
+def page_filter_search(
+    q: str, pages: QuerySet[Page], all_pages: QuerySet[Page] | None = None, ordering: str | None = None
+) -> tuple[QuerySet[Page], QuerySet[Page] | None]: ...
 
 class SearchView(PageListingMixin, PermissionCheckedMixin, BaseListingView):
     permission_policy = page_permission_policy

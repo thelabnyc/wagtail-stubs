@@ -1,5 +1,6 @@
 from wagtail.contrib.redirects.base_formats import DEFAULT_FORMATS as DEFAULT_FORMATS
-from wagtail.contrib.redirects.tmp_storages import CacheStorage as CacheStorage, TempFolderStorage as TempFolderStorage
+from wagtail.contrib.redirects.tmp_storages import CacheStorage as CacheStorage
+from wagtail.contrib.redirects.tmp_storages import TempFolderStorage as TempFolderStorage
 
 def write_to_file_storage(import_file, input_format): ...
 def get_supported_extensions(): ...

@@ -1,4 +1,5 @@
 from typing import Any
+
 from django.http import FileResponse, HttpRequest, HttpResponseNotModified
 
 def sendfile(request: HttpRequest, filename: str, **kwargs: Any) -> FileResponse | HttpResponseNotModified: ...

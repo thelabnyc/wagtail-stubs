@@ -1,10 +1,26 @@
-from _typeshed import Incomplete
 from collections.abc import Generator
+
+from _typeshed import Incomplete
 from django.core.exceptions import ValidationError
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.staticfiles import versioned_static as versioned_static
-from wagtail.telepath import Adapter as Adapter, register as register
-from wagtail.blocks.base import Block as Block, DeclarativeSubBlocksMetaclass as DeclarativeSubBlocksMetaclass, get_error_json_data as get_error_json_data, get_error_list_json_data as get_error_list_json_data, get_help_icon as get_help_icon
+from wagtail.blocks.base import (
+    Block as Block,
+)
+from wagtail.blocks.base import (
+    DeclarativeSubBlocksMetaclass as DeclarativeSubBlocksMetaclass,
+)
+from wagtail.blocks.base import (
+    get_error_json_data as get_error_json_data,
+)
+from wagtail.blocks.base import (
+    get_error_list_json_data as get_error_list_json_data,
+)
+from wagtail.blocks.base import (
+    get_help_icon as get_help_icon,
+)
+from wagtail.telepath import Adapter as Adapter
+from wagtail.telepath import register as register
 
 class TypedTableBlockValidationError(ValidationError):
     cell_errors: Incomplete

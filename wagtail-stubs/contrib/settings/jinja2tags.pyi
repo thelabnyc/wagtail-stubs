@@ -1,9 +1,10 @@
-import jinja2
 from _typeshed import Incomplete
 from jinja2.ext import Extension
-from wagtail.contrib.settings.models import BaseGenericSetting as BaseGenericSetting, BaseSiteSetting as BaseSiteSetting
+from wagtail.contrib.settings.models import BaseGenericSetting as BaseGenericSetting
+from wagtail.contrib.settings.models import BaseSiteSetting as BaseSiteSetting
 from wagtail.contrib.settings.registry import registry as registry
 from wagtail.models import Site as Site
+import jinja2
 
 settings_cache: Incomplete
 
@@ -21,4 +22,5 @@ def get_setting(context, model_string, use_default_site: bool = False): ...
 
 class SettingsExtension(Extension):
     def __init__(self, environment) -> None: ...
+
 settings = SettingsExtension

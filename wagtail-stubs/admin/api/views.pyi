@@ -1,3 +1,7 @@
+from rest_framework.authentication import SessionAuthentication
+from wagtail.api.v2.views import PagesAPIViewSet as PagesAPIViewSet
+from wagtail.models import Page as Page
+
 from .actions.convert_alias import ConvertAliasPageAPIAction as ConvertAliasPageAPIAction
 from .actions.copy import CopyPageAPIAction as CopyPageAPIAction
 from .actions.copy_for_translation import CopyForTranslationAPIAction as CopyForTranslationAPIAction
@@ -7,11 +11,9 @@ from .actions.move import MovePageAPIAction as MovePageAPIAction
 from .actions.publish import PublishPageAPIAction as PublishPageAPIAction
 from .actions.revert_to_page_revision import RevertToPageRevisionAPIAction as RevertToPageRevisionAPIAction
 from .actions.unpublish import UnpublishPageAPIAction as UnpublishPageAPIAction
-from .filters import ForExplorerFilter as ForExplorerFilter, HasChildrenFilter as HasChildrenFilter
+from .filters import ForExplorerFilter as ForExplorerFilter
+from .filters import HasChildrenFilter as HasChildrenFilter
 from .serializers import AdminPageSerializer as AdminPageSerializer
-from rest_framework.authentication import SessionAuthentication
-from wagtail.api.v2.views import PagesAPIViewSet as PagesAPIViewSet
-from wagtail.models import Page as Page
 
 class PagesAdminAPIViewSet(PagesAPIViewSet):
     base_serializer_class = AdminPageSerializer

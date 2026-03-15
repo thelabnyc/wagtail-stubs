@@ -1,7 +1,17 @@
 from wagtail.admin import messages as messages
 from wagtail.admin.action_menu import PageActionMenu as PageActionMenu
-from wagtail.admin.auth import user_has_any_page_permission as user_has_any_page_permission, user_passes_test as user_passes_test
-from wagtail.admin.views.generic.models import RevisionsCompareView as RevisionsCompareView, RevisionsUnscheduleView as RevisionsUnscheduleView
+from wagtail.admin.auth import (
+    user_has_any_page_permission as user_has_any_page_permission,
+)
+from wagtail.admin.auth import (
+    user_passes_test as user_passes_test,
+)
+from wagtail.admin.views.generic.models import (
+    RevisionsCompareView as RevisionsCompareView,
+)
+from wagtail.admin.views.generic.models import (
+    RevisionsUnscheduleView as RevisionsUnscheduleView,
+)
 from wagtail.admin.views.generic.preview import PreviewRevision as PreviewRevision
 from wagtail.admin.views.pages.edit import EditView as EditView
 from wagtail.admin.views.pages.utils import GenericPageBreadcrumbsMixin as GenericPageBreadcrumbsMixin

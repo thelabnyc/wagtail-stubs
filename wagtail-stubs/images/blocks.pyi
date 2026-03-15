@@ -1,10 +1,28 @@
-from .shortcuts import get_rendition_or_not_found as get_rendition_or_not_found
 from django.utils.functional import cached_property as cached_property
-from wagtail.admin.compare import BlockComparison as BlockComparison, StructBlockComparison as StructBlockComparison
-from wagtail.telepath import register as register
-from wagtail.blocks import BooleanBlock as BooleanBlock, CharBlock as CharBlock, ChooserBlock as ChooserBlock, StructBlock as StructBlock
-from wagtail.blocks.struct_block import StructBlockAdapter as StructBlockAdapter, StructBlockValidationError as StructBlockValidationError
+from wagtail.admin.compare import BlockComparison as BlockComparison
+from wagtail.admin.compare import StructBlockComparison as StructBlockComparison
+from wagtail.blocks import (
+    BooleanBlock as BooleanBlock,
+)
+from wagtail.blocks import (
+    CharBlock as CharBlock,
+)
+from wagtail.blocks import (
+    ChooserBlock as ChooserBlock,
+)
+from wagtail.blocks import (
+    StructBlock as StructBlock,
+)
+from wagtail.blocks.struct_block import (
+    StructBlockAdapter as StructBlockAdapter,
+)
+from wagtail.blocks.struct_block import (
+    StructBlockValidationError as StructBlockValidationError,
+)
 from wagtail.images.models import AbstractImage as AbstractImage
+from wagtail.telepath import register as register
+
+from .shortcuts import get_rendition_or_not_found as get_rendition_or_not_found
 
 class ImageChooserBlock(ChooserBlock):
     @cached_property
@@ -35,7 +53,7 @@ class ImageBlock(StructBlock):
     def value_from_datadict(self, data, files, prefix): ...
     def clean(self, value): ...
     def normalize(self, value): ...
-    def get_form_context(self, value, prefix: str = '', errors=None): ...
+    def get_form_context(self, value, prefix: str = "", errors=None): ...
     def get_form_state(self, value): ...
     def get_prep_value(self, value): ...
     def extract_references(self, value): ...

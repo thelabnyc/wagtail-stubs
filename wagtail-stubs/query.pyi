@@ -4,7 +4,6 @@ from typing import Any, Self
 from django.db.models import Q
 from django.db.models.query import ModelIterable
 from treebeard.mp_tree import MP_Node, MP_NodeQuerySet
-
 from wagtail.models import Page, Site
 from wagtail.search.queryset import SearchableQuerySetMixin as SearchableQuerySetMixin
 

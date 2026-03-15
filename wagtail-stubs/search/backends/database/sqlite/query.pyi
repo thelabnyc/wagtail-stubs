@@ -5,14 +5,19 @@ from django.db.models import Field
 from django.db.models.expressions import CombinedExpression, Expression, Value
 from django.db.models.functions import Func
 from django.db.models.sql.compiler import SQLCompiler
-
 from wagtail.search.query import SearchQuery
 
 class BM25(Func):
     function: str
     output_field: Field[float, float]
     def __init__(self) -> None: ...
-    def as_sql(self, compiler: SQLCompiler, connection: BaseDatabaseWrapper, function: str | None = None, template: str | None = None) -> tuple[str, list[Any]]: ...
+    def as_sql(
+        self,
+        compiler: SQLCompiler,
+        connection: BaseDatabaseWrapper,
+        function: str | None = None,
+        template: str | None = None,
+    ) -> tuple[str, list[Any]]: ...
 
 class SearchQueryField(Field[Any, Any]):
     def db_type(self, connection: BaseDatabaseWrapper) -> None: ...
@@ -26,11 +31,20 @@ class LexemeCombinable(Expression):
     def __and__(self, other: LexemeCombinable) -> CombinedLexeme: ...
 
 class Lexeme(LexemeCombinable, Value):
-    def __init__(self, value: str, output_field: Field[Any, Any] | None = None, *, prefix: bool = False, weight: str | None = None) -> None: ...
+    def __init__(
+        self,
+        value: str,
+        output_field: Field[Any, Any] | None = None,
+        *,
+        prefix: bool = False,
+        weight: str | None = None,
+    ) -> None: ...
     def as_sql(self, compiler: SQLCompiler, connection: BaseDatabaseWrapper) -> tuple[str, list[str]]: ...
 
 class CombinedLexeme(LexemeCombinable):
-    def __init__(self, lhs: LexemeCombinable, connector: str, rhs: LexemeCombinable, output_field: Field[Any, Any] | None = None) -> None: ...
+    def __init__(
+        self, lhs: LexemeCombinable, connector: str, rhs: LexemeCombinable, output_field: Field[Any, Any] | None = None
+    ) -> None: ...
     def as_sql(self, compiler: SQLCompiler, connection: BaseDatabaseWrapper) -> tuple[str, list[str]]: ...
 
 class SearchQueryCombinable:
@@ -43,24 +57,28 @@ class SearchQueryCombinable:
 
 class SearchQueryExpression(SearchQueryCombinable, Expression):
     def __init__(self, value: LexemeCombinable, using: str | None = None, **extra: Any) -> None: ...
-    def as_sql(self, compiler: SQLCompiler, connection: BaseDatabaseWrapper, **extra_context: Any) -> tuple[str, list[Any]]: ...
-    def __repr__(self) -> str: ...
+    def as_sql(
+        self, compiler: SQLCompiler, connection: BaseDatabaseWrapper, **extra_context: Any
+    ) -> tuple[str, list[Any]]: ...
 
 class CombinedSearchQueryExpression(SearchQueryCombinable, CombinedExpression):
-    def __init__(self, lhs: SearchQueryCombinable, connector: str, rhs: SearchQueryCombinable, output_field: Field[Any, Any] | None = None) -> None: ...
-    def __str__(self) -> str: ...
+    def __init__(
+        self,
+        lhs: SearchQueryCombinable,
+        connector: str,
+        rhs: SearchQueryCombinable,
+        output_field: Field[Any, Any] | None = None,
+    ) -> None: ...
 
 class MatchExpression(Expression):
     filterable: bool
     template: str
     def __init__(self, columns: list[str], query: SearchQueryCombinable) -> None: ...
     def as_sql(self, compiler: SQLCompiler, connection: BaseDatabaseWrapper) -> tuple[str, list[str]]: ...
-    def __repr__(self) -> str: ...
 
 class AndNot(SearchQuery):
     subquery_a: SearchQuery
     subquery_b: SearchQuery
     def __init__(self, subquery_a: SearchQuery, subquery_b: SearchQuery) -> None: ...
-    def __repr__(self) -> str: ...
 
 def normalize(search_query: SearchQuery) -> SearchQuery: ...

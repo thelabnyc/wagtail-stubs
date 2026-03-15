@@ -1,17 +1,64 @@
 from typing import Any
 
 from django.db.models import QuerySet
-from django.http import HttpRequest, HttpResponse, HttpResponseBase
-from django.utils.functional import cached_property as cached_property, classproperty
+from django.http import HttpRequest, HttpResponseBase
+from django.utils.functional import cached_property as cached_property
+from django.utils.functional import classproperty
 from django_filters.filters import ChoiceFilter, DateFromToRangeFilter, ModelMultipleChoiceFilter
 from wagtail import hooks as hooks
-from wagtail.admin.filters import DateRangePickerWidget as DateRangePickerWidget, MultipleContentTypeFilter as MultipleContentTypeFilter, MultipleUserFilter as MultipleUserFilter, WagtailFilterSet as WagtailFilterSet
+from wagtail.admin.filters import (
+    DateRangePickerWidget as DateRangePickerWidget,
+)
+from wagtail.admin.filters import (
+    MultipleContentTypeFilter as MultipleContentTypeFilter,
+)
+from wagtail.admin.filters import (
+    MultipleUserFilter as MultipleUserFilter,
+)
+from wagtail.admin.filters import (
+    WagtailFilterSet as WagtailFilterSet,
+)
 from wagtail.admin.ui.components import MediaContainer as MediaContainer
 from wagtail.admin.ui.side_panels import PageStatusSidePanel as PageStatusSidePanel
-from wagtail.admin.ui.tables import BaseColumn, DateColumn as DateColumn
-from wagtail.admin.ui.tables.pages import BulkActionsColumn as BulkActionsColumn, NavigateToChildrenColumn as NavigateToChildrenColumn, PageStatusColumn as PageStatusColumn, PageTable as PageTable, PageTitleColumn as PageTitleColumn, PageTypeColumn as PageTypeColumn, ParentPageColumn as ParentPageColumn
+from wagtail.admin.ui.tables import BaseColumn
+from wagtail.admin.ui.tables import DateColumn as DateColumn
+from wagtail.admin.ui.tables.pages import (
+    BulkActionsColumn as BulkActionsColumn,
+)
+from wagtail.admin.ui.tables.pages import (
+    NavigateToChildrenColumn as NavigateToChildrenColumn,
+)
+from wagtail.admin.ui.tables.pages import (
+    PageStatusColumn as PageStatusColumn,
+)
+from wagtail.admin.ui.tables.pages import (
+    PageTable as PageTable,
+)
+from wagtail.admin.ui.tables.pages import (
+    PageTitleColumn as PageTitleColumn,
+)
+from wagtail.admin.ui.tables.pages import (
+    PageTypeColumn as PageTypeColumn,
+)
+from wagtail.admin.ui.tables.pages import (
+    ParentPageColumn as ParentPageColumn,
+)
 from wagtail.admin.views import generic as generic
-from wagtail.models import Locale, Page as Page, PageLogEntry as PageLogEntry, Site as Site, get_page_content_types as get_page_content_types
+from wagtail.models import (
+    Locale,
+)
+from wagtail.models import (
+    Page as Page,
+)
+from wagtail.models import (
+    PageLogEntry as PageLogEntry,
+)
+from wagtail.models import (
+    Site as Site,
+)
+from wagtail.models import (
+    get_page_content_types as get_page_content_types,
+)
 from wagtail.permissions import page_permission_policy as page_permission_policy
 
 class SiteFilter(ModelMultipleChoiceFilter):

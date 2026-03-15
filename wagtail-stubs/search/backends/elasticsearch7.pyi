@@ -2,7 +2,6 @@ from collections.abc import Iterable
 from typing import Any
 
 from django.db import models
-
 from wagtail.search.backends.base import BaseSearchBackend, BaseSearchQueryCompiler, BaseSearchResults
 
 class Elasticsearch7Mapping:
@@ -32,7 +31,6 @@ class Elasticsearch7SearchQueryCompiler(BaseSearchQueryCompiler):
     mapping_class: type[Elasticsearch7Mapping]
 
 class Elasticsearch7SearchResults(BaseSearchResults): ...
-
 class Elasticsearch7AutocompleteQueryCompiler(Elasticsearch7SearchQueryCompiler): ...
 
 class Elasticsearch7SearchBackend(BaseSearchBackend):

@@ -1,9 +1,10 @@
 import logging
 
 from django.contrib.auth.base_user import AbstractBaseUser
-
 from wagtail.actions.unpublish import (
     UnpublishAction,
+)
+from wagtail.actions.unpublish import (
     UnpublishPermissionError as UnpublishPermissionError,
 )
 from wagtail.models import Page

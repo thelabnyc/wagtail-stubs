@@ -3,9 +3,24 @@ from typing import Any
 from django.db.models import Model
 from django.http import HttpRequest
 from wagtail.admin.ui.components import Component as Component
-from wagtail.admin.userbar import AccessibilityItem as AccessibilityItem, apply_userbar_hooks as apply_userbar_hooks
+from wagtail.admin.userbar import AccessibilityItem as AccessibilityItem
+from wagtail.admin.userbar import apply_userbar_hooks as apply_userbar_hooks
 from wagtail.locks import BaseLock
-from wagtail.models import DraftStateMixin as DraftStateMixin, Locale, LockableMixin as LockableMixin, Page as Page, ReferenceIndex as ReferenceIndex
+from wagtail.models import (
+    DraftStateMixin as DraftStateMixin,
+)
+from wagtail.models import (
+    Locale,
+)
+from wagtail.models import (
+    LockableMixin as LockableMixin,
+)
+from wagtail.models import (
+    Page as Page,
+)
+from wagtail.models import (
+    ReferenceIndex as ReferenceIndex,
+)
 from wagtail.models.view_restrictions import BaseViewRestriction as BaseViewRestriction
 
 class BaseSidePanel(Component):
@@ -19,6 +34,7 @@ class BaseSidePanel(Component):
         panel: BaseSidePanel
         def __init__(self, panel: BaseSidePanel) -> None: ...
         def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
+
     object: Model
     request: HttpRequest
     model: type[Model]
@@ -32,6 +48,7 @@ class StatusSidePanel(BaseSidePanel):
         icon_name: str
         counter_classname: str
         def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
+
     name: str
     title: str
     template_name: str
@@ -45,7 +62,19 @@ class StatusSidePanel(BaseSidePanel):
     history_url: str | None
     last_updated_info: dict[str, Any] | None
     locking_enabled: bool
-    def __init__(self, *args: Any, show_schedule_publishing_toggle: bool | None = None, live_object: Model | None = None, scheduled_object: Model | None = None, locale: Locale | None = None, translations: list[dict[str, Any]] | None = None, usage_url: str | None = None, history_url: str | None = None, last_updated_info: dict[str, Any] | None = None, **kwargs: Any) -> None: ...
+    def __init__(
+        self,
+        *args: Any,
+        show_schedule_publishing_toggle: bool | None = None,
+        live_object: Model | None = None,
+        scheduled_object: Model | None = None,
+        locale: Locale | None = None,
+        translations: list[dict[str, Any]] | None = None,
+        usage_url: str | None = None,
+        history_url: str | None = None,
+        last_updated_info: dict[str, Any] | None = None,
+        **kwargs: Any,
+    ) -> None: ...
     def get_status_templates(self, context: dict[str, Any]) -> list[str]: ...
     def get_scheduled_publishing_context(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
     lock: BaseLock | None
@@ -66,6 +95,7 @@ class CommentsSidePanel(BaseSidePanel):
     class SidePanelToggle(BaseSidePanel.SidePanelToggle):
         aria_label: str
         icon_name: str
+
     name: str
     title: str
     template_name: str
@@ -76,6 +106,7 @@ class ChecksSidePanel(BaseSidePanel):
     class SidePanelToggle(BaseSidePanel.SidePanelToggle):
         aria_label: str
         icon_name: str
+
     name: str
     title: str
     template_name: str
@@ -89,6 +120,7 @@ class PreviewSidePanel(BaseSidePanel):
         icon_name: str
         has_counter: bool
         keyboard_shortcut: str
+
     name: str
     title: str
     template_name: str

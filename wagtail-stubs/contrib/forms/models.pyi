@@ -1,11 +1,14 @@
-from .forms import FormBuilder as FormBuilder, WagtailAdminFormPageForm as WagtailAdminFormPageForm
 from _typeshed import Incomplete
 from django.db import models
 from wagtail.admin.mail import send_mail as send_mail
 from wagtail.admin.panels import FieldPanel as FieldPanel
 from wagtail.api import APIField as APIField
 from wagtail.contrib.forms.utils import get_field_clean_name as get_field_clean_name
-from wagtail.models import Orderable as Orderable, Page as Page
+from wagtail.models import Orderable as Orderable
+from wagtail.models import Page as Page
+
+from .forms import FormBuilder as FormBuilder
+from .forms import WagtailAdminFormPageForm as WagtailAdminFormPageForm
 
 FORM_FIELD_CHOICES: Incomplete
 

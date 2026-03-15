@@ -1,6 +1,5 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.exceptions import PermissionDenied
-
 from wagtail.models import Page
 
 class ConvertAliasPageError(RuntimeError): ...

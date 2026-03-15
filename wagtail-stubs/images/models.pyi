@@ -1,23 +1,42 @@
+from collections.abc import Generator, Iterable
+from contextlib import contextmanager
+from io import BytesIO
+from typing import NamedTuple
 import datetime
 import logging
 import re
-from collections.abc import Generator, Iterable
-from contextlib import contextmanager
+
 from django.contrib.auth.models import AbstractBaseUser
 from django.core.cache.backends.base import BaseCache
 from django.core.files import File
 from django.db import models
-from django.utils.functional import cached_property as cached_property, classproperty
-from io import BytesIO
-from typing import NamedTuple
+from django.utils.functional import cached_property as cached_property
+from django.utils.functional import classproperty
 from taggit.managers import TaggableManager
 from wagtail import hooks as hooks
 from wagtail.coreutils import string_to_ascii as string_to_ascii
-from wagtail.images.exceptions import InvalidFilterSpecError as InvalidFilterSpecError, UnknownOutputImageFormatError as UnknownOutputImageFormatError
-from wagtail.images.image_operations import FilterOperation as FilterOperation, FormatOperation as FormatOperation, ImageTransform as ImageTransform, TransformOperation as TransformOperation
+from wagtail.images.exceptions import (
+    InvalidFilterSpecError as InvalidFilterSpecError,
+)
+from wagtail.images.exceptions import (
+    UnknownOutputImageFormatError as UnknownOutputImageFormatError,
+)
+from wagtail.images.image_operations import (
+    FilterOperation as FilterOperation,
+)
+from wagtail.images.image_operations import (
+    FormatOperation as FormatOperation,
+)
+from wagtail.images.image_operations import (
+    ImageTransform as ImageTransform,
+)
+from wagtail.images.image_operations import (
+    TransformOperation as TransformOperation,
+)
 from wagtail.images.rect import Rect as Rect
 from wagtail.images.utils import to_svg_safe_spec as to_svg_safe_spec
-from wagtail.models import CollectionMember as CollectionMember, ReferenceIndex as ReferenceIndex
+from wagtail.models import CollectionMember as CollectionMember
+from wagtail.models import ReferenceIndex as ReferenceIndex
 from wagtail.search import index as index
 from wagtail.search.queryset import SearchableQuerySetMixin as SearchableQuerySetMixin
 from wagtail.utils.file import hash_filelike as hash_filelike
@@ -137,7 +156,9 @@ class Filter:
 class ResponsiveImage:
     renditions: list[AbstractRendition]
     attrs: dict[str, str | int | bool] | None
-    def __init__(self, renditions: dict[str, AbstractRendition], attrs: dict[str, str | int | bool] | None = None) -> None: ...
+    def __init__(
+        self, renditions: dict[str, AbstractRendition], attrs: dict[str, str | int | bool] | None = None
+    ) -> None: ...
     @classmethod
     def get_width_srcset(cls, renditions_list: list[AbstractRendition]): ...
     def __html__(self): ...
@@ -151,7 +172,9 @@ class FileFormat(NamedTuple):
 class Picture(ResponsiveImage):
     source_format_order: list[FileFormat]
     formats: dict[str, list[AbstractRendition]]
-    def __init__(self, renditions: dict[str, AbstractRendition], attrs: dict[str, str | int | bool] | None = None) -> None: ...
+    def __init__(
+        self, renditions: dict[str, AbstractRendition], attrs: dict[str, str | int | bool] | None = None
+    ) -> None: ...
     def get_formats(self, renditions: dict[str, AbstractRendition]) -> dict[str, list[AbstractRendition]]: ...
     def get_fallback_format(self): ...
     def __html__(self): ...

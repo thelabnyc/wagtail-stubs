@@ -1,5 +1,6 @@
-from .shortcuts import get_rendition_or_not_found as get_rendition_or_not_found
 from wagtail.utils.apps import get_app_submodules as get_app_submodules
+
+from .shortcuts import get_rendition_or_not_found as get_rendition_or_not_found
 
 class Format:
     name: str

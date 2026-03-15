@@ -67,4 +67,11 @@ class PageSerializer(BaseSerializer):
     alias_of: PageAliasOfField
     def build_relational_field(self, field_name: str, relation_info: Any) -> tuple[type[Field], dict[str, Any]]: ...
 
-def get_serializer_class(model: type, field_names: list[str], meta_fields: list[str], field_serializer_overrides: dict[str, Any] | None = None, child_serializer_classes: dict[str, Any] | None = None, base: type[BaseSerializer] = ...) -> type[BaseSerializer]: ...
+def get_serializer_class(
+    model: type,
+    field_names: list[str],
+    meta_fields: list[str],
+    field_serializer_overrides: dict[str, Any] | None = None,
+    child_serializer_classes: dict[str, Any] | None = None,
+    base: type[BaseSerializer] = ...,
+) -> type[BaseSerializer]: ...

@@ -1,11 +1,10 @@
-import datetime
 from typing import Any, Self
+import datetime
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.core.checks import CheckMessage
 from django.db import models
 from django.utils.functional import _StrPromise, cached_property
-
 from wagtail.locks import BaseLock
 from wagtail.models import Revision
 

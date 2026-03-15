@@ -1,7 +1,7 @@
-import django.forms
 from _typeshed import Incomplete
 from wagtail.admin.forms import WagtailAdminPageForm as WagtailAdminPageForm
 from wagtail.compat import URLField as URLField
+import django.forms
 
 class BaseForm(django.forms.Form):
     user: Incomplete

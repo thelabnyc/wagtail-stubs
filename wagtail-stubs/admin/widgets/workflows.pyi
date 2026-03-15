@@ -1,7 +1,6 @@
 from typing import Any
 
 from django import forms
-
 from wagtail.admin.widgets.chooser import BaseChooser
 
 class AdminTaskChooser(BaseChooser):

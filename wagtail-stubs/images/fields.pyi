@@ -1,6 +1,11 @@
 from django.core.validators import FileExtensionValidator
 from django.forms.fields import ImageField
-from wagtail.images.utils import get_accept_attributes as get_accept_attributes, get_allowed_image_extensions as get_allowed_image_extensions
+from wagtail.images.utils import (
+    get_accept_attributes as get_accept_attributes,
+)
+from wagtail.images.utils import (
+    get_allowed_image_extensions as get_allowed_image_extensions,
+)
 
 def ImageFileExtensionValidator(value): ...
 

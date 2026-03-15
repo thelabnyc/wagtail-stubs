@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.staticfiles import versioned_static as versioned_static
-from wagtail.telepath import register as register
-from wagtail.admin.widgets import BaseChooser as BaseChooser, BaseChooserAdapter as BaseChooserAdapter
+from wagtail.admin.widgets import BaseChooser as BaseChooser
+from wagtail.admin.widgets import BaseChooserAdapter as BaseChooserAdapter
 from wagtail.images import get_image_model as get_image_model
 from wagtail.images.shortcuts import get_rendition_or_not_found as get_rendition_or_not_found
+from wagtail.telepath import register as register
 
 class AdminImageChooser(BaseChooser):
     choose_one_text: str

@@ -1,4 +1,5 @@
 import logging
+
 from django.core.management.base import BaseCommand
 from wagtail.images import get_image_model as get_image_model
 

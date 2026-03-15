@@ -2,7 +2,8 @@ from _typeshed import Incomplete
 from django import forms
 from wagtail.admin.forms.models import WagtailAdminModelForm as WagtailAdminModelForm
 from wagtail.admin.widgets import AdminPageChooser as AdminPageChooser
-from wagtail.contrib.search_promotions.models import Query as Query, SearchPromotion as SearchPromotion
+from wagtail.contrib.search_promotions.models import Query as Query
+from wagtail.contrib.search_promotions.models import SearchPromotion as SearchPromotion
 
 class QueryForm(forms.ModelForm):
     query_string: Incomplete

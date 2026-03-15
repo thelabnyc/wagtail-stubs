@@ -1,7 +1,8 @@
 from typing import Any
+
 from django.forms import Media
-from django.utils.functional import cached_property as cached_property
 from django.http import HttpRequest
+from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.ui.components import Component as Component
 from wagtail.models import PagePermissionTester

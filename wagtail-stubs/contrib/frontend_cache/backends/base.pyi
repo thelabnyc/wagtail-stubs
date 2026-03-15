@@ -1,6 +1,6 @@
 from _typeshed import Incomplete
 
-__all__ = ['BaseBackend']
+__all__ = ["BaseBackend"]
 
 class BaseBackend:
     hostnames: Incomplete

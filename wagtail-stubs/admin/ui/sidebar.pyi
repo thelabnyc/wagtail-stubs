@@ -6,7 +6,8 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.search import SearchArea
 from wagtail.admin.staticfiles import versioned_static as versioned_static
-from wagtail.telepath import Adapter as Adapter, adapter as adapter
+from wagtail.telepath import Adapter as Adapter
+from wagtail.telepath import adapter as adapter
 
 class BaseSidebarAdapter(Adapter):
     @cached_property
@@ -18,32 +19,63 @@ class MenuItem:
     icon_name: str
     classname: str
     attrs: Mapping[str, Any]
-    def __init__(self, name: str, label: str, icon_name: str = '', classname: str = '', attrs: Mapping[str, Any] = None) -> None: ...
+    def __init__(
+        self, name: str, label: str, icon_name: str = "", classname: str = "", attrs: Mapping[str, Any] = None
+    ) -> None: ...
     def js_args(self) -> list[dict[str, Any]]: ...
 
 class LinkMenuItem(MenuItem):
     url: str
-    def __init__(self, name: str, label: str, url: str, icon_name: str = '', classname: str = '', attrs: Mapping[str, Any] = None) -> None: ...
+    def __init__(
+        self, name: str, label: str, url: str, icon_name: str = "", classname: str = "", attrs: Mapping[str, Any] = None
+    ) -> None: ...
     def js_args(self) -> list[dict[str, Any]]: ...
     def __eq__(self, other: object) -> bool: ...
 
 class ActionMenuItem(MenuItem):
     action: str
     method: str
-    def __init__(self, name: str, label: str, action: str, icon_name: str = '', classname: str = '', method: str = 'POST', attrs: Mapping[str, Any] = None) -> None: ...
+    def __init__(
+        self,
+        name: str,
+        label: str,
+        action: str,
+        icon_name: str = "",
+        classname: str = "",
+        method: str = "POST",
+        attrs: Mapping[str, Any] = None,
+    ) -> None: ...
     def js_args(self) -> list[dict[str, Any]]: ...
     def __eq__(self, other: object) -> bool: ...
 
 class SubMenuItem(MenuItem):
     menu_items: list[MenuItem]
     footer_text: str
-    def __init__(self, name: str, label: str, menu_items: list[MenuItem], icon_name: str = '', classname: str = '', footer_text: str = '', attrs: Mapping[str, Any] = None) -> None: ...
+    def __init__(
+        self,
+        name: str,
+        label: str,
+        menu_items: list[MenuItem],
+        icon_name: str = "",
+        classname: str = "",
+        footer_text: str = "",
+        attrs: Mapping[str, Any] = None,
+    ) -> None: ...
     def js_args(self) -> list[dict[str, Any] | list[MenuItem]]: ...
     def __eq__(self, other: object) -> bool: ...
 
 class PageExplorerMenuItem(LinkMenuItem):
     start_page_id: int
-    def __init__(self, name: str, label: str, url: str, start_page_id: int, icon_name: str = '', classname: str = '', attrs: Mapping[str, Any] = None) -> None: ...
+    def __init__(
+        self,
+        name: str,
+        label: str,
+        url: str,
+        start_page_id: int,
+        icon_name: str = "",
+        classname: str = "",
+        attrs: Mapping[str, Any] = None,
+    ) -> None: ...
     def js_args(self) -> list[dict[str, Any] | int]: ...
     def __eq__(self, other: object) -> bool: ...
 
@@ -59,5 +91,7 @@ class MainMenuModule:
     menu_items: list[MenuItem]
     account_menu_items: list[MenuItem]
     user: AbstractBaseUser
-    def __init__(self, menu_items: list[MenuItem], account_menu_items: list[MenuItem], user: AbstractBaseUser) -> None: ...
+    def __init__(
+        self, menu_items: list[MenuItem], account_menu_items: list[MenuItem], user: AbstractBaseUser
+    ) -> None: ...
     def js_args(self) -> list[list[MenuItem] | dict[str, Any]]: ...

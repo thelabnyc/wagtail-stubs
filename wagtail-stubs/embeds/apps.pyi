@@ -1,5 +1,6 @@
-from .finders import get_finders as get_finders
 from django.apps import AppConfig
+
+from .finders import get_finders as get_finders
 
 class WagtailEmbedsAppConfig(AppConfig):
     name: str

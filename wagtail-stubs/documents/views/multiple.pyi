@@ -2,12 +2,27 @@ from typing import Any
 
 from django.db import models
 from django.forms import Form
+from wagtail.admin.views.generic.base import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
+from wagtail.admin.views.generic.multiple_upload import (
+    AddView as BaseAddView,
+)
+from wagtail.admin.views.generic.multiple_upload import (
+    CreateFromUploadView as BaseCreateFromUploadView,
+)
+from wagtail.admin.views.generic.multiple_upload import (
+    DeleteUploadView as BaseDeleteUploadView,
+)
+from wagtail.admin.views.generic.multiple_upload import (
+    DeleteView as BaseDeleteView,
+)
+from wagtail.admin.views.generic.multiple_upload import (
+    EditView as BaseEditView,
+)
 
 from .. import get_document_model as get_document_model
-from ..forms import get_document_form as get_document_form, get_document_multi_form as get_document_multi_form
+from ..forms import get_document_form as get_document_form
+from ..forms import get_document_multi_form as get_document_multi_form
 from ..permissions import permission_policy as permission_policy
-from wagtail.admin.views.generic.base import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
-from wagtail.admin.views.generic.multiple_upload import AddView as BaseAddView, CreateFromUploadView as BaseCreateFromUploadView, DeleteUploadView as BaseDeleteUploadView, DeleteView as BaseDeleteView, EditView as BaseEditView
 
 class AddView(WagtailAdminTemplateMixin, BaseAddView):
     permission_policy = permission_policy

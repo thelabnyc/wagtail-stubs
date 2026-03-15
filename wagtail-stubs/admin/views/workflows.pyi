@@ -1,6 +1,5 @@
 from typing import Any
 
-import django_filters
 from django.core.paginator import Page as PaginatorPage
 from django.db.models import QuerySet
 from django.forms import Form
@@ -11,21 +10,79 @@ from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 from wagtail.admin import messages as messages
 from wagtail.admin.auth import PermissionPolicyChecker as PermissionPolicyChecker
-from wagtail.admin.filters import MultipleContentTypeFilter as MultipleContentTypeFilter, WagtailFilterSet as WagtailFilterSet
-from wagtail.admin.forms.workflows import TaskChooserSearchForm as TaskChooserSearchForm, WorkflowContentTypeForm as WorkflowContentTypeForm, WorkflowPagesFormSet as WorkflowPagesFormSet, get_task_form_class as get_task_form_class, get_workflow_edit_handler as get_workflow_edit_handler
+from wagtail.admin.filters import (
+    MultipleContentTypeFilter as MultipleContentTypeFilter,
+)
+from wagtail.admin.filters import (
+    WagtailFilterSet as WagtailFilterSet,
+)
+from wagtail.admin.forms.workflows import (
+    TaskChooserSearchForm as TaskChooserSearchForm,
+)
+from wagtail.admin.forms.workflows import (
+    WorkflowContentTypeForm as WorkflowContentTypeForm,
+)
+from wagtail.admin.forms.workflows import (
+    WorkflowPagesFormSet as WorkflowPagesFormSet,
+)
+from wagtail.admin.forms.workflows import (
+    get_task_form_class as get_task_form_class,
+)
+from wagtail.admin.forms.workflows import (
+    get_workflow_edit_handler as get_workflow_edit_handler,
+)
 from wagtail.admin.modal_workflow import render_modal_workflow as render_modal_workflow
 from wagtail.admin.panels.base import Panel
-from wagtail.admin.ui.tables import BaseColumn as BaseColumn, Column as Column, TitleColumn as TitleColumn
-from wagtail.admin.views.generic import CreateView as CreateView, DeleteView as DeleteView, EditView as EditView, IndexView as IndexView
+from wagtail.admin.ui.tables import BaseColumn as BaseColumn
+from wagtail.admin.ui.tables import Column as Column
+from wagtail.admin.ui.tables import TitleColumn as TitleColumn
+from wagtail.admin.views.generic import (
+    CreateView as CreateView,
+)
+from wagtail.admin.views.generic import (
+    DeleteView as DeleteView,
+)
+from wagtail.admin.views.generic import (
+    EditView as EditView,
+)
+from wagtail.admin.views.generic import (
+    IndexView as IndexView,
+)
 from wagtail.admin.views.generic.base import BaseListingView as BaseListingView
 from wagtail.admin.views.generic.permissions import PermissionCheckedMixin as PermissionCheckedMixin
 from wagtail.admin.views.pages.listing import PageListingMixin as PageListingMixin
 from wagtail.admin.widgets.button import Button
 from wagtail.coreutils import resolve_model_string as resolve_model_string
-from wagtail.models import Page as Page, Task as Task, TaskState as TaskState, Workflow as Workflow, WorkflowState as WorkflowState, WorkflowTask as WorkflowTask
-from wagtail.permissions import page_permission_policy as page_permission_policy, task_permission_policy as task_permission_policy, workflow_permission_policy as workflow_permission_policy
+from wagtail.models import (
+    Page as Page,
+)
+from wagtail.models import (
+    Task as Task,
+)
+from wagtail.models import (
+    TaskState as TaskState,
+)
+from wagtail.models import (
+    Workflow as Workflow,
+)
+from wagtail.models import (
+    WorkflowState as WorkflowState,
+)
+from wagtail.models import (
+    WorkflowTask as WorkflowTask,
+)
+from wagtail.permissions import (
+    page_permission_policy as page_permission_policy,
+)
+from wagtail.permissions import (
+    task_permission_policy as task_permission_policy,
+)
+from wagtail.permissions import (
+    workflow_permission_policy as workflow_permission_policy,
+)
 from wagtail.snippets.models import get_workflow_enabled_models as get_workflow_enabled_models
 from wagtail.workflows import get_task_types as get_task_types
+import django_filters
 
 task_permission_checker: PermissionPolicyChecker
 
@@ -43,7 +100,14 @@ class WorkflowTasksColumn(BaseColumn):
 
 class BaseWorkflowFilterSet(WagtailFilterSet):
     show_disabled: django_filters.ChoiceFilter
-    def __init__(self, data: QueryDict | None = None, queryset: QuerySet | None = None, *, request: HttpRequest | None = None, prefix: str | None = None) -> None: ...
+    def __init__(
+        self,
+        data: QueryDict | None = None,
+        queryset: QuerySet | None = None,
+        *,
+        request: HttpRequest | None = None,
+        prefix: str | None = None,
+    ) -> None: ...
     def filter_show_disabled(self, queryset: QuerySet, name: str, value: str) -> QuerySet: ...
 
 class WorkflowFilterSet(BaseWorkflowFilterSet):
@@ -177,7 +241,14 @@ class TaskUsageColumn(Column):
     cell_template_name: str
 
 class TaskFilterSet(BaseWorkflowFilterSet):
-    def __init__(self, data: QueryDict | None = None, queryset: QuerySet | None = None, *, request: HttpRequest | None = None, prefix: str | None = None) -> None: ...
+    def __init__(
+        self,
+        data: QueryDict | None = None,
+        queryset: QuerySet | None = None,
+        *,
+        request: HttpRequest | None = None,
+        prefix: str | None = None,
+    ) -> None: ...
     class Meta:
         model = Task
         fields: list[str]

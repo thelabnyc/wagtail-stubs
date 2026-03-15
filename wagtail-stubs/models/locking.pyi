@@ -1,10 +1,9 @@
-import datetime
 from typing import Any, Self
+import datetime
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.core.checks import Error
 from django.db import models
-
 from wagtail.locks import BasicLock
 
 class LockableMixin(models.Model):

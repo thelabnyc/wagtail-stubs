@@ -2,6 +2,8 @@ import logging
 
 from wagtail.actions.publish_revision import (
     PublishPermissionError as PublishPermissionError,
+)
+from wagtail.actions.publish_revision import (
     PublishRevisionAction,
 )
 

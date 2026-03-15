@@ -1,5 +1,4 @@
 from typing import Any
-from .registry import register_setting as register_setting
 
 from django.db import models
 from django.http import HttpRequest
@@ -7,11 +6,14 @@ from django.utils.functional import cached_property
 from wagtail.coreutils import InvokeViaAttributeShortcut
 from wagtail.models import Site
 
+from .registry import register_setting as register_setting
+
 __all__ = ["BaseGenericSetting", "BaseSiteSetting", "register_setting"]
 
 class AbstractSetting(models.Model):
     class Meta:
         abstract: bool
+
     select_related: list[str] | None
     @classmethod
     def base_queryset(cls): ...
@@ -26,6 +28,7 @@ class BaseSiteSetting(AbstractSetting):
     site: models.OneToOneField[Site, Site]
     class Meta:
         abstract: bool
+
     @classmethod
     def for_request(cls, request: HttpRequest): ...
     @classmethod
@@ -34,5 +37,6 @@ class BaseSiteSetting(AbstractSetting):
 class BaseGenericSetting(AbstractSetting):
     class Meta:
         abstract: bool
+
     @classmethod
     def load(cls, request_or_site: HttpRequest | Site | None = None): ...

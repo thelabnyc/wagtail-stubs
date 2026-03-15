@@ -1,14 +1,43 @@
+from functools import cached_property as cached_property
+
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import AbstractBaseUser
 from django.http import HttpRequest
 from django.views.generic.base import TemplateView
-from functools import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin import messages as messages
-from wagtail.admin.forms.account import AvatarPreferencesForm as AvatarPreferencesForm, LocalePreferencesForm as LocalePreferencesForm, NameEmailForm as NameEmailForm, NotificationPreferencesForm as NotificationPreferencesForm, ThemePreferencesForm as ThemePreferencesForm
-from wagtail.admin.forms.auth import LoginForm as LoginForm, PasswordChangeForm as PasswordChangeForm, PasswordResetForm as PasswordResetForm
-from wagtail.admin.localization import get_available_admin_languages as get_available_admin_languages, get_available_admin_time_zones as get_available_admin_time_zones
-from wagtail.admin.views.generic import EditView as EditView, WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
+from wagtail.admin.forms.account import (
+    AvatarPreferencesForm as AvatarPreferencesForm,
+)
+from wagtail.admin.forms.account import (
+    LocalePreferencesForm as LocalePreferencesForm,
+)
+from wagtail.admin.forms.account import (
+    NameEmailForm as NameEmailForm,
+)
+from wagtail.admin.forms.account import (
+    NotificationPreferencesForm as NotificationPreferencesForm,
+)
+from wagtail.admin.forms.account import (
+    ThemePreferencesForm as ThemePreferencesForm,
+)
+from wagtail.admin.forms.auth import (
+    LoginForm as LoginForm,
+)
+from wagtail.admin.forms.auth import (
+    PasswordChangeForm as PasswordChangeForm,
+)
+from wagtail.admin.forms.auth import (
+    PasswordResetForm as PasswordResetForm,
+)
+from wagtail.admin.localization import (
+    get_available_admin_languages as get_available_admin_languages,
+)
+from wagtail.admin.localization import (
+    get_available_admin_time_zones as get_available_admin_time_zones,
+)
+from wagtail.admin.views.generic import EditView as EditView
+from wagtail.admin.views.generic import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
 from wagtail.log_actions import log as log
 from wagtail.users.models import UserProfile as UserProfile
 from wagtail.utils.loading import get_custom_form as get_custom_form

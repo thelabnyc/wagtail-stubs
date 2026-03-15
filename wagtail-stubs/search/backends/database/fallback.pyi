@@ -2,9 +2,8 @@ from collections import OrderedDict
 from functools import partial
 from typing import Any
 
-from django.db.models import Q, QuerySet
 from django.db import models
-
+from django.db.models import Q, QuerySet
 from wagtail.search.backends.base import BaseSearchBackend, BaseSearchQueryCompiler, BaseSearchResults
 from wagtail.search.query import SearchQuery
 

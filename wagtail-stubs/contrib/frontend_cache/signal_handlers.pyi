@@ -1,5 +1,6 @@
 from wagtail.contrib.frontend_cache.utils import purge_page_from_cache as purge_page_from_cache
-from wagtail.signals import page_published as page_published, page_unpublished as page_unpublished
+from wagtail.signals import page_published as page_published
+from wagtail.signals import page_unpublished as page_unpublished
 
 def page_published_signal_handler(instance, **kwargs) -> None: ...
 def page_unpublished_signal_handler(instance, **kwargs) -> None: ...

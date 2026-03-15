@@ -4,8 +4,7 @@ from typing import Any
 from django.http.response import HttpResponseBase
 from django.urls import URLPattern
 from django.utils.functional import cached_property
-
-from wagtail.admin.menu import MenuItem, WagtailMenuRegisterable, WagtailMenuRegisterableGroup
+from wagtail.admin.menu import WagtailMenuRegisterable, WagtailMenuRegisterableGroup
 
 class ViewSet(WagtailMenuRegisterable):
     UNDEFINED: object

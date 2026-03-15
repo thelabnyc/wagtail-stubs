@@ -1,9 +1,10 @@
 from django.db import models
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.staticfiles import versioned_static as versioned_static
-from wagtail.telepath import register as register
-from wagtail.admin.widgets import BaseChooser as BaseChooser, BaseChooserAdapter as BaseChooserAdapter
+from wagtail.admin.widgets import BaseChooser as BaseChooser
+from wagtail.admin.widgets import BaseChooserAdapter as BaseChooserAdapter
 from wagtail.admin.widgets.button import Button as Button
+from wagtail.telepath import register as register
 from wagtail.utils.deprecation import RemovedInWagtail80Warning as RemovedInWagtail80Warning
 
 class AdminSnippetChooser(BaseChooser):

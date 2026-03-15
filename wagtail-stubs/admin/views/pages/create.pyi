@@ -10,11 +10,36 @@ from wagtail.admin.action_menu import PageActionMenu as PageActionMenu
 from wagtail.admin.forms.pages import WagtailAdminPageForm
 from wagtail.admin.panels.base import Panel
 from wagtail.admin.ui.components import MediaContainer as MediaContainer
-from wagtail.admin.ui.side_panels import ChecksSidePanel as ChecksSidePanel, CommentsSidePanel as CommentsSidePanel, PageStatusSidePanel as PageStatusSidePanel, PreviewSidePanel as PreviewSidePanel
+from wagtail.admin.ui.side_panels import (
+    ChecksSidePanel as ChecksSidePanel,
+)
+from wagtail.admin.ui.side_panels import (
+    CommentsSidePanel as CommentsSidePanel,
+)
+from wagtail.admin.ui.side_panels import (
+    PageStatusSidePanel as PageStatusSidePanel,
+)
+from wagtail.admin.ui.side_panels import (
+    PreviewSidePanel as PreviewSidePanel,
+)
 from wagtail.admin.utils import get_valid_next_url_from_request as get_valid_next_url_from_request
 from wagtail.admin.views.generic import HookResponseMixin as HookResponseMixin
 from wagtail.admin.views.generic.base import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
-from wagtail.models import BaseViewRestriction as BaseViewRestriction, Locale as Locale, Page as Page, PageSubscription as PageSubscription, PageViewRestriction as PageViewRestriction
+from wagtail.models import (
+    BaseViewRestriction as BaseViewRestriction,
+)
+from wagtail.models import (
+    Locale as Locale,
+)
+from wagtail.models import (
+    Page as Page,
+)
+from wagtail.models import (
+    PageSubscription as PageSubscription,
+)
+from wagtail.models import (
+    PageViewRestriction as PageViewRestriction,
+)
 from wagtail.models.pages import PagePermissionTester
 from wagtail.signals import init_new_page as init_new_page
 
@@ -35,7 +60,9 @@ class CreateView(WagtailAdminTemplateMixin, HookResponseMixin, View):
     form_class: type[WagtailAdminPageForm]
     subscription: PageSubscription
     next_url: str | None
-    def dispatch(self, request: HttpRequest, content_type_app_name: str, content_type_model_name: str, parent_page_id: int) -> HttpResponseBase: ...
+    def dispatch(
+        self, request: HttpRequest, content_type_app_name: str, content_type_model_name: str, parent_page_id: int
+    ) -> HttpResponseBase: ...
     form: WagtailAdminPageForm
     def post(self, request: HttpRequest) -> HttpResponse: ...
     @cached_property

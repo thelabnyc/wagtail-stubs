@@ -2,7 +2,18 @@ from wagtail import hooks as hooks
 from wagtail.admin import messages as messages
 from wagtail.admin.forms.collections import CollectionForm as CollectionForm
 from wagtail.admin.ui.tables import TitleColumn as TitleColumn
-from wagtail.admin.views.generic import CreateView as CreateView, DeleteView as DeleteView, EditView as EditView, IndexView as IndexView
+from wagtail.admin.views.generic import (
+    CreateView as CreateView,
+)
+from wagtail.admin.views.generic import (
+    DeleteView as DeleteView,
+)
+from wagtail.admin.views.generic import (
+    EditView as EditView,
+)
+from wagtail.admin.views.generic import (
+    IndexView as IndexView,
+)
 from wagtail.models import Collection as Collection
 from wagtail.permissions import collection_permission_policy as collection_permission_policy
 

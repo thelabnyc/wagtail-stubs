@@ -1,5 +1,4 @@
 from collections.abc import Callable
-from typing import Any
 
 from django import forms
 from telepath import Adapter, AdapterRegistry, JSContextBase

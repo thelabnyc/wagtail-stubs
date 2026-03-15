@@ -2,12 +2,14 @@ from typing import Any
 
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseBase
-from django.utils.functional import cached_property as cached_property, classproperty
+from django.utils.functional import cached_property as cached_property
+from django.utils.functional import classproperty
 from wagtail.admin.ui.tables import BaseColumn
 from wagtail.admin.views import generic as generic
 from wagtail.admin.views.generic.base import BaseListingView as BaseListingView
 from wagtail.admin.views.generic.permissions import PermissionCheckedMixin as PermissionCheckedMixin
-from wagtail.admin.views.pages.listing import PageFilterSet as PageFilterSet, PageListingMixin as PageListingMixin
+from wagtail.admin.views.pages.listing import PageFilterSet as PageFilterSet
+from wagtail.admin.views.pages.listing import PageListingMixin as PageListingMixin
 from wagtail.admin.views.pages.utils import GenericPageBreadcrumbsMixin as GenericPageBreadcrumbsMixin
 from wagtail.models import Page as Page
 from wagtail.permissions import page_permission_policy as page_permission_policy
@@ -24,7 +26,9 @@ class ContentTypeUseView(PageListingMixin, PermissionCheckedMixin, BaseListingVi
     @classproperty
     def columns(cls) -> list[BaseColumn]: ...
     page_class: type[Page]
-    def get(self, request: HttpRequest, *, content_type_app_name: str, content_type_model_name: str) -> HttpResponse: ...
+    def get(
+        self, request: HttpRequest, *, content_type_app_name: str, content_type_model_name: str
+    ) -> HttpResponse: ...
     def get_page_subtitle(self) -> str: ...
     @cached_property
     def verbose_name_plural(self) -> str: ...

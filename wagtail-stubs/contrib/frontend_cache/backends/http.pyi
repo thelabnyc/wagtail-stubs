@@ -1,8 +1,10 @@
-from .base import BaseBackend
-from _typeshed import Incomplete
 from urllib.request import Request
 
-__all__ = ['PurgeRequest', 'HTTPBackend']
+from _typeshed import Incomplete
+
+from .base import BaseBackend
+
+__all__ = ["PurgeRequest", "HTTPBackend"]
 
 class PurgeRequest(Request):
     def get_method(self): ...

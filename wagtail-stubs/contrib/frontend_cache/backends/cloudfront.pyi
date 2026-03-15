@@ -1,7 +1,8 @@
-from .base import BaseBackend
 from _typeshed import Incomplete
 
-__all__ = ['CloudfrontBackend']
+from .base import BaseBackend
+
+__all__ = ["CloudfrontBackend"]
 
 class CloudfrontBackend(BaseBackend):
     client: Incomplete

@@ -3,15 +3,47 @@ from django.utils.functional import cached_property as cached_property
 from wagtail.admin import messages as messages
 from wagtail.admin.auth import PermissionPolicyChecker as PermissionPolicyChecker
 from wagtail.admin.forms.search import SearchForm as SearchForm
-from wagtail.admin.ui.tables import Column as Column, StatusTagColumn as StatusTagColumn, TitleColumn as TitleColumn
+from wagtail.admin.ui.tables import Column as Column
+from wagtail.admin.ui.tables import StatusTagColumn as StatusTagColumn
+from wagtail.admin.ui.tables import TitleColumn as TitleColumn
 from wagtail.admin.views import generic as generic
 from wagtail.admin.widgets.button import Button as Button
-from wagtail.contrib.frontend_cache.utils import PurgeBatch as PurgeBatch, purge_urls_from_cache as purge_urls_from_cache
+from wagtail.contrib.frontend_cache.utils import (
+    PurgeBatch as PurgeBatch,
+)
+from wagtail.contrib.frontend_cache.utils import (
+    purge_urls_from_cache as purge_urls_from_cache,
+)
 from wagtail.contrib.redirects.filters import RedirectsReportFilterSet as RedirectsReportFilterSet
-from wagtail.contrib.redirects.forms import ConfirmImportForm as ConfirmImportForm, ConfirmImportManagementForm as ConfirmImportManagementForm, ImportForm as ImportForm, RedirectForm as RedirectForm
+from wagtail.contrib.redirects.forms import (
+    ConfirmImportForm as ConfirmImportForm,
+)
+from wagtail.contrib.redirects.forms import (
+    ConfirmImportManagementForm as ConfirmImportManagementForm,
+)
+from wagtail.contrib.redirects.forms import (
+    ImportForm as ImportForm,
+)
+from wagtail.contrib.redirects.forms import (
+    RedirectForm as RedirectForm,
+)
 from wagtail.contrib.redirects.models import Redirect as Redirect
 from wagtail.contrib.redirects.permissions import permission_policy as permission_policy
-from wagtail.contrib.redirects.utils import get_file_storage as get_file_storage, get_format_cls_by_extension as get_format_cls_by_extension, get_import_formats as get_import_formats, get_supported_extensions as get_supported_extensions, write_to_file_storage as write_to_file_storage
+from wagtail.contrib.redirects.utils import (
+    get_file_storage as get_file_storage,
+)
+from wagtail.contrib.redirects.utils import (
+    get_format_cls_by_extension as get_format_cls_by_extension,
+)
+from wagtail.contrib.redirects.utils import (
+    get_import_formats as get_import_formats,
+)
+from wagtail.contrib.redirects.utils import (
+    get_supported_extensions as get_supported_extensions,
+)
+from wagtail.contrib.redirects.utils import (
+    write_to_file_storage as write_to_file_storage,
+)
 from wagtail.log_actions import log as log
 from wagtail.models import Site as Site
 

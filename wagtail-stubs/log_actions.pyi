@@ -1,12 +1,10 @@
-import types
-import uuid
 from collections.abc import Callable
 from typing import Any
+import types
+import uuid
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.db.models import Model
-from django.db.models.base import ModelBase
-
 from wagtail.models.audit_log import BaseLogEntry
 from wagtail.utils.registry import ObjectTypeRegistry
 
@@ -22,7 +20,9 @@ class LogContext:
     uuid: uuid.UUID | None
     def __init__(self, user: AbstractBaseUser | None = None, generate_uuid: bool = True) -> None: ...
     def __enter__(self) -> LogContext: ...
-    def __exit__(self, type: type[BaseException] | None, value: BaseException | None, traceback: types.TracebackType | None) -> None: ...
+    def __exit__(
+        self, type: type[BaseException] | None, value: BaseException | None, traceback: types.TracebackType | None
+    ) -> None: ...
 
 empty_log_context: LogContext
 
@@ -47,7 +47,14 @@ class LogActionRegistry:
     def get_action_label(self, action: str) -> str: ...
     def get_log_model_for_model(self, model: type) -> type[Model] | None: ...
     def get_log_model_for_instance(self, instance: Model) -> type[Model] | None: ...
-    def log(self, instance: Model, action: str, user: AbstractBaseUser | None = None, uuid: uuid.UUID | None = None, **kwargs: Any) -> BaseLogEntry: ...
+    def log(
+        self,
+        instance: Model,
+        action: str,
+        user: AbstractBaseUser | None = None,
+        uuid: uuid.UUID | None = None,
+        **kwargs: Any,
+    ) -> BaseLogEntry: ...
     def get_logs_for_instance(self, instance: Model) -> Any: ...  # TODO: genuinely dynamic (QuerySet or none())
 
 registry: LogActionRegistry

@@ -1,17 +1,35 @@
 from wagtail import hooks as hooks
-from wagtail.admin.admin_url_finder import ModelAdminURLFinder as ModelAdminURLFinder, register_admin_url_finder as register_admin_url_finder
+from wagtail.admin.admin_url_finder import (
+    ModelAdminURLFinder as ModelAdminURLFinder,
+)
+from wagtail.admin.admin_url_finder import (
+    register_admin_url_finder as register_admin_url_finder,
+)
 from wagtail.admin.menu import MenuItem as MenuItem
 from wagtail.admin.navigation import get_site_for_user as get_site_for_user
 from wagtail.admin.search import SearchArea as SearchArea
 from wagtail.admin.site_summary import SummaryItem as SummaryItem
-from wagtail.documents import admin_urls as admin_urls, get_document_model as get_document_model
+from wagtail.documents import admin_urls as admin_urls
+from wagtail.documents import get_document_model as get_document_model
 from wagtail.documents.api.admin.views import DocumentsAdminAPIViewSet as DocumentsAdminAPIViewSet
 from wagtail.documents.forms import GroupDocumentPermissionFormSet as GroupDocumentPermissionFormSet
 from wagtail.documents.permissions import permission_policy as permission_policy
 from wagtail.documents.rich_text import DocumentLinkHandler as DocumentLinkHandler
-from wagtail.documents.rich_text.contentstate import ContentstateDocumentLinkConversionRule as ContentstateDocumentLinkConversionRule
-from wagtail.documents.rich_text.editor_html import EditorHTMLDocumentLinkConversionRule as EditorHTMLDocumentLinkConversionRule
-from wagtail.documents.views.bulk_actions import AddTagsBulkAction as AddTagsBulkAction, AddToCollectionBulkAction as AddToCollectionBulkAction, DeleteBulkAction as DeleteBulkAction
+from wagtail.documents.rich_text.contentstate import (
+    ContentstateDocumentLinkConversionRule as ContentstateDocumentLinkConversionRule,
+)
+from wagtail.documents.rich_text.editor_html import (
+    EditorHTMLDocumentLinkConversionRule as EditorHTMLDocumentLinkConversionRule,
+)
+from wagtail.documents.views.bulk_actions import (
+    AddTagsBulkAction as AddTagsBulkAction,
+)
+from wagtail.documents.views.bulk_actions import (
+    AddToCollectionBulkAction as AddToCollectionBulkAction,
+)
+from wagtail.documents.views.bulk_actions import (
+    DeleteBulkAction as DeleteBulkAction,
+)
 from wagtail.models import BaseViewRestriction as BaseViewRestriction
 from wagtail.wagtail_hooks import require_wagtail_login as require_wagtail_login
 

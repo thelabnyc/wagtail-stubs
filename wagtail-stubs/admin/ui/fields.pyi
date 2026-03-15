@@ -6,7 +6,12 @@ from wagtail.utils.registry import ModelFieldRegistry as ModelFieldRegistry
 
 display_class_registry: ModelFieldRegistry
 
-def register_display_class(field_class: type[models.Field], to: type[models.Model] | None = None, display_class: type[BaseFieldDisplay] | None = None, exact_class: bool = False) -> None: ...
+def register_display_class(
+    field_class: type[models.Field],
+    to: type[models.Model] | None = None,
+    display_class: type[BaseFieldDisplay] | None = None,
+    exact_class: bool = False,
+) -> None: ...
 
 class BaseFieldDisplay(Component):
     value: Any

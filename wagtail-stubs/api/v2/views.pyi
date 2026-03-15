@@ -6,13 +6,57 @@ from rest_framework.filters import BaseFilterBackend
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-
-from .filters import AncestorOfFilter as AncestorOfFilter, ChildOfFilter as ChildOfFilter, DescendantOfFilter as DescendantOfFilter, FieldsFilter as FieldsFilter, LocaleFilter as LocaleFilter, OrderingFilter as OrderingFilter, SearchFilter as SearchFilter, TranslationOfFilter as TranslationOfFilter
-from .pagination import WagtailPagination as WagtailPagination
-from .serializers import BaseSerializer as BaseSerializer, PageSerializer as PageSerializer, get_serializer_class as get_serializer_class
-from .utils import BadRequestError as BadRequestError, get_object_detail_url as get_object_detail_url, page_models_from_string as page_models_from_string, parse_fields_parameter as parse_fields_parameter
 from wagtail.api import APIField as APIField
-from wagtail.models import Page as Page, PageViewRestriction as PageViewRestriction, Site as Site
+from wagtail.models import Page as Page
+from wagtail.models import PageViewRestriction as PageViewRestriction
+from wagtail.models import Site as Site
+
+from .filters import (
+    AncestorOfFilter as AncestorOfFilter,
+)
+from .filters import (
+    ChildOfFilter as ChildOfFilter,
+)
+from .filters import (
+    DescendantOfFilter as DescendantOfFilter,
+)
+from .filters import (
+    FieldsFilter as FieldsFilter,
+)
+from .filters import (
+    LocaleFilter as LocaleFilter,
+)
+from .filters import (
+    OrderingFilter as OrderingFilter,
+)
+from .filters import (
+    SearchFilter as SearchFilter,
+)
+from .filters import (
+    TranslationOfFilter as TranslationOfFilter,
+)
+from .pagination import WagtailPagination as WagtailPagination
+from .serializers import (
+    BaseSerializer as BaseSerializer,
+)
+from .serializers import (
+    PageSerializer as PageSerializer,
+)
+from .serializers import (
+    get_serializer_class as get_serializer_class,
+)
+from .utils import (
+    BadRequestError as BadRequestError,
+)
+from .utils import (
+    get_object_detail_url as get_object_detail_url,
+)
+from .utils import (
+    page_models_from_string as page_models_from_string,
+)
+from .utils import (
+    parse_fields_parameter as parse_fields_parameter,
+)
 
 class BaseAPIViewSet(GenericViewSet):
     @classproperty
@@ -62,9 +106,9 @@ class BaseAPIViewSet(GenericViewSet):
     @classmethod
     def get_urlpatterns(cls) -> list[Any]: ...
     @classmethod
-    def get_model_listing_urlpath(cls, model: type, namespace: str = '') -> str | None: ...
+    def get_model_listing_urlpath(cls, model: type, namespace: str = "") -> str | None: ...
     @classmethod
-    def get_object_detail_urlpath(cls, model: type, pk: Any, namespace: str = '') -> str | None: ...
+    def get_object_detail_urlpath(cls, model: type, pk: Any, namespace: str = "") -> str | None: ...
 
 class PagesAPIViewSet(BaseAPIViewSet):
     base_serializer_class: type[PageSerializer]  # type: ignore[assignment]

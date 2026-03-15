@@ -7,7 +7,6 @@ _T = TypeVar("_T")
 from django.core.management.base import BaseCommand, CommandParser
 from django.db import models, transaction
 from django.db.models import QuerySet
-
 from wagtail.search.backends.base import BaseSearchBackend, NullIndex
 
 DEFAULT_CHUNK_SIZE: int

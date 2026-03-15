@@ -1,6 +1,7 @@
+from typing import Any
+
 from django import forms
 from django.contrib.auth.models import AbstractBaseUser
-
 from wagtail.users.models import UserProfile
 
 User: type[AbstractBaseUser]

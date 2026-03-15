@@ -1,6 +1,8 @@
 from typing import Any
 
-from wagtail.admin.ui.tables import Column as Column, StatusFlagColumn as StatusFlagColumn, TitleColumn as TitleColumn
+from wagtail.admin.ui.tables import Column as Column
+from wagtail.admin.ui.tables import StatusFlagColumn as StatusFlagColumn
+from wagtail.admin.ui.tables import TitleColumn as TitleColumn
 from wagtail.admin.views import generic as generic
 from wagtail.admin.viewsets.model import ModelViewSet as ModelViewSet
 from wagtail.models import Site as Site

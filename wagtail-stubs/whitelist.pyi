@@ -1,6 +1,6 @@
-import re
 from collections.abc import Callable
 from typing import Any
+import re
 
 from bs4 import BeautifulSoup, NavigableString, Tag
 

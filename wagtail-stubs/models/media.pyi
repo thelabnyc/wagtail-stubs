@@ -6,7 +6,6 @@ from django.db import models
 from django.db.models import ForeignKey
 from django.utils.safestring import SafeString
 from treebeard.mp_tree import MP_Node
-
 from wagtail.query import TreeQuerySet
 from wagtail.search import index
 
@@ -35,16 +34,13 @@ class Collection(MP_Node):
     objects: ClassVar[CollectionManager]  # type: ignore[assignment]
     node_order_by: ClassVar[list[str]]
 
-    def __str__(self) -> str: ...
     def get_ancestors(self, inclusive: bool = False) -> CollectionQuerySet: ...
     def get_descendants(self, inclusive: bool = False) -> CollectionQuerySet: ...
     def get_siblings(self, inclusive: bool = True) -> CollectionQuerySet: ...
     def get_next_siblings(self, inclusive: bool = False) -> CollectionQuerySet: ...
     def get_prev_siblings(self, inclusive: bool = False) -> CollectionQuerySet: ...
     def get_view_restrictions(self) -> models.QuerySet[CollectionViewRestriction]: ...
-    def get_indented_name(
-        self, indentation_start_depth: int = 2, html: bool = False
-    ) -> str | SafeString: ...
+    def get_indented_name(self, indentation_start_depth: int = 2, html: bool = False) -> str | SafeString: ...
 
     class Meta:
         verbose_name: str
@@ -60,9 +56,7 @@ class CollectionMember(models.Model):
         abstract: bool
 
 class GroupCollectionPermissionManager(models.Manager["GroupCollectionPermission"]):
-    def get_by_natural_key(
-        self, group: str, collection: str, permission: str
-    ) -> GroupCollectionPermission: ...
+    def get_by_natural_key(self, group: str, collection: str, permission: str) -> GroupCollectionPermission: ...
 
 class GroupCollectionPermission(models.Model):
     group: ForeignKey[Group, Group]
@@ -70,7 +64,6 @@ class GroupCollectionPermission(models.Model):
     permission: ForeignKey[Permission, Permission]
     objects: ClassVar[GroupCollectionPermissionManager]  # type: ignore[assignment]
 
-    def __str__(self) -> str: ...
     def natural_key(self) -> tuple[Group, Collection, Permission]: ...
 
     class Meta:

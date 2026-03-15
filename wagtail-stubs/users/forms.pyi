@@ -6,7 +6,18 @@ from django.db.models import QuerySet
 from wagtail import hooks as hooks
 from wagtail.admin.forms.formsets import BaseFormSetMixin as BaseFormSetMixin
 from wagtail.admin.widgets import AdminPageChooser as AdminPageChooser
-from wagtail.models import GroupPagePermission as GroupPagePermission, PAGE_PERMISSION_CODENAMES as PAGE_PERMISSION_CODENAMES, PAGE_PERMISSION_TYPES as PAGE_PERMISSION_TYPES, Page as Page
+from wagtail.models import (
+    PAGE_PERMISSION_CODENAMES as PAGE_PERMISSION_CODENAMES,
+)
+from wagtail.models import (
+    PAGE_PERMISSION_TYPES as PAGE_PERMISSION_TYPES,
+)
+from wagtail.models import (
+    GroupPagePermission as GroupPagePermission,
+)
+from wagtail.models import (
+    Page as Page,
+)
 
 User: type[AbstractBaseUser]
 standard_fields: set[str]
@@ -59,6 +70,7 @@ class GroupForm(forms.ModelForm):
         model = Group
         fields: tuple[str, ...]
         widgets: dict[str, forms.Widget]
+
     def clean_name(self): ...
     def save(self, commit: bool = True): ...
 
@@ -69,7 +81,7 @@ class PagePermissionsForm(forms.Form):
 class BaseGroupPagePermissionFormSet(BaseFormSetMixin, forms.BaseFormSet):
     permission_types = PAGE_PERMISSION_TYPES
     instance: Group
-    def __init__(self, data=None, files=None, instance=None, prefix: str = 'page_permissions') -> None: ...
+    def __init__(self, data=None, files=None, instance=None, prefix: str = "page_permissions") -> None: ...
     def clean(self) -> None: ...
     @transaction.atomic
     def save(self) -> None: ...

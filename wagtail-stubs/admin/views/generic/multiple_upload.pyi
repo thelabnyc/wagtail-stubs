@@ -4,7 +4,6 @@ from django.db import models
 from django.forms import Form
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views.generic.base import TemplateView, View
-
 from wagtail.models import UploadedFile
 from wagtail.permission_policies import BasePermissionPolicy
 

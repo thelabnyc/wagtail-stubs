@@ -1,17 +1,38 @@
 from wagtail import hooks as hooks
-from wagtail.admin.admin_url_finder import ModelAdminURLFinder as ModelAdminURLFinder, register_admin_url_finder as register_admin_url_finder
+from wagtail.admin.admin_url_finder import (
+    ModelAdminURLFinder as ModelAdminURLFinder,
+)
+from wagtail.admin.admin_url_finder import (
+    register_admin_url_finder as register_admin_url_finder,
+)
 from wagtail.admin.menu import MenuItem as MenuItem
 from wagtail.admin.navigation import get_site_for_user as get_site_for_user
 from wagtail.admin.search import SearchArea as SearchArea
 from wagtail.admin.site_summary import SummaryItem as SummaryItem
-from wagtail.images import admin_urls as admin_urls, get_image_model as get_image_model, image_operations as image_operations
+from wagtail.images import (
+    admin_urls as admin_urls,
+)
+from wagtail.images import (
+    get_image_model as get_image_model,
+)
+from wagtail.images import (
+    image_operations as image_operations,
+)
 from wagtail.images.api.admin.views import ImagesAdminAPIViewSet as ImagesAdminAPIViewSet
 from wagtail.images.forms import GroupImagePermissionFormSet as GroupImagePermissionFormSet
 from wagtail.images.permissions import permission_policy as permission_policy
 from wagtail.images.rich_text import ImageEmbedHandler as ImageEmbedHandler
 from wagtail.images.rich_text.contentstate import ContentstateImageConversionRule as ContentstateImageConversionRule
 from wagtail.images.rich_text.editor_html import EditorHTMLImageConversionRule as EditorHTMLImageConversionRule
-from wagtail.images.views.bulk_actions import AddTagsBulkAction as AddTagsBulkAction, AddToCollectionBulkAction as AddToCollectionBulkAction, DeleteBulkAction as DeleteBulkAction
+from wagtail.images.views.bulk_actions import (
+    AddTagsBulkAction as AddTagsBulkAction,
+)
+from wagtail.images.views.bulk_actions import (
+    AddToCollectionBulkAction as AddToCollectionBulkAction,
+)
+from wagtail.images.views.bulk_actions import (
+    DeleteBulkAction as DeleteBulkAction,
+)
 
 def register_admin_urls(): ...
 def construct_admin_api(router) -> None: ...

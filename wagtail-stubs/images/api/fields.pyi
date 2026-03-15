@@ -1,6 +1,7 @@
+from rest_framework.fields import Field
+
 from ..models import SourceImageIOError as SourceImageIOError
 from ..utils import to_svg_safe_spec as to_svg_safe_spec
-from rest_framework.fields import Field
 
 class ImageRenditionField(Field):
     filter_spec: str

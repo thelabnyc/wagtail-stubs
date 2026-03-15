@@ -1,5 +1,7 @@
-from . import checks as checks, get_image_model as get_image_model
 from django.apps import AppConfig
+
+from . import checks as checks
+from . import get_image_model as get_image_model
 
 class WagtailImagesAppConfig(AppConfig):
     name: str

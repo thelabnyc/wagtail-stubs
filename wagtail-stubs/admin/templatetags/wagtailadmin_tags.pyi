@@ -7,22 +7,55 @@ from wagtail.admin.icons import get_icon_sprite_url as get_icon_sprite_url
 from wagtail.admin.localization import get_js_translation_strings as get_js_translation_strings
 from wagtail.admin.menu import admin_menu as admin_menu
 from wagtail.admin.search import admin_search_areas as admin_search_areas
-from wagtail.telepath import JSContext as JSContext
 from wagtail.admin.ui import sidebar as sidebar
 from wagtail.admin.ui.menus import MenuItem as MenuItem
-from wagtail.admin.utils import get_admin_base_url as get_admin_base_url, get_keyboard_key_labels_from_request as get_keyboard_key_labels_from_request, get_latest_str as get_latest_str, get_user_display_name as get_user_display_name
+from wagtail.admin.utils import (
+    get_admin_base_url as get_admin_base_url,
+)
+from wagtail.admin.utils import (
+    get_keyboard_key_labels_from_request as get_keyboard_key_labels_from_request,
+)
+from wagtail.admin.utils import (
+    get_latest_str as get_latest_str,
+)
+from wagtail.admin.utils import (
+    get_user_display_name as get_user_display_name,
+)
 from wagtail.admin.views.bulk_action.registry import bulk_action_registry as bulk_action_registry
 from wagtail.admin.views.pages.utils import get_breadcrumbs_items_for_page as get_breadcrumbs_items_for_page
-from wagtail.admin.widgets import Button as Button, ButtonWithDropdown as ButtonWithDropdown
+from wagtail.admin.widgets import Button as Button
+from wagtail.admin.widgets import ButtonWithDropdown as ButtonWithDropdown
 from wagtail.admin.widgets.button import ListingButton as ListingButton
-from wagtail.coreutils import camelcase_to_underscore as camelcase_to_underscore, get_content_type_label as get_content_type_label, get_locales_display_names as get_locales_display_names
-from wagtail.models import Locale as Locale, Page as Page, PageViewRestriction as PageViewRestriction
+from wagtail.coreutils import (
+    camelcase_to_underscore as camelcase_to_underscore,
+)
+from wagtail.coreutils import (
+    get_content_type_label as get_content_type_label,
+)
+from wagtail.coreutils import (
+    get_locales_display_names as get_locales_display_names,
+)
+from wagtail.models import Locale as Locale
+from wagtail.models import Page as Page
+from wagtail.models import PageViewRestriction as PageViewRestriction
+from wagtail.telepath import JSContext as JSContext
 from wagtail.users.utils import get_gravatar_url as get_gravatar_url
 
 register: template.Library
 
 def breadcrumbs(items, is_expanded: bool = False, classname=None, icon_name=None): ...
-def page_breadcrumbs(context, page, url_name, url_root_name=None, include_self: bool = True, is_expanded: bool = False, querystring_value: str = '', trailing_breadcrumb_title=None, classname=None, icon_name=None): ...
+def page_breadcrumbs(
+    context,
+    page,
+    url_name,
+    url_root_name=None,
+    include_self: bool = True,
+    is_expanded: bool = False,
+    querystring_value: str = "",
+    trailing_breadcrumb_title=None,
+    classname=None,
+    icon_name=None,
+): ...
 def search_other(context, current=None): ...
 def ellipsistrim(value, max_length): ...
 @register.filter
@@ -55,8 +88,8 @@ def has_unrendered_errors(bound_field): ...
 @stringfilter
 def cautious_slugify(value): ...
 def querystring(context, **kwargs): ...
-def pagination_querystring(context, page_number, page_key: str = 'p'): ...
-def paginate(context, page, base_url: str = '', page_key: str = 'p', classname: str = ''): ...
+def pagination_querystring(context, page_number, page_key: str = "p"): ...
+def paginate(context, page, base_url: str = "", page_key: str = "p", classname: str = ""): ...
 def page_listing_buttons(context, page, user, next_url=None): ...
 def page_header_buttons(context, page, user, view_name): ...
 def bulk_action_choices(context, app_label, model_name): ...
@@ -79,7 +112,9 @@ def icon(name=None, classname=None, title=None, wrapped: bool = False): ...
 def status(label=None, classname=None, url=None, title=None, hidden_label=None, attrs=None): ...
 def timesince_simple(d): ...
 @register.simple_tag
-def timesince_last_update(last_update, show_time_prefix: bool = False, user_display_name: str = '', use_shorthand: bool = True): ...
+def timesince_last_update(
+    last_update, show_time_prefix: bool = False, user_display_name: str = "", use_shorthand: bool = True
+): ...
 @register.filter
 def user_display_name(user): ...
 @register.filter
@@ -137,13 +172,28 @@ class RawFormattedFieldNode(BlockInclusionNode):
     content_var: str
     template: str
 
-def formattedfield(field=None, rendered_field=None, classname: str = '', show_label: bool = True, id_for_label=None, sr_only_label: bool = False, icon=None, help_text=None, help_text_id=None, show_add_comment_button: bool = False, label_text=None, error_message_id=None, wrapper_id=None, attrs=None): ...
+def formattedfield(
+    field=None,
+    rendered_field=None,
+    classname: str = "",
+    show_label: bool = True,
+    id_for_label=None,
+    sr_only_label: bool = False,
+    icon=None,
+    help_text=None,
+    help_text_id=None,
+    show_add_comment_button: bool = False,
+    label_text=None,
+    error_message_id=None,
+    wrapper_id=None,
+    attrs=None,
+): ...
 def formattedfieldfromcontext(context): ...
 
 class FieldRowNode(BlockInclusionNode):
     template: str
 
-def dialog_toggle(dialog_id, classname: str = '', text=None): ...
+def dialog_toggle(dialog_id, classname: str = "", text=None): ...
 def workflow_status_with_date(workflow_state): ...
 def keyboard_shortcuts_dialog(context): ...
-def human_readable_date(date, description=None, placement: str = 'top'): ...
+def human_readable_date(date, description=None, placement: str = "top"): ...

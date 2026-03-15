@@ -1,11 +1,11 @@
-import re
 from argparse import ArgumentParser
 from typing import Any
+import re
 
 CURRENT_PYTHON: tuple[int, int]
 REQUIRED_PYTHON: tuple[int, int]
 
-def pluralize(value: int, arg: str = 's') -> str: ...
+def pluralize(value: int, arg: str = "s") -> str: ...
 
 class Command:
     description: str | None
@@ -26,7 +26,14 @@ class UpdateModulePaths(Command):
     description: str
     REPLACEMENTS: list[tuple[re.Pattern[str], str]]
     def add_arguments(self, parser: ArgumentParser) -> None: ...
-    def run(self, root_path: str | None = None, list_files: bool = False, diff: bool = False, ignored_dirs: list[str] | None = None, ignored_patterns: list[str] | None = None) -> None: ...
+    def run(
+        self,
+        root_path: str | None = None,
+        list_files: bool = False,
+        diff: bool = False,
+        ignored_dirs: list[str] | None = None,
+        ignored_patterns: list[str] | None = None,
+    ) -> None: ...
 
 class Version(Command):
     description: str

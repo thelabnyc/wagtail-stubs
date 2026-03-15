@@ -1,5 +1,6 @@
-import abc
 from abc import ABC, abstractmethod
+import abc
+
 from django import forms
 from django.db import models
 from django.http import HttpRequest

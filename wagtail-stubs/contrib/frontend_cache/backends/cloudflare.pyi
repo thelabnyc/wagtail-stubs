@@ -1,7 +1,8 @@
-from .base import BaseBackend
 from _typeshed import Incomplete
 
-__all__ = ['CloudflareBackend']
+from .base import BaseBackend
+
+__all__ = ["CloudflareBackend"]
 
 class CloudflareBackend(BaseBackend):
     CHUNK_SIZE: int

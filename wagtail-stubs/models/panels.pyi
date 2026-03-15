@@ -8,10 +8,8 @@ class PanelPlaceholder:
     kwargs: dict[str, Any]
 
     def __init__(self, path: str, args: list[Any], kwargs: dict[str, Any]) -> None: ...
-
     @cached_property
     def panel_class(self) -> type: ...
-
     def construct(self) -> Any: ...
 
 class CommentPanelPlaceholder(PanelPlaceholder):

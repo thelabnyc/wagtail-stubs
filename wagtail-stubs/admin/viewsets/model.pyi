@@ -1,15 +1,14 @@
 from collections.abc import Callable
 from typing import Any
 
-from django.contrib.auth.models import Permission
 from django import forms
+from django.contrib.auth.models import Permission
 from django.db import models
 from django.db.models import Options, QuerySet
 from django.forms import BaseModelForm
 from django.http.response import HttpResponseBase
 from django.urls import URLPattern
 from django.utils.functional import cached_property
-
 from wagtail.admin.admin_url_finder import ModelAdminURLFinder
 from wagtail.admin.filters import WagtailFilterSet
 from wagtail.admin.menu import MenuItem

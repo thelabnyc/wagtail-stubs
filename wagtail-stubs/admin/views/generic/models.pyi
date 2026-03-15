@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Any
 
 from django.db import models
@@ -9,13 +7,12 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseCreateView, BaseDeleteView, BaseUpdateView
-
 from wagtail.admin.compare import FieldComparison
 from wagtail.admin.filters import WagtailFilterSet
 from wagtail.admin.forms.models import WagtailAdminModelForm
 from wagtail.admin.panels.base import Panel
 from wagtail.admin.ui.components import MediaContainer
-from wagtail.admin.ui.tables import Column, TitleColumn
+from wagtail.admin.ui.tables import Column
 from wagtail.admin.views.generic.base import BaseListingView, WagtailAdminTemplateMixin
 from wagtail.admin.views.generic.mixins import (
     BeforeAfterHookMixin,
@@ -26,7 +23,7 @@ from wagtail.admin.views.generic.mixins import (
 from wagtail.admin.views.generic.permissions import PermissionCheckedMixin
 from wagtail.admin.views.mixins import SpreadsheetExportMixin
 from wagtail.admin.widgets.button import Button, ButtonWithDropdown, HeaderButton, ListingButton
-from wagtail.models import DraftStateMixin, Locale, ReferenceIndex
+from wagtail.models import Locale
 from wagtail.models.audit_log import BaseLogEntry
 from wagtail.models.reference_index import ReferenceGroups
 from wagtail.models.revisions import Revision
@@ -284,7 +281,9 @@ class RevisionsCompareView(WagtailAdminTemplateMixin, TemplateView):
     def get_breadcrumbs_items(self) -> list[dict[str, str]]: ...
     @cached_property
     def header_buttons(self) -> list[HeaderButton]: ...
-    def setup(self, request: HttpRequest, pk: str, revision_id_a: str, revision_id_b: str, *args: Any, **kwargs: Any) -> None: ...
+    def setup(
+        self, request: HttpRequest, pk: str, revision_id_a: str, revision_id_b: str, *args: Any, **kwargs: Any
+    ) -> None: ...
     def get_object(self, queryset: QuerySet[models.Model] | None = ...) -> models.Model: ...
     def get_edit_handler(self) -> Panel: ...
     def get_page_subtitle(self) -> str: ...

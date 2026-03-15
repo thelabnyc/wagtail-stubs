@@ -2,7 +2,6 @@ from typing import Any
 
 from django import forms
 from django.contrib.auth.models import AbstractBaseUser
-
 from wagtail.admin.forms.models import WagtailAdminModelForm
 from wagtail.admin.forms.view_restrictions import BaseViewRestrictionForm
 from wagtail.models import Page, PageSubscription, PageViewRestriction
@@ -49,7 +48,5 @@ class MoveForm(forms.Form):
 class ParentChooserForm(forms.Form):
     child_page_type: type[Page]
     user: AbstractBaseUser
-    def __init__(
-        self, child_page_type: type[Page], user: AbstractBaseUser, *args: Any, **kwargs: Any
-    ) -> None: ...
+    def __init__(self, child_page_type: type[Page], user: AbstractBaseUser, *args: Any, **kwargs: Any) -> None: ...
     def clean_parent_page(self) -> Page: ...

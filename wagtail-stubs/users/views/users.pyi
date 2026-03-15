@@ -1,20 +1,52 @@
-import django_filters
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
-from wagtail.admin.filters import DateRangePickerWidget as DateRangePickerWidget, RelatedFilterMixin as RelatedFilterMixin, WagtailFilterSet as WagtailFilterSet
+from wagtail.admin.filters import (
+    DateRangePickerWidget as DateRangePickerWidget,
+)
+from wagtail.admin.filters import (
+    RelatedFilterMixin as RelatedFilterMixin,
+)
+from wagtail.admin.filters import (
+    WagtailFilterSet as WagtailFilterSet,
+)
 from wagtail.admin.search import SearchArea as SearchArea
 from wagtail.admin.ui.menus import MenuItem as MenuItem
-from wagtail.admin.ui.tables import BooleanColumn as BooleanColumn, BulkActionsCheckboxColumn as BulkActionsCheckboxColumn, Column as Column, DateColumn as DateColumn, TitleColumn as TitleColumn
+from wagtail.admin.ui.tables import (
+    BooleanColumn as BooleanColumn,
+)
+from wagtail.admin.ui.tables import (
+    BulkActionsCheckboxColumn as BulkActionsCheckboxColumn,
+)
+from wagtail.admin.ui.tables import (
+    Column as Column,
+)
+from wagtail.admin.ui.tables import (
+    DateColumn as DateColumn,
+)
+from wagtail.admin.ui.tables import (
+    TitleColumn as TitleColumn,
+)
 from wagtail.admin.utils import get_user_display_name as get_user_display_name
 from wagtail.admin.views import generic as generic
 from wagtail.admin.viewsets.model import ModelViewSet as ModelViewSet
 from wagtail.admin.widgets.boolean_radio_select import BooleanRadioSelect as BooleanRadioSelect
-from wagtail.admin.widgets.button import BaseButton as BaseButton, Button as Button, ButtonWithDropdown as ButtonWithDropdown
-from wagtail.compat import AUTH_USER_APP_LABEL as AUTH_USER_APP_LABEL, AUTH_USER_MODEL_NAME as AUTH_USER_MODEL_NAME
+from wagtail.admin.widgets.button import (
+    BaseButton as BaseButton,
+)
+from wagtail.admin.widgets.button import (
+    Button as Button,
+)
+from wagtail.admin.widgets.button import (
+    ButtonWithDropdown as ButtonWithDropdown,
+)
+from wagtail.compat import AUTH_USER_APP_LABEL as AUTH_USER_APP_LABEL
+from wagtail.compat import AUTH_USER_MODEL_NAME as AUTH_USER_MODEL_NAME
 from wagtail.search import index as index
-from wagtail.users.forms import UserCreationForm as UserCreationForm, UserEditForm as UserEditForm
+from wagtail.users.forms import UserCreationForm as UserCreationForm
+from wagtail.users.forms import UserEditForm as UserEditForm
 from wagtail.users.utils import user_can_delete_user as user_can_delete_user
+import django_filters
 
 User: type[AbstractBaseUser]
 add_user_perm: str

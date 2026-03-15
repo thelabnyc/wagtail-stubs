@@ -1,1 +1,2 @@
-from .base import PageReportView as PageReportView, ReportView as ReportView
+from .base import PageReportView as PageReportView
+from .base import ReportView as ReportView

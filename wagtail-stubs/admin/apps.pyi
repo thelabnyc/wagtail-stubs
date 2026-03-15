@@ -1,5 +1,6 @@
-from . import checks as checks
 from django.apps import AppConfig
+
+from . import checks as checks
 
 class WagtailAdminAppConfig(AppConfig):
     name: str

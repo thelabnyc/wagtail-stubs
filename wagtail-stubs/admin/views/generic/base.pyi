@@ -1,8 +1,5 @@
-from __future__ import annotations
-
 from typing import Any
 
-import django_filters
 from django.core.paginator import Page, Paginator
 from django.db import models
 from django.db.models.options import Options
@@ -11,11 +8,11 @@ from django.utils.functional import cached_property
 from django.views import View
 from django.views.generic.base import ContextMixin, TemplateResponseMixin
 from django.views.generic.list import BaseListView
-
 from wagtail.admin.active_filters import ActiveFilter
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.ui.tables import Column, Table
 from wagtail.admin.widgets.button import Button
+import django_filters
 
 class WagtailAdminTemplateMixin(TemplateResponseMixin, ContextMixin):
     page_title: str
@@ -103,7 +100,9 @@ class BaseListingView(WagtailAdminTemplateMixin, BaseListView):
     def order_queryset(self, queryset: models.QuerySet[models.Model]) -> models.QuerySet[models.Model]: ...
     def get_base_queryset(self) -> models.QuerySet[models.Model]: ...
     def get_queryset(self) -> models.QuerySet[models.Model]: ...
-    def paginate_queryset(self, queryset: models.QuerySet[models.Model], page_size: int) -> tuple[Paginator, Page, models.QuerySet[models.Model], bool]: ...
+    def paginate_queryset(
+        self, queryset: models.QuerySet[models.Model], page_size: int
+    ) -> tuple[Paginator, Page, models.QuerySet[models.Model], bool]: ...
     def get_table_kwargs(self) -> dict[str, Any]: ...
     def get_table(self, object_list: models.QuerySet[models.Model]) -> Table: ...
     @cached_property

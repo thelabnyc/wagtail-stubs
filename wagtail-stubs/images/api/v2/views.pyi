@@ -1,8 +1,17 @@
+from django.db import models
+from wagtail.api.v2.filters import (
+    FieldsFilter as FieldsFilter,
+)
+from wagtail.api.v2.filters import (
+    OrderingFilter as OrderingFilter,
+)
+from wagtail.api.v2.filters import (
+    SearchFilter as SearchFilter,
+)
+from wagtail.api.v2.views import BaseAPIViewSet as BaseAPIViewSet
+
 from ... import get_image_model as get_image_model
 from .serializers import ImageSerializer as ImageSerializer
-from django.db import models
-from wagtail.api.v2.filters import FieldsFilter as FieldsFilter, OrderingFilter as OrderingFilter, SearchFilter as SearchFilter
-from wagtail.api.v2.views import BaseAPIViewSet as BaseAPIViewSet
 
 class ImagesAPIViewSet(BaseAPIViewSet):
     base_serializer_class = ImageSerializer

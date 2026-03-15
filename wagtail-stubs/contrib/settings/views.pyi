@@ -1,15 +1,21 @@
-from .forms import SiteSwitchForm as SiteSwitchForm
-from .models import BaseGenericSetting as BaseGenericSetting, BaseSiteSetting as BaseSiteSetting
-from .registry import registry as registry
-
 from typing import Any
 
 from django.http import HttpRequest, HttpResponse
 from wagtail.admin import messages as messages
-from wagtail.admin.panels import ObjectList as ObjectList, extract_panel_definitions_from_model_class as extract_panel_definitions_from_model_class
+from wagtail.admin.panels import (
+    ObjectList as ObjectList,
+)
+from wagtail.admin.panels import (
+    extract_panel_definitions_from_model_class as extract_panel_definitions_from_model_class,
+)
 from wagtail.admin.views import generic as generic
 from wagtail.models import Site as Site
 from wagtail.permission_policies import ModelPermissionPolicy
+
+from .forms import SiteSwitchForm as SiteSwitchForm
+from .models import BaseGenericSetting as BaseGenericSetting
+from .models import BaseSiteSetting as BaseSiteSetting
+from .registry import registry as registry
 
 def get_model_from_url_params(app_name: str, model_name: str) -> type: ...
 def get_setting_edit_handler(model: type) -> ObjectList: ...

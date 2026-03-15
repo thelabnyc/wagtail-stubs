@@ -3,7 +3,6 @@ from typing import NamedTuple
 
 from django.db import models
 from django.http import HttpRequest
-
 from wagtail.models.pages import Page
 
 MATCH_HOSTNAME_PORT: int
@@ -35,7 +34,6 @@ class Site(models.Model):
     objects: SiteManager  # type: ignore[assignment]
 
     def natural_key(self) -> tuple[str, int]: ...
-    def __str__(self) -> str: ...
     def clean(self) -> None: ...
     def clean_fields(self, exclude: Collection[str] | None = None) -> None: ...
     @staticmethod

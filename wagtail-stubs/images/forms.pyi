@@ -1,7 +1,14 @@
 from django import forms
 from django.forms import FileInput
-from typing import type_check_only
-from wagtail.admin.forms.collections import BaseCollectionMemberForm as BaseCollectionMemberForm, CollectionChoiceField as CollectionChoiceField, collection_member_permission_formset_factory as collection_member_permission_formset_factory
+from wagtail.admin.forms.collections import (
+    BaseCollectionMemberForm as BaseCollectionMemberForm,
+)
+from wagtail.admin.forms.collections import (
+    CollectionChoiceField as CollectionChoiceField,
+)
+from wagtail.admin.forms.collections import (
+    collection_member_permission_formset_factory as collection_member_permission_formset_factory,
+)
 from wagtail.admin.forms.tags import validate_tag_length as validate_tag_length
 from wagtail.admin.widgets import AdminTagWidget as AdminTagWidget
 from wagtail.images.fields import WagtailImageField as WagtailImageField
@@ -19,6 +26,7 @@ class BaseImageForm(BaseCollectionMemberForm):
     def save(self, commit: bool = True): ...
     class Meta:
         widgets: dict[str, type[AdminTagWidget] | FileInput | forms.HiddenInput]
+
     def clean_tags(self): ...
 
 def get_image_base_form(): ...

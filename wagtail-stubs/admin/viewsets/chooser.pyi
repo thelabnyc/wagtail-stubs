@@ -6,7 +6,6 @@ from django.db import models
 from django.http import HttpResponseBase
 from django.urls import URLPattern
 from django.utils.functional import cached_property
-
 from wagtail.admin.views.generic import chooser as chooser_views
 from wagtail.admin.viewsets.base import ViewSet
 from wagtail.admin.widgets.chooser import BaseChooser, BaseChooserAdapter

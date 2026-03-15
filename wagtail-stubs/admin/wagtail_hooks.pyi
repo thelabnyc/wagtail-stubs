@@ -1,32 +1,128 @@
-from typing import Any
 from collections.abc import Generator
+from typing import Any
+
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import Permission
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.urls.resolvers import URLPattern, URLResolver
 from django.utils.functional import cached_property as cached_property
-from wagtail import __version__ as __version__, hooks as hooks
-from wagtail.admin.admin_url_finder import ModelAdminURLFinder as ModelAdminURLFinder, register_admin_url_finder as register_admin_url_finder
+from wagtail import __version__ as __version__
+from wagtail import hooks as hooks
+from wagtail.admin.admin_url_finder import (
+    ModelAdminURLFinder as ModelAdminURLFinder,
+)
+from wagtail.admin.admin_url_finder import (
+    register_admin_url_finder as register_admin_url_finder,
+)
 from wagtail.admin.auth import user_has_any_page_permission as user_has_any_page_permission
-from wagtail.admin.forms.collections import GroupCollectionManagementPermissionFormSet as GroupCollectionManagementPermissionFormSet
-from wagtail.admin.menu import DismissibleMenuItem as DismissibleMenuItem, DismissibleSubmenuMenuItem as DismissibleSubmenuMenuItem, MenuItem as MenuItem, SubmenuMenuItem as SubmenuMenuItem, help_menu as help_menu, reports_menu as reports_menu, settings_menu as settings_menu
+from wagtail.admin.forms.collections import (
+    GroupCollectionManagementPermissionFormSet as GroupCollectionManagementPermissionFormSet,
+)
+from wagtail.admin.menu import (
+    DismissibleMenuItem as DismissibleMenuItem,
+)
+from wagtail.admin.menu import (
+    DismissibleSubmenuMenuItem as DismissibleSubmenuMenuItem,
+)
+from wagtail.admin.menu import (
+    MenuItem as MenuItem,
+)
+from wagtail.admin.menu import (
+    SubmenuMenuItem as SubmenuMenuItem,
+)
+from wagtail.admin.menu import (
+    help_menu as help_menu,
+)
+from wagtail.admin.menu import (
+    reports_menu as reports_menu,
+)
+from wagtail.admin.menu import (
+    settings_menu as settings_menu,
+)
 from wagtail.admin.rich_text.converters.contentstate import link_entity as link_entity
-from wagtail.admin.rich_text.converters.editor_html import LinkTypeRule as LinkTypeRule, PageLinkHandler as PageLinkHandler, WhitelistRule as WhitelistRule
-from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler as BlockElementHandler, ExternalLinkElementHandler as ExternalLinkElementHandler, HorizontalRuleHandler as HorizontalRuleHandler, InlineStyleElementHandler as InlineStyleElementHandler, ListElementHandler as ListElementHandler, ListItemElementHandler as ListItemElementHandler, PageLinkElementHandler as PageLinkElementHandler
+from wagtail.admin.rich_text.converters.editor_html import (
+    LinkTypeRule as LinkTypeRule,
+)
+from wagtail.admin.rich_text.converters.editor_html import (
+    PageLinkHandler as PageLinkHandler,
+)
+from wagtail.admin.rich_text.converters.editor_html import (
+    WhitelistRule as WhitelistRule,
+)
+from wagtail.admin.rich_text.converters.html_to_contentstate import (
+    BlockElementHandler as BlockElementHandler,
+)
+from wagtail.admin.rich_text.converters.html_to_contentstate import (
+    ExternalLinkElementHandler as ExternalLinkElementHandler,
+)
+from wagtail.admin.rich_text.converters.html_to_contentstate import (
+    HorizontalRuleHandler as HorizontalRuleHandler,
+)
+from wagtail.admin.rich_text.converters.html_to_contentstate import (
+    InlineStyleElementHandler as InlineStyleElementHandler,
+)
+from wagtail.admin.rich_text.converters.html_to_contentstate import (
+    ListElementHandler as ListElementHandler,
+)
+from wagtail.admin.rich_text.converters.html_to_contentstate import (
+    ListItemElementHandler as ListItemElementHandler,
+)
+from wagtail.admin.rich_text.converters.html_to_contentstate import (
+    PageLinkElementHandler as PageLinkElementHandler,
+)
 from wagtail.admin.search import SearchArea as SearchArea
-from wagtail.admin.site_summary import PagesSummaryItem as PagesSummaryItem, SummaryItem as SummaryItem
+from wagtail.admin.site_summary import PagesSummaryItem as PagesSummaryItem
+from wagtail.admin.site_summary import SummaryItem as SummaryItem
 from wagtail.admin.ui.menus.pages import PageMenuItem as PageMenuItem
 from wagtail.admin.ui.sidebar import MenuItem as SidebarMenuItem
-from wagtail.admin.views.pages.bulk_actions import DeleteBulkAction as DeleteBulkAction, MoveBulkAction as MoveBulkAction, PublishBulkAction as PublishBulkAction, UnpublishBulkAction as UnpublishBulkAction
+from wagtail.admin.views.pages.bulk_actions import (
+    DeleteBulkAction as DeleteBulkAction,
+)
+from wagtail.admin.views.pages.bulk_actions import (
+    MoveBulkAction as MoveBulkAction,
+)
+from wagtail.admin.views.pages.bulk_actions import (
+    PublishBulkAction as PublishBulkAction,
+)
+from wagtail.admin.views.pages.bulk_actions import (
+    UnpublishBulkAction as UnpublishBulkAction,
+)
 from wagtail.admin.viewsets import viewsets as viewsets
 from wagtail.admin.widgets import ButtonWithDropdownFromHook as ButtonWithDropdownFromHook
-from wagtail.models import Collection as Collection, Page as Page, Task as Task, Workflow as Workflow
-from wagtail.permissions import collection_permission_policy as collection_permission_policy, page_permission_policy as page_permission_policy, task_permission_policy as task_permission_policy, workflow_permission_policy as workflow_permission_policy
+from wagtail.models import Collection as Collection
+from wagtail.models import Page as Page
+from wagtail.models import Task as Task
+from wagtail.models import Workflow as Workflow
+from wagtail.permissions import (
+    collection_permission_policy as collection_permission_policy,
+)
+from wagtail.permissions import (
+    page_permission_policy as page_permission_policy,
+)
+from wagtail.permissions import (
+    task_permission_policy as task_permission_policy,
+)
+from wagtail.permissions import (
+    workflow_permission_policy as workflow_permission_policy,
+)
 from wagtail.rich_text.feature_registry import FeatureRegistry as FeatureRegistry
-from wagtail.templatetags.wagtailcore_tags import wagtail_feature_release_editor_guide_link as wagtail_feature_release_editor_guide_link, wagtail_feature_release_whats_new_link as wagtail_feature_release_whats_new_link
+from wagtail.templatetags.wagtailcore_tags import (
+    wagtail_feature_release_editor_guide_link as wagtail_feature_release_editor_guide_link,
+)
+from wagtail.templatetags.wagtailcore_tags import (
+    wagtail_feature_release_whats_new_link as wagtail_feature_release_whats_new_link,
+)
 from wagtail.utils.version import get_main_version as get_main_version
-from wagtail.whitelist import allow_without_attributes as allow_without_attributes, attribute_rule as attribute_rule, check_url as check_url
+from wagtail.whitelist import (
+    allow_without_attributes as allow_without_attributes,
+)
+from wagtail.whitelist import (
+    attribute_rule as attribute_rule,
+)
+from wagtail.whitelist import (
+    check_url as check_url,
+)
 
 class ExplorerMenuItem(MenuItem):
     def is_shown(self, request: HttpRequest) -> bool: ...
@@ -61,7 +157,9 @@ class WorkflowTasksMenuItem(MenuItem):
 
 def register_workflows_menu_item() -> WorkflowsMenuItem: ...
 def register_workflow_tasks_menu_item() -> WorkflowTasksMenuItem: ...
-def page_listing_buttons(page: Page, user: AbstractBaseUser, next_url: str | None = None) -> Generator[ButtonWithDropdownFromHook]: ...
+def page_listing_buttons(
+    page: Page, user: AbstractBaseUser, next_url: str | None = None
+) -> Generator[ButtonWithDropdownFromHook]: ...
 
 class PageListingEditButton(PageMenuItem):
     label: str
@@ -126,8 +224,12 @@ class PageListingSortMenuOrderButton(PageMenuItem):
     @cached_property
     def url(self) -> str: ...
 
-def page_listing_more_buttons(page: Page, user: AbstractBaseUser, next_url: str | None = None) -> Generator[PageMenuItem]: ...
-def page_header_buttons(page: Page, user: AbstractBaseUser, view_name: str, next_url: str | None = None) -> Generator[PageMenuItem]: ...
+def page_listing_more_buttons(
+    page: Page, user: AbstractBaseUser, next_url: str | None = None
+) -> Generator[PageMenuItem]: ...
+def page_header_buttons(
+    page: Page, user: AbstractBaseUser, view_name: str, next_url: str | None = None
+) -> Generator[PageMenuItem]: ...
 def register_viewsets_urls() -> list[URLPattern | URLResolver]: ...
 def register_core_features(features: FeatureRegistry) -> None: ...
 

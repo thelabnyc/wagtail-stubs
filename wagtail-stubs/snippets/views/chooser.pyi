@@ -1,6 +1,26 @@
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.ui.tables import LiveStatusTagColumn as LiveStatusTagColumn
-from wagtail.admin.views.generic.chooser import BaseChooseView as BaseChooseView, ChooseResultsViewMixin as ChooseResultsViewMixin, ChooseViewMixin as ChooseViewMixin, ChosenMultipleView as ChosenMultipleView, ChosenView as ChosenView, CreateView as CreateView, CreationFormMixin as CreationFormMixin
+from wagtail.admin.views.generic.chooser import (
+    BaseChooseView as BaseChooseView,
+)
+from wagtail.admin.views.generic.chooser import (
+    ChooseResultsViewMixin as ChooseResultsViewMixin,
+)
+from wagtail.admin.views.generic.chooser import (
+    ChooseViewMixin as ChooseViewMixin,
+)
+from wagtail.admin.views.generic.chooser import (
+    ChosenMultipleView as ChosenMultipleView,
+)
+from wagtail.admin.views.generic.chooser import (
+    ChosenView as ChosenView,
+)
+from wagtail.admin.views.generic.chooser import (
+    CreateView as CreateView,
+)
+from wagtail.admin.views.generic.chooser import (
+    CreationFormMixin as CreationFormMixin,
+)
 from wagtail.admin.viewsets.chooser import ChooserViewSet as ChooserViewSet
 from wagtail.models import DraftStateMixin as DraftStateMixin
 from wagtail.snippets.widgets import AdminSnippetChooser as AdminSnippetChooser

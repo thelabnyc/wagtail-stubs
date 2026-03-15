@@ -13,5 +13,7 @@ class ObjectTypeRegistry:
 class ModelFieldRegistry(ObjectTypeRegistry):
     values_by_fk_related_model: dict[type[models.Model], Any]
     def __init__(self) -> None: ...
-    def register(self, field_class: type, to: str | None = None, value: Any = None, exact_class: bool = False) -> None: ...  # type: ignore[override]
+    def register(
+        self, field_class: type, to: str | None = None, value: Any = None, exact_class: bool = False
+    ) -> None: ...  # type: ignore[override]
     def foreign_key_lookup(self, field: models.ForeignKey[Any, Any]) -> Any: ...

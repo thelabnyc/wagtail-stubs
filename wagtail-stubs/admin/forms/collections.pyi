@@ -6,7 +6,6 @@ from django.contrib.auth.models import AbstractBaseUser, Group, Permission
 from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Model, QuerySet
 from django.utils.datastructures import MultiValueDict
-
 from wagtail.admin.forms.formsets import BaseFormSetMixin
 from wagtail.admin.forms.view_restrictions import BaseViewRestrictionForm
 from wagtail.models import Collection, CollectionViewRestriction
@@ -43,6 +42,7 @@ class CollectionForm(forms.ModelForm):
     class Meta:
         model: type[Collection]
         fields: tuple[str, ...]
+
     def clean_parent(self) -> Collection: ...
 
 class BaseCollectionMemberForm(forms.ModelForm):

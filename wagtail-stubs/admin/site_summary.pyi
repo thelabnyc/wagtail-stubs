@@ -3,7 +3,8 @@ from wagtail import hooks as hooks
 from wagtail.admin.auth import user_has_any_page_permission as user_has_any_page_permission
 from wagtail.admin.navigation import get_site_for_user as get_site_for_user
 from wagtail.admin.ui.components import Component as Component
-from wagtail.models import Page as Page, Site as Site
+from wagtail.models import Page as Page
+from wagtail.models import Site as Site
 
 class SummaryItem(Component):
     order: int

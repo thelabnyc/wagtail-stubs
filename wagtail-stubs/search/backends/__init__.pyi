@@ -2,7 +2,6 @@ from collections.abc import Generator
 from typing import Any
 
 from django.core.exceptions import ImproperlyConfigured
-
 from wagtail.search.backends.base import BaseSearchBackend
 
 class InvalidSearchBackendError(ImproperlyConfigured): ...

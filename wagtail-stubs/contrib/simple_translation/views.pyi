@@ -1,11 +1,14 @@
-from .forms import SubmitTranslationForm as SubmitTranslationForm
 from _typeshed import Incomplete
 from django.views.generic import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from wagtail.actions.copy_for_translation import CopyPageForTranslationAction as CopyPageForTranslationAction
 from wagtail.admin import messages as messages
-from wagtail.models import DraftStateMixin as DraftStateMixin, Page as Page, TranslatableMixin as TranslatableMixin
+from wagtail.models import DraftStateMixin as DraftStateMixin
+from wagtail.models import Page as Page
+from wagtail.models import TranslatableMixin as TranslatableMixin
 from wagtail.snippets.views.snippets import get_snippet_model_from_url_params as get_snippet_model_from_url_params
+
+from .forms import SubmitTranslationForm as SubmitTranslationForm
 
 class SubmitTranslationView(SingleObjectMixin, TemplateView):
     template_name: str

@@ -4,12 +4,36 @@ from django.db import models
 from django.db.models import QuerySet
 from django.http import HttpResponse
 from django.utils.functional import cached_property as cached_property
-
 from wagtail.admin import messages as messages
 from wagtail.admin.auth import PermissionPolicyChecker as PermissionPolicyChecker
 from wagtail.admin.filters import BaseMediaFilterSet as BaseMediaFilterSet
-from wagtail.admin.ui.tables import BulkActionsCheckboxColumn as BulkActionsCheckboxColumn, Column as Column, DateColumn as DateColumn, DownloadColumn as DownloadColumn, Table as Table, TitleColumn as TitleColumn, UsageCountColumn as UsageCountColumn
-from wagtail.admin.utils import get_valid_next_url_from_request as get_valid_next_url_from_request, set_query_params as set_query_params
+from wagtail.admin.ui.tables import (
+    BulkActionsCheckboxColumn as BulkActionsCheckboxColumn,
+)
+from wagtail.admin.ui.tables import (
+    Column as Column,
+)
+from wagtail.admin.ui.tables import (
+    DateColumn as DateColumn,
+)
+from wagtail.admin.ui.tables import (
+    DownloadColumn as DownloadColumn,
+)
+from wagtail.admin.ui.tables import (
+    Table as Table,
+)
+from wagtail.admin.ui.tables import (
+    TitleColumn as TitleColumn,
+)
+from wagtail.admin.ui.tables import (
+    UsageCountColumn as UsageCountColumn,
+)
+from wagtail.admin.utils import (
+    get_valid_next_url_from_request as get_valid_next_url_from_request,
+)
+from wagtail.admin.utils import (
+    set_query_params as set_query_params,
+)
 from wagtail.admin.views import generic as generic
 from wagtail.documents import get_document_model as get_document_model
 from wagtail.documents.forms import get_document_form as get_document_form

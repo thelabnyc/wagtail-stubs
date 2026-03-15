@@ -7,7 +7,19 @@ class FilteredSelect(forms.Select):
     filter_field: str
     def __init__(self, attrs: dict[str, Any] | None = None, choices: _Choices = (), filter_field: str = "") -> None: ...
     def build_attrs(self, base_attrs: dict[str, Any], extra_attrs: dict[str, Any] | None = None) -> dict[str, Any]: ...
-    def optgroups(self, name: str, value: list[str], attrs: dict[str, Any] | None = None) -> list[tuple[str | None, list[dict[str, Any]], int]]: ...
-    def create_option(self, name: str, value: Any, label: int | str, selected: bool, index: int, subindex: int | None = None, attrs: dict[str, Any] | None = None, filter_value: list[str | int] | None = None) -> dict[str, Any]: ...  # type: ignore[override]
+    def optgroups(
+        self, name: str, value: list[str], attrs: dict[str, Any] | None = None
+    ) -> list[tuple[str | None, list[dict[str, Any]], int]]: ...
+    def create_option(
+        self,
+        name: str,
+        value: Any,
+        label: int | str,
+        selected: bool,
+        index: int,
+        subindex: int | None = None,
+        attrs: dict[str, Any] | None = None,
+        filter_value: list[str | int] | None = None,
+    ) -> dict[str, Any]: ...  # type: ignore[override]
     @property
     def media(self) -> forms.Media: ...

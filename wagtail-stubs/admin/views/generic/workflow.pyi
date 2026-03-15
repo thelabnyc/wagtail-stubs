@@ -3,7 +3,6 @@ from typing import Any
 from django.forms import Form
 from django.http import HttpRequest, HttpResponse
 from django.views import View
-
 from wagtail.models import Task, TaskState, WorkflowState
 
 from .base import BaseObjectMixin

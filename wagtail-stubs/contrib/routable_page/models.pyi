@@ -4,7 +4,6 @@ from typing import Any
 from django.core import checks
 from django.http import HttpRequest, HttpResponse
 from django.template.response import TemplateResponse
-
 from wagtail.models import Page
 from wagtail.url_routing import RouteResult
 
@@ -21,11 +20,26 @@ class RoutablePageMixin:
     def get_resolver(cls) -> Any: ...
     @classmethod
     def check(cls, **kwargs: Any) -> list[checks.Warning]: ...
-    def reverse_subpage(self, name: str, args: list[Any] | None = None, kwargs: dict[str, Any] | None = None) -> str: ...
+    def reverse_subpage(
+        self, name: str, args: list[Any] | None = None, kwargs: dict[str, Any] | None = None
+    ) -> str: ...
     def resolve_subpage(self, path: str) -> RouteResult: ...
     def route(self, request: HttpRequest, path_components: list[str]) -> RouteResult: ...
-    def serve(self, request: HttpRequest, view: Any | None = None, args: list[Any] | None = None, kwargs: dict[str, Any] | None = None) -> HttpResponse: ...
-    def render(self, request: HttpRequest, *args: Any, template: str | None = None, context_overrides: dict[str, Any] | None = None, **kwargs: Any) -> TemplateResponse: ...
+    def serve(
+        self,
+        request: HttpRequest,
+        view: Any | None = None,
+        args: list[Any] | None = None,
+        kwargs: dict[str, Any] | None = None,
+    ) -> HttpResponse: ...
+    def render(
+        self,
+        request: HttpRequest,
+        *args: Any,
+        template: str | None = None,
+        context_overrides: dict[str, Any] | None = None,
+        **kwargs: Any,
+    ) -> TemplateResponse: ...
     def serve_preview(self, request: HttpRequest, mode_name: str) -> HttpResponse: ...
 
 class RoutablePage(RoutablePageMixin, Page):

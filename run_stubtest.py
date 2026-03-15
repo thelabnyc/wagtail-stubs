@@ -1,8 +1,8 @@
 import subprocess
 import sys
 
-import django
 from django.conf import settings
+import django
 
 if not settings.configured:
     settings.configure(

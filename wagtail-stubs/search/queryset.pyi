@@ -2,5 +2,19 @@ from wagtail.search.backends.base import BaseSearchResults
 from wagtail.search.query import SearchQuery
 
 class SearchableQuerySetMixin:
-    def search(self, query: str | SearchQuery = ..., fields: list[str] | None = None, operator: str | None = None, order_by_relevance: bool = True, backend: str = "default") -> BaseSearchResults: ...
-    def autocomplete(self, query: str | SearchQuery = ..., fields: list[str] | None = None, operator: str | None = None, order_by_relevance: bool = True, backend: str = "default") -> BaseSearchResults: ...
+    def search(
+        self,
+        query: str | SearchQuery = ...,
+        fields: list[str] | None = None,
+        operator: str | None = None,
+        order_by_relevance: bool = True,
+        backend: str = "default",
+    ) -> BaseSearchResults: ...
+    def autocomplete(
+        self,
+        query: str | SearchQuery = ...,
+        fields: list[str] | None = None,
+        operator: str | None = None,
+        order_by_relevance: bool = True,
+        backend: str = "default",
+    ) -> BaseSearchResults: ...

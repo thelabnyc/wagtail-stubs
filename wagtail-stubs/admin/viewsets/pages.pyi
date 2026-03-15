@@ -3,7 +3,6 @@ from typing import Any
 
 from django.http import HttpResponseBase
 from django.urls import URLPattern
-
 from wagtail.admin.filters import WagtailFilterSet
 from wagtail.admin.ui.tables import Column
 from wagtail.admin.views.pages.choose_parent import ChooseParentView

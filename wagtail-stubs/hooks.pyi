@@ -1,7 +1,7 @@
-import types
 from collections.abc import Callable
 from contextlib import ContextDecorator
 from typing import Any, overload
+import types
 
 @overload
 def register(hook_name: str) -> Callable[[Callable[..., Any]], Callable[..., Any]]: ...
@@ -13,8 +13,18 @@ class TemporaryHook(ContextDecorator):
     order: int
     def __init__(self, hooks: list[tuple[str, Callable[..., Any]]], order: int) -> None: ...
     def __enter__(self) -> None: ...
-    def __exit__(self, exc_type: type[BaseException] | None, exc_value: BaseException | None, traceback: types.TracebackType | None) -> None: ...
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: types.TracebackType | None,
+    ) -> None: ...
 
-def register_temporarily(hook_name_or_hooks: str | list[tuple[str, Callable[..., Any]]], fn: Callable[..., Any] | None = None, *, order: int = 0) -> TemporaryHook: ...
+def register_temporarily(
+    hook_name_or_hooks: str | list[tuple[str, Callable[..., Any]]],
+    fn: Callable[..., Any] | None = None,
+    *,
+    order: int = 0,
+) -> TemporaryHook: ...
 def search_for_hooks() -> None: ...
 def get_hooks(hook_name: str) -> list[Callable[..., Any]]: ...

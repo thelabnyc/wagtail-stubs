@@ -3,20 +3,17 @@ from typing import Protocol
 
 from bs4 import Tag
 
-
 class _EditorHTMLEmbedHandler(Protocol):
     @staticmethod
     def get_db_attributes(tag: Tag) -> dict[str, str]: ...
     @staticmethod
     def expand_db_attributes(attrs: dict[str, str]) -> str: ...
 
-
 class _EditorHTMLLinkHandler(Protocol):
     @staticmethod
     def get_db_attributes(tag: Tag) -> dict[str, str]: ...
     @staticmethod
     def expand_db_attributes(attrs: dict[str, str]) -> str: ...
-
 
 class WhitelistRule:
     element: str

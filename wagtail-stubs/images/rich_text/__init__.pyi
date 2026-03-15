@@ -1,4 +1,5 @@
 from collections.abc import Generator
+
 from wagtail.images import get_image_model as get_image_model
 from wagtail.images.formats import get_image_format as get_image_format
 from wagtail.rich_text import EmbedHandler as EmbedHandler

@@ -3,7 +3,6 @@ from collections.abc import Sequence
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.exceptions import PermissionDenied
 from django.db import models
-
 from wagtail.models import Locale, Page
 
 class ParentNotTranslatedError(Exception): ...

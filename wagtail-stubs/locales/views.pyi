@@ -1,16 +1,18 @@
 from typing import Any
 
-from .forms import LocaleForm as LocaleForm
-from .utils import get_locale_usage as get_locale_usage
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponseBase
 from wagtail.admin import messages as messages
-from wagtail.admin.ui.tables import Column as Column, TitleColumn as TitleColumn
+from wagtail.admin.ui.tables import Column as Column
+from wagtail.admin.ui.tables import TitleColumn as TitleColumn
 from wagtail.admin.views import generic as generic
 from wagtail.admin.viewsets.model import ModelViewSet as ModelViewSet
 from wagtail.coreutils import get_content_languages as get_content_languages
 from wagtail.models import Locale as Locale
 from wagtail.permissions import locale_permission_policy as locale_permission_policy
+
+from .forms import LocaleForm as LocaleForm
+from .utils import get_locale_usage as get_locale_usage
 
 class LanguageTitleColumn(TitleColumn):
     cell_template_name: str

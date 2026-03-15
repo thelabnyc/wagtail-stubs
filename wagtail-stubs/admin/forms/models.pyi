@@ -41,7 +41,9 @@ class WagtailAdminModelFormMetaclass(PermissionedFormMetaclass, ClusterFormMetac
     def child_form(cls) -> type[WagtailAdminModelForm]: ...
 
 class WagtailAdminModelForm(
-    PermissionedForm, ClusterForm, metaclass=WagtailAdminModelFormMetaclass  # type: ignore[misc]
+    PermissionedForm,
+    ClusterForm,
+    metaclass=WagtailAdminModelFormMetaclass,  # type: ignore[misc]
 ):
     for_user: AbstractBaseUser | None
     deferred_required_fields: list[str]
