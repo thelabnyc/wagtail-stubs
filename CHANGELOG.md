@@ -8,6 +8,13 @@
 - add StructBlock.Meta.collapsed option
 - add init_new_page signal to wagtail.signals
 
+## v7.0.0a5 (2026-03-16)
+
+### Fix
+
+- allow publish.sh to run from wagtail-* branches
+- add _default_manager to Page stub for reverse manager resolution
+
 ## v7.0.0a4 (2026-03-16)
 
 ### Fix
