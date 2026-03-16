@@ -1,3 +1,10 @@
+## v7.0.0a5 (2026-03-16)
+
+### Fix
+
+- allow publish.sh to run from wagtail-* branches
+- add _default_manager to Page stub for reverse manager resolution
+
 ## v7.0.0a4 (2026-03-16)
 
 ### Fix
