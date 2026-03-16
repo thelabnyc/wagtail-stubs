@@ -20,7 +20,7 @@ class BaseButton(Component):
         url: str | None = None,
         classname: str = "",
         icon_name: str | None = None,
-        attrs: dict[str, str] = ...,
+        attrs: dict[str, str] | None = None,
         priority: int = 1000,
     ) -> None: ...
     @classmethod
@@ -48,7 +48,7 @@ class HeaderButton(Button):
         url: str | None = None,
         classname: str = "",
         icon_name: str | None = None,
-        attrs: dict[str, str] = ...,
+        attrs: dict[str, str] | None = None,
         icon_only: bool = False,
         *,
         priority: int = 1000,
