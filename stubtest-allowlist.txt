@@ -2,8 +2,7 @@
 wagtail.permission_policies.base
 wagtail.permission_policies.collections
 wagtail.permission_policies.pages
-wagtail.search.backends
-wagtail.search.management.commands.update_index
+wagtail.search.backends.database.sqlite.query
 
 wagtail.actions.convert_alias
 wagtail.actions.copy_for_translation
