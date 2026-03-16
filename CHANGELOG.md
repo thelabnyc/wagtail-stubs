@@ -1,3 +1,9 @@
+## v7.1.0a7 (2026-03-16)
+
+### Fix
+
+- bump django-treebeard-stubs to >=4.8.3
+
 ## v7.1.0a6 (2026-03-16)
 
 ### Fix
