@@ -42,17 +42,17 @@ class StructValue(collections.OrderedDict[str, Any]):
 class PlaceholderBoundBlock(BoundBlock):
     def render_form(self) -> SafeString: ...
 
-class BaseStructBlock(Block):
+class BaseStructBlock[BlockT: Block](Block):
     search_index: bool
-    child_blocks: collections.OrderedDict[str, Block]
+    child_blocks: collections.OrderedDict[str, BlockT]
     _constructor_kwargs: dict[str, Any]
     def __init__(
-        self, local_blocks: Iterable[tuple[str, Block]] | None = None, search_index: bool = True, **kwargs: Any
+        self, local_blocks: Iterable[tuple[str, BlockT]] | None = None, search_index: bool = True, **kwargs: Any
     ) -> None: ...
     @classmethod
     def construct_from_lookup(
         cls, lookup: BlockDefinitionLookup, child_blocks: list[tuple[str, int]] | None = None, **kwargs: Any
-    ) -> BaseStructBlock: ...
+    ) -> BaseStructBlock[Any]: ...
     def get_default(self) -> StructValue: ...
     def value_from_datadict(self, data: _DataT, files: _FilesT, prefix: str) -> StructValue: ...
     def value_omitted_from_data(self, data: _DataT, files: _FilesT, prefix: str) -> bool: ...
@@ -93,11 +93,11 @@ class BaseStructBlock(Block):
         label_format: str | None
         icon: str
 
-class StructBlock(BaseStructBlock, metaclass=DeclarativeSubBlocksMetaclass):
-    base_blocks: collections.OrderedDict[str, Block]
+class StructBlock[BlockT: Block](BaseStructBlock[BlockT], metaclass=DeclarativeSubBlocksMetaclass):
+    base_blocks: collections.OrderedDict[str, BlockT]
 
 class StructBlockAdapter(Adapter):
     js_constructor: str
-    def js_args(self, block: StructBlock) -> list[Any]: ...
+    def js_args(self, block: StructBlock[Any]) -> list[Any]: ...
     @cached_property
     def media(self) -> forms.Media: ...

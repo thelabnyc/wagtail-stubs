@@ -20,7 +20,7 @@
   main: |
     from wagtail.fields import StreamField
     from wagtail.blocks import CharBlock, StructBlock
-    field = StreamField([("text", CharBlock())])
+    field: StreamField = StreamField([("text", CharBlock())])
 
 - case: register_hook
   mypy_config: |
