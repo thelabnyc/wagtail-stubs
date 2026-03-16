@@ -17,6 +17,7 @@ class OrderByFieldError(FieldError): ...
 
 class BaseSearchQueryCompiler:
     DEFAULT_OPERATOR: str
+    HANDLES_ORDER_BY_EXPRESSIONS: bool
     queryset: QuerySet[models.Model]
     query: SearchQuery
     fields: list[str] | None

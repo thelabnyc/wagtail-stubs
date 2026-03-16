@@ -1,6 +1,6 @@
 from collections.abc import Generator, Iterable, Sized
 
-from django.core.validators import MaxLengthValidator
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db.models import Model
 from django.utils.safestring import SafeString
 from wagtail.rich_text.feature_registry import FeatureRegistry as FeatureRegistry
@@ -47,4 +47,7 @@ class LinkHandler(EntityHandler): ...
 class EmbedHandler(EntityHandler): ...
 
 class RichTextMaxLengthValidator(MaxLengthValidator):
+    def clean(self, x: Sized) -> int: ...
+
+class RichTextMinLengthValidator(MinLengthValidator):
     def clean(self, x: Sized) -> int: ...
