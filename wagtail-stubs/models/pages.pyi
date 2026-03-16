@@ -89,6 +89,7 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
     search_description: models.TextField[str, str]
     latest_revision_created_at: models.DateTimeField[datetime.datetime | None, datetime.datetime | None]
     alias_of: models.ForeignKey[Page | None, Page | None]
+    _default_manager: PageManager  # type: ignore[assignment]
 
     # ---- class-level configuration ----
     search_fields: list[index.BaseField]
