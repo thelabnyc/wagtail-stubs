@@ -11,6 +11,7 @@ from django.utils.functional import cached_property
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from treebeard.mp_tree import MP_Node
+from wagtail.admin.panels.base import Panel
 from wagtail.compat import HTTPMethod
 from wagtail.models.audit_log import (
     BaseLogEntry,
@@ -20,7 +21,6 @@ from wagtail.models.audit_log import (
 from wagtail.models.draft_state import DraftStateMixin
 from wagtail.models.i18n import Locale, TranslatableMixin
 from wagtail.models.locking import LockableMixin
-from wagtail.admin.panels.base import Panel
 from wagtail.models.panels import PanelPlaceholder
 from wagtail.models.preview import PreviewableMixin
 from wagtail.models.revisions import Revision, RevisionMixin

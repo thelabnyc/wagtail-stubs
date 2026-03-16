@@ -1324,7 +1324,7 @@ wheels = [
 
 [[package]]
 name = "wagtail-stubs"
-version = "7.0.0a2"
+version = "7.0.0a3"
 source = { editable = "." }
 dependencies = [
     { name = "django-modelcluster-stubs" },
