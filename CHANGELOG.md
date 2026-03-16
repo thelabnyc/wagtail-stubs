@@ -1,3 +1,9 @@
+## v7.0.0a6 (2026-03-16)
+
+### Feat
+
+- add generic type parameters to block and field stubs
+
 ## v7.0.0a5 (2026-03-16)
 
 ### Fix
