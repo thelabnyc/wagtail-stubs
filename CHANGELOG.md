@@ -1,3 +1,9 @@
+## v7.3.0a6 (2026-03-16)
+
+### Fix
+
+- make TreeQuerySet generic
+
 ## v7.3.0a5 (2026-03-16)
 
 ### Fix
