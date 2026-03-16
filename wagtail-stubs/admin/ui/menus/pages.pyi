@@ -1,4 +1,4 @@
-from django.utils.functional import cached_property as cached_property
+from django.utils.functional import cached_property
 from wagtail.admin.ui.menus import MenuItem as MenuItem
 from wagtail.models import Page
 
@@ -7,7 +7,7 @@ class PageMenuItem(MenuItem):
     label: str | None
     icon_name: str | None
     priority: int | None
-    link_rel: str
+    link_rel: None
     page: Page
     next_url: str | None
     def __init__(
