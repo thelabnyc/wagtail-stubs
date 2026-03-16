@@ -1,3 +1,13 @@
+## v7.0.0a7 (2026-03-16)
+
+### Feat
+
+- add /publish-all slash command for multi-branch releases
+
+### Fix
+
+- subpage_types / parent_page_types types
+
 ## v7.0.0a6 (2026-03-16)
 
 ### Feat
