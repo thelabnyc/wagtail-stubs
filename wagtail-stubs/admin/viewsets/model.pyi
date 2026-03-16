@@ -21,6 +21,7 @@ from wagtail.permissions import ModelPermissionPolicy
 
 class ModelViewSet(ViewSet):
     add_to_reference_index: bool
+    sort_order_field: str | None
     index_view_class: type[generic.IndexView]
     add_view_class: type[generic.CreateView]
     edit_view_class: type[generic.EditView]

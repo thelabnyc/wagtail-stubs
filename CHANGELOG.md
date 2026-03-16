@@ -1,3 +1,12 @@
+## v7.2.0a1 (2026-03-16)
+
+### Feat
+
+- update stubs for wagtail 7.2 support
+- add ModelViewSet.sort_order_field attribute
+- add Task.lock_class class attribute
+- add BaseSearchBackend.refresh_indexes() method
+
 ## v7.1.0a1 (2026-03-16)
 
 ### Feat

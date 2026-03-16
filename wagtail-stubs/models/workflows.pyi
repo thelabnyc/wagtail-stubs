@@ -149,6 +149,7 @@ class Task(SpecificMixin, models.Model):
     admin_form_fields: ClassVar[list[str]]
     admin_form_readonly_on_edit_fields: ClassVar[list[str]]
     task_state_class: ClassVar[type[TaskState] | None]
+    lock_class: ClassVar[type[BaseLock] | None]
 
     @property
     def workflows(self) -> models.QuerySet[Workflow]: ...
