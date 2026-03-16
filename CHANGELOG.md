@@ -19,6 +19,17 @@
 - add ModelViewSet.sort_order_field attribute
 - add Task.lock_class class attribute
 - add BaseSearchBackend.refresh_indexes() method
+
+## v7.1.0a4 (2026-03-16)
+
+### Feat
+
+- add /publish-all slash command for multi-branch releases
+
+### Fix
+
+- subpage_types / parent_page_types types
+
 ## v7.1.0a3 (2026-03-16)
 
 ### Feat
@@ -41,6 +52,16 @@
 - add wagtail.admin.telepath.widgets module (relocated from wagtail.widget_adapters)
 - add StructBlock.Meta.collapsed option
 - add init_new_page signal to wagtail.signals
+
+## v7.0.0a7 (2026-03-16)
+
+### Feat
+
+- add /publish-all slash command for multi-branch releases
+
+### Fix
+
+- subpage_types / parent_page_types types
 
 ## v7.0.0a6 (2026-03-16)
 
