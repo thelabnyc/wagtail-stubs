@@ -54,7 +54,7 @@ from-first = true
 [tool.commitizen]
 name = "cz_conventional_commits"
 annotated_tag = true
-gpg_sign = true
+gpg_sign = false
 tag_format = "v$version"
 update_changelog_on_bump = true
 changelog_merge_prerelease = true
