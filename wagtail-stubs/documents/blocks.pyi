@@ -1,3 +1,5 @@
 from wagtail.blocks import ChooserBlock
 
-DocumentChooserBlock: type[ChooserBlock]
+class DocumentChooserBlock(ChooserBlock):
+    class Meta:
+        icon: str

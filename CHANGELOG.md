@@ -31,6 +31,12 @@
 - add StructBlock.Meta.collapsed option
 - add init_new_page signal to wagtail.signals
 
+## v7.0.0a8 (2026-03-16)
+
+### Fix
+
+- improve type accuracy for Page properties, PageQuerySet, ChooserBlock, and DocumentChooserBlock
+
 ## v7.0.0a7 (2026-03-16)
 
 ### Feat
