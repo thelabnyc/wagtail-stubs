@@ -32,11 +32,11 @@ class ListValue(MutableSequence[Any]):
         def __init__(self, *args: Any, **kwargs: Any) -> None: ...
         def get_prep_value(self) -> dict[str, Any]: ...
 
-    list_block: ListBlock
+    list_block: ListBlock[Any]
     bound_blocks: list[ListChild]
     def __init__(
         self,
-        list_block: ListBlock,
+        list_block: ListBlock[Any],
         values: list[Any] | None = None,
         bound_blocks: list[ListChild] | None = None,
     ) -> None: ...
@@ -50,17 +50,19 @@ class ListValue(MutableSequence[Any]):
     def __len__(self) -> int: ...
     def insert(self, i: int, item: Any) -> None: ...
 
-class ListBlock(Block):
-    child_block: Block
+class ListBlock[BlockT: Block](Block):
+    child_block: BlockT
     search_index: bool
     def __init__(
         self,
-        child_block: Block | type[Block],
+        child_block: BlockT | type[BlockT],
         search_index: bool = True,
         **kwargs: Any,
     ) -> None: ...
     @classmethod
-    def construct_from_lookup(cls, lookup: BlockDefinitionLookup, *args: Any, **kwargs: Any) -> ListBlock: ...  # type: ignore[override]
+    def construct_from_lookup(  # type: ignore[override]
+        cls, lookup: BlockDefinitionLookup, *args: Any, **kwargs: Any
+    ) -> ListBlock[Any]: ...
     def value_from_datadict(self, data: _DataT, files: _FilesT, prefix: str) -> ListValue: ...
     def value_omitted_from_data(self, data: _DataT, files: _FilesT, prefix: str) -> bool: ...
     def clean(self, value: ListValue | list[Any]) -> ListValue: ...
@@ -90,6 +92,6 @@ class ListBlock(Block):
 
 class ListBlockAdapter(Adapter):
     js_constructor: str
-    def js_args(self, block: ListBlock) -> list[Any]: ...
+    def js_args(self, block: ListBlock[Any]) -> list[Any]: ...
     @cached_property
     def media(self) -> forms.Media: ...  # type: ignore[override]

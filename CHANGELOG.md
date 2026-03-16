@@ -14,6 +14,11 @@
 - add StructBlock.Meta.form_layout and get_form_layout() method
 - add ModelViewSet.pk_path_converter attribute
 - add CreateView/EditView.is_valid() and produced_error_message
+## v7.2.0a3 (2026-03-16)
+
+### Feat
+
+- add generic type parameters to block and field stubs
 
 ## v7.2.0a2 (2026-03-16)
 
@@ -30,6 +35,11 @@
 - add ModelViewSet.sort_order_field attribute
 - add Task.lock_class class attribute
 - add BaseSearchBackend.refresh_indexes() method
+## v7.1.0a3 (2026-03-16)
+
+### Feat
+
+- add generic type parameters to block and field stubs
 
 ## v7.1.0a2 (2026-03-16)
 
@@ -47,6 +57,12 @@
 - add wagtail.admin.telepath.widgets module (relocated from wagtail.widget_adapters)
 - add StructBlock.Meta.collapsed option
 - add init_new_page signal to wagtail.signals
+
+## v7.0.0a6 (2026-03-16)
+
+### Feat
+
+- add generic type parameters to block and field stubs
 
 ## v7.0.0a5 (2026-03-16)
 
