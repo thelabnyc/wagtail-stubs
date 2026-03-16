@@ -4,12 +4,12 @@ build-backend = "hatchling.build"
 
 [project]
 name = "wagtail-stubs"
-version = "7.0.0a4"
+version = "7.1.0a1"
 description = "PEP 561 type stubs for wagtail"
 readme = "README.md"
 license = { text = "ISC" }
 dependencies = [
-    "wagtail>=7.0,<7.1",
+    "wagtail>=7.1,<7.2",
     "django-stubs>=5.2.0",
     "django-modelcluster-stubs>=6.4.0a1",
     "django-treebeard-stubs>=4.8.0a1",

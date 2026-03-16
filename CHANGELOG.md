@@ -1,3 +1,13 @@
+## v7.1.0a1 (2026-03-16)
+
+### Feat
+
+- update stubs for wagtail 7.1 support
+- add wagtail.admin.telepath module (relocated from wagtail.telepath)
+- add wagtail.admin.telepath.widgets module (relocated from wagtail.widget_adapters)
+- add StructBlock.Meta.collapsed option
+- add init_new_page signal to wagtail.signals
+
 ## v7.0.0a4 (2026-03-16)
 
 ### Fix

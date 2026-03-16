@@ -92,6 +92,7 @@ class BaseStructBlock(Block):
         value_class: type[StructValue]
         label_format: str | None
         icon: str
+        collapsed: bool
 
 class StructBlock(BaseStructBlock, metaclass=DeclarativeSubBlocksMetaclass):
     base_blocks: collections.OrderedDict[str, Block]

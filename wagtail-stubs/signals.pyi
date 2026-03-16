@@ -1,5 +1,6 @@
 from django.dispatch import Signal
 
+init_new_page: Signal
 published: Signal
 unpublished: Signal
 page_published: Signal

@@ -397,6 +397,8 @@ wagtail.snippets.wagtail_hooks
 wagtail.snippets.widgets
 wagtail.tasks
 wagtail.telepath
+wagtail.admin.telepath
+wagtail.admin.telepath.widgets
 wagtail.templatetags.wagtail_cache
 wagtail.templatetags.wagtailcore_tags
 wagtail.urls
