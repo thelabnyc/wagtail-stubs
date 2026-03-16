@@ -112,8 +112,8 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
     private_page_options: list[str]
     context_object_name: str | None
     password_required_template: str | None
-    subpage_types: list[str]
-    parent_page_types: list[str]
+    subpage_types: list[str] | None
+    parent_page_types: list[str] | None
     allowed_http_methods: list[HTTPMethod]
 
     objects: PageManager  # type: ignore[assignment]
