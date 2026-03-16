@@ -8,6 +8,13 @@
 - add ModelViewSet.pk_path_converter attribute
 - add CreateView/EditView.is_valid() and produced_error_message
 
+## v7.2.0a2 (2026-03-16)
+
+### Fix
+
+- allow publish.sh to run from wagtail-* branches
+- add _default_manager to Page stub for reverse manager resolution
+
 ## v7.2.0a1 (2026-03-16)
 
 ### Feat
@@ -16,6 +23,13 @@
 - add ModelViewSet.sort_order_field attribute
 - add Task.lock_class class attribute
 - add BaseSearchBackend.refresh_indexes() method
+
+## v7.1.0a2 (2026-03-16)
+
+### Fix
+
+- allow publish.sh to run from wagtail-* branches
+- add _default_manager to Page stub for reverse manager resolution
 
 ## v7.1.0a1 (2026-03-16)
 
@@ -26,6 +40,13 @@
 - add wagtail.admin.telepath.widgets module (relocated from wagtail.widget_adapters)
 - add StructBlock.Meta.collapsed option
 - add init_new_page signal to wagtail.signals
+
+## v7.0.0a5 (2026-03-16)
+
+### Fix
+
+- allow publish.sh to run from wagtail-* branches
+- add _default_manager to Page stub for reverse manager resolution
 
 ## v7.0.0a4 (2026-03-16)
 
