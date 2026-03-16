@@ -313,15 +313,15 @@ wheels = [
 
 [[package]]
 name = "django-treebeard-stubs"
-version = "4.8.1"
+version = "4.8.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django-stubs" },
     { name = "django-treebeard" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/75/67/d0f499b125643b593817325d73e99f384f9526a0b9035d265273556b0e70/django_treebeard_stubs-4.8.1.tar.gz", hash = "sha256:49d92eec859b6dfedde3661d2caacd2deccce5177cae34b4f77be5cefc40cfec", size = 53356, upload-time = "2026-03-16T19:25:49.095Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ab/e2/9c627922f09fe5cc777c4a094d9109598c80ef6030d35b2f614d83f9fe52/django_treebeard_stubs-4.8.3.tar.gz", hash = "sha256:4fba2d9a46b3af497b1ce1a72b18fb59f76930aed86af1d03f8aff0f5b8f5926", size = 53452, upload-time = "2026-03-16T19:51:07.761Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b4/cd/801c023c6cc6c7ae7d84c943d01e5c0021b6f026f9b63fca6bd5ce6f32d9/django_treebeard_stubs-4.8.1-py3-none-any.whl", hash = "sha256:4c9240fc7492a86327e47e3c563735878d15e8e155b90aa8d9985fdb280e1c01", size = 9211, upload-time = "2026-03-16T19:25:47.826Z" },
+    { url = "https://files.pythonhosted.org/packages/50/d0/e5d3910e4bb92fae2aaa46668c19b840dae3d5e41fa01bd28aff21b034bc/django_treebeard_stubs-4.8.3-py3-none-any.whl", hash = "sha256:cc233519b7d570f8e81fbdb6a60446250262306390ed92b352b3b21b1ab4f11a", size = 9206, upload-time = "2026-03-16T19:51:06.799Z" },
 ]
 
 [[package]]
@@ -1335,7 +1335,7 @@ wheels = [
 
 [[package]]
 name = "wagtail-stubs"
-version = "7.3.0a5"
+version = "7.3.0a6"
 source = { editable = "." }
 dependencies = [
     { name = "django-modelcluster-stubs" },
@@ -1364,7 +1364,7 @@ requires-dist = [
     { name = "django-modelcluster-stubs", specifier = ">=6.4.0a1" },
     { name = "django-permissionedforms-stubs", specifier = ">=0.1.0" },
     { name = "django-stubs", specifier = ">=5.2.0" },
-    { name = "django-treebeard-stubs", specifier = ">=4.8.1" },
+    { name = "django-treebeard-stubs", specifier = ">=4.8.3" },
     { name = "laces-stubs", specifier = ">=0.1.0a1" },
     { name = "telepath-stubs", specifier = ">=0.3.0a1" },
     { name = "wagtail", specifier = ">=7.3,<7.4" },
