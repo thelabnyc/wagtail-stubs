@@ -43,6 +43,12 @@
 - add StructBlock.Meta.collapsed option
 - add init_new_page signal to wagtail.signals
 
+## v7.0.0a10 (2026-03-16)
+
+### Fix
+
+- bump django-treebeard-stubs to >=4.8.3
+
 ## v7.0.0a9 (2026-03-16)
 
 ### Fix
