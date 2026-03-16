@@ -1,3 +1,9 @@
+## v7.3.0a5 (2026-03-16)
+
+### Fix
+
+- improve type accuracy for Page properties, PageQuerySet, ChooserBlock, and DocumentChooserBlock
+
 ## v7.3.0a4 (2026-03-16)
 
 ### Feat
