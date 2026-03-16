@@ -37,6 +37,12 @@
 - add StructBlock.Meta.collapsed option
 - add init_new_page signal to wagtail.signals
 
+## v7.0.0a9 (2026-03-16)
+
+### Fix
+
+- make TreeQuerySet generic
+
 ## v7.0.0a8 (2026-03-16)
 
 ### Fix
