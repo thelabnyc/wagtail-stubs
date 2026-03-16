@@ -15,6 +15,7 @@ from .definition_lookup import BlockDefinitionLookup, BlockDefinitionLookupBuild
 
 __all__ = [
     "BaseStructBlock",
+    "BlockGroup",
     "StructBlock",
     "StructValue",
     "StructBlockValidationError",
@@ -38,6 +39,28 @@ class StructValue(collections.OrderedDict[str, Any]):
     @cached_property
     def bound_blocks(self) -> collections.OrderedDict[str, BoundBlock]: ...
     def __reduce__(self) -> tuple[type[StructValue], tuple[Block], None, None, Iterator[tuple[str, Any]]]: ...
+
+class BlockGroup:
+    children: list[str | BlockGroup]
+    settings: list[str]
+    heading: str
+    classname: str
+    help_text: str
+    icon: str
+    attrs: dict[str, Any] | None
+    label_format: str | None
+    def __init__(
+        self,
+        children: list[str | BlockGroup],
+        settings: list[str] | None = None,
+        heading: str = "",
+        classname: str = "",
+        help_text: str = "",
+        icon: str = "",
+        attrs: dict[str, Any] | None = None,
+        label_format: str | None = None,
+    ) -> None: ...
+    def get_sorted_block_names(self) -> list[str]: ...
 
 class PlaceholderBoundBlock(BoundBlock):
     def render_form(self) -> SafeString: ...
@@ -82,6 +105,7 @@ class BaseStructBlock(Block):
     def get_form_context(
         self, value: StructValue | dict[str, Any], prefix: str = "", errors: ValidationError | None = None
     ) -> dict[str, Any]: ...
+    def get_form_layout(self) -> BlockGroup: ...
     @cached_property
     def _has_default(self) -> bool: ...
 
@@ -93,6 +117,7 @@ class BaseStructBlock(Block):
         label_format: str | None
         icon: str
         collapsed: bool
+        form_layout: list[str | BlockGroup] | None
 
 class StructBlock(BaseStructBlock, metaclass=DeclarativeSubBlocksMetaclass):
     base_blocks: collections.OrderedDict[str, Block]

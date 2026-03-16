@@ -1,3 +1,13 @@
+## v7.3.0a1 (2026-03-16)
+
+### Feat
+
+- update stubs for wagtail 7.3 support
+- add BlockGroup class for StructBlock form layouts
+- add StructBlock.Meta.form_layout and get_form_layout() method
+- add ModelViewSet.pk_path_converter attribute
+- add CreateView/EditView.is_valid() and produced_error_message
+
 ## v7.2.0a1 (2026-03-16)
 
 ### Feat

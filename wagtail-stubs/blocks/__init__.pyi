@@ -95,6 +95,9 @@ from .struct_block import (
     BaseStructBlock as BaseStructBlock,
 )
 from .struct_block import (
+    BlockGroup as BlockGroup,
+)
+from .struct_block import (
     StructBlock as StructBlock,
 )
 from .struct_block import (
