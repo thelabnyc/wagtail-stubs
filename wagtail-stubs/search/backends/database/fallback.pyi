@@ -9,6 +9,7 @@ from wagtail.search.query import SearchQuery
 
 class DatabaseSearchQueryCompiler(BaseSearchQueryCompiler):
     DEFAULT_OPERATOR: str
+    HANDLES_ORDER_BY_EXPRESSIONS: bool
     OPERATORS: dict[str, partial[Any]]
     fields_names: list[str]
     def __init__(self, *args: Any, **kwargs: Any) -> None: ...

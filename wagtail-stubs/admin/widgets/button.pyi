@@ -3,18 +3,17 @@ from typing import Any
 from django.contrib.auth.models import AbstractBaseUser
 from django.utils.functional import cached_property
 from wagtail.admin.ui.components import Component
+from wagtail.admin.ui.menus import MenuItem
 from wagtail.models import Page
-from wagtail.models.pages import PagePermissionTester
 
-class Button(Component):
+class BaseButton(Component):
     template_name: str
     show: bool
     label: str
     icon_name: str | None
     url: str | None
     attrs: dict[str, str]
-    classname: str
-    priority: int
+    allow_in_dropdown: bool
     def __init__(
         self,
         label: str = "",
@@ -24,6 +23,8 @@ class Button(Component):
         attrs: dict[str, str] = ...,
         priority: int = 1000,
     ) -> None: ...
+    @classmethod
+    def from_menu_item(cls, menu_item: MenuItem) -> BaseButton: ...
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
     @property
     def base_attrs_string(self) -> str: ...
@@ -34,6 +35,11 @@ class Button(Component):
     def __gt__(self, other: object) -> bool: ...
     def __ge__(self, other: object) -> bool: ...
     def __eq__(self, other: object) -> bool: ...
+
+class Button(BaseButton):
+    allow_in_dropdown: bool
+    classname: str
+    priority: int
 
 class HeaderButton(Button):
     def __init__(
@@ -56,33 +62,12 @@ class ListingButton(Button):
         classname: str = "",
         *,
         icon_name: str | None = None,
-        attrs: dict[str, str] = ...,
+        attrs: dict[str, str] | None = None,
         priority: int = 1000,
     ) -> None: ...
 
 class PageListingButton(ListingButton):
-    aria_label_format: str | None
-    url_name: str | None
-    page: Page | None
-    user: AbstractBaseUser | None
-    next_url: str | None
-    def __init__(
-        self,
-        label: str = "",
-        url: str | None = None,
-        classname: str = "",
-        *,
-        page: Page | None = None,
-        next_url: str | None = None,
-        attrs: dict[str, str] = ...,
-        user: AbstractBaseUser | None = None,
-        icon_name: str | None = None,
-        priority: int = 1000,
-    ) -> None: ...
-    @cached_property
-    def url(self) -> str | None: ...  # type: ignore[override]
-    @cached_property
-    def page_perms(self) -> PagePermissionTester | None: ...
+    def __init__(self, *args: Any, **kwargs: Any) -> None: ...
 
 class BaseDropdownMenuButton(Button):
     template_name: str
@@ -92,7 +77,7 @@ class BaseDropdownMenuButton(Button):
         *,
         classname: str = "",
         icon_name: str | None = None,
-        attrs: dict[str, str] = ...,
+        attrs: dict[str, str] | None = None,
         priority: int = 1000,
     ) -> None: ...
     @cached_property
@@ -107,7 +92,7 @@ class ButtonWithDropdown(BaseDropdownMenuButton):
         buttons: list[Button] = ...,
         classname: str = "",
         icon_name: str | None = None,
-        attrs: dict[str, str] = ...,
+        attrs: dict[str, str] | None = None,
         priority: int = 1000,
     ) -> None: ...
 
@@ -126,7 +111,7 @@ class ButtonWithDropdownFromHook(BaseDropdownMenuButton):
         *,
         classname: str = "",
         icon_name: str | None = None,
-        attrs: dict[str, str] = ...,
+        attrs: dict[str, str] | None = None,
         priority: int = 1000,
     ) -> None: ...
     @property

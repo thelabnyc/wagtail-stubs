@@ -1,3 +1,0 @@
-from django.contrib.auth.models import AbstractBaseUser
-
-def user_can_edit_setting_type(user: AbstractBaseUser, model: type) -> bool: ...
