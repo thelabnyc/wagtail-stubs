@@ -1,0 +1,15 @@
+## v7.0.0a3 (2026-03-16)
+
+### Feat
+
+- initial wagtail-stubs package
+
+### Fix
+
+- improve stubs accuracy based on integration testing
+- treebeard version
+- version
+- **ci**: remove TOX_SKIP_ENV matrix that skips all envs
+- add LICENSE
+- replace Any/object with concrete types where possible
+- comprehensive type stub audit and improvement
