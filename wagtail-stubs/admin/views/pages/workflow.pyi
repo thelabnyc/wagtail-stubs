@@ -1,7 +1,7 @@
 from wagtail.admin import messages as messages
 from wagtail.admin.utils import get_latest_str as get_latest_str
 from wagtail.admin.views.generic import workflow as workflow
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 
 class WorkflowPageViewMixin:
     model = Page

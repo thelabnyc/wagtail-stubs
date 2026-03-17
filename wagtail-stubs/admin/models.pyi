@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 from wagtail.admin import panels as panels
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 
 class Admin(models.Model):
     class Meta:

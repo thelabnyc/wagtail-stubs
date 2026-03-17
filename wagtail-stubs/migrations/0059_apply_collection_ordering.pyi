@@ -1,6 +1,6 @@
 from _typeshed import Incomplete
 from django.db import migrations
-from wagtail.models import Collection as Collection
+from wagtail.models.media import Collection as Collection
 
 def apply_collection_ordering(apps, schema_editor) -> None: ...
 

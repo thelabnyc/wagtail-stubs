@@ -4,7 +4,7 @@ from typing import Any
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.db.models import QuerySet
-from wagtail.models import ReferenceIndex as ReferenceIndex
+from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
 from wagtail.signal_handlers import disable_reference_index_auto_update as disable_reference_index_auto_update
 
 DEFAULT_CHUNK_SIZE: int

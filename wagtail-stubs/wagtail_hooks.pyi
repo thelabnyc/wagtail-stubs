@@ -5,7 +5,7 @@ from django.contrib.auth.models import Permission
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
 from wagtail.log_actions import LogActionRegistry
-from wagtail.models import Page
+from wagtail.models.pages import Page
 
 def require_wagtail_login(next: str) -> HttpResponse: ...
 def check_view_restrictions(callback: Callable[..., HttpResponse]) -> Callable[..., HttpResponse]: ...

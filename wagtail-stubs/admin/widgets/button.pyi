@@ -3,8 +3,7 @@ from typing import Any
 from django.contrib.auth.models import AbstractBaseUser
 from django.utils.functional import cached_property
 from wagtail.admin.ui.components import Component
-from wagtail.models import Page
-from wagtail.models.pages import PagePermissionTester
+from wagtail.models.pages import Page, PagePermissionTester
 
 class Button(Component):
     template_name: str

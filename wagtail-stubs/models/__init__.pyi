@@ -2,7 +2,6 @@ from django.contrib.contenttypes.models import ContentType as ContentType
 from modelcluster.fields import ParentalKey as ParentalKey
 from modelcluster.models import ClusterableModel as ClusterableModel
 from treebeard.mp_tree import MP_Node as MP_Node
-from wagtail.query import PageQuerySet as PageQuerySet
 
 from .audit_log import (
     BaseLogEntry as BaseLogEntry,
@@ -120,11 +119,15 @@ from .pages import (
     PageLogEntryQuerySet as PageLogEntryQuerySet,
 )
 from .pages import (
-    PageManager as PageManager,
-)
-from .pages import (
     PagePermissionTester as PagePermissionTester,
 )
+
+# PageManager is created by BasePageManager.from_queryset(PageQuerySet) at runtime
+# and is re-exported here in the real wagtail.models.__init__.py.
+# However, re-exporting the dynamic TypeInfo created by from_queryset() crashes
+# mypy's cross-reference fixup. Users should import from wagtail.models.pages instead:
+#   from wagtail.models.pages import PageManager
+from .pages import PageQuerySet as PageQuerySet
 from .pages import (
     PageSubscription as PageSubscription,
 )

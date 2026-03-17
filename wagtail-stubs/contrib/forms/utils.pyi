@@ -1,6 +1,6 @@
 from wagtail import hooks as hooks
 from wagtail.coreutils import safe_snake_case as safe_snake_case
-from wagtail.models import get_page_models as get_page_models
+from wagtail.models.pages import get_page_models as get_page_models
 from wagtail.permissions import page_permission_policy as page_permission_policy
 
 def get_field_clean_name(label): ...

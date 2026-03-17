@@ -9,7 +9,7 @@ from wagtail.admin.panels import (
     extract_panel_definitions_from_model_class as extract_panel_definitions_from_model_class,
 )
 from wagtail.admin.views import generic as generic
-from wagtail.models import Site as Site
+from wagtail.models.sites import Site as Site
 from wagtail.permission_policies import ModelPermissionPolicy
 
 from .forms import SiteSwitchForm as SiteSwitchForm

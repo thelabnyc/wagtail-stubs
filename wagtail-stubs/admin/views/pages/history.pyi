@@ -1,8 +1,8 @@
 from wagtail.admin.views.generic import history as history
 from wagtail.admin.views.pages.utils import GenericPageBreadcrumbsMixin as GenericPageBreadcrumbsMixin
 from wagtail.admin.widgets import BooleanRadioSelect as BooleanRadioSelect
-from wagtail.models import Page as Page
-from wagtail.models import PageLogEntry as PageLogEntry
+from wagtail.models.pages import Page as Page
+from wagtail.models.pages import PageLogEntry as PageLogEntry
 from wagtail.permissions import page_permission_policy as page_permission_policy
 import django_filters
 

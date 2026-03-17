@@ -23,8 +23,8 @@ from wagtail.admin.views.generic.mixins import (
 from wagtail.admin.views.generic.permissions import PermissionCheckedMixin
 from wagtail.admin.views.mixins import SpreadsheetExportMixin
 from wagtail.admin.widgets.button import Button, ButtonWithDropdown, HeaderButton, ListingButton
-from wagtail.models import Locale
 from wagtail.models.audit_log import BaseLogEntry
+from wagtail.models.i18n import Locale
 from wagtail.models.reference_index import ReferenceGroups
 from wagtail.models.revisions import Revision
 

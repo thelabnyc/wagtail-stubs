@@ -4,9 +4,9 @@ from typing import Any, overload
 import types
 
 @overload
-def register(hook_name: str) -> Callable[[Callable[..., Any]], Callable[..., Any]]: ...
-@overload
 def register(hook_name: str, fn: Callable[..., Any], order: int = 0) -> None: ...
+@overload
+def register(hook_name: str, fn: None = None, order: int = 0) -> Callable[[Callable[..., Any]], Callable[..., Any]]: ...
 
 class TemporaryHook(ContextDecorator):
     hooks: list[tuple[str, Callable[..., Any]]]

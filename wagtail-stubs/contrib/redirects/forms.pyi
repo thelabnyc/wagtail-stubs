@@ -3,7 +3,7 @@ from django import forms
 from wagtail.admin.forms.models import WagtailAdminModelForm as WagtailAdminModelForm
 from wagtail.admin.widgets import AdminPageChooser as AdminPageChooser
 from wagtail.contrib.redirects.models import Redirect as Redirect
-from wagtail.models import Site as Site
+from wagtail.models.sites import Site as Site
 
 class RedirectForm(WagtailAdminModelForm):
     site: Incomplete

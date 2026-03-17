@@ -1,5 +1,3 @@
-from wagtail.admin.widgets import Button as Button
-from wagtail.utils.deprecation import RemovedInWagtail80Warning as RemovedInWagtail80Warning
+from wagtail.admin.widgets.button import ListingButton
 
-class UserListingButton(Button):
-    def __init__(self, *args, **kwargs) -> None: ...
+class UserListingButton(ListingButton): ...

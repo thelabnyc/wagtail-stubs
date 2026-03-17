@@ -1,9 +1,8 @@
 from collections.abc import Collection
-from typing import NamedTuple
+from typing import Any, NamedTuple
 
 from django.db import models
 from django.http import HttpRequest
-from wagtail.models.pages import Page
 
 MATCH_HOSTNAME_PORT: int
 MATCH_HOSTNAME_DEFAULT: int
@@ -29,7 +28,8 @@ class Site(models.Model):
     hostname: models.CharField[str, str]
     port: models.IntegerField[int, int]
     site_name: models.CharField[str, str]
-    root_page: models.ForeignKey[Page, Page]
+    # FK type uses Any to avoid circular import with wagtail.models.pages
+    root_page: models.ForeignKey[Any, Any]
     is_default_site: models.BooleanField[bool, bool]
     objects: SiteManager  # type: ignore[assignment]
 

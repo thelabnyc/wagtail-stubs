@@ -35,8 +35,8 @@ from wagtail.images.image_operations import (
 )
 from wagtail.images.rect import Rect as Rect
 from wagtail.images.utils import to_svg_safe_spec as to_svg_safe_spec
-from wagtail.models import CollectionMember as CollectionMember
-from wagtail.models import ReferenceIndex as ReferenceIndex
+from wagtail.models.media import CollectionMember as CollectionMember
+from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
 from wagtail.search import index as index
 from wagtail.search.queryset import SearchableQuerySetMixin as SearchableQuerySetMixin
 from wagtail.utils.file import hash_filelike as hash_filelike
@@ -138,7 +138,7 @@ class Filter:
     spec: str
     def __init__(self, spec=None) -> None: ...
     @classmethod
-    def expand_spec(self, spec: str | Iterable[str]) -> list[str]: ...
+    def expand_spec(cls, spec: str | Iterable[str]) -> list[str]: ...
     @cached_property
     def operations(self): ...
     @property

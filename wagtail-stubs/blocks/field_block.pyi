@@ -99,6 +99,7 @@ class FloatBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
+        help_text: str | _StrPromise | None = None,
         max_value: float | None = None,
         min_value: float | None = None,
         validators: Sequence[_Validator] = (),
@@ -241,7 +242,7 @@ class BaseChoiceBlock(FieldBlock):
     def __init__(
         self,
         choices: _ChoiceType | None = None,
-        default: str | None = None,
+        default: Any = None,
         required: bool = True,
         help_text: str | _StrPromise | None = None,
         search_index: bool = True,
@@ -274,6 +275,7 @@ class RichTextBlock(FieldBlock):
         editor: str = "default",
         features: list[str] | None = None,
         max_length: int | None = None,
+        min_length: int | None = None,
         validators: Sequence[_Validator] = (),
         search_index: bool = True,
         **kwargs: Any,

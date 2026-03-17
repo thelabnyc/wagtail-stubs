@@ -2,8 +2,8 @@ from typing import Any
 
 from django.http import HttpRequest
 from wagtail.coreutils import resolve_model_string as resolve_model_string
-from wagtail.models import Page as Page
-from wagtail.models import Site as Site
+from wagtail.models.pages import Page as Page
+from wagtail.models.sites import Site as Site
 
 class BadRequestError(Exception): ...
 

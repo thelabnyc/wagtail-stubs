@@ -8,7 +8,7 @@ from django.db.models import Model, QuerySet
 from django.utils.datastructures import MultiValueDict
 from wagtail.admin.forms.formsets import BaseFormSetMixin
 from wagtail.admin.forms.view_restrictions import BaseViewRestrictionForm
-from wagtail.models import Collection, CollectionViewRestriction
+from wagtail.models.media import Collection, CollectionViewRestriction
 from wagtail.permission_policies.base import BasePermissionPolicy
 
 class CollectionViewRestrictionForm(BaseViewRestrictionForm):

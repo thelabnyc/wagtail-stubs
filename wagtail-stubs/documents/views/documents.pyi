@@ -38,8 +38,8 @@ from wagtail.admin.views import generic as generic
 from wagtail.documents import get_document_model as get_document_model
 from wagtail.documents.forms import get_document_form as get_document_form
 from wagtail.documents.permissions import permission_policy as permission_policy
-from wagtail.models import ReferenceIndex as ReferenceIndex
 from wagtail.models.media import Collection
+from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
 
 permission_checker: PermissionPolicyChecker
 Document: type

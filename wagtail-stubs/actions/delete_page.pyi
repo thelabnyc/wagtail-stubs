@@ -2,7 +2,7 @@ from typing import Any
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.exceptions import PermissionDenied
-from wagtail.models import Page
+from wagtail.models.pages import Page
 
 class DeletePagePermissionError(PermissionDenied): ...
 

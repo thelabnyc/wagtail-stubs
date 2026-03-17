@@ -2,10 +2,10 @@ from collections.abc import Generator
 
 from _typeshed import Incomplete
 from wagtail import hooks as hooks
-from wagtail.admin.ui.menus import MenuItem as MenuItem
-from wagtail.models import Locale as Locale
-from wagtail.models import Page as Page
-from wagtail.models import TranslatableMixin as TranslatableMixin
+from wagtail.admin.menu import MenuItem as MenuItem
+from wagtail.models.i18n import Locale as Locale
+from wagtail.models.i18n import TranslatableMixin as TranslatableMixin
+from wagtail.models.pages import Page as Page
 
 from .views import (
     SubmitPageTranslationView as SubmitPageTranslationView,

@@ -53,8 +53,18 @@ class ListValue(MutableSequence[Any]):
 class ListBlock[BlockT: Block](Block):
     child_block: BlockT
     search_index: bool
+    @overload
     def __init__(
         self,
+        child_block: BlockT | type[BlockT],
+        /,
+        search_index: bool = True,
+        **kwargs: Any,
+    ) -> None: ...
+    @overload
+    def __init__(
+        self,
+        *,
         child_block: BlockT | type[BlockT],
         search_index: bool = True,
         **kwargs: Any,

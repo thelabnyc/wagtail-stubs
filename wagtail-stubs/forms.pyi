@@ -1,7 +1,7 @@
 from typing import Any
 
 from django import forms
-from wagtail.models import BaseViewRestriction
+from wagtail.models.view_restrictions import BaseViewRestriction
 
 class PasswordViewRestrictionForm(forms.Form):
     password: forms.CharField

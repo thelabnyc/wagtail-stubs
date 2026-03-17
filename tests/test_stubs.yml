@@ -101,3 +101,85 @@
     from wagtail.search import index
     field = index.SearchField("title")
     reveal_type(field)  # N: Revealed type is "wagtail.search.index.SearchField"
+
+- case: page_queryset_generic
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import Page
+    from wagtail.models.pages import PageQuerySet
+
+    # Page.objects returns a PageQuerySet parameterized with Page
+    reveal_type(Page.objects.all())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
+
+    # Chained queryset methods preserve the type via Self
+    reveal_type(Page.objects.all().live())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
+
+    # Iteration yields the parameterized type
+    for page in Page.objects.all():
+        reveal_type(page)  # N: Revealed type is "wagtail.models.pages.Page"
+
+    # first_common_ancestor returns the parameterized type
+    reveal_type(Page.objects.all().first_common_ancestor())  # N: Revealed type is "wagtail.models.pages.Page"
+
+- case: page_queryset_generic_annotation
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import Page
+    from wagtail.models.pages import PageQuerySet
+    from django.db import models
+
+    class BlogPage(Page):
+        body: models.TextField[str, str]
+        class Meta:
+            app_label = "test"
+
+    # Explicitly annotated PageQuerySet preserves the subclass type
+    def process_blogs(qs: PageQuerySet[BlogPage]) -> None:
+        for page in qs:
+            reveal_type(page)  # N: Revealed type is "main.BlogPage"
+
+        # Chained methods preserve the subclass type
+        reveal_type(qs.live())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(qs.in_menu())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(qs.public())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(qs.defer_streamfields())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+
+        # first_common_ancestor returns the subclass type
+        reveal_type(qs.first_common_ancestor())  # N: Revealed type is "main.BlogPage"
+
+    # TreeQuerySet methods also preserve the type
+    def tree_ops(qs: PageQuerySet[BlogPage], page: Page) -> None:
+        reveal_type(qs.descendant_of(page))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(qs.child_of(page))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(qs.ancestor_of(page))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+
+- case: page_manager_as_type_annotation
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import ClassVar
+    from wagtail.models import Page
+    from wagtail.models.pages import PageManager
+
+    # PageManager can be used as a type annotation
+    class MyPage(Page):
+        objects: ClassVar[PageManager] = PageManager()  # type: ignore[assignment,misc]
+        class Meta:
+            app_label = "test"
+
+    reveal_type(MyPage.objects)  # N: Revealed type is "wagtail.models.pages.BasePageManagerFromPageQuerySet"
+    reveal_type(MyPage.objects.all())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"

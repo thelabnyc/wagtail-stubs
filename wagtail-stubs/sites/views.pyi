@@ -5,7 +5,7 @@ from wagtail.admin.ui.tables import StatusFlagColumn as StatusFlagColumn
 from wagtail.admin.ui.tables import TitleColumn as TitleColumn
 from wagtail.admin.views import generic as generic
 from wagtail.admin.viewsets.model import ModelViewSet as ModelViewSet
-from wagtail.models import Site as Site
+from wagtail.models.sites import Site as Site
 from wagtail.permissions import site_permission_policy as site_permission_policy
 from wagtail.sites.forms import SiteForm as SiteForm
 

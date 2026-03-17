@@ -4,8 +4,8 @@ from wagtail.admin.mail import send_mail as send_mail
 from wagtail.admin.panels import FieldPanel as FieldPanel
 from wagtail.api import APIField as APIField
 from wagtail.contrib.forms.utils import get_field_clean_name as get_field_clean_name
-from wagtail.models import Orderable as Orderable
-from wagtail.models import Page as Page
+from wagtail.models.orderable import Orderable as Orderable
+from wagtail.models.pages import Page as Page
 
 from .forms import FormBuilder as FormBuilder
 from .forms import WagtailAdminFormPageForm as WagtailAdminFormPageForm

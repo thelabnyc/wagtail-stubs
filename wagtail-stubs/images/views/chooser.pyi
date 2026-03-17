@@ -53,7 +53,7 @@ from wagtail.images.forms import ImageInsertionForm as ImageInsertionForm
 from wagtail.images.forms import get_image_form as get_image_form
 from wagtail.images.permissions import permission_policy as permission_policy
 from wagtail.images.utils import find_image_duplicates as find_image_duplicates
-from wagtail.models import ReferenceIndex as ReferenceIndex
+from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
 
 permission_checker: PermissionPolicyChecker
 
