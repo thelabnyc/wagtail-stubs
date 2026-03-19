@@ -42,21 +42,22 @@ class StructValue(collections.OrderedDict[str, Any]):
 
 class BlockGroup:
     children: list[str | BlockGroup]
-    settings: list[str]
+    settings: list[str | BlockGroup]
     heading: str
+    clean_name: str
     classname: str
     help_text: str
     icon: str
-    attrs: dict[str, Any] | None
+    attrs: dict[str, Any]
     label_format: str | None
     def __init__(
         self,
         children: list[str | BlockGroup],
-        settings: list[str] | None = None,
+        settings: list[str | BlockGroup] | None = None,
         heading: str = "",
         classname: str = "",
         help_text: str = "",
-        icon: str = "",
+        icon: str = "placeholder",
         attrs: dict[str, Any] | None = None,
         label_format: str | None = None,
     ) -> None: ...

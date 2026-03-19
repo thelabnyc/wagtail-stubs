@@ -1,3 +1,5 @@
+from collections.abc import Sequence
+
 from django.forms import Media, MediaDefiningClass
 from django.http import HttpRequest
 from django.utils.functional import _StrOrPromise
@@ -94,7 +96,7 @@ class WagtailMenuRegisterable:
     def register_menu_item(self) -> None: ...
 
 class WagtailMenuRegisterableGroup(WagtailMenuRegisterable):
-    items: tuple[type[WagtailMenuRegisterable] | WagtailMenuRegisterable, ...]
+    items: Sequence[type[WagtailMenuRegisterable] | WagtailMenuRegisterable]
     menu_icon: str
     add_to_admin_menu: bool
     registerables: list[WagtailMenuRegisterable]
