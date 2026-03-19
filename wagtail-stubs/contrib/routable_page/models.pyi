@@ -2,7 +2,7 @@ from collections.abc import Callable
 from typing import Any
 
 from django.core.checks import CheckMessage
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.template.response import TemplateResponse
 from wagtail.models.pages import Page
 from wagtail.url_routing import RouteResult
@@ -25,13 +25,7 @@ class RoutablePageMixin:
     ) -> str: ...
     def resolve_subpage(self, path: str) -> RouteResult: ...
     def route(self, request: HttpRequest, path_components: list[str]) -> RouteResult: ...
-    def serve(
-        self,
-        request: HttpRequest,
-        view: Any = None,
-        args: list[Any] | None = None,
-        kwargs: dict[str, Any] | None = None,
-    ) -> TemplateResponse: ...
+    def serve(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse: ...
     def render(
         self,
         request: HttpRequest,

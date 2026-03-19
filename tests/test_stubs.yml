@@ -285,3 +285,247 @@
 
     # IntegerChoices should be accepted as choices
     block = ChoiceBlock(choices=Priority.choices)
+
+- case: versioned_static_returns_str
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.staticfiles import versioned_static
+    result = versioned_static("wagtailadmin/js/core.js")
+    reveal_type(result)  # N: Revealed type is "builtins.str"
+
+- case: base_chooser_accepts_lazy_strings
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.utils.translation import gettext_lazy as _
+    from wagtail.admin.widgets.chooser import BaseChooser
+
+    class MyChooser(BaseChooser):
+        choose_one_text = _("Choose an item")
+        choose_another_text = _("Choose another item")
+        model = "myapp.MyModel"
+
+- case: chooser_block_target_model_accepts_str
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.blocks import ChooserBlock
+
+    class MyChooserBlock(ChooserBlock):
+        target_model = "myapp.MyModel"
+
+- case: field_block_field_as_property
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django import forms
+    from wagtail.blocks import FieldBlock
+    from django.utils.functional import cached_property
+
+    class MyBlock(FieldBlock):
+        @cached_property
+        def field(self) -> forms.CharField:
+            return forms.CharField()
+
+- case: block_deconstruct_returns_list
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import Any
+    from wagtail.blocks import Block
+    block = Block()
+    path, args, kwargs = block.deconstruct()
+    reveal_type(args)  # N: Revealed type is "builtins.list[Any]"
+
+- case: raw_html_block_returns_str
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.blocks import RawHTMLBlock
+    block = RawHTMLBlock()
+    reveal_type(block.to_python("test"))  # N: Revealed type is "builtins.str"
+    reveal_type(block.get_default())  # N: Revealed type is "builtins.str"
+
+- case: regex_block_keyword_regex
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.blocks import RegexBlock
+    # regex can be passed as keyword arg
+    block = RegexBlock(regex=r"^[a-z]+$")
+
+- case: boolean_column_accepts_lazy_label
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.utils.translation import gettext_lazy as _
+    from wagtail.admin.ui.tables import BooleanColumn
+    col = BooleanColumn("is_active", label=_("Active"))
+
+- case: model_viewset_list_display_tuple
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.viewsets.model import ModelViewSet
+    from django.db import models
+
+    class MyModel(models.Model):
+        name: models.CharField[str, str]
+        class Meta:
+            app_label = "test"
+
+    class MyViewSet(ModelViewSet):
+        model = MyModel
+        list_display = ("name",)
+
+- case: stream_field_keyword_only_use_json_field
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.fields import StreamField
+    from wagtail.blocks import CharBlock
+    # use_json_field as keyword arg should work
+    field: StreamField = StreamField([("text", CharBlock())], use_json_field=True)
+
+- case: chooser_viewset_accepts_lazy_strings
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.utils.translation import gettext_lazy as _
+    from wagtail.admin.viewsets.chooser import ChooserViewSet
+
+    class MyChooserViewSet(ChooserViewSet):
+        choose_one_text = _("Choose")
+        choose_another_text = _("Choose another")
+        page_title = _("Select an item")
+
+- case: page_manager_importable_from_wagtail_models
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import PageManager
+    # Just verify it's importable and callable
+    manager = PageManager()  # type: ignore[var-annotated]
+
+- case: log_formatter_accepts_lazy_strings
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.utils.translation import gettext_lazy as _
+    from wagtail.log_actions import LogFormatter
+
+    class MyFormatter(LogFormatter):
+        label = _("My action")
+        message = _("Did something")
+
+- case: subpage_types_accepts_model_classes
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import Page
+    from django.db import models
+
+    class ChildPage(Page):
+        class Meta:
+            app_label = "test"
+
+    class ParentPage(Page):
+        subpage_types = [ChildPage]
+        parent_page_types = ["test.RootPage"]
+        class Meta:
+            app_label = "test"
+
+- case: routable_page_serve_compatible_with_page
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import Any
+    from django.http import HttpRequest, HttpResponse
+    from wagtail.models import Page
+    from wagtail.contrib.routable_page.models import RoutablePageMixin
+
+    class BasePage(Page):
+        def serve(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+            return super().serve(request, *args, **kwargs)
+        class Meta:
+            app_label = "test"
+
+    class MyRoutablePage(RoutablePageMixin, BasePage):
+        class Meta:
+            app_label = "test"
+
+- case: page_get_context_accepts_none_request
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.models import Page
+
+    page = Page()
+    ctx = page.get_context(None)
+    reveal_type(ctx)  # N: Revealed type is "builtins.dict[builtins.str, Any]"

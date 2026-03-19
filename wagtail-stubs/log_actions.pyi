@@ -5,15 +5,16 @@ import uuid
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.db.models import Model
+from django.utils.functional import _StrPromise
 from wagtail.models.audit_log import BaseLogEntry
 from wagtail.utils.registry import ObjectTypeRegistry
 
 class LogFormatter:
-    label: str
-    message: str
-    comment: str
-    def format_message(self, log_entry: BaseLogEntry) -> str: ...
-    def format_comment(self, log_entry: BaseLogEntry) -> str: ...
+    label: str | _StrPromise
+    message: str | _StrPromise
+    comment: str | _StrPromise
+    def format_message(self, log_entry: BaseLogEntry) -> str | _StrPromise: ...
+    def format_comment(self, log_entry: BaseLogEntry) -> str | _StrPromise: ...
 
 class LogContext:
     user: AbstractBaseUser | None

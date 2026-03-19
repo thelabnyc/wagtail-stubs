@@ -4,6 +4,7 @@ from typing import Any
 
 from django.forms import Media, MediaDefiningClass
 from django.template.backends.base import _EngineTemplate
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.ui.components import Component as Component
 from wagtail.admin.widgets.button import Button
@@ -27,7 +28,7 @@ class BaseColumn(metaclass=MediaDefiningClass):
     cell_template_name: str | None
     name: str
     accessor: str | Callable[..., Any]
-    label: str
+    label: _StrOrPromise
     classname: str | None
     sort_key: str | None
     header: BaseColumn.Header
@@ -37,7 +38,7 @@ class BaseColumn(metaclass=MediaDefiningClass):
     def __init__(
         self,
         name: str,
-        label: str | None = None,
+        label: _StrOrPromise | None = None,
         accessor: str | Callable[..., Any] | None = None,
         classname: str | None = None,
         sort_key: str | None = None,
@@ -152,7 +153,7 @@ class ReferencesColumn(Column):
     def __init__(
         self,
         name: str,
-        label: str | None = None,
+        label: _StrOrPromise | None = None,
         accessor: str | Callable[..., Any] | None = None,
         classname: str | None = None,
         sort_key: str | None = None,

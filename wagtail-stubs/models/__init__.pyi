@@ -118,15 +118,10 @@ from .pages import (
 from .pages import (
     PageLogEntryQuerySet as PageLogEntryQuerySet,
 )
+from .pages import PageManager as PageManager
 from .pages import (
     PagePermissionTester as PagePermissionTester,
 )
-
-# PageManager is created by BasePageManager.from_queryset(PageQuerySet) at runtime
-# and is re-exported here in the real wagtail.models.__init__.py.
-# However, re-exporting the dynamic TypeInfo created by from_queryset() crashes
-# mypy's cross-reference fixup. Users should import from wagtail.models.pages instead:
-#   from wagtail.models.pages import PageManager
 from .pages import PageQuerySet as PageQuerySet
 from .pages import (
     PageSubscription as PageSubscription,

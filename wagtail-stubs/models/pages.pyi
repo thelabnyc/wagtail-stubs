@@ -171,8 +171,8 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
     private_page_options: list[str]
     context_object_name: str | None
     password_required_template: str | None
-    subpage_types: list[str] | None
-    parent_page_types: list[str] | None
+    subpage_types: list[str | type[Page]] | None
+    parent_page_types: list[str | type[Page]] | None
     allowed_http_methods: list[HTTPMethod]
 
     objects: PageManager  # type: ignore[assignment]
@@ -267,7 +267,7 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
         user: AbstractBaseUser | None = None,
         log_action: bool | str = True,
     ) -> None: ...
-    def get_context(self, request: HttpRequest, *args: Any, **kwargs: Any) -> dict[str, Any]: ...
+    def get_context(self, request: HttpRequest | None, *args: Any, **kwargs: Any) -> dict[str, Any]: ...
     def get_preview_context(self, request: HttpRequest, mode_name: str) -> dict[str, Any]: ...
     def get_template(self, request: HttpRequest, *args: Any, **kwargs: Any) -> _TemplateForResponseT: ...
     def get_preview_template(self, request: HttpRequest, mode_name: str) -> _TemplateForResponseT: ...

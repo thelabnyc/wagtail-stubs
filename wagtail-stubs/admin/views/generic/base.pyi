@@ -67,7 +67,7 @@ class BaseListingView(WagtailAdminTemplateMixin, BaseListView):
     page_kwarg: str
     is_searchable: bool | None
     search_kwarg: str
-    search_fields: list[str] | None
+    search_fields: list[str] | tuple[str, ...] | None
     search_backend_name: str
     default_ordering: str | None
     filterset_class: type[django_filters.FilterSet] | None
