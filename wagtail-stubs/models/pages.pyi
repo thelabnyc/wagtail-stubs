@@ -155,7 +155,7 @@ class Page(AbstractPage, index.Indexed, ClusterableModel, metaclass=PageBase):
     _default_manager: PageManager  # type: ignore[assignment]
 
     # ---- class-level configuration ----
-    search_fields: list[index.BaseField]
+    search_fields: list[index.BaseField | index.RelatedFields]
     is_creatable: bool
     max_count: int | None
     max_count_per_parent: int | None

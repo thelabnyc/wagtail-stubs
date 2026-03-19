@@ -12,7 +12,7 @@ from django.utils.functional import cached_property
 from wagtail.blocks import Block, BlockField, StreamBlock, StreamValue
 from wagtail.blocks.base import BoundBlock
 
-class RichTextField(models.TextField[str, str]):
+class RichTextField(models.TextField):
     editor: str
     features: list[str] | None
     def __init__(

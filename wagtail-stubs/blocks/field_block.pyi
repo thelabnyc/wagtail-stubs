@@ -229,11 +229,14 @@ class IntegerBlock(FieldBlock):
 
 type _StrOrPromise = str | _StrPromise
 
+type _ChoiceValue = str | int | float | _StrPromise
+type _ChoiceLabel = _StrOrPromise
+
 type _ChoiceType = (
-    list[tuple[_StrOrPromise, _StrOrPromise]]
-    | list[tuple[_StrOrPromise, list[tuple[_StrOrPromise, _StrOrPromise]]]]
-    | Iterable[tuple[_StrOrPromise, _StrOrPromise | list[tuple[_StrOrPromise, _StrOrPromise]]]]
-    | Callable[[], Iterable[tuple[_StrOrPromise, _StrOrPromise | list[tuple[_StrOrPromise, _StrOrPromise]]]]]
+    list[tuple[_ChoiceValue, _ChoiceLabel]]
+    | list[tuple[_ChoiceLabel, list[tuple[_ChoiceValue, _ChoiceLabel]]]]
+    | Iterable[tuple[_ChoiceValue, _ChoiceLabel | list[tuple[_ChoiceValue, _ChoiceLabel]]]]
+    | Callable[[], Iterable[tuple[_ChoiceValue, _ChoiceLabel | list[tuple[_ChoiceValue, _ChoiceLabel]]]]]
 )
 
 class BaseChoiceBlock(FieldBlock):

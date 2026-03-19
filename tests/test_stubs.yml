@@ -190,3 +190,98 @@
     # In the test subprocess, it defaults to Any (see page_queryset_generic comment).
     reveal_type(MyPage.objects)  # N: Revealed type is "wagtail.models.pages.BasePageManagerFromPageQuerySet[Any]"
     reveal_type(MyPage.objects.all())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[Any]"
+
+- case: search_fields_accepts_related_fields_on_page
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import Page
+    from wagtail.search import index
+    from django.db import models
+
+    class MyPage(Page):
+        search_fields = Page.search_fields + [
+            index.RelatedFields("owner", [
+                index.SearchField("username"),
+            ]),
+        ]
+        class Meta:
+            app_label = "test"
+
+- case: struct_block_label_and_name_as_child_blocks
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.blocks import StructBlock, CharBlock
+
+    # Using 'label' and 'name' as child block field names should work
+    class LabelledBlock(StructBlock):
+        label = CharBlock()
+        name = CharBlock()
+        description = CharBlock()
+
+- case: form_builder_typed
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.forms.forms import FormBuilder, BaseForm
+    reveal_type(FormBuilder.get_form_class)  # N: Revealed type is "def (self: wagtail.contrib.forms.forms.FormBuilder) -> type[wagtail.contrib.forms.forms.BaseForm]"
+
+- case: email_form_mixin_render_email_typed
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.forms.models import EmailFormMixin
+    from wagtail.contrib.forms.forms import BaseForm
+    # render_email should be typed (form -> str)
+    mixin = EmailFormMixin()
+    form = BaseForm()
+    result = mixin.render_email(form)
+    reveal_type(result)  # N: Revealed type is "builtins.str"
+
+- case: rendition_img_tag_typed
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.images.models import AbstractRendition
+    # img_tag should have a return type annotation (SafeString)
+    reveal_type(AbstractRendition.img_tag)  # N: Revealed type is "def (self: wagtail.images.models.AbstractRendition, extra_attributes: builtins.dict[builtins.str, Any] =) -> django.utils.safestring.SafeString"
+
+- case: choice_block_accepts_integer_choices
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.db.models import IntegerChoices
+    from wagtail.blocks import ChoiceBlock
+
+    class Priority(IntegerChoices):
+        LOW = 1, "Low"
+        MEDIUM = 2, "Medium"
+        HIGH = 3, "High"
+
+    # IntegerChoices should be accepted as choices
+    block = ChoiceBlock(choices=Priority.choices)

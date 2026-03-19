@@ -31,14 +31,12 @@ class BaseBlock(type):
     def __new__(mcs, name: str, bases: tuple[type, ...], attrs: dict[str, Any]) -> BaseBlock: ...
 
 class Block(metaclass=BaseBlock):
-    name: str
     creation_counter: int
     definition_registry: dict[str, Block]
     definition_prefix: str
     TEMPLATE_VAR: str
     DEFAULT_PREVIEW_TEMPLATE: str
     MUTABLE_META_ATTRIBUTES: list[str]
-    label: str
     meta: Block.Meta
 
     class Meta:
