@@ -1,3 +1,9 @@
+## v7.0.0b2 (2026-03-19)
+
+### Fix
+
+- use TypeAlias instead of PEP 695 type statement for _FilterValue
+
 ## v7.0.0b1 (2026-03-18)
 
 ### Fix
