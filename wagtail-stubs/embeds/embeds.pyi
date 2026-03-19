@@ -11,10 +11,13 @@ from .models import Embed as Embed
 type _EmbedDict = dict[str, str | int | datetime.datetime | None]
 
 def get_finder_for_embed(url: str, max_width: int | None = None, max_height: int | None = None) -> _EmbedDict: ...
+
+type _FinderCallable = Callable[[str, int | None, int | None], _EmbedDict]
+
 def get_embed(
     url: str,
     max_width: int | None = None,
     max_height: int | None = None,
-    finder: Callable[[str, int | None, int | None], _EmbedDict] = ...,
+    finder: _FinderCallable = ...,
 ) -> Embed: ...
 def get_embed_hash(url: str, max_width: int | None = None, max_height: int | None = None) -> str: ...

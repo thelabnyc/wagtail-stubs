@@ -5,8 +5,8 @@ from wagtail import hooks as hooks
 from wagtail.admin.ui.components import Component as Component
 from wagtail.admin.utils import get_admin_base_url as get_admin_base_url
 from wagtail.coreutils import accepts_kwarg as accepts_kwarg
-from wagtail.models import Revision as Revision
 from wagtail.models.pages import Page as Page
+from wagtail.models.revisions import Revision as Revision
 from wagtail.users.models import UserProfile as UserProfile
 from wagtail.utils.deprecation import RemovedInWagtail80Warning as RemovedInWagtail80Warning
 
@@ -20,8 +20,6 @@ class AdminItem(BaseItem):
     def render(self, request: HttpRequest) -> str: ...
 
 class AccessibilityItem(BaseItem):
-    in_editor: bool
-    def __init__(self, in_editor: bool = False) -> None: ...
     template: str
     axe_include: list[str]
     axe_exclude: list[str | dict[str, list[str]]]
@@ -41,7 +39,7 @@ class AccessibilityItem(BaseItem):
     def get_axe_options(self, request: HttpRequest) -> dict[str, Any]: ...
     def get_axe_spec(self, request: HttpRequest) -> dict[str, Any]: ...
     def get_axe_configuration(self, request: HttpRequest) -> dict[str, Any]: ...
-    def get_context_data(self, request: HttpRequest) -> dict[str, Any]: ...  # type: ignore[override]
+    def get_context_data(self, request: HttpRequest) -> dict[str, Any]: ...
     def render(self, request: HttpRequest) -> str: ...
 
 class AddPageItem(BaseItem):

@@ -1,7 +1,7 @@
 from _typeshed import Incomplete
 from wagtail.contrib.settings.models import BaseGenericSetting as BaseGenericSetting
 from wagtail.contrib.settings.models import BaseSiteSetting as BaseSiteSetting
-from wagtail.models import Site as Site
+from wagtail.models.sites import Site as Site
 
 from .registry import registry as registry
 

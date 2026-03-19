@@ -10,8 +10,8 @@ from wagtail.admin.mail import (
 from wagtail.admin.mail import (
     WorkflowStateSubmissionEmailNotifier as WorkflowStateSubmissionEmailNotifier,
 )
-from wagtail.models import TaskState as TaskState
-from wagtail.models import WorkflowState as WorkflowState
+from wagtail.models.workflows import TaskState as TaskState
+from wagtail.models.workflows import WorkflowState as WorkflowState
 from wagtail.signals import (
     task_submitted as task_submitted,
 )

@@ -1,11 +1,12 @@
 from django.forms import Media, MediaDefiningClass
 from django.http import HttpRequest
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.ui.sidebar import LinkMenuItem as LinkMenuItemComponent
 from wagtail.admin.ui.sidebar import SubMenuItem as SubMenuItemComponent
 
 class MenuItem(metaclass=MediaDefiningClass):
-    label: str
+    label: _StrOrPromise
     url: str
     classname: str
     icon_name: str
@@ -14,7 +15,7 @@ class MenuItem(metaclass=MediaDefiningClass):
     order: int
     def __init__(
         self,
-        label: str,
+        label: _StrOrPromise,
         url: str,
         name: str | None = None,
         classname: str = "",
@@ -79,7 +80,7 @@ class AdminOnlyMenuItem(MenuItem):
 
 class WagtailMenuRegisterable:
     menu_icon: str
-    menu_label: str
+    menu_label: _StrOrPromise
     menu_name: str
     menu_order: int
     menu_url: str | None

@@ -7,22 +7,23 @@ from django.db import models
 from django.forms import widgets
 from django.forms.renderers import BaseRenderer
 from django.utils.datastructures import MultiValueDict
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from django.utils.safestring import SafeString
 from wagtail.widget_adapters import WidgetAdapter
 
 class BaseChooser(widgets.Input):
-    choose_one_text: str
-    choose_another_text: str
-    clear_choice_text: str
-    link_to_chosen_text: str
+    choose_one_text: _StrOrPromise
+    choose_another_text: _StrOrPromise
+    clear_choice_text: _StrOrPromise
+    link_to_chosen_text: _StrOrPromise
     show_edit_link: bool
     show_clear_link: bool
     template_name: str
     display_title_key: str
     icon: str | None
     classname: str | None
-    model: type[models.Model] | None
+    model: type[models.Model] | str | None
     js_constructor: str
     linked_fields: dict[str, str | dict[str, str]]
     input_type: str
@@ -54,7 +55,7 @@ class BaseChooser(widgets.Input):
     @property
     def base_js_init_options(self) -> dict[str, Any]: ...
     def get_js_init_options(self, id_: str, name: str, value_data: dict[str, Any] | None) -> dict[str, Any]: ...
-    def render_js_init(self, id_: str, name: str, value_data: dict[str, Any] | None) -> str: ...
+    def render_js_init(self, id_: str, name: str, value_data: dict[str, Any]) -> str: ...
     @cached_property
     def media(self) -> forms.Media: ...
 
@@ -65,9 +66,9 @@ class BaseChooserAdapter(WidgetAdapter):
     def media(self) -> forms.Media: ...
 
 class AdminPageChooser(BaseChooser):
-    choose_one_text: str
-    choose_another_text: str
-    link_to_chosen_text: str
+    choose_one_text: _StrOrPromise
+    choose_another_text: _StrOrPromise
+    link_to_chosen_text: _StrOrPromise
     display_title_key: str
     chooser_modal_url_name: str
     icon: str

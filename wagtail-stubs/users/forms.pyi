@@ -6,18 +6,10 @@ from django.db.models import QuerySet
 from wagtail import hooks as hooks
 from wagtail.admin.forms.formsets import BaseFormSetMixin as BaseFormSetMixin
 from wagtail.admin.widgets import AdminPageChooser as AdminPageChooser
-from wagtail.models import (
-    PAGE_PERMISSION_CODENAMES as PAGE_PERMISSION_CODENAMES,
-)
-from wagtail.models import (
-    PAGE_PERMISSION_TYPES as PAGE_PERMISSION_TYPES,
-)
-from wagtail.models import (
-    GroupPagePermission as GroupPagePermission,
-)
-from wagtail.models import (
-    Page as Page,
-)
+from wagtail.models.pages import PAGE_PERMISSION_CODENAMES as PAGE_PERMISSION_CODENAMES
+from wagtail.models.pages import PAGE_PERMISSION_TYPES as PAGE_PERMISSION_TYPES
+from wagtail.models.pages import GroupPagePermission as GroupPagePermission
+from wagtail.models.pages import Page as Page
 
 User: type[AbstractBaseUser]
 standard_fields: set[str]

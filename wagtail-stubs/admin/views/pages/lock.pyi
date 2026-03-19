@@ -1,5 +1,5 @@
 from wagtail.admin.views.generic import lock as lock
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 
 class PageOperationViewMixin:
     model = Page

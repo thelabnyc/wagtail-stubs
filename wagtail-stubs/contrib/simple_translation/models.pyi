@@ -1,7 +1,7 @@
 from _typeshed import Incomplete
 from django.db.models import Model
 from wagtail import hooks as hooks
-from wagtail.models import Locale as Locale
+from wagtail.models.i18n import Locale as Locale
 
 class SimpleTranslation(Model):
     class Meta:

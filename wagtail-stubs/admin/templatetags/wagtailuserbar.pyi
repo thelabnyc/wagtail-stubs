@@ -1,7 +1,7 @@
 from django import template
 from wagtail.admin.userbar import Userbar as Userbar
-from wagtail.models import PAGE_TEMPLATE_VAR as PAGE_TEMPLATE_VAR
-from wagtail.models import Page as Page
+from wagtail.models.pages import PAGE_TEMPLATE_VAR as PAGE_TEMPLATE_VAR
+from wagtail.models.pages import Page as Page
 
 register: template.Library
 

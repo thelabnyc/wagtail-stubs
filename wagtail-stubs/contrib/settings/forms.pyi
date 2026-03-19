@@ -1,7 +1,7 @@
 from typing import Any
 
 from django import forms
-from wagtail.models import Site as Site
+from wagtail.models.sites import Site as Site
 
 class SiteSwitchForm(forms.Form):
     site: forms.ChoiceField

@@ -2,7 +2,7 @@ from collections.abc import Iterable
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.db.models import QuerySet
-from wagtail.models import GroupPagePermission, Page
+from wagtail.models.pages import GroupPagePermission, Page
 from wagtail.permission_policies.base import OwnershipPermissionPolicy
 
 class PagePermissionPolicy(OwnershipPermissionPolicy):

@@ -12,7 +12,7 @@ from django.utils.functional import cached_property
 from wagtail.blocks import Block, BlockField, StreamBlock, StreamValue
 from wagtail.blocks.base import BoundBlock
 
-class RichTextField(models.TextField[str, str]):
+class RichTextField(models.TextField):
     editor: str
     features: list[str] | None
     def __init__(
@@ -29,14 +29,14 @@ class Creator:
     def __get__(self, obj: models.Model | None, type: type | None = None) -> StreamValue[Any]: ...
     def __set__(self, obj: models.Model, value: StreamValue[Any] | list[Any] | str | None) -> None: ...
 
-class StreamField[StreamBlockT: StreamBlock[Any]](models.Field[StreamValue[Any], StreamValue[Any]]):
+class StreamField[StreamBlockT: StreamBlock[Any]](models.Field):
     block_opts: dict[str, Any]
     block_types_arg: type[StreamBlock[Any]] | StreamBlock[Any] | Sequence[tuple[str, Block]]
     block_lookup: dict[str, Any] | None
     def __init__(
         self,
         block_types: type[StreamBlockT] | StreamBlockT | Sequence[tuple[str, Block]],
-        use_json_field: bool = True,
+        use_json_field: bool | None = True,
         block_lookup: dict[str, Any] | None = None,
         *,
         min_num: int | None = ...,

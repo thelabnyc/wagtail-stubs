@@ -6,21 +6,11 @@ from wagtail.admin.ui.components import Component as Component
 from wagtail.admin.userbar import AccessibilityItem as AccessibilityItem
 from wagtail.admin.userbar import apply_userbar_hooks as apply_userbar_hooks
 from wagtail.locks import BaseLock
-from wagtail.models import (
-    DraftStateMixin as DraftStateMixin,
-)
-from wagtail.models import (
-    Locale,
-)
-from wagtail.models import (
-    LockableMixin as LockableMixin,
-)
-from wagtail.models import (
-    Page as Page,
-)
-from wagtail.models import (
-    ReferenceIndex as ReferenceIndex,
-)
+from wagtail.models.draft_state import DraftStateMixin as DraftStateMixin
+from wagtail.models.i18n import Locale as Locale
+from wagtail.models.locking import LockableMixin as LockableMixin
+from wagtail.models.pages import Page as Page
+from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
 from wagtail.models.view_restrictions import BaseViewRestriction as BaseViewRestriction
 
 class BaseSidePanel(Component):

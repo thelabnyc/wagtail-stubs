@@ -56,7 +56,7 @@ class BaseStreamBlock[BlockT: Block](Block):
     def construct_from_lookup(
         cls,
         lookup: BlockDefinitionLookup,
-        child_blocks: list[tuple[str, int]] | None = None,
+        child_blocks: list[tuple[str, int]] | None,
         **kwargs: Any,
     ) -> BaseStreamBlock[Any]: ...
     def empty_value(self, raw_text: str | None = None) -> StreamValue[Any]: ...

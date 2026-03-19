@@ -10,8 +10,8 @@ from wagtail.admin.filters import (
 from wagtail.admin.filters import (
     WagtailFilterSet as WagtailFilterSet,
 )
+from wagtail.admin.menu import MenuItem as MenuItem
 from wagtail.admin.search import SearchArea as SearchArea
-from wagtail.admin.ui.menus import MenuItem as MenuItem
 from wagtail.admin.ui.tables import (
     BooleanColumn as BooleanColumn,
 )

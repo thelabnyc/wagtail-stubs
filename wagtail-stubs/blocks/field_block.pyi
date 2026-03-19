@@ -7,7 +7,6 @@ from django import forms
 from django.db.models import Model
 from django.forms.utils import _DataT, _FilesT
 from django.utils.functional import _StrPromise, cached_property
-from django.utils.safestring import SafeString
 from wagtail.rich_text import RichText
 from wagtail.telepath import Adapter
 
@@ -39,7 +38,8 @@ __all__ = [
 type _Validator = Callable[[Any], None]
 
 class FieldBlock(Block):
-    field: forms.Field
+    @property
+    def field(self) -> forms.Field: ...
     def id_for_label(self, prefix: str) -> str | None: ...
     def value_from_form(self, value: Any) -> Any: ...
     def value_for_form(self, value: Any) -> Any: ...
@@ -99,10 +99,10 @@ class FloatBlock(FieldBlock):
     def __init__(
         self,
         required: bool = True,
+        help_text: str | _StrPromise | None = None,
         max_value: float | None = None,
         min_value: float | None = None,
         validators: Sequence[_Validator] = (),
-        *args: Any,
         **kwargs: Any,
     ) -> None: ...
 
@@ -117,7 +117,6 @@ class DecimalBlock(FieldBlock):
         max_digits: int | None = None,
         decimal_places: int | None = None,
         validators: Sequence[_Validator] = (),
-        *args: Any,
         **kwargs: Any,
     ) -> None: ...
     def to_python(self, value: str | float | Decimal | None) -> Decimal | None: ...
@@ -228,11 +227,14 @@ class IntegerBlock(FieldBlock):
 
 type _StrOrPromise = str | _StrPromise
 
+type _ChoiceValue = str | int | float | _StrPromise
+type _ChoiceLabel = _StrOrPromise
+
 type _ChoiceType = (
-    list[tuple[_StrOrPromise, _StrOrPromise]]
-    | list[tuple[_StrOrPromise, list[tuple[_StrOrPromise, _StrOrPromise]]]]
-    | Iterable[tuple[_StrOrPromise, _StrOrPromise | list[tuple[_StrOrPromise, _StrOrPromise]]]]
-    | Callable[[], Iterable[tuple[_StrOrPromise, _StrOrPromise | list[tuple[_StrOrPromise, _StrOrPromise]]]]]
+    list[tuple[_ChoiceValue, _ChoiceLabel]]
+    | list[tuple[_ChoiceLabel, list[tuple[_ChoiceValue, _ChoiceLabel]]]]
+    | Iterable[tuple[_ChoiceValue, _ChoiceLabel | list[tuple[_ChoiceValue, _ChoiceLabel]]]]
+    | Callable[[], Iterable[tuple[_ChoiceValue, _ChoiceLabel | list[tuple[_ChoiceValue, _ChoiceLabel]]]]]
 )
 
 class BaseChoiceBlock(FieldBlock):
@@ -241,7 +243,7 @@ class BaseChoiceBlock(FieldBlock):
     def __init__(
         self,
         choices: _ChoiceType | None = None,
-        default: str | None = None,
+        default: Any = None,
         required: bool = True,
         help_text: str | _StrPromise | None = None,
         search_index: bool = True,
@@ -274,6 +276,7 @@ class RichTextBlock(FieldBlock):
         editor: str = "default",
         features: list[str] | None = None,
         max_length: int | None = None,
+        min_length: int | None = None,
         validators: Sequence[_Validator] = (),
         search_index: bool = True,
         **kwargs: Any,
@@ -299,12 +302,12 @@ class RawHTMLBlock(FieldBlock):
         validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
-    def get_default(self) -> SafeString: ...
-    def to_python(self, value: str) -> SafeString: ...
-    def normalize(self, value: str | SafeString) -> SafeString: ...
-    def get_prep_value(self, value: str | SafeString) -> str: ...
-    def value_for_form(self, value: str | SafeString) -> str: ...
-    def value_from_form(self, value: str) -> SafeString: ...
+    def get_default(self) -> str: ...
+    def to_python(self, value: str) -> str: ...
+    def normalize(self, value: str) -> str: ...
+    def get_prep_value(self, value: str) -> str: ...
+    def value_for_form(self, value: str) -> str: ...
+    def value_from_form(self, value: str) -> str: ...
 
 class ChooserBlock(FieldBlock):
     _required: bool
@@ -317,8 +320,7 @@ class ChooserBlock(FieldBlock):
         validators: Sequence[_Validator] = (),
         **kwargs: Any,
     ) -> None: ...
-    @cached_property
-    def target_model(self) -> type[Model]: ...
+    target_model: type[Model] | str
     @cached_property
     def model_class(self) -> type[Model]: ...
     @cached_property

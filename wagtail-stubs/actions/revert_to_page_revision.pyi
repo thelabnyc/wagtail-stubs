@@ -2,7 +2,8 @@ import datetime
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.exceptions import PermissionDenied
-from wagtail.models import Page, Revision
+from wagtail.models.pages import Page
+from wagtail.models.revisions import Revision
 
 class RevertToPageRevisionError(RuntimeError): ...
 class RevertToPageRevisionPermissionError(PermissionDenied): ...

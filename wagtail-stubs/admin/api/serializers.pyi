@@ -2,7 +2,7 @@ from rest_framework.fields import Field, ReadOnlyField
 from wagtail.api.v2.serializers import PageSerializer as PageSerializer
 from wagtail.api.v2.serializers import get_serializer_class as get_serializer_class
 from wagtail.api.v2.utils import get_full_url as get_full_url
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 
 def get_model_listing_url(context, model): ...
 

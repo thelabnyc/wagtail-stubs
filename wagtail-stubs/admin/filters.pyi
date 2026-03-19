@@ -23,7 +23,7 @@ from wagtail.coreutils import (
 from wagtail.coreutils import (
     get_content_type_label as get_content_type_label,
 )
-from wagtail.models import Locale as Locale
+from wagtail.models.i18n import Locale as Locale
 from wagtail.permission_policies.base import BasePermissionPolicy
 import django_filters
 

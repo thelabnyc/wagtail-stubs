@@ -1,8 +1,8 @@
 from _typeshed import Incomplete
 from django.db import models
 from django.utils.functional import cached_property as cached_property
-from wagtail.models import Page as Page
-from wagtail.models import Site as Site
+from wagtail.models.pages import Page as Page
+from wagtail.models.sites import Site as Site
 
 class Redirect(models.Model):
     old_path: Incomplete
@@ -31,7 +31,7 @@ class Redirect(models.Model):
         automatically_created: bool = False,
     ): ...
     @staticmethod
-    def normalise_path(url: str) -> str: ...
+    def normalise_path(url: str, decode_unicode: bool = True) -> str: ...
     @staticmethod
     def normalise_page_route_path(url): ...
     def clean(self) -> None: ...

@@ -43,35 +43,17 @@ from wagtail.locks import (
 from wagtail.locks import (
     WorkflowLock as WorkflowLock,
 )
-from wagtail.models import (
-    COMMENTS_RELATION_NAME as COMMENTS_RELATION_NAME,
-)
-from wagtail.models import (
-    Comment as Comment,
-)
-from wagtail.models import (
-    CommentReply as CommentReply,
-)
-from wagtail.models import (
-    Locale,
-    Task,
-)
-from wagtail.models import (
-    Page as Page,
-)
-from wagtail.models import (
-    PageSubscription as PageSubscription,
-)
-from wagtail.models import (
-    Revision as Revision,
-)
-from wagtail.models import (
-    WorkflowState as WorkflowState,
-)
-from wagtail.models import (
-    get_default_page_content_type as get_default_page_content_type,
-)
+from wagtail.models.content_types import get_default_page_content_type as get_default_page_content_type
+from wagtail.models.i18n import Locale as Locale
+from wagtail.models.pages import COMMENTS_RELATION_NAME as COMMENTS_RELATION_NAME
+from wagtail.models.pages import Comment as Comment
+from wagtail.models.pages import CommentReply as CommentReply
+from wagtail.models.pages import Page as Page
 from wagtail.models.pages import PagePermissionTester
+from wagtail.models.pages import PageSubscription as PageSubscription
+from wagtail.models.revisions import Revision as Revision
+from wagtail.models.workflows import Task as Task
+from wagtail.models.workflows import WorkflowState as WorkflowState
 from wagtail.utils.timestamps import render_timestamp as render_timestamp
 
 class EditView(WagtailAdminTemplateMixin, HookResponseMixin, View):
