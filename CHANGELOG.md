@@ -1,3 +1,9 @@
+## v7.0.0b3 (2026-03-19)
+
+### Fix
+
+- resolve type errors found during stubs testing
+
 ## v7.0.0b2 (2026-03-19)
 
 ### Fix
