@@ -3,18 +3,10 @@ import types
 
 from django.core.mail import EmailBackend
 from wagtail.coreutils import camelcase_to_underscore as camelcase_to_underscore
-from wagtail.models import (
-    AbstractGroupApprovalTask as AbstractGroupApprovalTask,
-)
-from wagtail.models import (
-    Page as Page,
-)
-from wagtail.models import (
-    TaskState as TaskState,
-)
-from wagtail.models import (
-    WorkflowState as WorkflowState,
-)
+from wagtail.models.pages import Page as Page
+from wagtail.models.workflows import AbstractGroupApprovalTask as AbstractGroupApprovalTask
+from wagtail.models.workflows import TaskState as TaskState
+from wagtail.models.workflows import WorkflowState as WorkflowState
 from wagtail.users.models import UserProfile as UserProfile
 
 logger: logging.Logger

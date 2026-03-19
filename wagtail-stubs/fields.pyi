@@ -36,7 +36,7 @@ class StreamField[StreamBlockT: StreamBlock[Any]](models.Field[StreamValue[Any],
     def __init__(
         self,
         block_types: type[StreamBlockT] | StreamBlockT | Sequence[tuple[str, Block]],
-        use_json_field: bool = True,
+        use_json_field: bool | None = True,
         block_lookup: dict[str, Any] | None = None,
         *,
         min_num: int | None = ...,

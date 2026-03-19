@@ -53,24 +53,12 @@ from wagtail.admin.views.generic.permissions import PermissionCheckedMixin as Pe
 from wagtail.admin.views.pages.listing import PageListingMixin as PageListingMixin
 from wagtail.admin.widgets.button import Button
 from wagtail.coreutils import resolve_model_string as resolve_model_string
-from wagtail.models import (
-    Page as Page,
-)
-from wagtail.models import (
-    Task as Task,
-)
-from wagtail.models import (
-    TaskState as TaskState,
-)
-from wagtail.models import (
-    Workflow as Workflow,
-)
-from wagtail.models import (
-    WorkflowState as WorkflowState,
-)
-from wagtail.models import (
-    WorkflowTask as WorkflowTask,
-)
+from wagtail.models.pages import Page as Page
+from wagtail.models.workflows import Task as Task
+from wagtail.models.workflows import TaskState as TaskState
+from wagtail.models.workflows import Workflow as Workflow
+from wagtail.models.workflows import WorkflowState as WorkflowState
+from wagtail.models.workflows import WorkflowTask as WorkflowTask
 from wagtail.permissions import (
     page_permission_policy as page_permission_policy,
 )

@@ -3,8 +3,8 @@ from typing import Any
 from django.db.models import QuerySet
 from rest_framework.filters import BaseFilterBackend
 from rest_framework.request import Request
-from wagtail.models import Locale as Locale
-from wagtail.models import Page as Page
+from wagtail.models.i18n import Locale as Locale
+from wagtail.models.pages import Page as Page
 from wagtail.search.backends import get_search_backend as get_search_backend
 from wagtail.search.backends.base import FilterFieldError as FilterFieldError
 from wagtail.search.backends.base import OrderByFieldError as OrderByFieldError

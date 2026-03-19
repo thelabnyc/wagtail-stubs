@@ -9,7 +9,8 @@ from django.utils.functional import cached_property
 from django.utils.safestring import SafeString
 from wagtail.admin.forms.formsets import BaseFormSetMixin
 from wagtail.admin.panels.group import ObjectList
-from wagtail.models import Page, Task, Workflow, WorkflowPage
+from wagtail.models.pages import Page, WorkflowPage
+from wagtail.models.workflows import Task, Workflow
 
 class TaskChooserSearchForm(forms.Form):
     q: forms.CharField

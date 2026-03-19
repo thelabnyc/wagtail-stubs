@@ -4,7 +4,7 @@ from django import forms
 from django.core import validators
 from django.db.models import Model, QuerySet
 from django.forms.widgets import TextInput
-from wagtail.models import Collection
+from wagtail.models.media import Collection
 
 _M = TypeVar("_M", bound=Model)
 

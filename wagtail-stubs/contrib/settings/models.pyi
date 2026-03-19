@@ -4,7 +4,7 @@ from django.db import models
 from django.http import HttpRequest
 from django.utils.functional import cached_property
 from wagtail.coreutils import InvokeViaAttributeShortcut
-from wagtail.models import Site
+from wagtail.models.sites import Site
 
 from .registry import register_setting as register_setting
 

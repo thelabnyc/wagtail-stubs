@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.models import AbstractBaseUser
 from wagtail.admin.forms.models import WagtailAdminModelForm
 from wagtail.admin.forms.view_restrictions import BaseViewRestrictionForm
-from wagtail.models import Page, PageSubscription, PageViewRestriction
+from wagtail.models.pages import Page, PageSubscription, PageViewRestriction
 
 class CopyForm(forms.Form):
     page: Page

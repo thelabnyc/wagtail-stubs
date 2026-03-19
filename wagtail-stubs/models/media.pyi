@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models import ForeignKey
 from django.utils.safestring import SafeString
 from treebeard.mp_tree import MP_Node
-from wagtail.query import TreeQuerySet
+from wagtail.models.pages import TreeQuerySet
 from wagtail.search import index
 
 from .view_restrictions import BaseViewRestriction

@@ -14,7 +14,7 @@ from wagtail.admin.views.generic import (
 from wagtail.admin.views.generic import (
     IndexView as IndexView,
 )
-from wagtail.models import Collection as Collection
+from wagtail.models.media import Collection as Collection
 from wagtail.permissions import collection_permission_policy as collection_permission_policy
 
 class Index(IndexView):

@@ -7,7 +7,7 @@ from wagtail.contrib.redirects.utils import (
 from wagtail.contrib.redirects.utils import (
     get_supported_extensions as get_supported_extensions,
 )
-from wagtail.models import Site as Site
+from wagtail.models.sites import Site as Site
 
 class Command(BaseCommand):
     help: str

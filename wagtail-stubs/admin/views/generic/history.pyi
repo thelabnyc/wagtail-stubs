@@ -8,7 +8,9 @@ from wagtail.admin.ui.tables import Column, UserColumn
 from wagtail.admin.views.generic.base import BaseListingView, BaseObjectMixin, WagtailAdminTemplateMixin
 from wagtail.admin.views.generic.permissions import PermissionCheckedMixin
 from wagtail.admin.widgets.button import HeaderButton
-from wagtail.models import BaseLogEntry, Revision, Task, TaskState, WorkflowState
+from wagtail.models.audit_log import BaseLogEntry
+from wagtail.models.revisions import Revision
+from wagtail.models.workflows import Task, TaskState, WorkflowState
 import django_filters
 
 def get_actions_for_filter(queryset: models.QuerySet[BaseLogEntry]) -> list[tuple[str, str]]: ...

@@ -45,7 +45,7 @@ from wagtail.contrib.redirects.utils import (
     write_to_file_storage as write_to_file_storage,
 )
 from wagtail.log_actions import log as log
-from wagtail.models import Site as Site
+from wagtail.models.sites import Site as Site
 
 permission_checker: Incomplete
 

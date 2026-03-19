@@ -9,7 +9,7 @@ from wagtail.admin.ui.components import Component as Component
 from wagtail.admin.widgets.button import Button
 from wagtail.coreutils import get_locales_display_names as get_locales_display_names
 from wagtail.coreutils import multigetattr as multigetattr
-from wagtail.models import Locale as Locale
+from wagtail.models.i18n import Locale as Locale
 
 class BaseColumn(metaclass=MediaDefiningClass):
     class Header:

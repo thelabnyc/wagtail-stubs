@@ -15,7 +15,7 @@ from wagtail.admin.views.generic.models import (
 from wagtail.admin.views.generic.preview import PreviewRevision as PreviewRevision
 from wagtail.admin.views.pages.edit import EditView as EditView
 from wagtail.admin.views.pages.utils import GenericPageBreadcrumbsMixin as GenericPageBreadcrumbsMixin
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 from wagtail.utils.timestamps import render_timestamp as render_timestamp
 
 def revisions_index(request, page_id): ...

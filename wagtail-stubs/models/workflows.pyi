@@ -10,12 +10,12 @@ from django.db import models
 from django.utils.functional import _StrPromise, cached_property
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-from wagtail.forms import TaskStateCommentForm
 from wagtail.locks import BaseLock
 from wagtail.models.orderable import Orderable
+from wagtail.models.pages import PageQuerySet
 from wagtail.models.revisions import Revision
-from wagtail.models.specific import SpecificMixin
-from wagtail.query import PageQuerySet, SpecificQuerySetMixin
+from wagtail.models.specific import SpecificMixin, SpecificQuerySetMixin
+import wagtail.forms
 
 # ---------------------------------------------------------------------------
 # WorkflowContentType
@@ -175,7 +175,7 @@ class Task(SpecificMixin, models.Model):
     def user_can_lock(self, obj: models.Model, user: AbstractBaseUser) -> bool: ...
     def user_can_unlock(self, obj: models.Model, user: AbstractBaseUser) -> bool: ...
     def get_actions(self, obj: models.Model, user: AbstractBaseUser) -> list[tuple[str, _StrPromise, bool]]: ...
-    def get_form_for_action(self, action: str) -> type[TaskStateCommentForm]: ...
+    def get_form_for_action(self, action: str) -> type[wagtail.forms.TaskStateCommentForm]: ...
     def get_template_for_action(self, action: str) -> str: ...
     def get_task_states_user_can_moderate(
         self, user: AbstractBaseUser, **kwargs: Any

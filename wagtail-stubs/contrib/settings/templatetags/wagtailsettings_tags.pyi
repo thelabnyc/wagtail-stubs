@@ -1,7 +1,7 @@
 from _typeshed import Incomplete
 from django.template import Node
 from wagtail.contrib.settings.context_processors import SettingProxy as SettingProxy
-from wagtail.models import Site as Site
+from wagtail.models.sites import Site as Site
 
 register: Incomplete
 

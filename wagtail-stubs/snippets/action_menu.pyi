@@ -4,15 +4,9 @@ from django.http import HttpRequest
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.ui.components import Component as Component
-from wagtail.models import (
-    DraftStateMixin as DraftStateMixin,
-)
-from wagtail.models import (
-    LockableMixin as LockableMixin,
-)
-from wagtail.models import (
-    WorkflowMixin as WorkflowMixin,
-)
+from wagtail.models.draft_state import DraftStateMixin as DraftStateMixin
+from wagtail.models.locking import LockableMixin as LockableMixin
+from wagtail.models.workflows import WorkflowMixin as WorkflowMixin
 from wagtail.snippets.permissions import get_permission_name as get_permission_name
 
 class ActionMenuItem(Component):
