@@ -1,3 +1,15 @@
+## v7.1.0b0 (2026-03-19)
+
+### Fix
+
+- adapt stubs for wagtail 7.1 differences
+- improve type accuracy across multiple stub modules
+- sendmail stubs
+- resolve type errors found during stubs testing
+- use TypeAlias instead of PEP 695 type statement for _FilterValue
+- make BasePageManager generic
+- stub signature mismatches and reduce stubtest allowlist
+
 ## v7.1.0a7 (2026-03-16)
 
 ### Fix
