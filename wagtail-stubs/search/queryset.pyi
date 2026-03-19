@@ -8,6 +8,7 @@ class SearchableQuerySetMixin:
         fields: list[str] | None = None,
         operator: str | None = None,
         order_by_relevance: bool = True,
+        order_by: str | None = None,
         backend: str = "default",
     ) -> BaseSearchResults: ...
     def autocomplete(
@@ -16,5 +17,6 @@ class SearchableQuerySetMixin:
         fields: list[str] | None = None,
         operator: str | None = None,
         order_by_relevance: bool = True,
+        order_by: str | None = None,
         backend: str = "default",
     ) -> BaseSearchResults: ...
