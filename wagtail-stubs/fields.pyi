@@ -2,6 +2,7 @@ from collections.abc import Generator, Sequence
 from typing import Any
 
 from django.core import checks
+from django.core.validators import BaseValidator
 from django.db import models
 from django.db.backends.base.base import BaseDatabaseWrapper
 from django.db.models import Field
@@ -11,6 +12,12 @@ from django.forms import Field as FormField
 from django.utils.functional import cached_property
 from wagtail.blocks import Block, BlockField, StreamBlock, StreamValue
 from wagtail.blocks.base import BoundBlock
+
+class NoFutureDateValidator(BaseValidator):
+    message: str
+    code: str
+    def __init__(self, message: str | None = None) -> None: ...
+    def __call__(self, value: Any) -> None: ...
 
 class RichTextField(models.TextField):
     editor: str

@@ -5,7 +5,7 @@ wagtail\.tests(\..*)?
 
 # Django migrations don't need stubs
 wagtail\..*\.migrations(\..*)?
-wagtail\.migrations\.0059_apply_collection_ordering(\..*)?
+wagtail\.migrations(\..*)?
 
 # Modules with known stubtest mismatches
 wagtail\.admin\.action_menu(\..*)?
@@ -32,7 +32,6 @@ wagtail\.admin\.signal_handlers(\..*)?
 wagtail\.admin\.site_summary(\..*)?
 wagtail\.admin\.templatetags\.wagtailadmin_tags(\..*)?
 wagtail\.admin\.templatetags\.wagtailuserbar(\..*)?
-wagtail\.admin\.ui\.autosave(\..*)?
 wagtail\.admin\.ui\.side_panels(\..*)?
 wagtail\.admin\.ui\.sidebar(\..*)?
 wagtail\.admin\.ui\.tables(\..*)?
@@ -87,7 +86,6 @@ wagtail\.api\.v2\.serializers(\..*)?
 wagtail\.api\.v2\.utils(\..*)?
 wagtail\.api\.v2\.views(\..*)?
 wagtail\.blocks(\..*)?
-wagtail\.checks(\..*)?
 wagtail\.compat(\..*)?
 wagtail\.contrib\.forms\.models(\..*)?
 wagtail\.contrib\.forms\.panels(\..*)?
