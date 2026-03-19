@@ -1,3 +1,4 @@
+from typing import Any
 import logging
 import types
 
@@ -19,7 +20,9 @@ class OpenedConnection:
         self, type: type[BaseException] | None, value: BaseException | None, traceback: types.TracebackType | None
     ): ...
 
-def send_mail(subject, message, recipient_list, from_email=None, **kwargs): ...
+def send_mail(
+    subject: str, message: str, recipient_list: list[str], from_email: str | None = None, **kwargs: Any
+) -> None: ...
 def send_notification(recipient_users, notification, extra_context): ...
 
 class Notifier:
