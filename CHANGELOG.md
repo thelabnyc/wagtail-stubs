@@ -1,3 +1,9 @@
+## v7.3.0b1 (2026-03-19)
+
+### Fix
+
+- typing tweaks from integration testing
+
 ## v7.3.0b0 (2026-03-19)
 
 ### Fix
