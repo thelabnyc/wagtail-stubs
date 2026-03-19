@@ -3,7 +3,7 @@ from jinja2.ext import Extension
 from wagtail.contrib.settings.models import BaseGenericSetting as BaseGenericSetting
 from wagtail.contrib.settings.models import BaseSiteSetting as BaseSiteSetting
 from wagtail.contrib.settings.registry import registry as registry
-from wagtail.models import Site as Site
+from wagtail.models.sites import Site as Site
 import jinja2
 
 settings_cache: Incomplete

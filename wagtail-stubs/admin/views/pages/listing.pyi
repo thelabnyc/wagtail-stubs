@@ -44,21 +44,11 @@ from wagtail.admin.ui.tables.pages import (
     ParentPageColumn as ParentPageColumn,
 )
 from wagtail.admin.views import generic as generic
-from wagtail.models import (
-    Locale,
-)
-from wagtail.models import (
-    Page as Page,
-)
-from wagtail.models import (
-    PageLogEntry as PageLogEntry,
-)
-from wagtail.models import (
-    Site as Site,
-)
-from wagtail.models import (
-    get_page_content_types as get_page_content_types,
-)
+from wagtail.models.i18n import Locale as Locale
+from wagtail.models.pages import Page as Page
+from wagtail.models.pages import PageLogEntry as PageLogEntry
+from wagtail.models.pages import get_page_content_types as get_page_content_types
+from wagtail.models.sites import Site as Site
 from wagtail.permissions import page_permission_policy as page_permission_policy
 
 class SiteFilter(ModelMultipleChoiceFilter):

@@ -36,8 +36,8 @@ from wagtail.images.models import Filter as Filter
 from wagtail.images.models import SourceImageIOError as SourceImageIOError
 from wagtail.images.permissions import permission_policy as permission_policy
 from wagtail.images.utils import generate_signature as generate_signature
-from wagtail.models import ReferenceIndex as ReferenceIndex
-from wagtail.models import Site as Site
+from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
+from wagtail.models.sites import Site as Site
 
 permission_checker: PermissionPolicyChecker
 Image: type[models.Model]

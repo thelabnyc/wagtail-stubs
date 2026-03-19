@@ -2,7 +2,7 @@ from wagtail import hooks as hooks
 from wagtail.actions.unpublish_page import UnpublishPageAction as UnpublishPageAction
 from wagtail.admin.utils import get_valid_next_url_from_request as get_valid_next_url_from_request
 from wagtail.admin.views.generic.models import UnpublishView as UnpublishView
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 
 class Unpublish(UnpublishView):
     model = Page

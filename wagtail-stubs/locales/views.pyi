@@ -8,7 +8,7 @@ from wagtail.admin.ui.tables import TitleColumn as TitleColumn
 from wagtail.admin.views import generic as generic
 from wagtail.admin.viewsets.model import ModelViewSet as ModelViewSet
 from wagtail.coreutils import get_content_languages as get_content_languages
-from wagtail.models import Locale as Locale
+from wagtail.models.i18n import Locale as Locale
 from wagtail.permissions import locale_permission_policy as locale_permission_policy
 
 from .forms import LocaleForm as LocaleForm

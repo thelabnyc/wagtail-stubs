@@ -1,6 +1,6 @@
 from django import forms
 from wagtail.admin.widgets import AdminPageChooser as AdminPageChooser
-from wagtail.models import Site as Site
+from wagtail.models.sites import Site as Site
 
 class SiteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs) -> None: ...

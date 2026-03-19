@@ -1,7 +1,7 @@
 from collections.abc import Generator
 
 from django.contrib.auth.models import AbstractBaseUser
-from wagtail.models import Task, WorkflowState
+from wagtail.models.workflows import Task, WorkflowState
 
 TASK_TYPES: list[type[Task]]
 

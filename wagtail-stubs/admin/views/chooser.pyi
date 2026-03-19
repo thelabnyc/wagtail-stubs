@@ -26,9 +26,9 @@ from wagtail.admin.ui.tables import Column as Column
 from wagtail.admin.ui.tables import DateColumn as DateColumn
 from wagtail.admin.ui.tables import Table as Table
 from wagtail.coreutils import resolve_model_string as resolve_model_string
-from wagtail.models import Locale as Locale
-from wagtail.models import Page as Page
-from wagtail.models import Site as Site
+from wagtail.models.i18n import Locale as Locale
+from wagtail.models.pages import Page as Page
+from wagtail.models.sites import Site as Site
 
 def shared_context(request: HttpRequest, extra_context: dict[str, Any] | None = None) -> dict[str, Any]: ...
 def page_models_from_string(string: str) -> tuple[type[Page], ...]: ...

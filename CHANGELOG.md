@@ -150,6 +150,42 @@
 - add StructBlock.Meta.collapsed option
 - add init_new_page signal to wagtail.signals
 
+## v7.0.0b5 (2026-03-19)
+
+### Fix
+
+- improve type accuracy across multiple stub modules
+
+## v7.0.0b4 (2026-03-19)
+
+### Fix
+
+- sendmail stubs
+
+## v7.0.0b3 (2026-03-19)
+
+### Fix
+
+- resolve type errors found during stubs testing
+
+## v7.0.0b2 (2026-03-19)
+
+### Fix
+
+- use TypeAlias instead of PEP 695 type statement for _FilterValue
+
+## v7.0.0b1 (2026-03-18)
+
+### Fix
+
+- make BasePageManager generic
+
+## v7.0.0b0 (2026-03-18)
+
+### Fix
+
+- stub signature mismatches and reduce stubtest allowlist
+
 ## v7.0.0a10 (2026-03-16)
 
 ### Fix

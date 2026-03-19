@@ -4,6 +4,7 @@ import functools
 from django.db import models
 from django.forms import Form
 from django.http import HttpRequest
+from django.utils.functional import _StrOrPromise
 from django.utils.safestring import SafeString
 from wagtail.admin.compare import ChildRelationComparison, FieldComparison
 from wagtail.admin.forms.models import WagtailAdminModelForm
@@ -27,9 +28,9 @@ class Panel:
 
     def __init__(
         self,
-        heading: str = "",
+        heading: _StrOrPromise = "",
         classname: str = "",
-        help_text: str = "",
+        help_text: _StrOrPromise = "",
         base_form_class: type[Form] | None = None,
         icon: str = "",
         attrs: dict[str, str] | None = None,

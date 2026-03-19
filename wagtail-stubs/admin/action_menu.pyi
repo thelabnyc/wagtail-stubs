@@ -5,7 +5,7 @@ from django.http import HttpRequest
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.ui.components import Component as Component
-from wagtail.models import PagePermissionTester
+from wagtail.models.pages import PagePermissionTester
 
 class ActionMenuItem(Component):
     order: int

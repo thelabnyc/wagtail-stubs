@@ -1,6 +1,6 @@
 from rest_framework.authentication import SessionAuthentication
 from wagtail.api.v2.views import PagesAPIViewSet as PagesAPIViewSet
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 
 from .actions.convert_alias import ConvertAliasPageAPIAction as ConvertAliasPageAPIAction
 from .actions.copy import CopyPageAPIAction as CopyPageAPIAction

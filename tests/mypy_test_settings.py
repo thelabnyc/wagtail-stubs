@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     "wagtail.sites",
     "wagtail.contrib.settings",
     "wagtail.contrib.forms",
+    "wagtail.contrib.redirects",
     "wagtail.contrib.routable_page",
     "taggit",
     "rest_framework",

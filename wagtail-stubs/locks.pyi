@@ -2,7 +2,7 @@ from typing import Any
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.db.models import Model
-from wagtail.models.workflows import Task
+import wagtail.models.workflows
 
 class BaseLock:
     object: Model
@@ -25,8 +25,8 @@ class BasicLock(BaseLock):
     def get_description(self, user: AbstractBaseUser) -> str: ...
 
 class WorkflowLock(BaseLock):
-    task: Task
-    def __init__(self, object: Model, task: Task) -> None: ...
+    task: wagtail.models.workflows.Task
+    def __init__(self, object: Model, task: wagtail.models.workflows.Task) -> None: ...
     def for_user(self, user: AbstractBaseUser) -> bool: ...
     def get_message(self, user: AbstractBaseUser) -> str | None: ...
     def get_icon(self, user: AbstractBaseUser, can_lock: bool = False) -> str: ...

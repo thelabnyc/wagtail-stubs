@@ -22,7 +22,7 @@ from wagtail.admin.views.generic.chooser import (
     CreationFormMixin as CreationFormMixin,
 )
 from wagtail.admin.viewsets.chooser import ChooserViewSet as ChooserViewSet
-from wagtail.models import DraftStateMixin as DraftStateMixin
+from wagtail.models.draft_state import DraftStateMixin as DraftStateMixin
 from wagtail.snippets.widgets import AdminSnippetChooser as AdminSnippetChooser
 
 class BaseSnippetChooseView(BaseChooseView):

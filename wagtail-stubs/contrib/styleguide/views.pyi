@@ -28,7 +28,7 @@ from wagtail.admin.widgets import (
 from wagtail.compat import URLField as URLField
 from wagtail.documents.widgets import AdminDocumentChooser as AdminDocumentChooser
 from wagtail.images.widgets import AdminImageChooser as AdminImageChooser
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 from wagtail.snippets.widgets import AdminSnippetChooser as AdminSnippetChooser
 
 class FakeAdminSnippetChooser(AdminSnippetChooser):

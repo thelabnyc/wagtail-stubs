@@ -1,4 +1,4 @@
-from wagtail.models import ReferenceIndex as ReferenceIndex
+from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
 
 class ReferenceIndexMixin:
     object_references: dict
