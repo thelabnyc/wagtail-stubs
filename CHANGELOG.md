@@ -1,3 +1,9 @@
+## v7.0.0b5 (2026-03-19)
+
+### Fix
+
+- improve type accuracy across multiple stub modules
+
 ## v7.0.0b4 (2026-03-19)
 
 ### Fix
