@@ -7,7 +7,7 @@ from wagtail import hooks as hooks
 from wagtail.actions.move_page import MovePageAction as MovePageAction
 from wagtail.admin import messages as messages
 from wagtail.admin.forms.pages import MoveForm as MoveForm
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 from wagtail.models.pages import PagePermissionTester
 
 class MoveChooseDestination(TemplateView, FormMixin):

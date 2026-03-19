@@ -7,9 +7,9 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from wagtail.api import APIField as APIField
-from wagtail.models import Page as Page
-from wagtail.models import PageViewRestriction as PageViewRestriction
-from wagtail.models import Site as Site
+from wagtail.models.pages import Page as Page
+from wagtail.models.pages import PageViewRestriction as PageViewRestriction
+from wagtail.models.sites import Site as Site
 
 from .filters import (
     AncestorOfFilter as AncestorOfFilter,

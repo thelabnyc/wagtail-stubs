@@ -1,5 +1,5 @@
 from wagtail.admin.views.generic.preview import PreviewOnEdit as GenericPreviewOnEdit
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 
 def view_draft(request, page_id): ...
 

@@ -10,6 +10,6 @@ from wagtail.admin.auth import (
 )
 from wagtail.admin.forms.pages import CopyForm as CopyForm
 from wagtail.admin.utils import get_valid_next_url_from_request as get_valid_next_url_from_request
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 
 def copy(request, page_id): ...

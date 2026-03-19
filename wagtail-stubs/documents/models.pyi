@@ -7,9 +7,9 @@ from django.core.files.base import File
 from django.db import models
 from django.dispatch import Signal
 from taggit.managers import TaggableManager
-from wagtail.models import CollectionMember as CollectionMember
-from wagtail.models import ReferenceIndex as ReferenceIndex
+from wagtail.models.media import CollectionMember as CollectionMember
 from wagtail.models.reference_index import ReferenceGroups
+from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
 from wagtail.search import index as index
 from wagtail.search.queryset import SearchableQuerySetMixin as SearchableQuerySetMixin
 from wagtail.utils.file import hash_filelike as hash_filelike
@@ -17,6 +17,7 @@ from wagtail.utils.file import hash_filelike as hash_filelike
 class DocumentQuerySet(SearchableQuerySetMixin, models.QuerySet): ...
 
 class AbstractDocument(CollectionMember, index.Indexed, models.Model):
+    id: int
     title: models.CharField[str, str]
     file: models.FileField[str, str]
     created_at: models.DateTimeField[datetime, datetime]

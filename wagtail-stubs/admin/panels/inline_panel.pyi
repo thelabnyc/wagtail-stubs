@@ -4,7 +4,7 @@ import functools
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.forms import BaseForm
 from django.forms.formsets import BaseFormSet
-from django.utils.functional import cached_property
+from django.utils.functional import _StrOrPromise, cached_property
 from wagtail.admin.compare import ChildRelationComparison
 
 from .base import Panel
@@ -21,8 +21,8 @@ class InlinePanel(Panel):
         self,
         relation_name: str,
         panels: list[Panel] | None = None,
-        heading: str = "",
-        label: str = "",
+        heading: _StrOrPromise = "",
+        label: _StrOrPromise = "",
         min_num: int | None = None,
         max_num: int | None = None,
         *args: Any,

@@ -1,7 +1,7 @@
 from _typeshed import Incomplete
 from django import forms
-from wagtail.models import Locale as Locale
-from wagtail.models import Page as Page
+from wagtail.models.i18n import Locale as Locale
+from wagtail.models.pages import Page as Page
 
 class CheckboxSelectMultipleWithDisabledOptions(forms.CheckboxSelectMultiple):
     option_template_name: str

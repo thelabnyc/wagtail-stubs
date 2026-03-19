@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.checks import check_panels_in_model as check_panels_in_model
+from wagtail.admin.menu import MenuItem as MenuItem
 from wagtail.admin.panels import (
     ObjectList as ObjectList,
 )
@@ -11,7 +12,6 @@ from wagtail.admin.panels import (
     extract_panel_definitions_from_model_class as extract_panel_definitions_from_model_class,
 )
 from wagtail.admin.ui.components import MediaContainer as MediaContainer
-from wagtail.admin.ui.menus import MenuItem as MenuItem
 from wagtail.admin.ui.side_panels import ChecksSidePanel as ChecksSidePanel
 from wagtail.admin.ui.side_panels import PreviewSidePanel as PreviewSidePanel
 from wagtail.admin.ui.tables import (
@@ -49,21 +49,11 @@ from wagtail.admin.widgets.button import (
 from wagtail.admin.widgets.button import (
     ButtonWithDropdown as ButtonWithDropdown,
 )
-from wagtail.models import (
-    DraftStateMixin as DraftStateMixin,
-)
-from wagtail.models import (
-    LockableMixin as LockableMixin,
-)
-from wagtail.models import (
-    PreviewableMixin as PreviewableMixin,
-)
-from wagtail.models import (
-    RevisionMixin as RevisionMixin,
-)
-from wagtail.models import (
-    WorkflowMixin as WorkflowMixin,
-)
+from wagtail.models.draft_state import DraftStateMixin as DraftStateMixin
+from wagtail.models.locking import LockableMixin as LockableMixin
+from wagtail.models.preview import PreviewableMixin as PreviewableMixin
+from wagtail.models.revisions import RevisionMixin as RevisionMixin
+from wagtail.models.workflows import WorkflowMixin as WorkflowMixin
 from wagtail.permissions import ModelPermissionPolicy as ModelPermissionPolicy
 from wagtail.snippets.action_menu import SnippetActionMenu as SnippetActionMenu
 from wagtail.snippets.models import (

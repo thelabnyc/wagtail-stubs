@@ -16,7 +16,7 @@ from wagtail.images.fields import WagtailImageField as WagtailImageField
 from wagtail.images.formats import get_image_formats as get_image_formats
 from wagtail.images.models import Image as Image
 from wagtail.images.permissions import permission_policy as images_permission_policy
-from wagtail.models import Collection as Collection
+from wagtail.models.media import Collection as Collection
 
 def formfield_for_dbfield(db_field, **kwargs): ...
 

@@ -8,7 +8,9 @@ from wagtail.admin.panels import Panel
 from wagtail.admin.ui.editing_sessions import EditingSessionsModule
 from wagtail.admin.ui.tables import Column
 from wagtail.locks import BaseLock
-from wagtail.models import Locale, Revision, Task, Workflow, WorkflowState
+from wagtail.models.i18n import Locale
+from wagtail.models.revisions import Revision
+from wagtail.models.workflows import Task, Workflow, WorkflowState
 
 class HookResponseMixin:
     def run_hook(self, hook_name: str, *args: Any, **kwargs: Any) -> HttpResponse | None: ...

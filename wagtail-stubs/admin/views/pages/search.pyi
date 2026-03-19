@@ -9,7 +9,7 @@ from wagtail.admin.ui.tables.pages import NavigateToChildrenColumn as NavigateTo
 from wagtail.admin.views.generic.base import BaseListingView as BaseListingView
 from wagtail.admin.views.generic.permissions import PermissionCheckedMixin as PermissionCheckedMixin
 from wagtail.admin.views.pages.listing import PageListingMixin as PageListingMixin
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 from wagtail.permissions import page_permission_policy as page_permission_policy
 from wagtail.search.query import MATCH_ALL as MATCH_ALL
 from wagtail.search.utils import parse_query_string as parse_query_string

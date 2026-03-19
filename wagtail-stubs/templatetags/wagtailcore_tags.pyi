@@ -3,7 +3,8 @@ from django.template.base import FilterExpression, Parser, Token
 from django.template.context import Context
 from django.utils.functional import Promise
 from django.utils.safestring import SafeString
-from wagtail.models import Page, Site
+from wagtail.models.pages import Page
+from wagtail.models.sites import Site
 from wagtail.rich_text import RichText
 
 register: template.Library

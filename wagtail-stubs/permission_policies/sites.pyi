@@ -1,0 +1,33 @@
+from collections.abc import Iterable
+
+from django.contrib.auth.models import AbstractBaseUser
+from django.db.models import Model, QuerySet
+from wagtail.models.sites import Site
+from wagtail.permission_policies.base import BaseDjangoAuthPermissionPolicy
+
+class SitePermissionPolicy(BaseDjangoAuthPermissionPolicy):
+    permission_cache_name: str
+    site_field_name: str
+    site_fk_field_name: str
+
+    def __init__(
+        self,
+        model: type[Model] | str,
+        auth_model: type[Model] | str | None = None,
+        site_field_name: str = "site",
+    ) -> None: ...
+    def user_has_permission(self, user: AbstractBaseUser, action: str) -> bool: ...
+    def user_has_any_permission(self, user: AbstractBaseUser, actions: Iterable[str]) -> bool: ...
+    def users_with_any_permission(self, actions: Iterable[str]) -> QuerySet[AbstractBaseUser]: ...
+    def user_has_any_permission_for_instance(
+        self, user: AbstractBaseUser, actions: Iterable[str], instance: Model
+    ) -> bool: ...
+    def user_has_permission_for_instance(self, user: AbstractBaseUser, action: str, instance: Model) -> bool: ...
+    def sites_user_has_any_permission_for(self, user: AbstractBaseUser, actions: Iterable[str]) -> QuerySet[Site]: ...
+    def sites_user_has_permission_for(self, user: AbstractBaseUser, action: str) -> QuerySet[Site]: ...
+    def instances_user_has_any_permission_for(
+        self, user: AbstractBaseUser, actions: Iterable[str]
+    ) -> QuerySet[Model]: ...
+    def users_with_any_permission_for_instance(
+        self, actions: Iterable[str], instance: Model
+    ) -> QuerySet[AbstractBaseUser]: ...

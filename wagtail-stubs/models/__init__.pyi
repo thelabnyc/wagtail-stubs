@@ -2,7 +2,6 @@ from django.contrib.contenttypes.models import ContentType as ContentType
 from modelcluster.fields import ParentalKey as ParentalKey
 from modelcluster.models import ClusterableModel as ClusterableModel
 from treebeard.mp_tree import MP_Node as MP_Node
-from wagtail.query import PageQuerySet as PageQuerySet
 
 from .audit_log import (
     BaseLogEntry as BaseLogEntry,
@@ -119,12 +118,11 @@ from .pages import (
 from .pages import (
     PageLogEntryQuerySet as PageLogEntryQuerySet,
 )
-from .pages import (
-    PageManager as PageManager,
-)
+from .pages import PageManager as PageManager
 from .pages import (
     PagePermissionTester as PagePermissionTester,
 )
+from .pages import PageQuerySet as PageQuerySet
 from .pages import (
     PageSubscription as PageSubscription,
 )

@@ -7,7 +7,7 @@ from wagtail.actions.unpublish import (
 from wagtail.actions.unpublish import (
     UnpublishPermissionError as UnpublishPermissionError,
 )
-from wagtail.models import Page
+from wagtail.models.pages import Page
 
 logger: logging.Logger
 

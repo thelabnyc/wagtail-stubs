@@ -2,7 +2,7 @@ from collections.abc import Iterable
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.db.models import Model, QuerySet
-from wagtail.models import Collection, GroupCollectionPermission
+from wagtail.models.media import Collection, GroupCollectionPermission
 from wagtail.permission_policies.base import BaseDjangoAuthPermissionPolicy
 
 class CollectionPermissionLookupMixin:

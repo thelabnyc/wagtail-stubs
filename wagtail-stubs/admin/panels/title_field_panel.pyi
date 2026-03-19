@@ -7,7 +7,7 @@ from .field_panel import FieldPanel
 class TitleFieldPanel(FieldPanel):
     apply_if_live: bool
     placeholder: bool | str
-    targets: list[str]
+    targets: list[str] | None
 
     def __init__(
         self,
@@ -15,7 +15,7 @@ class TitleFieldPanel(FieldPanel):
         apply_if_live: bool = False,
         classname: str = "title",
         placeholder: bool | str = True,
-        targets: list[str] = ...,
+        targets: list[str] | None = None,
         **kwargs: str | type[forms.Form] | dict[str, str] | None,
     ) -> None: ...
     def clone_kwargs(self) -> dict[str, str | bool | list[str] | type[forms.Widget] | forms.Widget | None]: ...

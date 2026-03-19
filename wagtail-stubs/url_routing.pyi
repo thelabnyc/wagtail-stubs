@@ -1,6 +1,6 @@
 from typing import Any
 
-from wagtail.models import Page
+from wagtail.models.pages import Page
 
 class RouteResult:
     page: Page

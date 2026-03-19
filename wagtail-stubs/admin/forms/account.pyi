@@ -46,3 +46,4 @@ class ThemePreferencesForm(forms.ModelForm[UserProfile]):
     class Meta:
         model: type[UserProfile]
         fields: list[str]
+        widgets: dict[str, Any]

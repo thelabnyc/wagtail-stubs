@@ -5,7 +5,7 @@ from django import forms
 from django.db import models
 from django.http import HttpResponseBase
 from django.urls import URLPattern
-from django.utils.functional import cached_property
+from django.utils.functional import _StrOrPromise, cached_property
 from wagtail.admin.views.generic import chooser as chooser_views
 from wagtail.admin.viewsets.base import ViewSet
 from wagtail.admin.widgets.chooser import BaseChooser, BaseChooserAdapter
@@ -15,15 +15,15 @@ from wagtail.permission_policies import BasePermissionPolicy
 class ChooserViewSet(ViewSet):
     model: type[models.Model] | str | None
     icon: str
-    choose_one_text: str
-    page_title: str | None
-    choose_another_text: str
-    edit_item_text: str
+    choose_one_text: _StrOrPromise
+    page_title: _StrOrPromise | None
+    choose_another_text: _StrOrPromise
+    edit_item_text: _StrOrPromise
     per_page: int
     preserve_url_parameters: list[str]
     url_filter_parameters: list[str]
-    choose_view_class: type[chooser_views.ChooseView]
-    choose_results_view_class: type[chooser_views.ChooseResultsView]
+    choose_view_class: type[chooser_views.BaseChooseView]
+    choose_results_view_class: type[chooser_views.BaseChooseView]
     chosen_view_class: type[chooser_views.ChosenView]
     chosen_multiple_view_class: type[chooser_views.ChosenMultipleView]
     create_view_class: type[chooser_views.CreateView]
@@ -34,10 +34,10 @@ class ChooserViewSet(ViewSet):
     creation_form_class: type[forms.BaseForm] | None
     form_fields: list[str] | None
     exclude_form_fields: list[str] | None
-    search_tab_label: str
-    create_action_label: str
-    create_action_clicked_label: str | None
-    creation_tab_label: str | None
+    search_tab_label: _StrOrPromise
+    create_action_label: _StrOrPromise
+    create_action_clicked_label: _StrOrPromise | None
+    creation_tab_label: _StrOrPromise | None
     permission_policy: BasePermissionPolicy | None
     def __init__(self, name: str | None = None, **kwargs: Any) -> None: ...
     def get_common_view_kwargs(self, **kwargs: Any) -> dict[str, Any]: ...

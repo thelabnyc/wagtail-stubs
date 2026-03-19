@@ -8,7 +8,7 @@ from wagtail.admin.ui.tables import Column
 from wagtail.admin.views.pages.choose_parent import ChooseParentView
 from wagtail.admin.views.pages.listing import IndexView
 from wagtail.admin.viewsets.base import ViewSet
-from wagtail.models import Page
+from wagtail.models.pages import Page
 
 class PageListingViewSet(ViewSet):
     index_view_class: type[IndexView]

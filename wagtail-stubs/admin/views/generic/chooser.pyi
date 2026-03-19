@@ -5,7 +5,7 @@ from django.core.paginator import Page
 from django.db import models
 from django.forms import Form
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.utils.functional import cached_property
+from django.utils.functional import _StrOrPromise, cached_property
 from django.views.generic.base import ContextMixin, View
 from wagtail.admin.forms.choosers import BaseFilterForm
 from wagtail.admin.paginator import WagtailPaginator
@@ -14,8 +14,8 @@ from wagtail.permission_policies import BasePermissionPolicy
 
 class ModalPageFurnitureMixin(ContextMixin):
     icon: str | None
-    page_title: str | None
-    page_subtitle: str | None
+    page_title: _StrOrPromise | None
+    page_subtitle: _StrOrPromise | None
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
 
 class ModelLookupMixin:
@@ -45,7 +45,7 @@ class BaseChooseView(
     chosen_multiple_url_name: str | None
     results_url_name: str | None
     icon: str
-    page_title: str
+    page_title: _StrOrPromise
     filter_form_class: type[Form] | None
     template_name: str
     results_template_name: str
@@ -84,8 +84,8 @@ class CreationFormMixin(ModelLookupMixin, PreserveURLParametersMixin):
     exclude_form_fields: list[str] | None
     creation_form_template_name: str
     creation_tab_id: str
-    create_action_label: str
-    create_action_clicked_label: str | None
+    create_action_label: _StrOrPromise
+    create_action_clicked_label: _StrOrPromise | None
     create_url_name: str | None
     permission_policy: BasePermissionPolicy | None
     def get_permission_policy(self) -> BasePermissionPolicy: ...
@@ -97,8 +97,8 @@ class CreationFormMixin(ModelLookupMixin, PreserveURLParametersMixin):
     def get_creation_form_context_data(self, form: Form) -> dict[str, Any]: ...
 
 class ChooseViewMixin:
-    search_tab_label: str
-    creation_tab_label: str | None
+    search_tab_label: _StrOrPromise
+    creation_tab_label: _StrOrPromise | None
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
     def get_response_json_data(self) -> dict[str, Any]: ...
     def render_to_response(self) -> JsonResponse: ...

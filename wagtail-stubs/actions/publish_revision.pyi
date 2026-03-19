@@ -3,7 +3,7 @@ import logging
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.exceptions import PermissionDenied
 from django.db import models
-from wagtail.models import Revision
+from wagtail.models.revisions import Revision
 from wagtail.permission_policies.base import ModelPermissionPolicy
 
 logger: logging.Logger

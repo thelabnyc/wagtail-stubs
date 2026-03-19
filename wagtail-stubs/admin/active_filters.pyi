@@ -1,6 +1,6 @@
 from collections.abc import Generator
 from datetime import date
-from typing import NamedTuple
+from typing import NamedTuple, TypeAlias
 
 from django.db import models
 from django.db.models import QuerySet
@@ -10,7 +10,10 @@ from wagtail.utils.registry import ObjectTypeRegistry as ObjectTypeRegistry
 from wagtail.utils.utils import flatten_choices as flatten_choices
 import django_filters
 
-type _FilterValue = str | list[str] | models.Model | QuerySet[models.Model] | slice
+# NOTE: Using TypeAlias instead of PEP 695 `type` statement to work around
+# a mypy bug where `type X = ... | QuerySet[Model]` in .pyi files causes
+# QuerySet's PEP 696 _Row TypeVar default to resolve to Model globally.
+_FilterValue: TypeAlias = str | list[str] | models.Model | QuerySet[models.Model] | slice  # NOQA:UP040
 
 class ActiveFilter(NamedTuple):
     auto_id: str

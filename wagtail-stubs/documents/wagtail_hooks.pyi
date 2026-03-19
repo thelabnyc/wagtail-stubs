@@ -30,7 +30,7 @@ from wagtail.documents.views.bulk_actions import (
 from wagtail.documents.views.bulk_actions import (
     DeleteBulkAction as DeleteBulkAction,
 )
-from wagtail.models import BaseViewRestriction as BaseViewRestriction
+from wagtail.models.view_restrictions import BaseViewRestriction as BaseViewRestriction
 from wagtail.wagtail_hooks import require_wagtail_login as require_wagtail_login
 
 def register_admin_urls(): ...

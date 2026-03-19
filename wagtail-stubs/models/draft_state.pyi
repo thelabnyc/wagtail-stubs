@@ -6,7 +6,7 @@ from django.core.checks import CheckMessage
 from django.db import models
 from django.utils.functional import _StrPromise, cached_property
 from wagtail.locks import BaseLock
-from wagtail.models import Revision
+from wagtail.models.revisions import Revision
 
 class DraftStateMixin(models.Model):
     live: models.BooleanField[bool, bool]

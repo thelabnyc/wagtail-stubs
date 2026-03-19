@@ -8,7 +8,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Model
 from django.db.models.base import ModelBase
 from django.http import HttpRequest
-from wagtail.models import Page, Site
+from wagtail.models.pages import Page
+from wagtail.models.sites import Site
 
 WAGTAIL_APPEND_SLASH: bool
 

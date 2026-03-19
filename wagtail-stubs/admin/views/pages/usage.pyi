@@ -11,7 +11,7 @@ from wagtail.admin.views.generic.permissions import PermissionCheckedMixin as Pe
 from wagtail.admin.views.pages.listing import PageFilterSet as PageFilterSet
 from wagtail.admin.views.pages.listing import PageListingMixin as PageListingMixin
 from wagtail.admin.views.pages.utils import GenericPageBreadcrumbsMixin as GenericPageBreadcrumbsMixin
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 from wagtail.permissions import page_permission_policy as page_permission_policy
 
 class ContentTypeUseView(PageListingMixin, PermissionCheckedMixin, BaseListingView):

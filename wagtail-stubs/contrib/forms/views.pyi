@@ -22,7 +22,7 @@ from wagtail.admin.views.pages.listing import PageListingMixin as PageListingMix
 from wagtail.contrib.forms.models import FormMixin as FormMixin
 from wagtail.contrib.forms.utils import get_form_types as get_form_types
 from wagtail.contrib.forms.utils import get_forms_for_user as get_forms_for_user
-from wagtail.models import Page as Page
+from wagtail.models.pages import Page as Page
 from wagtail.permissions import page_permission_policy as page_permission_policy
 
 def get_submissions_list_view(request, *args, **kwargs): ...
