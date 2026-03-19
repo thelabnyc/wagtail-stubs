@@ -1,3 +1,9 @@
+## v7.0.0b0 (2026-03-18)
+
+### Fix
+
+- stub signature mismatches and reduce stubtest allowlist
+
 ## v7.0.0a10 (2026-03-16)
 
 ### Fix
