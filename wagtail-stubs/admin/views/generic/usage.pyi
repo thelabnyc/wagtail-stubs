@@ -1,7 +1,7 @@
 from typing import Any
 
 from django.db import models
-from django.utils.functional import cached_property
+from django.utils.functional import _StrOrPromise, cached_property
 from wagtail.admin.ui import tables
 from wagtail.admin.widgets.button import HeaderButton
 from wagtail.models.reference_index import ReferenceGroups
@@ -14,7 +14,7 @@ class TitleColumn(tables.TitleColumn):
 
 class UsageView(PermissionCheckedMixin, BaseObjectMixin, BaseListingView):
     paginate_by: int
-    page_title: str
+    page_title: _StrOrPromise
     index_url_name: str | None
     edit_url_name: str | None
     usage_url_name: str | None

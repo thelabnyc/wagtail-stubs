@@ -29,7 +29,7 @@ class MenuItem(metaclass=MediaDefiningClass):
 class DismissibleMenuItemMixin:
     def __init__(
         self,
-        *args: str | Menu,
+        *args: _StrOrPromise | Menu,
         name: str | None = None,
         classname: str = "",
         icon_name: str = "",
@@ -61,7 +61,7 @@ class SubmenuMenuItem(MenuItem):
     menu: Menu
     def __init__(
         self,
-        label: str,
+        label: _StrOrPromise,
         menu: Menu,
         *,
         name: str | None = None,

@@ -18,9 +18,9 @@ def get_form_for_model(
 
 class Panel:
     BASE_ATTRS: dict[str, str]
-    heading: str
+    heading: _StrOrPromise
     classname: str
-    help_text: str
+    help_text: _StrOrPromise
     base_form_class: type[Form] | None
     icon: str
     model: type[models.Model] | None
@@ -60,8 +60,8 @@ class Panel:
         request: HttpRequest | None
         form: Form | None
         prefix: str
-        heading: str
-        help_text: str
+        heading: _StrOrPromise
+        help_text: _StrOrPromise
 
         def __init__(
             self,

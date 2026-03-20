@@ -12,7 +12,7 @@ from .base import Panel
 class InlinePanel(Panel):
     relation_name: str
     panels: list[Panel] | None
-    label: str
+    label: _StrOrPromise
     min_num: int | None
     max_num: int | None
     db_field: ForeignObjectRel
@@ -41,7 +41,7 @@ class InlinePanel(Panel):
 
     class BoundPanel(Panel.BoundPanel):
         template_name: str
-        label: str
+        label: _StrOrPromise
         formset: BaseFormSet[BaseForm]
         child_edit_handler: Panel
         children: list[Panel.BoundPanel]

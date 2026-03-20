@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.http import HttpRequest
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.ui.components import Component as Component
@@ -12,7 +13,7 @@ from wagtail.snippets.permissions import get_permission_name as get_permission_n
 class ActionMenuItem(Component):
     order: int
     template_name: str
-    label: str
+    label: _StrOrPromise
     name: str | None
     classname: str
     icon_name: str
@@ -23,14 +24,14 @@ class ActionMenuItem(Component):
 
 class PublishMenuItem(ActionMenuItem):
     name: str
-    label: str
+    label: _StrOrPromise
     icon_name: str
     template_name: str
     def is_shown(self, context): ...
 
 class SubmitForModerationMenuItem(ActionMenuItem):
     name: str
-    label: str
+    label: _StrOrPromise
     icon_name: str
     def is_shown(self, context): ...
     def get_context_data(self, parent_context): ...
@@ -38,7 +39,7 @@ class SubmitForModerationMenuItem(ActionMenuItem):
 class WorkflowMenuItem(ActionMenuItem):
     template_name: str
     name: str
-    label: str
+    label: _StrOrPromise
     launch_modal: bool
     icon_name: str
     def __init__(self, name, label, launch_modal, *args, **kwargs) -> None: ...
@@ -47,20 +48,20 @@ class WorkflowMenuItem(ActionMenuItem):
     def get_url(self, parent_context): ...
 
 class RestartWorkflowMenuItem(ActionMenuItem):
-    label: str
+    label: _StrOrPromise
     name: str
     classname: str
     icon_name: str
     def is_shown(self, context): ...
 
 class CancelWorkflowMenuItem(ActionMenuItem):
-    label: str
+    label: _StrOrPromise
     name: str
     icon_name: str
     def is_shown(self, context): ...
 
 class UnpublishMenuItem(ActionMenuItem):
-    label: str
+    label: _StrOrPromise
     name: str
     icon_name: str
     def is_shown(self, context): ...
@@ -68,13 +69,13 @@ class UnpublishMenuItem(ActionMenuItem):
 
 class SaveMenuItem(ActionMenuItem):
     name: str
-    label: str
+    label: _StrOrPromise
     icon_name: str
     template_name: str
 
 class LockedMenuItem(ActionMenuItem):
     name: str
-    label: str
+    label: _StrOrPromise
     template_name: str
     def is_shown(self, context): ...
 

@@ -4,7 +4,7 @@ from django.core.paginator import Page, Paginator
 from django.db import models
 from django.db.models.options import Options
 from django.http import HttpRequest, HttpResponse
-from django.utils.functional import cached_property
+from django.utils.functional import _StrOrPromise, cached_property
 from django.views import View
 from django.views.generic.base import ContextMixin, TemplateResponseMixin
 from django.views.generic.list import BaseListView
@@ -15,8 +15,8 @@ from wagtail.admin.widgets.button import Button
 import django_filters
 
 class WagtailAdminTemplateMixin(TemplateResponseMixin, ContextMixin):
-    page_title: str
-    page_subtitle: str
+    page_title: _StrOrPromise
+    page_subtitle: _StrOrPromise
     header_icon: str
     breadcrumbs_items: list[dict[str, Any]]
     template_name: str | list[str] | tuple[str, ...]
@@ -44,7 +44,7 @@ class BaseObjectMixin:
     def get_object(self) -> models.Model: ...
 
 class BaseOperationView(BaseObjectMixin, View):
-    success_message: str | None
+    success_message: _StrOrPromise | None
     success_message_extra_tags: str
     success_url_name: str | None
     next_url: str | None
@@ -112,5 +112,5 @@ class BaseListingView(WagtailAdminTemplateMixin, BaseListView):
     def index_results_url(self) -> str | None: ...
     def get_index_results_url(self) -> str | None: ...
     @cached_property
-    def no_results_message(self) -> str: ...
+    def no_results_message(self) -> _StrOrPromise: ...
     def get_context_data(self, *args: Any, **kwargs: Any) -> dict[str, Any]: ...

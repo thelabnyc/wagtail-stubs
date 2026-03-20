@@ -3,6 +3,7 @@ from typing import Any
 
 from django import forms
 from django.contrib.auth.models import AbstractBaseUser
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.search import SearchArea
 from wagtail.admin.staticfiles import versioned_static as versioned_static
@@ -15,19 +16,25 @@ class BaseSidebarAdapter(Adapter):
 
 class MenuItem:
     name: str
-    label: str
+    label: _StrOrPromise
     icon_name: str
     classname: str
     attrs: Mapping[str, Any]
     def __init__(
-        self, name: str, label: str, icon_name: str = "", classname: str = "", attrs: Mapping[str, Any] = None
+        self, name: str, label: _StrOrPromise, icon_name: str = "", classname: str = "", attrs: Mapping[str, Any] = None
     ) -> None: ...
     def js_args(self) -> list[dict[str, Any]]: ...
 
 class LinkMenuItem(MenuItem):
     url: str
     def __init__(
-        self, name: str, label: str, url: str, icon_name: str = "", classname: str = "", attrs: Mapping[str, Any] = None
+        self,
+        name: str,
+        label: _StrOrPromise,
+        url: str,
+        icon_name: str = "",
+        classname: str = "",
+        attrs: Mapping[str, Any] = None,
     ) -> None: ...
     def js_args(self) -> list[dict[str, Any]]: ...
     def __eq__(self, other: object) -> bool: ...
@@ -38,7 +45,7 @@ class ActionMenuItem(MenuItem):
     def __init__(
         self,
         name: str,
-        label: str,
+        label: _StrOrPromise,
         action: str,
         icon_name: str = "",
         classname: str = "",
@@ -50,15 +57,15 @@ class ActionMenuItem(MenuItem):
 
 class SubMenuItem(MenuItem):
     menu_items: list[MenuItem]
-    footer_text: str
+    footer_text: _StrOrPromise
     def __init__(
         self,
         name: str,
-        label: str,
+        label: _StrOrPromise,
         menu_items: list[MenuItem],
         icon_name: str = "",
         classname: str = "",
-        footer_text: str = "",
+        footer_text: _StrOrPromise = "",
         attrs: Mapping[str, Any] = None,
     ) -> None: ...
     def js_args(self) -> list[dict[str, Any] | list[MenuItem]]: ...
@@ -69,7 +76,7 @@ class PageExplorerMenuItem(LinkMenuItem):
     def __init__(
         self,
         name: str,
-        label: str,
+        label: _StrOrPromise,
         url: str,
         start_page_id: int,
         icon_name: str = "",

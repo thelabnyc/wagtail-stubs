@@ -1,12 +1,13 @@
 from typing import Any
 
 from django import forms
+from django.utils.functional import _StrOrPromise
 
 from .field_panel import FieldPanel
 
 class TitleFieldPanel(FieldPanel):
     apply_if_live: bool
-    placeholder: bool | str
+    placeholder: bool | _StrOrPromise
     targets: list[str] | None
 
     def __init__(
@@ -14,7 +15,7 @@ class TitleFieldPanel(FieldPanel):
         *args: str | forms.Widget | type[forms.Widget] | bool | None,
         apply_if_live: bool = False,
         classname: str = "title",
-        placeholder: bool | str = True,
+        placeholder: bool | _StrOrPromise = True,
         targets: list[str] | None = None,
         **kwargs: str | type[forms.Form] | dict[str, str] | None,
     ) -> None: ...

@@ -6,7 +6,7 @@ from django.core import checks
 from django.core.exceptions import ValidationError
 from django.forms.renderers import BaseRenderer
 from django.forms.utils import ErrorList, _DataT, _FilesT
-from django.utils.functional import cached_property
+from django.utils.functional import _StrOrPromise, cached_property
 from wagtail.blocks.definition_lookup import (
     BlockDefinitionLookup,
     BlockDefinitionLookupBuilder,
@@ -41,10 +41,10 @@ class Block(metaclass=BaseBlock):
 
     class Meta:
         default: Any
-        label: str | None
+        label: _StrOrPromise | None
         icon: str
         classname: str | None
-        group: str
+        group: _StrOrPromise
 
     def __new__(cls, *args: Any, **kwargs: Any) -> Self: ...
     def __init__(self, **kwargs: Any) -> None: ...

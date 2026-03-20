@@ -2,7 +2,7 @@ from typing import Any
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
-from django.utils.functional import cached_property
+from django.utils.functional import _StrOrPromise, cached_property
 from wagtail.admin.filters import MultipleUserFilter, WagtailFilterSet
 from wagtail.admin.ui.tables import Column, UserColumn
 from wagtail.admin.views.generic.base import BaseListingView, BaseObjectMixin, WagtailAdminTemplateMixin
@@ -49,7 +49,7 @@ class LogEntryUserColumn(UserColumn):
 
 class HistoryView(PermissionCheckedMixin, BaseObjectMixin, BaseListingView):
     any_permission_required: list[str]
-    page_title: str
+    page_title: _StrOrPromise
     header_icon: str
     paginate_by: int
     filterset_class: type[HistoryFilterSet]
@@ -89,7 +89,7 @@ class WorkflowHistoryView(BaseObjectMixin, BaseListingView):
     index_url_name: str | None
     edit_url_name: str | None
     workflow_history_detail_url_name: str | None
-    page_title: str
+    page_title: _StrOrPromise
     context_object_name: str
     @cached_property
     def index_url(self) -> str | None: ...
@@ -108,7 +108,7 @@ class WorkflowHistoryDetailView(BaseObjectMixin, WagtailAdminTemplateMixin):
     edit_url_name: str | None
     workflow_state_url_kwarg: str
     workflow_history_url_name: str | None
-    page_title: str
+    page_title: _StrOrPromise
     header_icon: str
     object_icon: str
     @cached_property

@@ -8,7 +8,7 @@ from django.db.models import Options, QuerySet
 from django.forms import BaseModelForm
 from django.http.response import HttpResponseBase
 from django.urls import URLPattern
-from django.utils.functional import _StrPromise, cached_property
+from django.utils.functional import _StrOrPromise, _StrPromise, cached_property
 from wagtail.admin.admin_url_finder import ModelAdminURLFinder
 from wagtail.admin.filters import WagtailFilterSet
 from wagtail.admin.menu import MenuItem
@@ -105,7 +105,7 @@ class ModelViewSet(ViewSet):
     @cached_property
     def export_filename(self) -> str: ...
     @cached_property
-    def menu_label(self) -> str: ...
+    def menu_label(self) -> _StrOrPromise: ...
     @cached_property
     def menu_item_class(self) -> type[MenuItem]: ...
     def formfield_for_dbfield(self, db_field: models.Field[Any, Any], **kwargs: Any) -> forms.Field | None: ...

@@ -1,14 +1,14 @@
 from typing import Any
 
 from django.contrib.auth.models import AbstractBaseUser
-from django.utils.functional import cached_property
+from django.utils.functional import _StrOrPromise, cached_property
 from wagtail.admin.ui.components import Component
 from wagtail.models.pages import Page, PagePermissionTester
 
 class Button(Component):
     template_name: str
     show: bool
-    label: str
+    label: _StrOrPromise
     icon_name: str | None
     url: str | None
     attrs: dict[str, str]
@@ -16,7 +16,7 @@ class Button(Component):
     priority: int
     def __init__(
         self,
-        label: str = "",
+        label: _StrOrPromise = "",
         url: str | None = None,
         classname: str = "",
         icon_name: str | None = None,
@@ -37,7 +37,7 @@ class Button(Component):
 class HeaderButton(Button):
     def __init__(
         self,
-        label: str = "",
+        label: _StrOrPromise = "",
         url: str | None = None,
         classname: str = "",
         icon_name: str | None = None,
@@ -50,7 +50,7 @@ class HeaderButton(Button):
 class ListingButton(Button):
     def __init__(
         self,
-        label: str = "",
+        label: _StrOrPromise = "",
         url: str | None = None,
         classname: str = "",
         *,
@@ -67,7 +67,7 @@ class PageListingButton(ListingButton):
     next_url: str | None
     def __init__(
         self,
-        label: str = "",
+        label: _StrOrPromise = "",
         url: str | None = None,
         classname: str = "",
         *,
@@ -87,7 +87,7 @@ class BaseDropdownMenuButton(Button):
     template_name: str
     def __init__(
         self,
-        label: str = "",
+        label: _StrOrPromise = "",
         *,
         classname: str = "",
         icon_name: str | None = None,
@@ -101,7 +101,7 @@ class BaseDropdownMenuButton(Button):
 class ButtonWithDropdown(BaseDropdownMenuButton):
     def __init__(
         self,
-        label: str = "",
+        label: _StrOrPromise = "",
         *,
         buttons: list[Button] = ...,
         classname: str = "",
@@ -117,7 +117,7 @@ class ButtonWithDropdownFromHook(BaseDropdownMenuButton):
     next_url: str | None
     def __init__(
         self,
-        label: str,
+        label: _StrOrPromise,
         hook_name: str,
         page: Page,
         user: AbstractBaseUser,

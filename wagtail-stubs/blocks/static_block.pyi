@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.forms.utils import _DataT, _FilesT
+from django.utils.functional import _StrOrPromise
 
 from .base import Block
 
@@ -8,7 +9,7 @@ __all__ = ["StaticBlock"]
 
 class StaticBlock(Block):
     class Meta:
-        admin_text: str | None
+        admin_text: _StrOrPromise | None
         default: None
 
     def get_admin_text(self) -> str: ...

@@ -99,10 +99,14 @@ class TitleColumn(Column):
 
 class StatusFlagColumn(Column):
     cell_template_name: str
-    true_label: str | None
-    false_label: str | None
+    true_label: _StrOrPromise | None
+    false_label: _StrOrPromise | None
     def __init__(
-        self, name: str, true_label: str | None = None, false_label: str | None = None, **kwargs: Any
+        self,
+        name: str,
+        true_label: _StrOrPromise | None = None,
+        false_label: _StrOrPromise | None = None,
+        **kwargs: Any,
     ) -> None: ...
 
 class StatusTagColumn(Column):
@@ -132,8 +136,8 @@ class UpdatedAtColumn(DateColumn):
 
 class UserColumn(Column):
     cell_template_name: str
-    blank_display_name: str
-    def __init__(self, name: str, blank_display_name: str = "", **kwargs: Any) -> None: ...
+    blank_display_name: _StrOrPromise
+    def __init__(self, name: str, blank_display_name: _StrOrPromise = "", **kwargs: Any) -> None: ...
     def get_cell_context_data(self, instance: Any, parent_context: dict[str, Any]) -> dict[str, Any]: ...
 
 class BulkActionsCheckboxColumn(BaseColumn):
@@ -179,7 +183,7 @@ class Table(Component):
     ascending_title_text_format: str
     descending_title_text_format: str
     columns: OrderedDict[str, BaseColumn]
-    caption: str | None
+    caption: _StrOrPromise | None
     data: Sequence[Any]
     base_url: str | None
     ordering: str | None
@@ -193,7 +197,7 @@ class Table(Component):
         ordering: str | None = None,
         classname: str | None = None,
         attrs: dict[str, str] | None = None,
-        caption: str | None = None,
+        caption: _StrOrPromise | None = None,
     ) -> None: ...
     def get_caption(self) -> str | None: ...
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...

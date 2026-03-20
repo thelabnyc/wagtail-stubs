@@ -2,6 +2,7 @@ from typing import Any
 
 from django.forms import Media
 from django.http import HttpRequest
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.ui.components import Component as Component
@@ -10,7 +11,7 @@ from wagtail.models.pages import PagePermissionTester
 class ActionMenuItem(Component):
     order: int
     template_name: str
-    label: str
+    label: _StrOrPromise
     name: str | None
     classname: str
     icon_name: str
@@ -21,7 +22,7 @@ class ActionMenuItem(Component):
     def get_url(self, parent_context: dict[str, Any]) -> str | None: ...
 
 class PublishMenuItem(ActionMenuItem):
-    label: str
+    label: _StrOrPromise
     name: str
     template_name: str
     icon_name: str
@@ -29,7 +30,7 @@ class PublishMenuItem(ActionMenuItem):
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
 
 class SubmitForModerationMenuItem(ActionMenuItem):
-    label: str
+    label: _StrOrPromise
     name: str
     icon_name: str
     def is_shown(self, context: dict[str, Any]) -> bool: ...
@@ -38,28 +39,28 @@ class SubmitForModerationMenuItem(ActionMenuItem):
 class WorkflowMenuItem(ActionMenuItem):
     template_name: str
     name: str
-    label: str
+    label: _StrOrPromise
     launch_modal: bool
     icon_name: str
-    def __init__(self, name: str, label: str, launch_modal: bool, *args: Any, **kwargs: Any) -> None: ...
+    def __init__(self, name: str, label: _StrOrPromise, launch_modal: bool, *args: Any, **kwargs: Any) -> None: ...
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
     def is_shown(self, context: dict[str, Any]) -> bool | None: ...
 
 class RestartWorkflowMenuItem(ActionMenuItem):
-    label: str
+    label: _StrOrPromise
     name: str
     classname: str
     icon_name: str
     def is_shown(self, context: dict[str, Any]) -> bool: ...
 
 class CancelWorkflowMenuItem(ActionMenuItem):
-    label: str
+    label: _StrOrPromise
     name: str
     icon_name: str
     def is_shown(self, context: dict[str, Any]) -> bool: ...
 
 class UnpublishMenuItem(ActionMenuItem):
-    label: str
+    label: _StrOrPromise
     name: str
     icon_name: str
     def is_shown(self, context: dict[str, Any]) -> bool | None: ...
@@ -67,13 +68,13 @@ class UnpublishMenuItem(ActionMenuItem):
 
 class SaveDraftMenuItem(ActionMenuItem):
     name: str
-    label: str
+    label: _StrOrPromise
     template_name: str
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
 
 class PageLockedMenuItem(ActionMenuItem):
     name: str
-    label: str
+    label: _StrOrPromise
     template_name: str
     def is_shown(self, context: dict[str, Any]) -> bool: ...
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...

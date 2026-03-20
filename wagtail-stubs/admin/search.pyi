@@ -1,11 +1,12 @@
 from django.forms import MediaDefiningClass
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.forms.search import SearchForm as SearchForm
 
 class SearchArea(metaclass=MediaDefiningClass):
     template: str
-    label: str
+    label: _StrOrPromise
     url: str
     classname: str
     icon_name: str

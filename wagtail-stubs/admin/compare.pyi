@@ -2,6 +2,7 @@ from typing import Any
 
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
+from django.utils.functional import _StrOrPromise
 from django.utils.safestring import SafeString
 from wagtail import blocks as blocks
 from wagtail.blocks.base import BoundBlock
@@ -109,14 +110,14 @@ class ChildRelationComparison:
     field_comparisons: list[type[FieldComparison]]
     val_a: Any
     val_b: Any
-    label: str
+    label: _StrOrPromise
     def __init__(
         self,
         field: ForeignObjectRel,
         field_comparisons: list[type[FieldComparison]],
         obj_a: models.Model,
         obj_b: models.Model,
-        label: str = "",
+        label: _StrOrPromise = "",
     ) -> None: ...
     def field_label(self) -> str: ...
     def get_mapping(
