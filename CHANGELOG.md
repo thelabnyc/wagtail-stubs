@@ -1,3 +1,9 @@
+## v7.0.0b6 (2026-03-19)
+
+### Fix
+
+- widen str to StrOrPromise for labels
+
 ## v7.0.0b5 (2026-03-19)
 
 ### Fix
