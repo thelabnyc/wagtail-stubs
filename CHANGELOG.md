@@ -1,3 +1,9 @@
+## v7.0.0b7 (2026-03-24)
+
+### Fix
+
+- subpage_types/parent_page_types to be Sequence instead of list
+
 ## v7.0.0b6 (2026-03-19)
 
 ### Fix
