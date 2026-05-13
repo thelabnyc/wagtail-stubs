@@ -1,28 +1,80 @@
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from typing import Any
 
 from django.http import HttpResponseBase
 from django.urls import URLPattern
-from wagtail.admin.filters import WagtailFilterSet
-from wagtail.admin.ui.tables import Column
-from wagtail.admin.views.pages.choose_parent import ChooseParentView
-from wagtail.admin.views.pages.listing import IndexView
-from wagtail.admin.viewsets.base import ViewSet
+from django.utils.functional import cached_property, classproperty
+from wagtail.admin.ui.tables import BaseColumn
+from wagtail.admin.views.pages.choose_parent import ChooseParentView, GenericChooseParentView
+from wagtail.admin.views.pages.listing import ExplorableIndexView, IndexView, PageFilterSet
+from wagtail.admin.views.pages.usage import ContentTypeUseView
+from wagtail.admin.viewsets.base import ViewSet, _Undefined
+from wagtail.admin.viewsets.listing import ListingViewSetMixin
 from wagtail.models.pages import Page
+from wagtail.utils.registry import ObjectTypeRegistry
 
-class PageListingViewSet(ViewSet):
+class PageListingViewSet(ListingViewSetMixin, ViewSet):
     index_view_class: type[IndexView]
     choose_parent_view_class: type[ChooseParentView]
     model: type[Page]
-    columns: list[Column]
-    filterset_class: type[WagtailFilterSet] | None
+    @classproperty
+    def columns(cls) -> list[BaseColumn] | _Undefined: ...
+    @classproperty
+    def filterset_class(cls) -> type[PageFilterSet] | _Undefined: ...
+    @cached_property
+    def export_filename(self) -> str: ...
     def get_common_view_kwargs(self, **kwargs: Any) -> dict[str, Any]: ...
     def get_index_view_kwargs(self, **kwargs: Any) -> dict[str, Any]: ...
     def get_choose_parent_view_kwargs(self, **kwargs: Any) -> dict[str, Any]: ...
-    @property
+    @cached_property
     def index_view(self) -> Callable[..., HttpResponseBase]: ...
-    @property
+    @cached_property
     def index_results_view(self) -> Callable[..., HttpResponseBase]: ...
-    @property
+    @cached_property
     def choose_parent_view(self) -> Callable[..., HttpResponseBase]: ...
     def get_urlpatterns(self) -> list[URLPattern]: ...
+
+class PageViewSet(PageListingViewSet):
+    choose_parent_view_class: type[GenericChooseParentView]
+    content_type_use_view_class: type[ContentTypeUseView]
+    index_view_class: type[ExplorableIndexView]
+    menu_url: None
+    @cached_property
+    def views(self) -> dict[str, Callable[..., HttpResponseBase]]: ...
+    def get_view_by_name(self, name: str) -> Callable[..., HttpResponseBase]: ...
+    @cached_property
+    def content_type_use_view(self) -> Callable[..., HttpResponseBase]: ...
+    @cached_property
+    def content_type_use_results_view(self) -> Callable[..., HttpResponseBase]: ...
+    @cached_property
+    def parent_models(self) -> list[type[Page]]: ...
+    def get_url_name(self, view_name: str) -> str: ...
+    def get_urlpatterns(self) -> list[URLPattern]: ...
+    def on_register(self) -> None: ...
+
+class PageViewSetRegistry(ObjectTypeRegistry):
+    values_by_parent_model: dict[type[Page], PageViewSet]
+    def __init__(self) -> None: ...
+    def get_content_type_id_by_page_id(self, page_id: int) -> int: ...
+    def get_page_model_by_content_type_id(self, content_type_id: int) -> type[Page]: ...
+    def get_by_parent_model(self, cls: type[Page]) -> PageViewSet | None: ...
+    def get_by_page_id(self, page_id: int) -> PageViewSet: ...
+    def get_by_parent_page_id(self, parent_page_id: int) -> PageViewSet | None: ...
+    def get_by_content_type_natural_key(self, app_label: str, model_name: str) -> PageViewSet: ...
+    def register(
+        self,
+        cls: type[Page],
+        value: PageViewSet | None = None,
+        exact_class: bool = False,
+        parent_models: Iterable[type[Page]] = (),
+    ) -> None: ...
+    def as_view(
+        self,
+        view_name: str,
+        parent_page_id_kwarg: str | None = None,
+        app_label_kwarg: str | None = None,
+        model_name_kwarg: str | None = None,
+    ) -> Callable[..., HttpResponseBase]: ...
+
+page_viewset_registry: PageViewSetRegistry
+base_page_viewset: PageViewSet

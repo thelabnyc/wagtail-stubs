@@ -1,5 +1,5 @@
 from collections.abc import Iterator
-from typing import Any, overload
+from typing import Any, ClassVar, overload
 import uuid
 
 from django.contrib.contenttypes.models import ContentType
@@ -22,6 +22,12 @@ class ReferenceGroups:
 
 class ReferenceIndexQuerySet(models.QuerySet["ReferenceIndex"]):
     def group_by_source_object(self) -> ReferenceGroups: ...
+    def group_by_source_object_in_bulk(self) -> dict[tuple[int, str], ReferenceGroups]: ...
+
+class ReferenceIndexManager(models.Manager["ReferenceIndex"]):
+    def get_queryset(self) -> ReferenceIndexQuerySet: ...
+    def group_by_source_object(self) -> ReferenceGroups: ...
+    def group_by_source_object_in_bulk(self) -> dict[tuple[int, str], ReferenceGroups]: ...
 
 class ReferenceIndex(models.Model):
     content_type: models.ForeignKey[ContentType, ContentType]
@@ -33,7 +39,7 @@ class ReferenceIndex(models.Model):
     content_path: models.TextField[str, str]
     content_path_hash: models.UUIDField[uuid.UUID, uuid.UUID]
 
-    objects: models.Manager[ReferenceIndex]  # type: ignore[assignment]
+    objects: ClassVar[ReferenceIndexManager]
 
     wagtail_reference_index_ignore: bool
     tracked_models: set[type[models.Model]]
@@ -64,6 +70,8 @@ class ReferenceIndex(models.Model):
     def related_field_model_name(self) -> str: ...
     @cached_property
     def on_delete(self) -> Any: ...
+    @cached_property
+    def model_path_components(self) -> list[str]: ...
     @cached_property
     def source_field(self) -> Field[Any, Any]: ...
     @cached_property

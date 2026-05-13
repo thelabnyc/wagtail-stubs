@@ -24,6 +24,9 @@ from .mixins import (
     IndexViewOptionalFeaturesMixin as IndexViewOptionalFeaturesMixin,
 )
 from .mixins import (
+    JsonPostResponseMixin as JsonPostResponseMixin,
+)
+from .mixins import (
     LocaleMixin as LocaleMixin,
 )
 from .mixins import (
@@ -62,5 +65,6 @@ from .models import (
 from .models import (
     UnpublishView as UnpublishView,
 )
+from .ordering import ReorderView as ReorderView
 from .permissions import PermissionCheckedMixin as PermissionCheckedMixin
 from .usage import UsageView as UsageView

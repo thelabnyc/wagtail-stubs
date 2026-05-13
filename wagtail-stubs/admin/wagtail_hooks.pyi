@@ -74,6 +74,7 @@ from wagtail.admin.rich_text.converters.html_to_contentstate import (
 from wagtail.admin.search import SearchArea as SearchArea
 from wagtail.admin.site_summary import PagesSummaryItem as PagesSummaryItem
 from wagtail.admin.site_summary import SummaryItem as SummaryItem
+from wagtail.admin.ui.menus.pages import PageMenuItem as PageMenuItem
 from wagtail.admin.ui.sidebar import MenuItem as SidebarMenuItem
 from wagtail.admin.views.pages.bulk_actions import (
     DeleteBulkAction as DeleteBulkAction,
@@ -88,6 +89,7 @@ from wagtail.admin.views.pages.bulk_actions import (
     UnpublishBulkAction as UnpublishBulkAction,
 )
 from wagtail.admin.viewsets import viewsets as viewsets
+from wagtail.admin.viewsets.pages import PageViewSet
 from wagtail.admin.widgets import ButtonWithDropdownFromHook as ButtonWithDropdownFromHook
 from wagtail.admin.widgets.button import PageListingButton as PageListingButton
 from wagtail.models.media import Collection as Collection
@@ -129,6 +131,7 @@ class ExplorerMenuItem(MenuItem):
     def get_context(self, request: HttpRequest) -> dict[str, Any]: ...
     def render_component(self, request: HttpRequest) -> SidebarMenuItem: ...
 
+def register_base_page_viewset() -> PageViewSet: ...
 def register_explorer_menu_item() -> ExplorerMenuItem: ...
 
 class SettingsMenuItem(SubmenuMenuItem):
@@ -161,63 +164,63 @@ def page_listing_buttons(
     page: Page, user: AbstractBaseUser, next_url: str | None = None
 ) -> Generator[ButtonWithDropdownFromHook]: ...
 
-class PageListingEditButton(PageListingButton):
+class PageListingEditButton(PageMenuItem):
     label: str
     icon_name: str
     url_name: str
     def is_shown(self, user: AbstractBaseUser) -> bool: ...
 
-class PageListingViewDraftButton(PageListingButton):
+class PageListingViewDraftButton(PageMenuItem):
     label: str
     icon_name: str
     url_name: str
     link_rel: str
     def is_shown(self, user: AbstractBaseUser) -> bool: ...
 
-class PageListingViewLiveButton(PageListingButton):
+class PageListingViewLiveButton(PageMenuItem):
     label: str
     icon_name: str
     link_rel: str
     def is_shown(self, user: AbstractBaseUser) -> bool: ...
 
-class PageListingAddChildPageButton(PageListingButton):
+class PageListingAddChildPageButton(PageMenuItem):
     label: str
     icon_name: str
     url_name: str
     def is_shown(self, user: AbstractBaseUser) -> bool: ...
 
-class PageListingMoveButton(PageListingButton):
+class PageListingMoveButton(PageMenuItem):
     label: str
     icon_name: str
     url_name: str
     def is_shown(self, user: AbstractBaseUser) -> bool: ...
 
-class PageListingCopyButton(PageListingButton):
+class PageListingCopyButton(PageMenuItem):
     label: str
     icon_name: str
     url_name: str
     def is_shown(self, user: AbstractBaseUser) -> bool: ...
 
-class PageListingDeleteButton(PageListingButton):
+class PageListingDeleteButton(PageMenuItem):
     label: str
     icon_name: str
     @cached_property
     def url(self) -> str | None: ...
     def is_shown(self, user: AbstractBaseUser) -> bool: ...
 
-class PageListingUnpublishButton(PageListingButton):
+class PageListingUnpublishButton(PageMenuItem):
     label: str
     icon_name: str
     url_name: str
     def is_shown(self, user: AbstractBaseUser) -> bool: ...
 
-class PageListingHistoryButton(PageListingButton):
+class PageListingHistoryButton(PageMenuItem):
     label: str
     icon_name: str
     url_name: str
     def is_shown(self, user: AbstractBaseUser) -> bool: ...
 
-class PageListingSortMenuOrderButton(PageListingButton):
+class PageListingSortMenuOrderButton(PageMenuItem):
     label: str
     icon_name: str
     def is_shown(self, user: AbstractBaseUser) -> bool: ...
@@ -226,10 +229,10 @@ class PageListingSortMenuOrderButton(PageListingButton):
 
 def page_listing_more_buttons(
     page: Page, user: AbstractBaseUser, next_url: str | None = None
-) -> Generator[PageListingButton]: ...
+) -> Generator[PageMenuItem]: ...
 def page_header_buttons(
     page: Page, user: AbstractBaseUser, view_name: str, next_url: str | None = None
-) -> Generator[PageListingButton]: ...
+) -> Generator[PageMenuItem]: ...
 def register_viewsets_urls() -> list[URLPattern | URLResolver]: ...
 def register_core_features(features: FeatureRegistry) -> None: ...
 

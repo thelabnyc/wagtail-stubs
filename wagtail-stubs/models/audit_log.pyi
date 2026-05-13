@@ -1,5 +1,5 @@
 from collections.abc import Iterator
-from typing import Any
+from typing import Any, Self
 import datetime
 import uuid
 
@@ -19,6 +19,13 @@ class LogEntryQuerySet(models.QuerySet["BaseLogEntry"]):
     def with_instances(
         self,
     ) -> Iterator[tuple[BaseLogEntry, models.Model | None]]: ...
+    def latest_uuid_for_user_revision_action(
+        self,
+        user: AbstractBaseUser | None,
+        revision: Revision,
+        action: str,
+    ) -> uuid.UUID | None: ...
+    def latest_by_uuid_and_action(self) -> Self: ...
 
 class BaseLogEntryManager(models.Manager["BaseLogEntry"]):
     def get_queryset(self) -> LogEntryQuerySet: ...
