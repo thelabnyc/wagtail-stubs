@@ -20,7 +20,6 @@ wagtail\.admin\.api\.urls(\..*)?
 wagtail\.admin\.api\.views(\..*)?
 wagtail\.admin\.blocks(\..*)?
 wagtail\.admin\.filters(\..*)?
-wagtail\.admin\.jinja2tags(\..*)?
 wagtail\.admin\.mail(\..*)?
 wagtail\.admin\.menu(\..*)?
 wagtail\.admin\.models(\..*)?
@@ -132,7 +131,6 @@ wagtail\.embeds\.embeds(\..*)?
 wagtail\.embeds\.models(\..*)?
 wagtail\.embeds\.rich_text(\..*)?
 wagtail\.images(\..*)?
-wagtail\.jinja2tags(\..*)?
 wagtail\.locales\.forms(\..*)?
 wagtail\.locales\.utils(\..*)?
 wagtail\.locales\.views(\..*)?
@@ -156,6 +154,7 @@ wagtail\.search\.backends\.elasticsearch9(\..*)?
 wagtail\.search\.backends\.opensearch2(\..*)?
 wagtail\.search\.backends\.opensearch3(\..*)?
 wagtail\.search\.backends\.deprecation(\..*)?
+wagtail\.search\.management\.commands\.enable_trigram(\..*)?
 wagtail\.search\.models(\..*)?
 wagtail\.search\.query(\..*)?
 wagtail\.search\.tasks\.insert_or_update_object_task(\..*)?

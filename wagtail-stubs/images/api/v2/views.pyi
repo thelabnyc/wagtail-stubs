@@ -1,4 +1,4 @@
-from django.db import models
+from django.db.models import QuerySet
 from wagtail.api.v2.filters import (
     FieldsFilter as FieldsFilter,
 )
@@ -9,6 +9,7 @@ from wagtail.api.v2.filters import (
     SearchFilter as SearchFilter,
 )
 from wagtail.api.v2.views import BaseAPIViewSet as BaseAPIViewSet
+from wagtail.images.models import AbstractImage
 
 from ... import get_image_model as get_image_model
 from .serializers import ImageSerializer as ImageSerializer
@@ -21,4 +22,5 @@ class ImagesAPIViewSet(BaseAPIViewSet):
     listing_default_fields: list[str]
     nested_default_fields: list[str]
     name: str
-    model: type[models.Model]
+    model: type[AbstractImage]
+    def get_queryset(self) -> QuerySet[AbstractImage]: ...

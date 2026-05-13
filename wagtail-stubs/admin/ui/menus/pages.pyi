@@ -1,5 +1,7 @@
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.functional import cached_property
 from wagtail.admin.ui.menus import MenuItem as MenuItem
+from wagtail.admin.widgets.button import Button
 from wagtail.models import Page
 
 class PageMenuItem(MenuItem):
@@ -22,3 +24,10 @@ class PageMenuItem(MenuItem):
     ) -> None: ...
     @cached_property
     def url(self) -> str | None: ...
+
+def get_page_header_buttons(
+    page: Page,
+    user: AbstractBaseUser,
+    next_url: str | None,
+    view_name: str,
+) -> list[Button]: ...

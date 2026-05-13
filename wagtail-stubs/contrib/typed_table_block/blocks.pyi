@@ -1,7 +1,9 @@
-from collections.abc import Generator
+from collections.abc import Generator, Iterator
 
 from _typeshed import Incomplete
 from django.core.exceptions import ValidationError
+from django.db.models import Model
+from django.forms.utils import ErrorList
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.staticfiles import versioned_static as versioned_static
 from wagtail.blocks.base import (
@@ -23,9 +25,13 @@ from wagtail.telepath import Adapter as Adapter
 from wagtail.telepath import register as register
 
 class TypedTableBlockValidationError(ValidationError):
-    cell_errors: Incomplete
-    non_block_errors: Incomplete
-    def __init__(self, cell_errors=None, non_block_errors=None) -> None: ...
+    cell_errors: dict[int, dict[int, ValidationError]] | None
+    non_block_errors: ErrorList
+    def __init__(
+        self,
+        cell_errors: dict[int, dict[int, ValidationError]] | None = None,
+        non_block_errors: ErrorList | list[str | ValidationError] | None = None,
+    ) -> None: ...
     def as_json_data(self): ...
 
 class TypedTable:
@@ -55,6 +61,8 @@ class BaseTypedTableBlock(Block):
     def deconstruct_with_lookup(self, lookup): ...
     def check(self, **kwargs): ...
     def render_basic(self, value, context=None): ...
+    def get_searchable_content(self, value: TypedTable | None) -> list[str]: ...
+    def extract_references(self, value: TypedTable | None) -> Iterator[tuple[type[Model], str, str, str]]: ...
     class Meta:
         default: Incomplete
         icon: str

@@ -529,3 +529,79 @@
     page = Page()
     ctx = page.get_context(None)
     reveal_type(ctx)  # N: Revealed type is "builtins.dict[builtins.str, Any]"
+
+- case: wagtail_74_page_viewset_listing_options
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.db import models
+    from wagtail.admin.viewsets.pages import PageViewSet, base_page_viewset, page_viewset_registry
+    from wagtail.models import Page
+
+    class BlogPage(Page):
+        body: models.TextField[str, str]
+        class Meta:
+            app_label = "test"
+
+    class BlogPageViewSet(PageViewSet):
+        model = BlogPage
+        list_display = ("title",)
+        list_filter = ["live"]
+        list_export = ("title",)
+        export_headings = {"title": "Title"}
+
+    viewset = BlogPageViewSet()
+    page_viewset_registry.register(BlogPage, viewset, parent_models=(Page,))
+    reveal_type(base_page_viewset)  # N: Revealed type is "wagtail.admin.viewsets.pages.PageViewSet"
+
+- case: wagtail_74_content_checker_userbar_item
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.userbar import AccessibilityItem, ContentCheckerItem
+
+    item = ContentCheckerItem(in_editor=True)
+    old_name = AccessibilityItem()
+    reveal_type(item.in_editor)  # N: Revealed type is "builtins.bool"
+
+- case: wagtail_74_deferred_block_validation
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.blocks import CharBlock, StreamBlock
+
+    class ContentStream(StreamBlock):
+        text = CharBlock(required=True)
+
+    block = ContentStream()
+    value = block.to_python([])
+    block.defer_required_validation()
+    block.restore_deferred_validation()
+    cleaned = block.clean_deferred(value)
+
+- case: wagtail_74_document_field_and_routable_full_url
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.routable_page.templatetags.wagtailroutablepage_tags import routablefullpageurl
+    from wagtail.documents.fields import WagtailDocumentField
+
+    field = WagtailDocumentField(required=False)
+    url = routablefullpageurl({}, None, "url_name")
+    reveal_type(url)  # N: Revealed type is "builtins.str"

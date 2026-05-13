@@ -1,9 +1,8 @@
-from typing import Any
+from typing import Any, TypedDict
 
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponseBase
 from django.utils.functional import cached_property as cached_property
-from django.utils.functional import classproperty
 from django_filters.filters import ChoiceFilter, DateFromToRangeFilter, ModelMultipleChoiceFilter
 from wagtail import hooks as hooks
 from wagtail.admin.filters import (
@@ -44,12 +43,18 @@ from wagtail.admin.ui.tables.pages import (
     ParentPageColumn as ParentPageColumn,
 )
 from wagtail.admin.views import generic as generic
+from wagtail.admin.widgets.button import Button, HeaderButton
 from wagtail.models.i18n import Locale as Locale
 from wagtail.models.pages import Page as Page
 from wagtail.models.pages import PageLogEntry as PageLogEntry
+from wagtail.models.pages import PagePermissionTester as PagePermissionTester
 from wagtail.models.pages import get_page_content_types as get_page_content_types
 from wagtail.models.sites import Site as Site
 from wagtail.permissions import page_permission_policy as page_permission_policy
+
+class PageTranslation(TypedDict):
+    locale: Locale
+    url: str
 
 class SiteFilter(ModelMultipleChoiceFilter):
     def get_filter_predicate(self, v: Site) -> dict[str, str]: ...
@@ -77,10 +82,10 @@ class PageListingMixin:
     template_name: str
     context_object_name: str
     table_class = PageTable
-    filterset_class = GenericPageFilterSet
-    default_ordering: str
+    default_ordering: str | None
     model = Page
     is_searchable: bool
+    base_columns: list[BaseColumn]
     columns: list[BaseColumn]
     @cached_property
     def i18n_enabled(self) -> bool: ...
@@ -101,9 +106,12 @@ class IndexView(PageListingMixin, generic.IndexView):
     results_template_name: str
     paginate_by: int
     table_classname: str
-    filterset_class = PageFilterSet
-    @classproperty
-    def columns(cls) -> list[BaseColumn]: ...
+    base_filterset_class = PageFilterSet
+    base_columns: list[BaseColumn]
+    @cached_property
+    def columns(self) -> list[BaseColumn]: ...
+    @cached_property
+    def filterset_class(self) -> type[PageFilterSet]: ...
     def get_base_queryset(self) -> QuerySet[Page]: ...
 
 class ExplorableIndexView(IndexView):
@@ -112,23 +120,34 @@ class ExplorableIndexView(IndexView):
     index_url_name: str
     index_results_url_name: str
     page_title: str
-    filterset_class = GenericPageFilterSet
+    base_filterset_class = GenericPageFilterSet
     sort_order_field: str
-    @classproperty
-    def columns(cls) -> list[BaseColumn]: ...
+    add_item_label: str
+    add_url_name: str
+    reorder_button: None
+    base_columns: list[BaseColumn]
     parent_page: Page
+    permissions: PagePermissionTester
     scheduled_page: Page | None
     locale: Locale | None
-    translations: list[dict[str, Any]]
+    translations: list[PageTranslation]
+    @cached_property
+    def explorable_columns(self) -> list[BaseColumn]: ...
+    def get_table(self, object_list: QuerySet[Page]) -> PageTable: ...
     def get(self, request: HttpRequest, parent_page_id: int | None = None) -> HttpResponseBase: ...
     @cached_property
     def is_searching_whole_tree(self) -> bool: ...
     @cached_property
     def show_locale_labels(self) -> bool: ...
+    @cached_property
+    def add_button(self) -> HeaderButton | None: ...
+    @cached_property
+    def header_more_buttons(self) -> list[Button]: ...
     def get_base_queryset(self) -> QuerySet[Page]: ...
     def search_queryset(self, queryset: QuerySet[Page]) -> QuerySet[Page]: ...
     def get_index_url(self) -> str: ...
     def get_index_results_url(self) -> str: ...
+    def get_add_url(self) -> str | None: ...
     def get_history_url(self) -> str | None: ...
     def get_reorder_url(self) -> str: ...
     def get_table_kwargs(self) -> dict[str, Any]: ...
@@ -136,4 +155,4 @@ class ExplorableIndexView(IndexView):
     def get_page_subtitle(self) -> str: ...
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
     def get_side_panels(self) -> MediaContainer: ...
-    def get_translations(self) -> list[dict[str, Any]]: ...
+    def get_translations(self) -> list[PageTranslation]: ...

@@ -1,13 +1,15 @@
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Final
 
 from django.http.response import HttpResponseBase
 from django.urls import URLPattern
 from django.utils.functional import cached_property
 from wagtail.admin.menu import WagtailMenuRegisterable, WagtailMenuRegisterableGroup
 
+class _Undefined: ...
+
 class ViewSet(WagtailMenuRegisterable):
-    UNDEFINED: object
+    UNDEFINED: Final[_Undefined]
     name: str | None
     icon: str
     def __init__(self, name: str | None = None, **kwargs: Any) -> None: ...
