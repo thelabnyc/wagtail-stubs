@@ -12,7 +12,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.locks import BaseLock
 from wagtail.models.orderable import Orderable
-from wagtail.models.pages import PageQuerySet
+from wagtail.models.pages import Page, PageQuerySet
 from wagtail.models.revisions import Revision
 from wagtail.models.specific import SpecificMixin, SpecificQuerySetMixin
 import wagtail.forms
@@ -108,7 +108,7 @@ class AbstractWorkflow(ClusterableModel):
     def tasks(self) -> models.QuerySet[Task]: ...
     def start(self, obj: models.Model, user: AbstractBaseUser) -> WorkflowState: ...
     def deactivate(self, user: AbstractBaseUser | None = None) -> None: ...
-    def all_pages(self) -> PageQuerySet: ...
+    def all_pages(self) -> PageQuerySet[Page]: ...
 
     class Meta:
         verbose_name: _StrPromise
