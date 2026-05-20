@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "wagtail-stubs"
-version = "7.4.0"
+version = "7.4.1"
 description = "PEP 561 type stubs for wagtail"
 readme = "README.md"
 license = { text = "ISC" }

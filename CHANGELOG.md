@@ -1,3 +1,9 @@
+## v7.4.1 (2026-05-20)
+
+### Fix
+
+- parameterize all unparameterized PageQuerySet return types
+
 ## v7.4.0 (2026-05-12)
 
 ### Feat
