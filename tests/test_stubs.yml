@@ -168,6 +168,17 @@
         reveal_type(qs.child_of(page))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
         reveal_type(qs.ancestor_of(page))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
 
+    def page_type_filters(page: Page, page_qs: PageQuerySet[Page], blog_qs: PageQuerySet[BlogPage]) -> None:
+        # Filtering a generic page queryset by concrete page type narrows the result
+        reveal_type(page.get_children().type(BlogPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(page_qs.type(BlogPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(page_qs.exact_type(BlogPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+
+        # Already-specific querysets keep their existing type
+        reveal_type(blog_qs.type(BlogPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(blog_qs.exact_type(BlogPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(blog_qs.not_type(BlogPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+
 - case: page_manager_as_type_annotation
   mypy_config: |
     [mypy]
