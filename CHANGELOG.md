@@ -1,3 +1,9 @@
+## v7.4.2 (2026-05-24)
+
+### Fix
+
+- narrow page querysets by page type filters
+
 ## v7.4.1 (2026-05-20)
 
 ### Fix
