@@ -16,12 +16,13 @@ from wagtail.admin.views import generic
 from wagtail.admin.views.generic import history, usage
 from wagtail.admin.viewsets.base import ViewSet, ViewSetGroup, _Undefined
 from wagtail.admin.viewsets.listing import ListingViewSetMixin
-from wagtail.permissions import ModelPermissionPolicy
+from wagtail.permission_policies.base import BasePermissionPolicy
 
 class ModelViewSet(ListingViewSetMixin, ViewSet):
     add_to_reference_index: bool
     sort_order_field: str | None | _Undefined
-    pk_path_converter: str
+    @cached_property
+    def pk_path_converter(self) -> str: ...
     index_view_class: type[generic.IndexView]
     add_view_class: type[generic.CreateView]
     edit_view_class: type[generic.EditView]
@@ -42,8 +43,8 @@ class ModelViewSet(ListingViewSetMixin, ViewSet):
     app_label: str
     model_name: str
     def __init__(self, name: str | None = None, **kwargs: Any) -> None: ...
-    @property
-    def permission_policy(self) -> ModelPermissionPolicy: ...
+    @cached_property
+    def permission_policy(self) -> BasePermissionPolicy: ...
     @cached_property
     def name(self) -> str: ...  # type: ignore[override]
     @cached_property

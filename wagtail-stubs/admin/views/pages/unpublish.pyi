@@ -1,11 +1,13 @@
 from wagtail import hooks as hooks
 from wagtail.actions.unpublish_page import UnpublishPageAction as UnpublishPageAction
 from wagtail.admin.utils import get_valid_next_url_from_request as get_valid_next_url_from_request
-from wagtail.admin.views.generic.models import UnpublishView as UnpublishView
-from wagtail.models.pages import Page as Page
+from wagtail.admin.views.generic.models import UnpublishView as GenericUnpublishView
+from wagtail.models import AbstractPage
 
-class Unpublish(UnpublishView):
-    model = Page
+Page: type[AbstractPage]
+
+class UnpublishView(GenericUnpublishView):
+    model: type[AbstractPage]
     index_url_name: str
     edit_url_name: str
     unpublish_url_name: str

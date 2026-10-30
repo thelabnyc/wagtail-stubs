@@ -3,6 +3,7 @@ from typing import Any
 from django.db import models
 from django.forms import Form
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.utils.functional import cached_property
 from django.views.generic.base import TemplateView, View
 from wagtail.models.media import UploadedFile
 from wagtail.permission_policies import BasePermissionPolicy
@@ -10,6 +11,8 @@ from wagtail.permission_policies import BasePermissionPolicy
 from .permissions import PermissionCheckedMixin
 
 class AddView(PermissionCheckedMixin, TemplateView):
+    @cached_property
+    def permission_policy(self) -> BasePermissionPolicy: ...
     permission_required: str
     edit_form_template_name: str
     model: type[models.Model]
@@ -39,8 +42,9 @@ class AddView(PermissionCheckedMixin, TemplateView):
     def post(self, request: HttpRequest) -> JsonResponse | HttpResponseBadRequest: ...
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
 
-class EditView(View):
-    permission_policy: BasePermissionPolicy
+class EditView(PermissionCheckedMixin, View):
+    @cached_property
+    def permission_policy(self) -> BasePermissionPolicy: ...
     pk_url_kwarg: str
     edit_object_form_prefix: str
     context_object_name: str
@@ -57,8 +61,9 @@ class EditView(View):
     def save_object(self, form: Form) -> None: ...
     def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> JsonResponse: ...
 
-class DeleteView(View):
-    permission_policy: BasePermissionPolicy
+class DeleteView(PermissionCheckedMixin, View):
+    @cached_property
+    def permission_policy(self) -> BasePermissionPolicy: ...
     pk_url_kwarg: str
     context_object_id_name: str
     http_method_names: list[str]

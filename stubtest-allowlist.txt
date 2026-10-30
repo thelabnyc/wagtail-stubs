@@ -22,45 +22,36 @@ wagtail\.admin\.filters(\..*)?
 wagtail\.admin\.menu(\..*)?
 wagtail\.admin\.models(\..*)?
 wagtail\.admin\.panels(\..*)?
-wagtail\.admin\.rich_text\.editors(\..*)?
-wagtail\.admin\.search(\..*)?
+# MediaDefiningClass adds media at runtime
+wagtail\.admin\.search\.SearchArea\.media
 wagtail\.admin\.ui\.tables(\..*)?
 wagtail\.admin\.urls(\..*)?
 wagtail\.admin\.views\.account(\..*)?
 wagtail\.admin\.views\.chooser(\..*)?
-wagtail\.admin\.views\.collections(\..*)?
 wagtail\.admin\.views\.generic(\..*)?
-wagtail\.admin\.views\.home(\..*)?
-wagtail\.admin\.views\.page_privacy(\..*)?
 wagtail\.admin\.views\.pages\.bulk_actions\.delete(\..*)?
 wagtail\.admin\.views\.pages\.bulk_actions\.move(\..*)?
 wagtail\.admin\.views\.pages\.bulk_actions\.page_bulk_action(\..*)?
 wagtail\.admin\.views\.pages\.bulk_actions\.publish(\..*)?
 wagtail\.admin\.views\.pages\.bulk_actions\.unpublish(\..*)?
-wagtail\.admin\.views\.pages\.choose_parent(\..*)?
-wagtail\.admin\.views\.pages\.convert_alias(\..*)?
-wagtail\.admin\.views\.pages\.copy(\..*)?
-wagtail\.admin\.views\.pages\.create(\..*)?
-wagtail\.admin\.views\.pages\.delete(\..*)?
-wagtail\.admin\.views\.pages\.history(\..*)?
+# django-filter FilterSet metaclass attributes
+wagtail\.admin\.views\.pages\.history\.PageHistoryFilterSet(\..*)?
 wagtail\.admin\.views\.pages\.listing(\..*)?
-wagtail\.admin\.views\.pages\.move(\..*)?
-wagtail\.admin\.views\.pages\.ordering(\..*)?
-wagtail\.admin\.views\.pages\.preview(\..*)?
-wagtail\.admin\.views\.pages\.revisions(\..*)?
-wagtail\.admin\.views\.pages\.search(\..*)?
-wagtail\.admin\.views\.pages\.unpublish(\..*)?
-wagtail\.admin\.views\.pages\.workflow(\..*)?
-wagtail\.admin\.views\.reports\.aging_pages(\..*)?
+# django-filter FilterSet metaclass attributes
+wagtail\.admin\.views\.reports\.aging_pages\.AgingPagesReportFilterSet(\..*)?
 wagtail\.admin\.views\.reports\.audit_logging(\..*)?
-wagtail\.admin\.views\.reports\.base(\..*)?
-wagtail\.admin\.views\.reports\.locked_pages(\..*)?
-wagtail\.admin\.views\.reports\.page_types_usage(\..*)?
+# django-filter FilterSet metaclass attributes
+wagtail\.admin\.views\.reports\.locked_pages\.LockedPagesReportFilterSet(\..*)?
+# django-filter FilterSet metaclass attributes
+wagtail\.admin\.views\.reports\.page_types_usage\.PageTypesUsageReportFilterSet(\..*)?
 wagtail\.admin\.views\.reports\.workflows(\..*)?
 wagtail\.admin\.views\.workflows(\..*)?
-wagtail\.admin\.viewsets(\..*)?
+# Stub-only type aliases
+wagtail\.admin\.viewsets\.listing\.ListDisplayItem
+wagtail\.admin\.viewsets\.listing\.ListFilter
 wagtail\.admin\.wagtail_hooks(\..*)?
-wagtail\.admin\.widgets(\..*)?
+# MediaDefiningClass adds media at runtime
+wagtail\.admin\.widgets\.tags\.AdminTagWidget(\..*)?
 wagtail\.api\.v2\.serializers(\..*)?
 wagtail\.api\.v2\.utils(\..*)?
 wagtail\.api\.v2\.views(\..*)?

@@ -36,8 +36,8 @@ from wagtail.coreutils import (
 from wagtail.coreutils import (
     get_locales_display_names as get_locales_display_names,
 )
+from wagtail.models import AbstractPage as AbstractPage
 from wagtail.models.i18n import Locale as Locale
-from wagtail.models.pages import Page as Page
 from wagtail.models.pages import PageViewRestriction as PageViewRestriction
 from wagtail.users.utils import get_gravatar_url as get_gravatar_url
 

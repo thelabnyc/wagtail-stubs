@@ -3,6 +3,7 @@ from functools import cached_property as cached_property
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import AbstractBaseUser
 from django.http import HttpRequest
+from django.utils.functional import _StrOrPromise
 from django.views.generic.base import TemplateView
 from wagtail import hooks as hooks
 from wagtail.admin import messages as messages
@@ -123,7 +124,7 @@ class ChangePasswordPanel(BaseSettingsPanel):
 
 class AccountView(WagtailAdminTemplateMixin, TemplateView):
     template_name: str
-    page_title: str
+    page_title: _StrOrPromise
     header_icon: str
     def get_breadcrumbs_items(self): ...
     def get_context_data(self, **kwargs): ...

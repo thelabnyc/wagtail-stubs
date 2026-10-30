@@ -1,3 +1,6 @@
-from wagtail.permissions import page_permission_policy as page_permission_policy
+from wagtail.models import AbstractPage
+from wagtail.permissions import policy_registry as policy_registry
+
+Page: type[AbstractPage]
 
 def get_site_for_user(user): ...

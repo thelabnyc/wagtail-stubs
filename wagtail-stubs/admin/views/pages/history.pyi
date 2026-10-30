@@ -1,17 +1,20 @@
+from django.utils.functional import cached_property
 from wagtail.admin.views.generic import history as history
 from wagtail.admin.views.pages.utils import GenericPageBreadcrumbsMixin as GenericPageBreadcrumbsMixin
 from wagtail.admin.widgets import BooleanRadioSelect as BooleanRadioSelect
-from wagtail.models.pages import Page as Page
+from wagtail.models import AbstractPage
 from wagtail.models.pages import PageLogEntry as PageLogEntry
-from wagtail.permissions import page_permission_policy as page_permission_policy
+from wagtail.permission_policies.pages import PagePermissionPolicy
 import django_filters
+
+Page: type[AbstractPage]
 
 class PageHistoryFilterSet(history.HistoryFilterSet):
     is_commenting_action: django_filters.BooleanFilter
     def filter_is_commenting_action(self, queryset, name, value): ...
 
 class PageWorkflowHistoryViewMixin:
-    model = Page
+    model: type[AbstractPage]
     pk_url_kwarg: str
     edit_url_name: str
     def dispatch(self, request, *args, **kwargs): ...
@@ -31,10 +34,11 @@ class WorkflowHistoryDetailView(
 class PageHistoryView(GenericPageBreadcrumbsMixin, history.HistoryView):
     template_name: str
     filterset_class = PageHistoryFilterSet
-    model = Page
+    model: type[AbstractPage]
     pk_url_kwarg: str
-    permission_policy = page_permission_policy
-    any_permission_required: set[str]
+    @cached_property
+    def permission_policy(self) -> PagePermissionPolicy[AbstractPage]: ...
+    any_permission_required: list[str]
     history_url_name: str
     history_results_url_name: str
     edit_url_name: str

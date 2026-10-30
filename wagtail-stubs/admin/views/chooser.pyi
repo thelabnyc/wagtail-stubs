@@ -26,19 +26,22 @@ from wagtail.admin.ui.tables import Column as Column
 from wagtail.admin.ui.tables import DateColumn as DateColumn
 from wagtail.admin.ui.tables import Table as Table
 from wagtail.coreutils import resolve_model_string as resolve_model_string
+from wagtail.models import AbstractPage
 from wagtail.models.i18n import Locale as Locale
-from wagtail.models.pages import Page as Page
 from wagtail.models.sites import Site as Site
 
+Page: type[AbstractPage]
+base_page_type_string: str
+
 def shared_context(request: HttpRequest, extra_context: dict[str, Any] | None = None) -> dict[str, Any]: ...
-def page_models_from_string(string: str) -> tuple[type[Page], ...]: ...
+def page_models_from_string(string: str) -> tuple[type[AbstractPage], ...]: ...
 def can_choose_page(
-    page: Page,
+    page: AbstractPage,
     user: AbstractBaseUser,
-    desired_classes: tuple[type[Page], ...],
+    desired_classes: tuple[type[AbstractPage], ...],
     can_choose_root: bool = True,
     user_perm: str | bool | None = None,
-    target_pages: QuerySet[Page] | None = None,
+    target_pages: QuerySet[AbstractPage] | None = None,
     match_subclass: bool = True,
 ) -> bool: ...
 
@@ -48,7 +51,7 @@ class PageChooserTable(Table):
     def __init__(
         self,
         columns: Sequence[BaseColumn],
-        data: Sequence[Page],
+        data: Sequence[AbstractPage],
         *,
         show_locale_labels: bool = False,
         template_name: str | None = None,
@@ -59,7 +62,7 @@ class PageChooserTable(Table):
         caption: str | None = None,
     ) -> None: ...
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
-    def get_row_classname(self, page: Page) -> str: ...
+    def get_row_classname(self, page: AbstractPage) -> str: ...
 
 class PageTitleColumn(Column):
     cell_template_name: str
@@ -77,21 +80,21 @@ class PageTitleColumn(Column):
         ascending_title_text: str | None = None,
         descending_title_text: str | None = None,
     ) -> None: ...
-    def get_value(self, instance: Page) -> str: ...
-    def get_cell_context_data(self, instance: Page, parent_context: dict[str, Any]) -> dict[str, Any]: ...
+    def get_value(self, instance: AbstractPage) -> str: ...
+    def get_cell_context_data(self, instance: AbstractPage, parent_context: dict[str, Any]) -> dict[str, Any]: ...
 
 class ParentPageColumn(Column):
     cell_template_name: str
-    def get_value(self, instance: Page) -> Page | None: ...
-    def get_cell_context_data(self, instance: Page, parent_context: dict[str, Any]) -> dict[str, Any]: ...
+    def get_value(self, instance: AbstractPage) -> AbstractPage | None: ...
+    def get_cell_context_data(self, instance: AbstractPage, parent_context: dict[str, Any]) -> dict[str, Any]: ...
 
 class PageStatusColumn(Column):
     cell_template_name: str
-    def get_value(self, instance: Page) -> Page: ...
+    def get_value(self, instance: AbstractPage) -> AbstractPage: ...
 
 class PageNavigateToChildrenColumn(Column):
     cell_template_name: str
-    def get_value(self, instance: Page) -> Page: ...
+    def get_value(self, instance: AbstractPage) -> AbstractPage: ...
 
 class PageCheckboxSelectColumn(Column):
     cell_template_name: str
@@ -99,12 +102,12 @@ class PageCheckboxSelectColumn(Column):
 class BrowseView(View):
     @property
     def columns(self) -> list[Column]: ...
-    def get_object_list(self) -> QuerySet[Page]: ...
-    def filter_object_list(self, pages: QuerySet[Page]) -> QuerySet[Page]: ...
+    def get_object_list(self) -> QuerySet[AbstractPage]: ...
+    def filter_object_list(self, pages: QuerySet[AbstractPage]) -> QuerySet[AbstractPage]: ...
     i18n_enabled: bool
     is_multiple_choice: str | None
-    desired_classes: tuple[type[Page], ...]
-    parent_page: Page
+    desired_classes: tuple[type[AbstractPage], ...]
+    parent_page: AbstractPage
     def get(self, request: HttpRequest, parent_page_id: int | None = None) -> HttpResponseBase: ...
 
 class SearchView(View):

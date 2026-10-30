@@ -7,16 +7,18 @@ from wagtail.admin.auth import (
     user_passes_test as user_passes_test,
 )
 from wagtail.admin.views.generic.models import (
-    RevisionsCompareView as RevisionsCompareView,
+    RevisionsCompareView as GenericRevisionsCompareView,
 )
 from wagtail.admin.views.generic.models import (
-    RevisionsUnscheduleView as RevisionsUnscheduleView,
+    RevisionsUnscheduleView as GenericRevisionsUnscheduleView,
 )
 from wagtail.admin.views.generic.preview import PreviewRevision as PreviewRevision
 from wagtail.admin.views.pages.edit import EditView as EditView
 from wagtail.admin.views.pages.utils import GenericPageBreadcrumbsMixin as GenericPageBreadcrumbsMixin
-from wagtail.models.pages import Page as Page
+from wagtail.models import AbstractPage
 from wagtail.utils.timestamps import render_timestamp as render_timestamp
+
+Page: type[AbstractPage]
 
 def revisions_index(request, page_id): ...
 
@@ -30,11 +32,11 @@ class RevisionsRevertView(EditView):
     def get_context_data(self, **kwargs): ...
 
 class RevisionsView(PreviewRevision):
-    model = Page
+    model: type[AbstractPage]
     def setup(self, request, page_id, revision_id, *args, **kwargs): ...
     def get_object(self): ...
 
-class RevisionsCompare(GenericPageBreadcrumbsMixin, RevisionsCompareView):
+class RevisionsCompareView(GenericPageBreadcrumbsMixin, GenericRevisionsCompareView):
     history_url_name: str
     edit_url_name: str
     header_icon: str
@@ -44,8 +46,8 @@ class RevisionsCompare(GenericPageBreadcrumbsMixin, RevisionsCompareView):
     def get_edit_handler(self): ...
     def get_page_subtitle(self): ...
 
-class RevisionsUnschedule(RevisionsUnscheduleView):
-    model = Page
+class RevisionsUnscheduleView(GenericRevisionsUnscheduleView):
+    model: type[AbstractPage]
     edit_url_name: str
     history_url_name: str
     revisions_unschedule_url_name: str

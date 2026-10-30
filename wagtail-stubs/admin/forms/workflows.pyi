@@ -9,8 +9,11 @@ from django.utils.functional import cached_property
 from django.utils.safestring import SafeString
 from wagtail.admin.forms.formsets import BaseFormSetMixin
 from wagtail.admin.panels.group import ObjectList
-from wagtail.models.pages import Page, WorkflowPage
+from wagtail.models import AbstractPage
+from wagtail.models.pages import WorkflowPage
 from wagtail.models.workflows import Task, Workflow
+
+Page: type[AbstractPage]
 
 class TaskChooserSearchForm(forms.Form):
     q: forms.CharField
@@ -27,7 +30,7 @@ class TaskChooserSearchForm(forms.Form):
     def specific_task_model_selected(self) -> bool: ...
 
 class WorkflowPageForm(forms.ModelForm[WorkflowPage]):
-    page: forms.ModelChoiceField[Page]
+    page: forms.ModelChoiceField[AbstractPage]
     def clean(self) -> None: ...
     def save(self, commit: bool = False) -> None: ...  # type: ignore[override]
 

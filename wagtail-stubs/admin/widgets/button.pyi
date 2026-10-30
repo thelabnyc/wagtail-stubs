@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.utils.functional import cached_property
 from wagtail.admin.ui.components import Component
 from wagtail.admin.ui.menus import MenuItem
-from wagtail.models import Page
+from wagtail.models import AbstractPage
 
 class BaseButton(Component):
     template_name: str
@@ -66,9 +66,6 @@ class ListingButton(Button):
         priority: int = 1000,
     ) -> None: ...
 
-class PageListingButton(ListingButton):
-    def __init__(self, *args: Any, **kwargs: Any) -> None: ...
-
 class BaseDropdownMenuButton(Button):
     template_name: str
     def __init__(
@@ -98,14 +95,14 @@ class ButtonWithDropdown(BaseDropdownMenuButton):
 
 class ButtonWithDropdownFromHook(BaseDropdownMenuButton):
     hook_name: str
-    page: Page
+    page: AbstractPage
     user: AbstractBaseUser
     next_url: str | None
     def __init__(
         self,
         label: str,
         hook_name: str,
-        page: Page,
+        page: AbstractPage,
         user: AbstractBaseUser,
         next_url: str | None = None,
         *,

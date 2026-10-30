@@ -5,14 +5,20 @@ from django.utils.functional import cached_property as cached_property
 from django.views.generic import FormView
 from wagtail.admin.forms.pages import ParentChooserForm as ParentChooserForm
 from wagtail.admin.views.generic.base import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
-from wagtail.models.pages import Page as Page
-from wagtail.permissions import page_permission_policy as page_permission_policy
+from wagtail.admin.views.generic.mixins import LocaleMixin as LocaleMixin
+from wagtail.models import AbstractPage
+from wagtail.permission_policies.pages import PagePermissionPolicy
+from wagtail.permissions import policy_registry as policy_registry
 
-class ChooseParentView(WagtailAdminTemplateMixin, FormView):
+Page: type[AbstractPage]
+
+class ChooseParentView(LocaleMixin, WagtailAdminTemplateMixin, FormView):
     template_name: str
-    model = Page
+    model: type[AbstractPage]
     index_url_name: str | None
     page_title: str
+    @cached_property
+    def permission_policy(self) -> PagePermissionPolicy[AbstractPage]: ...
     def get_valid_parent_pages(self, user): ...
     def get(self, request, *args, **kwargs): ...
     def get_form(self): ...

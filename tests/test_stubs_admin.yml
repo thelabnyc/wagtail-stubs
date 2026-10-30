@@ -1,0 +1,259 @@
+- case: admin_page_viewset_view_classes
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.views.pages.copy import CopyView
+    from wagtail.admin.views.pages.edit import EditView
+    from wagtail.admin.viewsets.pages import PageViewSet
+    from wagtail.models import Page
+
+    class BlogPage(Page):
+        pass
+
+    class BlogEditView(EditView):
+        pass
+
+    class BlogCopyView(CopyView):
+        pass
+
+    class BlogPageViewSet(PageViewSet):
+        model = BlogPage
+        edit_view_class = BlogEditView
+        copy_view_class = BlogCopyView
+
+    viewset = BlogPageViewSet()
+    reveal_type(PageViewSet().model)  # N: Revealed type is "type[wagtail.models.pages.AbstractPage]"
+    reveal_type(PageViewSet().copy_view_class)  # N: Revealed type is "type[wagtail.admin.views.pages.copy.CopyView]"
+    reveal_type(viewset.edit_view_class)  # N: Revealed type is "def (**kwargs: Any) -> main.BlogEditView"
+    reveal_type(viewset.edit_view)  # N: Revealed type is "def (*Any, **Any) -> django.http.response.HttpResponseBase"
+    reveal_type(viewset.workflow_preview_view)  # N: Revealed type is "def (*Any, **Any) -> django.http.response.HttpResponseBase"
+
+- case: admin_page_viewset_bad_view_class
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.views.pages.delete import DeleteView
+    from wagtail.admin.viewsets.pages import PageViewSet
+
+    class BrokenViewSet(PageViewSet):
+        edit_view_class = DeleteView  # E: Incompatible types in assignment (expression has type "type[DeleteView]", base class "PageViewSet" defined the type as "type[EditView]")  [assignment]
+
+- case: admin_page_viewset_registry_custom_base_page
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.viewsets.pages import PageViewSet, page_viewset_registry
+    from wagtail.models import AbstractPage
+
+    class BasePage(AbstractPage):
+        class Meta:
+            abstract = True
+
+    class NewsPage(BasePage):
+        pass
+
+    class NewsPageViewSet(PageViewSet):
+        model = NewsPage
+
+    page_viewset_registry.register(NewsPage, NewsPageViewSet(), parent_models=[BasePage])
+    reveal_type(page_viewset_registry.get_by_parent_model(NewsPage))  # N: Revealed type is "wagtail.admin.viewsets.pages.PageViewSet | None"
+    reveal_type(page_viewset_registry.get_page_model_by_content_type_id(1))  # N: Revealed type is "type[wagtail.models.pages.AbstractPage]"
+
+- case: admin_page_viewset_registry_as_view
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.viewsets.pages import page_viewset_registry
+
+    reveal_type(page_viewset_registry.as_view("edit", page_id_kwarg="page_id"))  # N: Revealed type is "def (*Any, **Any) -> django.http.response.HttpResponseBase"
+    page_viewset_registry.as_view("index", is_base_page=True)
+    page_viewset_registry.as_view("add", app_label_kwarg="app", model_name_kwarg="model")
+    page_viewset_registry.as_view("add_subpage", "parent_page_id", is_base_page=1)  # E: Argument "is_base_page" to "as_view" of "PageViewSetRegistry" has incompatible type "int"; expected "bool"  [arg-type]
+
+- case: admin_permission_checked_mixin_policy
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.views.generic import IndexView, PermissionCheckedMixin
+    from wagtail.models import Site
+    from wagtail.permission_policies import ModelPermissionPolicy
+
+    class SiteIndexView(IndexView):
+        model = Site
+        permission_policy = ModelPermissionPolicy(Site)
+
+    class NoPolicyView(PermissionCheckedMixin):
+        permission_policy = None
+
+    reveal_type(SiteIndexView().permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.ModelPermissionPolicy[Any]"
+    reveal_type(IndexView().permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any] | None"
+    reveal_type(NoPolicyView().permission_policy)  # N: Revealed type is "None"
+
+- case: admin_page_views_permission_policy
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import AbstractBaseUser
+    from wagtail.admin.views.home import HomeView
+    from wagtail.admin.views.pages.choose_parent import ChooseParentView
+    from wagtail.admin.views.pages.listing import IndexView
+    from wagtail.admin.views.pages.search import SearchView
+    from wagtail.admin.views.reports import PageReportView
+
+    def check(user: AbstractBaseUser) -> None:
+        reveal_type(IndexView().permission_policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+        reveal_type(IndexView().permission_policy.explorable_instances(user))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.AbstractPage]"
+        reveal_type(SearchView().permission_policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+        reveal_type(ChooseParentView().permission_policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+        reveal_type(HomeView().permission_policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+        reveal_type(PageReportView().permission_policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+
+- case: admin_viewset_permission_policy
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.viewsets.chooser import ChooserViewSet
+    from wagtail.admin.viewsets.model import ModelViewSet
+    from wagtail.models import Site
+    from wagtail.permission_policies import ModelPermissionPolicy
+
+    class SiteViewSet(ModelViewSet):
+        model = Site
+
+    class LegacyPolicyViewSet(ModelViewSet):
+        model = Site
+        permission_policy = ModelPermissionPolicy(Site)
+
+    reveal_type(SiteViewSet().permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any]"
+    reveal_type(LegacyPolicyViewSet().permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.ModelPermissionPolicy[Any]"
+    reveal_type(ChooserViewSet("sites").permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any] | wagtail.admin.viewsets.base._Undefined | None"
+
+- case: admin_generic_views_action_class
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.views.generic import CreateView, DeleteView, EditView
+
+    reveal_type(CreateView().action_class)  # N: Revealed type is "type[wagtail.actions.create.CreateAction[Any]]"
+    reveal_type(EditView().action_class)  # N: Revealed type is "type[wagtail.actions.edit.EditAction[Any]]"
+    reveal_type(DeleteView().action_class)  # N: Revealed type is "type[wagtail.actions.base.BaseAction[Any]]"
+
+- case: admin_menu_order_and_submenu_hook
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.viewsets.base import ViewSet, ViewSetGroup
+
+    class UnorderedViewSet(ViewSet):
+        menu_order = None
+
+    class OrderedViewSet(ViewSet):
+        menu_order = 100
+
+    class Group(ViewSetGroup):
+        items = (UnorderedViewSet, OrderedViewSet)
+        submenu_hook = "register_group_menu_item"
+
+    reveal_type(UnorderedViewSet().menu_order)  # N: Revealed type is "None"
+    reveal_type(UnorderedViewSet().get_menu_item_order())  # N: Revealed type is "int"
+    reveal_type(OrderedViewSet().get_menu_item_order(5))  # N: Revealed type is "int"
+    reveal_type(Group().submenu_hook)  # N: Revealed type is "str"
+
+- case: admin_userbar_accepts_any_model
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.admin.userbar import BaseItem, Userbar, apply_userbar_hooks
+    from wagtail.models import Site
+
+    def render(request: HttpRequest, site: Site, items: list[BaseItem]) -> None:
+        bar = Userbar(object=site)
+        reveal_type(bar.object)  # N: Revealed type is "django.db.models.base.Model | None"
+        apply_userbar_hooks(request, items, site)
+
+- case: admin_renamed_page_views
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.views.page_privacy import SetPrivacyView
+    from wagtail.admin.views.pages.convert_alias import ConvertAliasView
+    from wagtail.admin.views.pages.create import AddSubpageView
+    from wagtail.admin.views.pages.move import MoveChooseDestinationView, MoveConfirmView
+    from wagtail.admin.views.pages.ordering import SetPagePositionView
+    from wagtail.admin.views.pages.preview import PreviewOnCreateView, PreviewOnEditView, ViewDraftView
+    from wagtail.admin.views.pages.revisions import RevisionsCompareView, RevisionsUnscheduleView
+    from wagtail.admin.views.pages.unpublish import UnpublishView
+    from wagtail.admin.views.pages.workflow import (
+        CollectWorkflowActionDataView,
+        ConfirmWorkflowCancellationView,
+        PreviewRevisionForTaskView,
+        WorkflowActionView,
+    )
+
+    reveal_type(SetPrivacyView().object)  # N: Revealed type is "wagtail.models.pages.PageViewRestriction | None"
+    reveal_type(SetPrivacyView().get_form())  # N: Revealed type is "wagtail.admin.forms.pages.PageViewRestrictionForm"
+    reveal_type(MoveChooseDestinationView().get_form())  # N: Revealed type is "wagtail.admin.forms.pages.MoveForm"
+
+- case: admin_removed_names
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.widgets.button import PageListingButton  # E: Module "wagtail.admin.widgets.button" has no attribute "PageListingButton"; maybe "ListingButton"?  [attr-defined]
+    from wagtail.admin.views.pages.copy import copy  # E: Module "wagtail.admin.views.pages.copy" has no attribute "copy"  [attr-defined]
+    from wagtail.admin.views.pages.move import MoveChooseDestination  # E: Module "wagtail.admin.views.pages.move" has no attribute "MoveChooseDestination"; maybe "MoveChooseDestinationView"?  [attr-defined]
+    from wagtail.admin.auth import page_permission_policy  # E: Module "wagtail.admin.auth" has no attribute "page_permission_policy"; maybe "BasePermissionPolicy"?  [attr-defined]

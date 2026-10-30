@@ -3,23 +3,26 @@ from typing import Any
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
-from django.utils.functional import classproperty
+from django.utils.functional import cached_property, classproperty
 from wagtail.admin.ui.tables import BaseColumn
 from wagtail.admin.ui.tables.pages import NavigateToChildrenColumn as NavigateToChildrenColumn
 from wagtail.admin.views.generic.base import BaseListingView as BaseListingView
 from wagtail.admin.views.generic.permissions import PermissionCheckedMixin as PermissionCheckedMixin
 from wagtail.admin.views.pages.listing import PageListingMixin as PageListingMixin
-from wagtail.models.pages import Page as Page
-from wagtail.permissions import page_permission_policy as page_permission_policy
+from wagtail.models import AbstractPage
+from wagtail.permission_policies.pages import PagePermissionPolicy
 from wagtail.search.query import MATCH_ALL as MATCH_ALL
 from wagtail.search.utils import parse_query_string as parse_query_string
 
+Page: type[AbstractPage]
+
 def page_filter_search(
-    q: str, pages: QuerySet[Page], all_pages: QuerySet[Page] | None = None, ordering: str | None = None
-) -> tuple[QuerySet[Page], QuerySet[Page] | None]: ...
+    q: str, pages: QuerySet[AbstractPage], all_pages: QuerySet[AbstractPage] | None = None, ordering: str | None = None
+) -> tuple[QuerySet[AbstractPage], QuerySet[AbstractPage] | None]: ...
 
 class SearchView(PageListingMixin, PermissionCheckedMixin, BaseListingView):
-    permission_policy = page_permission_policy
+    @cached_property
+    def permission_policy(self) -> PagePermissionPolicy[AbstractPage]: ...
     any_permission_required: set[str]
     paginate_by: int
     page_title: str
@@ -34,8 +37,9 @@ class SearchView(PageListingMixin, PermissionCheckedMixin, BaseListingView):
     @classproperty
     def columns(cls) -> list[BaseColumn]: ...
     content_types: list[tuple[ContentType, int]]
-    ordering: str | None
+    @cached_property
+    def ordering(self) -> str | None: ...
     selected_content_type: ContentType | None
     def get(self, request: HttpRequest) -> HttpResponse: ...
-    def get_queryset(self) -> QuerySet[Page]: ...
+    def get_queryset(self) -> QuerySet[AbstractPage]: ...
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...

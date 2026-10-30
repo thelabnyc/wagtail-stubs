@@ -1,4 +1,5 @@
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.filters import (
@@ -71,7 +72,7 @@ class IndexView(generic.IndexView):
     results_template_name: str
     add_item_label: str
     context_object_name: str
-    page_title: str
+    page_title: _StrOrPromise
     show_other_searches: bool
     @cached_property
     def columns(self): ...
@@ -87,7 +88,7 @@ class IndexView(generic.IndexView):
 
 class CreateView(generic.CreateView):
     success_message: str
-    page_title: str
+    page_title: _StrOrPromise
     def run_before_hook(self): ...
     def run_after_hook(self): ...
 
@@ -107,7 +108,7 @@ class EditView(generic.EditView):
     def get_context_data(self, **kwargs): ...
 
 class DeleteView(generic.DeleteView):
-    page_title: str
+    page_title: _StrOrPromise
     success_message: str
     context_object_name: str
     object: AbstractBaseUser

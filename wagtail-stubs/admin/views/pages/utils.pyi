@@ -6,7 +6,7 @@ from wagtail.admin.utils import (
 from wagtail.admin.utils import (
     get_valid_next_url_from_request as get_valid_next_url_from_request,
 )
-from wagtail.permissions import page_permission_policy as page_permission_policy
+from wagtail.permissions import policy_registry as policy_registry
 
 def get_breadcrumbs_items_for_page(
     page,

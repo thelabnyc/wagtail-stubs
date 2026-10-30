@@ -1,4 +1,5 @@
 from django.contrib.auth.models import Group
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from wagtail import hooks as hooks
 from wagtail.admin.ui.tables import TitleColumn as TitleColumn
@@ -21,7 +22,7 @@ class PermissionPanelFormsMixin:
     def get_context_data(self, **kwargs): ...
 
 class IndexView(generic.IndexView):
-    page_title: str
+    page_title: _StrOrPromise
     add_item_label: str
     search_box_placeholder: str
     search_fields: list[str]
@@ -30,7 +31,7 @@ class IndexView(generic.IndexView):
     columns: list[TitleColumn]
 
 class CreateView(PermissionPanelFormsMixin, generic.CreateView):
-    page_title: str
+    page_title: _StrOrPromise
     success_message: str
     object: Group
     def post(self, request, *args, **kwargs): ...
@@ -46,7 +47,7 @@ class EditView(PermissionPanelFormsMixin, generic.EditView):
 
 class DeleteView(generic.DeleteView):
     success_message: str
-    page_title: str
+    page_title: _StrOrPromise
     confirmation_message: str
 
 class GroupViewSet(ModelViewSet):

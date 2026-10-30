@@ -91,23 +91,11 @@ from wagtail.admin.views.pages.bulk_actions import (
 from wagtail.admin.viewsets import viewsets as viewsets
 from wagtail.admin.viewsets.pages import PageViewSet
 from wagtail.admin.widgets import ButtonWithDropdownFromHook as ButtonWithDropdownFromHook
-from wagtail.admin.widgets.button import PageListingButton as PageListingButton
+from wagtail.models import AbstractPage
 from wagtail.models.media import Collection as Collection
-from wagtail.models.pages import Page as Page
 from wagtail.models.workflows import Task as Task
 from wagtail.models.workflows import Workflow as Workflow
-from wagtail.permissions import (
-    collection_permission_policy as collection_permission_policy,
-)
-from wagtail.permissions import (
-    page_permission_policy as page_permission_policy,
-)
-from wagtail.permissions import (
-    task_permission_policy as task_permission_policy,
-)
-from wagtail.permissions import (
-    workflow_permission_policy as workflow_permission_policy,
-)
+from wagtail.permissions import policy_registry as policy_registry
 from wagtail.rich_text.feature_registry import FeatureRegistry as FeatureRegistry
 from wagtail.templatetags.wagtailcore_tags import (
     wagtail_feature_release_editor_guide_link as wagtail_feature_release_editor_guide_link,
@@ -125,6 +113,8 @@ from wagtail.whitelist import (
 from wagtail.whitelist import (
     check_url as check_url,
 )
+
+Page: type[AbstractPage]
 
 class ExplorerMenuItem(MenuItem):
     def is_shown(self, request: HttpRequest) -> bool: ...
@@ -161,7 +151,7 @@ class WorkflowTasksMenuItem(MenuItem):
 def register_workflows_menu_item() -> WorkflowsMenuItem: ...
 def register_workflow_tasks_menu_item() -> WorkflowTasksMenuItem: ...
 def page_listing_buttons(
-    page: Page, user: AbstractBaseUser, next_url: str | None = None
+    page: AbstractPage, user: AbstractBaseUser, next_url: str | None = None
 ) -> Generator[ButtonWithDropdownFromHook]: ...
 
 class PageListingEditButton(PageMenuItem):
@@ -228,10 +218,10 @@ class PageListingSortMenuOrderButton(PageMenuItem):
     def url(self) -> str: ...
 
 def page_listing_more_buttons(
-    page: Page, user: AbstractBaseUser, next_url: str | None = None
+    page: AbstractPage, user: AbstractBaseUser, next_url: str | None = None
 ) -> Generator[PageMenuItem]: ...
 def page_header_buttons(
-    page: Page, user: AbstractBaseUser, view_name: str, next_url: str | None = None
+    page: AbstractPage, user: AbstractBaseUser, view_name: str, next_url: str | None = None
 ) -> Generator[PageMenuItem]: ...
 def register_viewsets_urls() -> list[URLPattern | URLResolver]: ...
 def register_core_features(features: FeatureRegistry) -> None: ...
@@ -268,16 +258,13 @@ def add_pages_summary_item(request: HttpRequest, items: list[SummaryItem]) -> No
 class PageAdminURLFinder:
     user: AbstractBaseUser | None
     def __init__(self, user: AbstractBaseUser | None) -> None: ...
-    def get_edit_url(self, instance: Page) -> str | None: ...
+    def get_edit_url(self, instance: AbstractPage) -> str | None: ...
 
 class CollectionAdminURLFinder(ModelAdminURLFinder):
-    permission_policy = collection_permission_policy
     edit_url_name: str
 
 class WorkflowAdminURLFinder(ModelAdminURLFinder):
-    permission_policy = workflow_permission_policy
     edit_url_name: str
 
 class WorkflowTaskAdminURLFinder(ModelAdminURLFinder):
-    permission_policy = task_permission_policy
     edit_url_name: str

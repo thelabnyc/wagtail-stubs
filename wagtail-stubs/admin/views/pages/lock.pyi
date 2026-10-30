@@ -1,8 +1,10 @@
 from wagtail.admin.views.generic import lock as lock
-from wagtail.models.pages import Page as Page
+from wagtail.models import AbstractPage
+
+Page: type[AbstractPage]
 
 class PageOperationViewMixin:
-    model = Page
+    model: type[AbstractPage]
     pk_url_kwarg: str
     def get_object(self): ...
     def get_success_url(self): ...

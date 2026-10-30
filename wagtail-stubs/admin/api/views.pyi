@@ -1,6 +1,6 @@
 from rest_framework.authentication import SessionAuthentication
 from wagtail.api.v2.views import PagesAPIViewSet as PagesAPIViewSet
-from wagtail.models.pages import Page as Page
+from wagtail.models import AbstractPage
 
 from .actions.convert_alias import ConvertAliasPageAPIAction as ConvertAliasPageAPIAction
 from .actions.copy import CopyPageAPIAction as CopyPageAPIAction
@@ -14,6 +14,8 @@ from .actions.unpublish import UnpublishPageAPIAction as UnpublishPageAPIAction
 from .filters import ForExplorerFilter as ForExplorerFilter
 from .filters import HasChildrenFilter as HasChildrenFilter
 from .serializers import AdminPageSerializer as AdminPageSerializer
+
+Page: type[AbstractPage]
 
 class PagesAdminAPIViewSet(PagesAPIViewSet):
     base_serializer_class = AdminPageSerializer
