@@ -3,11 +3,9 @@ from typing import Any
 
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser
 from django.db.models import Model
-from django.forms import BaseForm
+from django.forms import BaseForm, BaseModelForm
 from django.utils.datastructures import MultiValueDict
 from pydantic import BaseModel
-from wagtail.admin.forms.models import WagtailAdminModelForm
-from wagtail.admin.forms.pages import WagtailAdminPageForm
 from wagtail.blocks import Block
 from wagtail.models import AbstractPage
 
@@ -18,28 +16,30 @@ def filter_form_options(
     form_options: dict[str, Any],
     writable_fields: Iterable[str],
 ) -> dict[str, Any]: ...
-def get_api_form_class(model: type[Model], field_names: Iterable[str] | None = None) -> type[WagtailAdminModelForm]: ...
-def build_page_form(
-    model: type[AbstractPage],
+def get_api_form_class[M: Model](
+    model: type[M], field_names: Iterable[str] | None = None
+) -> type[BaseModelForm[M]]: ...
+def build_page_form[P: AbstractPage](
+    model: type[P],
     parent: AbstractPage,
     data: BaseModel,
     user: AbstractBaseUser | AnonymousUser,
-) -> WagtailAdminPageForm: ...
-def build_page_update_form(
-    page: AbstractPage,
+) -> BaseModelForm[P]: ...
+def build_page_update_form[P: AbstractPage](
+    page: P,
     data: BaseModel,
     user: AbstractBaseUser | AnonymousUser,
-) -> WagtailAdminPageForm: ...
-def build_model_form(
-    model: type[Model],
+) -> BaseModelForm[P]: ...
+def build_model_form[M: Model](
+    model: type[M],
     data: BaseModel,
     user: AbstractBaseUser | AnonymousUser,
-) -> WagtailAdminModelForm: ...
-def build_model_update_form(
-    instance: Model,
+) -> BaseModelForm[M]: ...
+def build_model_update_form[M: Model](
+    instance: M,
     data: BaseModel,
     user: AbstractBaseUser | AnonymousUser,
-) -> WagtailAdminModelForm: ...
+) -> BaseModelForm[M]: ...
 def get_warnings(data: MultiValueDict[str, Any]) -> list[Any]: ...
 def add_warnings(data: MultiValueDict[str, Any], warnings: list[Any]) -> None: ...
 def flatten_block_value(block: Block, value: Any, prefix: str, data: MultiValueDict[str, Any]) -> None: ...

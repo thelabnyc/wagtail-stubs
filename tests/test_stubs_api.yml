@@ -258,6 +258,7 @@
     reveal_type(SiteInputSchema(hostname="example.com", root_page_id=1).root_page)  # N: Revealed type is "int"
     reveal_type(SiteInputSchema.__init__)  # N: Revealed type is "def (self: wagtail.api.v3.schemas.sites.SiteInputSchema, *, hostname: str, port: int =, site_name: str =, root_page_id: int, is_default_site: bool =)"
     reveal_type(RedirectInputSchema(old_path="/old/", redirect_page_id=None).redirect_page)  # N: Revealed type is "int | None"
+    SiteInputSchema(hostname="example.com", root_page_id=1, root_page=1)  # E: Unexpected keyword argument "root_page" for "SiteInputSchema"; did you mean "root_page_id"?  [call-arg]  # N: "SiteInputSchema" defined in "wagtail.api.v3.schemas.sites"
 
 - case: api_v3_queryset_param_schemas
   mypy_config: |
@@ -281,7 +282,41 @@
         reveal_type(OrderingSchema().order_queryset(pages, pagination, base_fields=["title"]))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
         reveal_type(TranslationFilterSchema().filter_queryset(pages))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
         reveal_type(PageFilterSchema().filter(pages, request))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        page_filter = PageFilterSchema(type=["blog.BlogPage"], child_of="root")
+        reveal_type(page_filter.type)  # N: Revealed type is "list[type[django.db.models.base.Model]]"
+        reveal_type(page_filter.type[0]._meta.label)  # N: Revealed type is "str"
+        PageFilterSchema(type=[BlogPage])  # E: List item 0 has incompatible type "type[BlogPage]"; expected "str"  [list-item]
         reveal_type(SearchSchema().search_queryset(request, pages))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage] | wagtail.search.backends.base.BaseSearchResults"
+
+- case: api_v3_form_data_keeps_model
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import AbstractBaseUser
+    from pydantic import BaseModel
+    from wagtail.api.v3.form_data import (
+        build_model_form,
+        build_model_update_form,
+        build_page_form,
+        build_page_update_form,
+        get_api_form_class,
+    )
+    from wagtail.models import Page, Site
+
+    class BlogPage(Page):
+        pass
+
+    def check(user: AbstractBaseUser, data: BaseModel, home: Page, blog: BlogPage, site: Site) -> None:
+        reveal_type(get_api_form_class(Site))  # N: Revealed type is "type[django.forms.models.BaseModelForm[wagtail.models.sites.Site]]"
+        reveal_type(build_model_form(Site, data, user).instance)  # N: Revealed type is "wagtail.models.sites.Site"
+        reveal_type(build_model_update_form(site, data, user).instance)  # N: Revealed type is "wagtail.models.sites.Site"
+        reveal_type(build_page_form(BlogPage, home, data, user).instance)  # N: Revealed type is "main.BlogPage"
+        reveal_type(build_page_update_form(blog, data, user).instance)  # N: Revealed type is "main.BlogPage"
+        build_model_form(Site, data, user).defer_required_fields()  # E: "BaseModelForm[Site]" has no attribute "defer_required_fields"  [attr-defined]
 
 - case: api_bare_subclasses_strict
   mypy_config: |

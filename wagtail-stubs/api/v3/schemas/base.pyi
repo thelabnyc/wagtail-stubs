@@ -13,7 +13,9 @@ class BaseMetaSchema(Schema):
     @staticmethod
     def resolve_type(obj: Model, context: dict[str, Any]) -> str: ...
     @staticmethod
-    def resolve_warnings(obj: Model, context: dict[str, Any]) -> list[str] | None: ...
+    def resolve_warnings(
+        obj: Model, context: dict[str, Any]
+    ) -> list[RichTextRemoval | str | dict[str, Any]] | None: ...
 
 class BaseSchema(Schema):
     meta: BaseMetaSchema
