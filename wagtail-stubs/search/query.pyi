@@ -20,6 +20,7 @@ class Fuzzy(SearchQuery):
     DEFAULT_OPERATOR: str
     query_string: str
     operator: str
+    unaccent: bool
     def __init__(self, query_string: str, operator: str = ..., unaccent: bool = False) -> None: ...
 
 class Boost(SearchQuery):
