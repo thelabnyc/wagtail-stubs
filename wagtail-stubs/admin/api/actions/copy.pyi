@@ -4,9 +4,11 @@ from wagtail.actions.copy_page import CopyPageAction as CopyPageAction
 from wagtail.actions.copy_page import CopyPageIntegrityError as CopyPageIntegrityError
 from wagtail.api.v2.utils import BadRequestError as BadRequestError
 from wagtail.coreutils import find_available_slug as find_available_slug
-from wagtail.models.pages import Page as Page
+from wagtail.models import AbstractPage
 
 from .base import APIAction as APIAction
+
+Page: type[AbstractPage]
 
 class CopyPageAPIActionSerializer(Serializer):
     destination_page_id: IntegerField

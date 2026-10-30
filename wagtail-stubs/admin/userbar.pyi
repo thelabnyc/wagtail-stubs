@@ -1,12 +1,12 @@
 from typing import Any
 
+from django.db.models import Model
 from django.http import HttpRequest
 from django.utils.functional import _StrOrPromise
 from wagtail import hooks as hooks
 from wagtail.admin.ui.components import Component as Component
 from wagtail.admin.utils import get_admin_base_url as get_admin_base_url
-from wagtail.coreutils import accepts_kwarg as accepts_kwarg
-from wagtail.models.pages import Page as Page
+from wagtail.models.pages import AbstractPage as AbstractPage
 from wagtail.models.revisions import Revision as Revision
 from wagtail.users.models import UserProfile as UserProfile
 from wagtail.utils.deprecation import RemovedInWagtail90Warning as RemovedInWagtail90Warning
@@ -47,29 +47,29 @@ class AccessibilityItem(ContentCheckerItem): ...
 
 class AddPageItem(BaseItem):
     template_name: str
-    page: Page
-    parent_page: Page | None
-    def __init__(self, page: Page) -> None: ...
+    page: AbstractPage
+    parent_page: AbstractPage | None
+    def __init__(self, page: AbstractPage) -> None: ...
     def render_html(self, parent_context: dict[str, Any]) -> str: ...
 
 class ExplorePageItem(BaseItem):
     template_name: str
-    page: Page
-    parent_page: Page | None
-    def __init__(self, page: Page) -> None: ...
+    page: AbstractPage
+    parent_page: AbstractPage | None
+    def __init__(self, page: AbstractPage) -> None: ...
     def render_html(self, parent_context: dict[str, Any]) -> str: ...
 
 class EditPageItem(BaseItem):
     template_name: str
-    page: Page
-    def __init__(self, page: Page) -> None: ...
+    page: AbstractPage
+    def __init__(self, page: AbstractPage) -> None: ...
     def render_html(self, parent_context: dict[str, Any]) -> str: ...
 
-def apply_userbar_hooks(request: HttpRequest, items: list[BaseItem], page: Page | None) -> None: ...
+def apply_userbar_hooks(request: HttpRequest, items: list[BaseItem], page: Model | None) -> None: ...
 
 class Userbar(Component):
     template_name: str
-    object: Page | None
+    object: Model | None
     position: str
-    def __init__(self, *, object: Page | None = None, position: str = "bottom-right") -> None: ...
+    def __init__(self, *, object: Model | None = None, position: str = "bottom-right") -> None: ...
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...

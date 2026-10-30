@@ -15,10 +15,8 @@ from wagtail.admin.views.generic import (
     IndexView as IndexView,
 )
 from wagtail.models.media import Collection as Collection
-from wagtail.permissions import collection_permission_policy as collection_permission_policy
 
 class Index(IndexView):
-    permission_policy = collection_permission_policy
     model = Collection
     context_object_name: str
     results_template_name: str
@@ -32,7 +30,6 @@ class Index(IndexView):
     def get_table(self, object_list): ...
 
 class Create(CreateView):
-    permission_policy = collection_permission_policy
     model = Collection
     form_class = CollectionForm
     page_title: str
@@ -45,7 +42,6 @@ class Create(CreateView):
     def save_instance(self): ...
 
 class Edit(EditView):
-    permission_policy = collection_permission_policy
     model = Collection
     form_class = CollectionForm
     template_name: str
@@ -61,7 +57,6 @@ class Edit(EditView):
     def save_instance(self): ...
 
 class Delete(DeleteView):
-    permission_policy = collection_permission_policy
     model = Collection
     success_message: str
     index_url_name: str

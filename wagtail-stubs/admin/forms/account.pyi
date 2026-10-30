@@ -2,8 +2,10 @@ from typing import Any
 
 from django import forms
 from django.contrib.auth.models import AbstractBaseUser
+from wagtail.models import AbstractPage
 from wagtail.users.models import UserProfile
 
+Page: type[AbstractPage]
 User: type[AbstractBaseUser]
 
 class NotificationPreferencesForm(forms.ModelForm[UserProfile]):
