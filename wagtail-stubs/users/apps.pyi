@@ -7,3 +7,4 @@ class WagtailUsersAppConfig(AppConfig):
     default_auto_field: str
     group_viewset: str
     user_viewset: str
+    def ready(self) -> None: ...

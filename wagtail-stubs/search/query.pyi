@@ -9,7 +9,7 @@ class PlainText(SearchQuery):
     query_string: str
     operator: str
     boost: float
-    def __init__(self, query_string: str, operator: str = ..., boost: float = 1.0) -> None: ...
+    def __init__(self, query_string: str, operator: str = ..., boost: float = 1) -> None: ...
 
 class Phrase(SearchQuery):
     query_string: str
@@ -20,7 +20,7 @@ class Fuzzy(SearchQuery):
     DEFAULT_OPERATOR: str
     query_string: str
     operator: str
-    def __init__(self, query_string: str, operator: str = ...) -> None: ...
+    def __init__(self, query_string: str, operator: str = ..., unaccent: bool = False) -> None: ...
 
 class Boost(SearchQuery):
     subquery: SearchQuery

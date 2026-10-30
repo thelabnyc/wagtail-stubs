@@ -7,7 +7,7 @@ from wagtail.admin.admin_url_finder import (
 )
 from wagtail.admin.menu import MenuItem as MenuItem
 from wagtail.contrib.redirects import urls as urls
-from wagtail.contrib.redirects.permissions import permission_policy as permission_policy
+from wagtail.permissions import policy_registry as policy_registry
 
 from .models import Redirect as Redirect
 
@@ -21,4 +21,3 @@ def register_permissions(): ...
 
 class RedirectAdminURLFinder(ModelAdminURLFinder):
     edit_url_name: str
-    permission_policy = permission_policy

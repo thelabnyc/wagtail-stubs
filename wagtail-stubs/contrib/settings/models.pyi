@@ -1,10 +1,12 @@
-from typing import Any
+from typing import Any, Self
 
 from django.db import models
 from django.http import HttpRequest
 from django.utils.functional import cached_property
 from wagtail.coreutils import InvokeViaAttributeShortcut
 from wagtail.models.sites import Site
+from wagtail.permission_policies.base import BasePermissionPolicy
+from wagtail.permission_policies.sites import SitePermissionPolicy
 
 from .registry import register_setting as register_setting
 
@@ -19,6 +21,8 @@ class AbstractSetting(models.Model):
     def base_queryset(cls): ...
     @classmethod
     def get_cache_attr_name(cls) -> str: ...
+    @classmethod
+    def get_permission_policy(cls) -> BasePermissionPolicy[Self]: ...
     def __init__(self, *args: Any, **kwargs: Any) -> None: ...
     @cached_property
     def page_url(self) -> InvokeViaAttributeShortcut: ...
@@ -29,6 +33,8 @@ class BaseSiteSetting(AbstractSetting):
     class Meta:
         abstract: bool
 
+    @classmethod
+    def get_permission_policy(cls) -> SitePermissionPolicy[Self]: ...
     @classmethod
     def for_request(cls, request: HttpRequest): ...
     @classmethod

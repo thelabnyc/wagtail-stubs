@@ -20,7 +20,6 @@ from wagtail.images import (
 )
 from wagtail.images.api.admin.views import ImagesAdminAPIViewSet as ImagesAdminAPIViewSet
 from wagtail.images.forms import GroupImagePermissionFormSet as GroupImagePermissionFormSet
-from wagtail.images.permissions import permission_policy as permission_policy
 from wagtail.images.rich_text import ImageEmbedHandler as ImageEmbedHandler
 from wagtail.images.rich_text.contentstate import ContentstateImageConversionRule as ContentstateImageConversionRule
 from wagtail.images.rich_text.editor_html import EditorHTMLImageConversionRule as EditorHTMLImageConversionRule
@@ -33,6 +32,7 @@ from wagtail.images.views.bulk_actions import (
 from wagtail.images.views.bulk_actions import (
     DeleteBulkAction as DeleteBulkAction,
 )
+from wagtail.permissions import policy_registry as policy_registry
 
 def register_admin_urls(): ...
 def construct_admin_api(router) -> None: ...
@@ -61,6 +61,5 @@ def describe_collection_docs(collection): ...
 
 class ImageAdminURLFinder(ModelAdminURLFinder):
     edit_url_name: str
-    permission_policy = permission_policy
 
 def register_image_chooser_viewset(): ...

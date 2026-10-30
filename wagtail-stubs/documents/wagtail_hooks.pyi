@@ -13,7 +13,7 @@ from wagtail.documents import admin_urls as admin_urls
 from wagtail.documents import get_document_model as get_document_model
 from wagtail.documents.api.admin.views import DocumentsAdminAPIViewSet as DocumentsAdminAPIViewSet
 from wagtail.documents.forms import GroupDocumentPermissionFormSet as GroupDocumentPermissionFormSet
-from wagtail.documents.permissions import permission_policy as permission_policy
+from wagtail.documents.models import AbstractDocument
 from wagtail.documents.rich_text import DocumentLinkHandler as DocumentLinkHandler
 from wagtail.documents.rich_text.contentstate import (
     ContentstateDocumentLinkConversionRule as ContentstateDocumentLinkConversionRule,
@@ -31,7 +31,10 @@ from wagtail.documents.views.bulk_actions import (
     DeleteBulkAction as DeleteBulkAction,
 )
 from wagtail.models.view_restrictions import BaseViewRestriction as BaseViewRestriction
+from wagtail.permissions import policy_registry as policy_registry
 from wagtail.wagtail_hooks import require_wagtail_login as require_wagtail_login
+
+Document: type[AbstractDocument]
 
 def register_admin_urls(): ...
 def construct_admin_api(router) -> None: ...
@@ -60,6 +63,5 @@ def check_view_restrictions(document, request): ...
 
 class DocumentAdminURLFinder(ModelAdminURLFinder):
     edit_url_name: str
-    permission_policy = permission_policy
 
 def register_document_chooser_viewset(): ...

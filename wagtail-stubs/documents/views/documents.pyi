@@ -3,9 +3,9 @@ from typing import Any
 from django.db import models
 from django.db.models import QuerySet
 from django.http import HttpResponse
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin import messages as messages
-from wagtail.admin.auth import PermissionPolicyChecker as PermissionPolicyChecker
 from wagtail.admin.filters import BaseMediaFilterSet as BaseMediaFilterSet
 from wagtail.admin.ui.tables import (
     BulkActionsCheckboxColumn as BulkActionsCheckboxColumn,
@@ -37,12 +37,13 @@ from wagtail.admin.utils import (
 from wagtail.admin.views import generic as generic
 from wagtail.documents import get_document_model as get_document_model
 from wagtail.documents.forms import get_document_form as get_document_form
-from wagtail.documents.permissions import permission_policy as permission_policy
+from wagtail.documents.models import AbstractDocument
 from wagtail.models.media import Collection
 from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
+from wagtail.permission_policies.base import BasePermissionPolicy
+from wagtail.permissions import policy_registry as policy_registry
 
-permission_checker: PermissionPolicyChecker
-Document: type
+Document: type[AbstractDocument]
 
 class BulkActionsColumn(BulkActionsCheckboxColumn):
     def __init__(self, *args: Any, **kwargs: Any) -> None: ...
@@ -52,16 +53,16 @@ class DocumentTable(Table):
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
 
 class DocumentsFilterSet(BaseMediaFilterSet):
-    permission_policy = permission_policy
+    @cached_property
+    def permission_policy(self) -> BasePermissionPolicy[AbstractDocument]: ...
     class Meta:
         model = Document
         fields: list[str]
 
 class IndexView(generic.IndexView):
-    permission_policy = permission_policy
     any_permission_required: list[str]
     context_object_name: str
-    page_title: str
+    page_title: _StrOrPromise
     header_icon: str
     page_kwarg: str
     paginate_by: int
@@ -84,8 +85,6 @@ class IndexView(generic.IndexView):
     def current_collection(self) -> Collection | None: ...
     @cached_property
     def columns(self) -> list[Column]: ...
-    @cached_property
-    def collections(self) -> QuerySet[Collection] | None: ...
     def get_next_url(self) -> str: ...
     def get_add_url(self) -> str: ...
     def get_edit_url(self, instance: models.Model) -> str: ...
@@ -94,7 +93,6 @@ class IndexView(generic.IndexView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
 
 class CreateView(generic.CreateView):
-    permission_policy = permission_policy
     index_url_name: str
     add_url_name: str
     edit_url_name: str
@@ -109,7 +107,6 @@ class CreateView(generic.CreateView):
     def get_success_message(self, instance: models.Model) -> str: ...
 
 class EditView(generic.EditView):
-    permission_policy = permission_policy
     pk_url_kwarg: str
     error_message: str
     template_name: str
@@ -134,13 +131,12 @@ class EditView(generic.EditView):
 class DeleteView(generic.DeleteView):
     model: type
     pk_url_kwarg: str
-    permission_policy = permission_policy
     permission_required: str
     header_icon: str
     usage_url_name: str
     delete_url_name: str
     index_url_name: str
-    page_title: str
+    page_title: _StrOrPromise
     def user_has_permission(self, permission: str) -> bool: ...
     @property
     def confirmation_message(self) -> str: ...
@@ -149,7 +145,6 @@ class DeleteView(generic.DeleteView):
 class UsageView(generic.UsageView):
     model: type
     pk_url_kwarg: str
-    permission_policy = permission_policy
     permission_required: str
     header_icon: str
     index_url_name: str

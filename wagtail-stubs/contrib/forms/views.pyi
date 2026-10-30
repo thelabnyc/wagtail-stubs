@@ -22,8 +22,9 @@ from wagtail.admin.views.pages.listing import PageListingMixin as PageListingMix
 from wagtail.contrib.forms.models import FormMixin as FormMixin
 from wagtail.contrib.forms.utils import get_form_types as get_form_types
 from wagtail.contrib.forms.utils import get_forms_for_user as get_forms_for_user
-from wagtail.models.pages import Page as Page
-from wagtail.permissions import page_permission_policy as page_permission_policy
+from wagtail.models import AbstractPage
+
+Page: type[AbstractPage]
 
 def get_submissions_list_view(request, *args, **kwargs): ...
 
@@ -37,7 +38,6 @@ class FormPageFilterSet(PageFilterSet):
     content_type: Incomplete
 
 class FormPagesListView(PageListingMixin, PermissionCheckedMixin, BaseListingView):
-    permission_policy = page_permission_policy
     any_permission_required: Incomplete
     template_name: str
     results_template_name: str
@@ -48,7 +48,7 @@ class FormPagesListView(PageListingMixin, PermissionCheckedMixin, BaseListingVie
     index_results_url_name: str
     page_title: Incomplete
     header_icon: str
-    model = Page
+    model: type[AbstractPage]
     is_searchable: bool
     filterset_class = FormPageFilterSet
     @classproperty

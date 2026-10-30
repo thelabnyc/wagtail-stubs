@@ -1,15 +1,14 @@
-from typing import Any, TypeVar, overload
+from typing import Any, overload
 
 from django.db import models
 from django.http import HttpRequest
 from wagtail.admin.admin_url_finder import ModelAdminURLFinder
 from wagtail.admin.menu import MenuItem
-
-_T = TypeVar("_T")
+from wagtail.permissions import policy_registry as policy_registry
+from wagtail.permissions import register_permission_policy as register_permission_policy
 
 class SettingMenuItem(MenuItem):
     model: type[models.Model]
-    permission_policy: Any
     def __init__(self, model: type[models.Model], icon: str = "cog", classname: str = "", **kwargs: Any) -> None: ...
     def is_shown(self, request: HttpRequest) -> bool: ...
 
@@ -22,12 +21,12 @@ class GenericSettingAdminURLFinder(ModelAdminURLFinder):
 class Registry(list[type[models.Model]]):
     def __init__(self) -> None: ...
     def register(self, model: type[models.Model], icon: str = "cog", **kwargs: Any) -> None: ...
-    def register_decorator(self, model: type[_T] | None = None, icon: str = "cog", **kwargs: Any) -> type[_T]: ...
+    def register_decorator[T](self, model: type[T] | None = None, icon: str = "cog", **kwargs: Any) -> type[T]: ...
     def get_by_natural_key(self, app_label: str, model_name: str) -> type[models.Model]: ...
 
 registry: Registry
 
 @overload
-def register_setting[T](model: type[_T]) -> type[_T]: ...
+def register_setting[T](model: type[T]) -> type[T]: ...
 @overload
 def register_setting(model: None = None, icon: str = "cog", **kwargs: Any) -> Any: ...

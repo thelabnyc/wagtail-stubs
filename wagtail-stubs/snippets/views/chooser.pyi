@@ -1,4 +1,4 @@
-from django.utils.functional import cached_property as cached_property
+from django.utils.functional import cached_property
 from wagtail.admin.ui.tables import LiveStatusTagColumn as LiveStatusTagColumn
 from wagtail.admin.views.generic.chooser import (
     BaseChooseView as BaseChooseView,
@@ -54,5 +54,6 @@ class SnippetChooserViewSet(ChooserViewSet):
     chosen_view_class: type[SnippetChosenView]
     chosen_multiple_view_class: type[SnippetChosenMultipleView]
     create_view_class: type[SnippetCreateView]
+    base_widget_class: type[AdminSnippetChooser]
     @cached_property
-    def widget_class(self): ...
+    def widget_class(self) -> type[AdminSnippetChooser]: ...
