@@ -1,13 +1,8 @@
 from wagtail.images import get_image_model as get_image_model
-from wagtail.images.models import Image as Image
-from wagtail.permission_policies.collections import (
-    CollectionOwnershipPermissionPolicy as CollectionOwnershipPermissionPolicy,
-)
+from wagtail.images import get_permission_policy as get_permission_policy
+from wagtail.images.models import AbstractImage
+from wagtail.permission_policies.base import BasePermissionPolicy
+from wagtail.permissions import policy_registry as policy_registry
+from wagtail.utils.deprecation import RemovedInWagtail90Warning as RemovedInWagtail90Warning
 
-permission_policy: CollectionOwnershipPermissionPolicy
-
-class ImagesPermissionPolicyGetter:
-    def __get__(self, obj, objtype=None): ...
-
-def set_permission_policy() -> None: ...
-def update_permission_policy(signal, sender, setting, **kwargs) -> None: ...
+permission_policy: BasePermissionPolicy[AbstractImage]

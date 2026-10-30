@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.functional import cached_property as cached_property
 from django.views.generic.base import View
-from wagtail.admin.auth import PermissionPolicyChecker as PermissionPolicyChecker
 from wagtail.admin.modal_workflow import render_modal_workflow as render_modal_workflow
 from wagtail.admin.models import popular_tags_for_model as popular_tags_for_model
 from wagtail.admin.ui.tables import (
@@ -51,11 +50,11 @@ from wagtail.images import get_image_model as get_image_model
 from wagtail.images.formats import get_image_format as get_image_format
 from wagtail.images.forms import ImageInsertionForm as ImageInsertionForm
 from wagtail.images.forms import get_image_form as get_image_form
-from wagtail.images.permissions import permission_policy as permission_policy
+from wagtail.images.models import AbstractImage
 from wagtail.images.utils import find_image_duplicates as find_image_duplicates
 from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
-
-permission_checker: PermissionPolicyChecker
+from wagtail.permission_policies.base import BasePermissionPolicy
+from wagtail.permissions import policy_registry as policy_registry
 
 class ImageChosenResponseMixin(ChosenResponseMixin):
     def get_chosen_response_data(self, image, preview_image_filter: str = "max-165x165"): ...
@@ -64,7 +63,6 @@ class ImageCreationFormMixin(CreationFormMixin):
     creation_tab_id: str
     create_action_label: str
     create_action_clicked_label: str
-    permission_policy = permission_policy
     def get_creation_form_class(self): ...
     def get_creation_form_kwargs(self): ...
 
@@ -103,10 +101,14 @@ class ImageChooseResultsView(ChooseResultsViewMixin, ImageCreationFormMixin, Bas
 
 class ImageChosenView(ChosenViewMixin, ImageChosenResponseMixin, View):
     model: type[models.Model]
+    def get_object(self, pk: str) -> AbstractImage: ...
     def get(self, request, *args, pk, **kwargs): ...
 
 class ImageChosenMultipleView(ChosenMultipleViewMixin, ImageChosenResponseMixin, View):
     model: type[models.Model]
+    @cached_property
+    def permission_policy(self) -> BasePermissionPolicy[AbstractImage]: ...
+    def get_objects(self, pks: list[str]) -> models.QuerySet[AbstractImage]: ...
     def get(self, request, *args, **kwargs): ...
 
 class SelectFormatResponseMixin(PreserveURLParametersMixin):
@@ -123,6 +125,7 @@ class ImageUploadView(ImageUploadViewMixin, ImageCreationFormMixin, ImageChosenR
 
 class ImageSelectFormatView(SelectFormatResponseMixin, ImageChosenResponseMixin, View):
     model: type[models.Model] | None
+    def get_object(self, pk: int | str) -> AbstractImage: ...
     def get(self, request, image_id): ...
     def get_chosen_response_data(self, image): ...
     form: ImageInsertionForm
@@ -135,7 +138,6 @@ class ImageChooserViewSet(ChooserViewSet):
     chosen_multiple_view_class = ImageChosenMultipleView
     create_view_class = ImageUploadView
     select_format_view_class = ImageSelectFormatView
-    permission_policy = permission_policy
     register_widget: bool
     preserve_url_parameters: list[str]
     icon: str

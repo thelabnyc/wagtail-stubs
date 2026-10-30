@@ -1,7 +1,7 @@
 from django.db import models
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin import messages as messages
-from wagtail.admin.auth import PermissionPolicyChecker as PermissionPolicyChecker
 from wagtail.admin.filters import BaseMediaFilterSet as BaseMediaFilterSet
 from wagtail.admin.ui.tables import (
     BaseColumn as BaseColumn,
@@ -32,19 +32,21 @@ from wagtail.images import get_image_model as get_image_model
 from wagtail.images.exceptions import InvalidFilterSpecError as InvalidFilterSpecError
 from wagtail.images.forms import URLGeneratorForm as URLGeneratorForm
 from wagtail.images.forms import get_image_form as get_image_form
+from wagtail.images.models import AbstractImage
 from wagtail.images.models import Filter as Filter
 from wagtail.images.models import SourceImageIOError as SourceImageIOError
-from wagtail.images.permissions import permission_policy as permission_policy
 from wagtail.images.utils import generate_signature as generate_signature
 from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
 from wagtail.models.sites import Site as Site
+from wagtail.permission_policies.base import BasePermissionPolicy
+from wagtail.permissions import policy_registry as policy_registry
 
-permission_checker: PermissionPolicyChecker
-Image: type[models.Model]
+Image: type[AbstractImage]
 USAGE_PAGE_SIZE: int
 
 class ImagesFilterSet(BaseMediaFilterSet):
-    permission_policy = permission_policy
+    @cached_property
+    def permission_policy(self) -> BasePermissionPolicy[AbstractImage]: ...
     class Meta:
         model = Image
         fields: list[str]
@@ -53,13 +55,12 @@ class IndexView(generic.IndexView):
     ORDERING_OPTIONS: dict[str, str]
     default_ordering: str
     context_object_name: str
-    permission_policy = permission_policy
     any_permission_required: list[str]
     model = Image
     filterset_class = ImagesFilterSet
     show_other_searches: bool
     header_icon: str
-    page_title: str
+    page_title: _StrOrPromise
     add_item_label: str
     index_url_name: str
     index_results_url_name: str
@@ -95,7 +96,6 @@ class TitleColumnWithFilename(TitleColumn):
     cell_template_name: str
 
 class EditView(generic.EditView):
-    permission_policy = permission_policy
     pk_url_kwarg: str
     error_message: str
     template_name: str
@@ -123,7 +123,7 @@ class URLGeneratorView(generic.InspectView):
     pk_url_kwarg: str
     header_icon: str
     output_only: bool
-    page_title: str
+    page_title: _StrOrPromise
     template_name: str
     output_template_name: str
     index_url_name: str
@@ -144,21 +144,19 @@ def preview(request, image_id, filter_spec): ...
 class DeleteView(generic.DeleteView):
     model: type[models.Model]
     pk_url_kwarg: str
-    permission_policy = permission_policy
     permission_required: str
     header_icon: str
     template_name: str
     usage_url_name: str
     delete_url_name: str
     index_url_name: str
-    page_title: str
+    page_title: _StrOrPromise
     def user_has_permission(self, permission): ...
     @property
     def confirmation_message(self): ...
     def get_success_message(self): ...
 
 class CreateView(generic.CreateView):
-    permission_policy = permission_policy
     index_url_name: str
     add_url_name: str
     edit_url_name: str
@@ -176,7 +174,6 @@ class UsageView(generic.UsageView):
     model: type[models.Model]
     paginate_by = USAGE_PAGE_SIZE
     pk_url_kwarg: str
-    permission_policy = permission_policy
     permission_required: str
     header_icon: str
     index_url_name: str

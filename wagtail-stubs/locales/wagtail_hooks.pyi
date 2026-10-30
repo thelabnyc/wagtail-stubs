@@ -1,6 +1,6 @@
 from wagtail import hooks as hooks
 from wagtail.admin.menu import MenuItem as MenuItem
-from wagtail.permissions import site_permission_policy as site_permission_policy
+from wagtail.permissions import policy_registry as policy_registry
 
 from .views import LocaleViewSet as LocaleViewSet
 

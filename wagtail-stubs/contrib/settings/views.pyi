@@ -10,7 +10,7 @@ from wagtail.admin.panels import (
 )
 from wagtail.admin.views import generic as generic
 from wagtail.models.sites import Site as Site
-from wagtail.permission_policies import ModelPermissionPolicy
+from wagtail.permissions import policy_registry as policy_registry
 
 from .forms import SiteSwitchForm as SiteSwitchForm
 from .models import BaseGenericSetting as BaseGenericSetting
@@ -29,7 +29,6 @@ class EditView(generic.EditView):
     app_name: str
     model_name: str
     model: type
-    permission_policy: ModelPermissionPolicy
     pk: Any
     def setup(self, request: HttpRequest, app_name: str, model_name: str, *args: Any, **kwargs: Any) -> None: ...
     def get_header_icon(self) -> str | None: ...
