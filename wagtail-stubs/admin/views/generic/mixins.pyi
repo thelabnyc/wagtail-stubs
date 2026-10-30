@@ -1,9 +1,10 @@
-from typing import Any
+from typing import Any, Generic
 
 from django.db import models
-from django.forms import Form
+from django.forms import BaseForm, Form
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.utils.functional import cached_property
+from typing_extensions import TypeVar
 from wagtail.admin.panels import Panel
 from wagtail.admin.ui.editing_sessions import EditingSessionsModule
 from wagtail.admin.ui.tables import Column
@@ -11,6 +12,8 @@ from wagtail.locks import BaseLock
 from wagtail.models.i18n import Locale
 from wagtail.models.revisions import Revision
 from wagtail.models.workflows import Task, Workflow, WorkflowState
+
+_FormT = TypeVar("_FormT", bound=BaseForm, default=Any)
 
 class HookResponseMixin:
     def run_hook(self, hook_name: str, *args: Any, **kwargs: Any) -> HttpResponse | None: ...
@@ -33,12 +36,12 @@ class LocaleMixin:
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
     def _set_locale_query_param(self, url: str, locale: Locale | None = ...) -> str: ...
 
-class PanelMixin:
+class PanelMixin(Generic[_FormT]):
     panel: Panel | None
     def setup(self, request: HttpRequest, *args: Any, **kwargs: Any) -> None: ...
     def get_panel(self) -> Panel | None: ...
-    def get_bound_panel(self, form: Form) -> Panel.BoundPanel | None: ...
-    def get_form_class(self) -> type[Form]: ...
+    def get_bound_panel(self, form: _FormT) -> Panel.BoundPanel | None: ...
+    def get_form_class(self) -> type[_FormT]: ...
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
 
 class IndexViewOptionalFeaturesMixin:

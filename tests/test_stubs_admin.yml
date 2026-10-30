@@ -257,3 +257,25 @@
     from wagtail.admin.views.pages.copy import copy  # E: Module "wagtail.admin.views.pages.copy" has no attribute "copy"  [attr-defined]
     from wagtail.admin.views.pages.move import MoveChooseDestination  # E: Module "wagtail.admin.views.pages.move" has no attribute "MoveChooseDestination"; maybe "MoveChooseDestinationView"?  [attr-defined]
     from wagtail.admin.auth import page_permission_policy  # E: Module "wagtail.admin.auth" has no attribute "page_permission_policy"; maybe "BasePermissionPolicy"?  [attr-defined]
+
+- case: admin_review_fixes
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.localization import get_available_admin_time_zones
+    from wagtail.admin.views.generic.preview import PreviewOnEdit
+    from wagtail.admin.views.pages.preview import PreviewOnCreateView
+    from wagtail.admin.views.reports.aging_pages import AgingPagesView
+    from wagtail.models import Page, PageQuerySet
+
+    def check(pages: PageQuerySet[Page]) -> None:
+        get_available_admin_time_zones.cache_clear()
+        reveal_type(get_available_admin_time_zones())  # N: Revealed type is "typing.Sequence[str]"
+        reveal_type(AgingPagesView().decorate_paginated_queryset(pages))  # N: Revealed type is "django.db.models.query.QuerySet[wagtail.models.pages.Page, wagtail.models.pages.Page]"
+        reveal_type(PreviewOnEdit().parent_object_id)  # N: Revealed type is "str | int"
+        reveal_type(PreviewOnCreateView().parent_object_id)  # N: Revealed type is "int"

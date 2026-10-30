@@ -4,7 +4,8 @@ from typing import Any
 from django import forms
 from django.contrib.auth.models import Permission
 from django.db import models
-from django.db.models import Options, QuerySet
+from django.db.models import QuerySet
+from django.db.models.options import Options
 from django.forms import BaseModelForm
 from django.http.response import HttpResponseBase
 from django.urls import URLPattern
@@ -21,8 +22,8 @@ from wagtail.permission_policies.base import BasePermissionPolicy
 class ModelViewSet(ListingViewSetMixin, ViewSet):
     add_to_reference_index: bool
     sort_order_field: str | None | _Undefined
-    @cached_property
-    def pk_path_converter(self) -> str: ...
+    # Overridden with plain strings, which Pyright rejects against a bare cached_property
+    pk_path_converter: str | cached_property[str]
     index_view_class: type[generic.IndexView]
     add_view_class: type[generic.CreateView]
     edit_view_class: type[generic.EditView]

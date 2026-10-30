@@ -2,7 +2,7 @@ from typing import Any
 
 from django.db import models
 from django.db.models import QuerySet
-from django.forms import BaseForm
+from django.forms import BaseForm, BaseModelForm, Form
 from django.http import HttpRequest, HttpResponse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
@@ -104,12 +104,12 @@ class IndexView(
 
 class CreateView(
     LocaleMixin,
-    PanelMixin,
+    PanelMixin[BaseModelForm[Any]],
     PermissionCheckedMixin,
     BeforeAfterHookMixin,
     WagtailAdminTemplateMixin,
     JsonPostResponseMixin,
-    BaseCreateView,
+    BaseCreateView[Any, BaseModelForm[Any]],
 ):
     model: type[models.Model] | None
     form_class: type[WagtailAdminModelForm] | None
@@ -172,12 +172,12 @@ class CopyView(CopyViewMixin, CreateView): ...
 
 class EditView(
     LocaleMixin,
-    PanelMixin,
+    PanelMixin[BaseModelForm[Any]],
     PermissionCheckedMixin,
     BeforeAfterHookMixin,
     WagtailAdminTemplateMixin,
     JsonPostResponseMixin,
-    BaseUpdateView,
+    BaseUpdateView[Any, BaseModelForm[Any]],
 ):
     model: type[models.Model] | None
     form_class: type[WagtailAdminModelForm] | None
@@ -247,11 +247,11 @@ class EditView(
 
 class DeleteView(
     LocaleMixin,
-    PanelMixin,
+    PanelMixin[Form],
     PermissionCheckedMixin,
     BeforeAfterHookMixin,
     WagtailAdminTemplateMixin,
-    BaseDeleteView,
+    BaseDeleteView[Any, Form],
 ):
     model: type[models.Model] | None
     index_url_name: str | None

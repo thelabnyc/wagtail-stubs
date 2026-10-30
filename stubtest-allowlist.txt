@@ -19,6 +19,8 @@ wagtail\.admin\.api\.serializers(\..*)?
 wagtail\.admin\.api\.urls(\..*)?
 wagtail\.admin\.api\.views(\..*)?
 wagtail\.admin\.filters(\..*)?
+# functools.cache wrapper: stub signature has *args/**kwargs, runtime inspect follows __wrapped__
+wagtail\.admin\.localization\.get_available_admin_time_zones
 wagtail\.admin\.menu(\..*)?
 wagtail\.admin\.models(\..*)?
 wagtail\.admin\.panels(\..*)?

@@ -61,7 +61,6 @@ class BaseListingView(WagtailAdminTemplateMixin, BaseListView):
     results_only: bool
     table_class: type[Table]
     table_classname: str | None
-    columns: list[Column]
     index_url_name: str | None
     index_results_url_name: str | None
     page_kwarg: str
@@ -73,6 +72,8 @@ class BaseListingView(WagtailAdminTemplateMixin, BaseListView):
     filterset_class: type[django_filters.FilterSet] | None
     verbose_name_plural: str | None
     paginator_class: type[Paginator]
+    @cached_property
+    def columns(self) -> list[Column]: ...
     def get_template_names(self) -> list[str]: ...
     def get_breadcrumbs_items(self) -> list[dict[str, Any]]: ...
     def get_search_form(self) -> SearchForm | None: ...
