@@ -138,6 +138,8 @@ wagtail\.snippets\.widgets(\..*)?
 wagtail\.tasks\.delete_file_from_storage_task(\..*)?
 wagtail\.tasks\.update_reference_index_task(\..*)?
 wagtail\.users\.models(\..*)?
+# django-filter ships no types, so the FilterSet metaclass cannot be declared
+wagtail\.users\.views\.api_tokens\.APITokenFilterSet
 wagtail\.users\.views\.bulk_actions\.assign_role(\..*)?
 wagtail\.users\.views\.bulk_actions\.delete(\..*)?
 wagtail\.users\.views\.bulk_actions\.set_active_state(\..*)?
