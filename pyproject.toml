@@ -30,8 +30,8 @@ Repository = "https://gitlab.com/thelabnyc/stubs/wagtail-stubs"
 
 [dependency-groups]
 dev = [
-    "mypy>=1.19.1",
-    "django-stubs>=5.2.9",
+    "mypy>=2.4",
+    "django-stubs>=6.1",
     "pytest>=8.0",
     "pytest-mypy-plugins>=3.0",
     "tox>=4.49.0",
