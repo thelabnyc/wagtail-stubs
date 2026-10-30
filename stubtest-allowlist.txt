@@ -67,6 +67,15 @@ wagtail\.api\.rich_text\.RichTextOutputFormat
 # DRF ships no types, so the serializer metaclass cannot be declared
 wagtail\.api\.v2\.serializers\.BaseSerializer
 wagtail\.api\.v2\.serializers\.PageSerializer
+# Literal/Annotated aliases built at import time from project models
+wagtail\.api\.v3\.routers\.pages\.IntPKFilter(\..*)?
+# Multi-value Literal alias: mypy models it as a Union, runtime is a Literal
+wagtail\.api\.v3\.routers\.pages\.PagePositionLiteral
+# Literal/Annotated aliases built at import time from project models
+wagtail\.api\.v3\.routers\.pages\.PageTypeLiteral
+# Inherits pydantic FieldInfo's runtime __final__ flag but is subclassed
+wagtail\.api\.v3\.schemas\.pages\.PageTypeInjectingBody
+wagtail\.api\.v3\.schemas\.params\.TypeInjectingBody
 wagtail\.blocks(\..*)?
 wagtail\.contrib\.forms\.models(\..*)?
 wagtail\.contrib\.forms\.views(\..*)?
