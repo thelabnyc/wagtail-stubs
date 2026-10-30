@@ -1,10 +1,11 @@
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Generic
 
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpRequest, HttpResponse, HttpResponseBase
 from django.utils.functional import cached_property as cached_property
 from django.views.generic.base import View
+from typing_extensions import TypeVar
 from wagtail.actions.publish_page_revision import PublishPageRevisionAction as PublishPageRevisionAction
 from wagtail.admin import messages as messages
 from wagtail.admin.action_menu import PageActionMenu as PageActionMenu
@@ -58,8 +59,9 @@ from wagtail.models.workflows import WorkflowState as WorkflowState
 from wagtail.utils.timestamps import render_timestamp as render_timestamp
 
 Page: type[AbstractPage]
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
 
-class EditView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMixin, View):
+class EditView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMixin, View, Generic[_PageT]):
     partials_template_name: str
     def get_page_title(self) -> str: ...
     def get_page_subtitle(self) -> str: ...
@@ -76,20 +78,20 @@ class EditView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMix
     def get_view_draft_message_button(self) -> messages.button: ...
     def get_view_live_message_button(self) -> messages.button: ...
     def get_compare_with_live_message_button(self) -> messages.button: ...
-    def get_page_for_status(self) -> AbstractPage: ...
-    def get_object(self) -> AbstractPage: ...
+    def get_page_for_status(self) -> _PageT: ...
+    def get_object(self) -> _PageT: ...
     def get_edit_url(self) -> str: ...
     real_page_record: AbstractPage
     latest_revision: Revision | None
     scheduled_revision: Revision | None
     page_content_type: ContentType
-    page_class: type[AbstractPage] | None
+    page_class: type[_PageT] | None
     revision_id: str | None
     is_reverting: bool
     previous_revision: Revision | None
-    page: AbstractPage
+    page: _PageT
     parent: AbstractPage
-    scheduled_page: AbstractPage | None
+    scheduled_page: _PageT | None
     page_perms: PagePermissionTester
     lock: BaseLock | None
     locked_for_user: bool

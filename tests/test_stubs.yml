@@ -567,7 +567,7 @@
 
     viewset = BlogPageViewSet()
     page_viewset_registry.register(BlogPage, viewset, parent_models=(Page,))
-    reveal_type(base_page_viewset)  # N: Revealed type is "wagtail.admin.viewsets.pages.PageViewSet"
+    reveal_type(base_page_viewset)  # N: Revealed type is "wagtail.admin.viewsets.pages.PageViewSet[wagtail.models.pages.AbstractPage]"
 
 - case: wagtail_74_content_checker_userbar_item
   mypy_config: |

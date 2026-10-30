@@ -3,7 +3,7 @@ from typing import Any
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
-from django.utils.functional import cached_property, classproperty
+from django.utils.functional import _StrOrPromise, cached_property, classproperty
 from wagtail.admin.ui.tables import BaseColumn
 from wagtail.admin.ui.tables.pages import NavigateToChildrenColumn as NavigateToChildrenColumn
 from wagtail.admin.views.generic.base import BaseListingView as BaseListingView
@@ -20,12 +20,12 @@ def page_filter_search(
     q: str, pages: QuerySet[AbstractPage], all_pages: QuerySet[AbstractPage] | None = None, ordering: str | None = None
 ) -> tuple[QuerySet[AbstractPage], QuerySet[AbstractPage] | None]: ...
 
-class SearchView(PageListingMixin, PermissionCheckedMixin, BaseListingView):
+class SearchView(PageListingMixin[AbstractPage], PermissionCheckedMixin[AbstractPage], BaseListingView[AbstractPage]):
     @cached_property
     def permission_policy(self) -> PagePermissionPolicy[AbstractPage]: ...
     any_permission_required: set[str]
     paginate_by: int
-    page_title: str
+    page_title: _StrOrPromise
     header_icon: str
     index_url_name: str
     index_results_url_name: str

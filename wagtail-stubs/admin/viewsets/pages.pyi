@@ -1,9 +1,10 @@
 from collections.abc import Callable, Iterable
-from typing import Any
+from typing import Any, Generic
 
 from django.http import HttpResponseBase
 from django.urls import URLPattern
 from django.utils.functional import cached_property, classproperty
+from typing_extensions import TypeVar
 from wagtail.admin.ui.tables import BaseColumn
 from wagtail.admin.views.page_privacy import SetPrivacyView
 from wagtail.admin.views.pages.choose_parent import ChooseParentView, GenericChooseParentView
@@ -39,11 +40,12 @@ from wagtail.models import AbstractPage
 from wagtail.utils.registry import ObjectTypeRegistry
 
 Page: type[AbstractPage]
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
 
-class PageListingViewSet(ListingViewSetMixin, ViewSet):
-    index_view_class: type[IndexView]
-    choose_parent_view_class: type[ChooseParentView]
-    model: type[AbstractPage]
+class PageListingViewSet(ListingViewSetMixin, ViewSet, Generic[_PageT]):
+    index_view_class: type[IndexView[Any]]
+    choose_parent_view_class: type[ChooseParentView[Any]]
+    model: type[_PageT]
     @classproperty
     def columns(cls) -> list[BaseColumn] | _Undefined: ...
     @classproperty
@@ -61,39 +63,39 @@ class PageListingViewSet(ListingViewSetMixin, ViewSet):
     def choose_parent_view(self) -> Callable[..., HttpResponseBase]: ...
     def get_urlpatterns(self) -> list[URLPattern]: ...
 
-class PageViewSet(PageListingViewSet):
-    choose_parent_view_class: type[GenericChooseParentView]
+class PageViewSet(PageListingViewSet[_PageT]):
+    choose_parent_view_class: type[GenericChooseParentView[Any]]
     content_type_use_view_class: type[ContentTypeUseView]
-    add_view_class: type[CreateView]
+    add_view_class: type[CreateView[Any]]
     add_subpage_view_class: type[AddSubpageView]
-    collect_workflow_action_data_view_class: type[CollectWorkflowActionDataView]
-    confirm_workflow_cancellation_view_class: type[ConfirmWorkflowCancellationView]
-    convert_alias_view_class: type[ConvertAliasView]
+    collect_workflow_action_data_view_class: type[CollectWorkflowActionDataView[Any]]
+    confirm_workflow_cancellation_view_class: type[ConfirmWorkflowCancellationView[Any]]
+    convert_alias_view_class: type[ConvertAliasView[Any]]
     copy_view_class: type[CopyView]
-    delete_view_class: type[DeleteView]
-    edit_view_class: type[EditView]
-    history_view_class: type[PageHistoryView]
-    lock_view_class: type[LockView]
+    delete_view_class: type[DeleteView[Any]]
+    edit_view_class: type[EditView[Any]]
+    history_view_class: type[PageHistoryView[Any]]
+    lock_view_class: type[LockView[Any]]
     move_view_class: type[MoveChooseDestinationView]
-    move_confirm_view_class: type[MoveConfirmView]
-    preview_on_add_view_class: type[PreviewOnCreateView]
-    preview_on_edit_view_class: type[PreviewOnEditView]
-    revisions_view_class: type[RevisionsView]
-    revisions_compare_view_class: type[RevisionsCompareView]
-    revisions_revert_view_class: type[RevisionsRevertView]
-    revisions_unschedule_view_class: type[RevisionsUnscheduleView]
+    move_confirm_view_class: type[MoveConfirmView[Any]]
+    preview_on_add_view_class: type[PreviewOnCreateView[Any]]
+    preview_on_edit_view_class: type[PreviewOnEditView[Any]]
+    revisions_view_class: type[RevisionsView[Any]]
+    revisions_compare_view_class: type[RevisionsCompareView[Any]]
+    revisions_revert_view_class: type[RevisionsRevertView[Any]]
+    revisions_unschedule_view_class: type[RevisionsUnscheduleView[Any]]
     search_view_class: type[SearchView]
     set_page_position_view_class: type[SetPagePositionView]
     set_privacy_view_class: type[SetPrivacyView]
-    unlock_view_class: type[UnlockView]
-    unpublish_view_class: type[UnpublishView]
-    usage_view_class: type[UsageView]
+    unlock_view_class: type[UnlockView[Any]]
+    unpublish_view_class: type[UnpublishView[Any]]
+    usage_view_class: type[UsageView[Any]]
     view_draft_view_class: type[ViewDraftView]
-    workflow_action_view_class: type[WorkflowActionView]
-    workflow_history_view_class: type[WorkflowHistoryView]
-    workflow_history_detail_view_class: type[WorkflowHistoryDetailView]
-    workflow_preview_view_class: type[PreviewRevisionForTaskView]
-    index_view_class: type[ExplorableIndexView]
+    workflow_action_view_class: type[WorkflowActionView[Any]]
+    workflow_history_view_class: type[WorkflowHistoryView[Any]]
+    workflow_history_detail_view_class: type[WorkflowHistoryDetailView[Any]]
+    workflow_preview_view_class: type[PreviewRevisionForTaskView[Any]]
+    index_view_class: type[ExplorableIndexView[Any]]
     menu_url: None
     @cached_property
     def views(self) -> dict[str, Callable[..., HttpResponseBase]]: ...
@@ -171,18 +173,18 @@ class PageViewSet(PageListingViewSet):
     def on_register(self) -> None: ...
 
 class PageViewSetRegistry(ObjectTypeRegistry):
-    values_by_parent_model: dict[type[AbstractPage], PageViewSet]
+    values_by_parent_model: dict[type[AbstractPage], PageViewSet[Any]]
     def __init__(self) -> None: ...
     def get_content_type_id_by_page_id(self, page_id: int) -> int: ...
     def get_page_model_by_content_type_id(self, content_type_id: int) -> type[AbstractPage]: ...
-    def get_by_parent_model(self, cls: type[AbstractPage]) -> PageViewSet | None: ...
-    def get_by_page_id(self, page_id: int) -> PageViewSet: ...
-    def get_by_parent_page_id(self, parent_page_id: int) -> PageViewSet | None: ...
-    def get_by_content_type_natural_key(self, app_label: str, model_name: str) -> PageViewSet: ...
+    def get_by_parent_model(self, cls: type[AbstractPage]) -> PageViewSet[Any] | None: ...
+    def get_by_page_id(self, page_id: int) -> PageViewSet[Any]: ...
+    def get_by_parent_page_id(self, parent_page_id: int) -> PageViewSet[Any] | None: ...
+    def get_by_content_type_natural_key(self, app_label: str, model_name: str) -> PageViewSet[Any]: ...
     def register(
         self,
         cls: type[AbstractPage],
-        value: PageViewSet | None = None,
+        value: PageViewSet[Any] | None = None,
         exact_class: bool = False,
         parent_models: Iterable[type[AbstractPage]] = (),
     ) -> None: ...
@@ -197,4 +199,4 @@ class PageViewSetRegistry(ObjectTypeRegistry):
     ) -> Callable[..., HttpResponseBase]: ...
 
 page_viewset_registry: PageViewSetRegistry
-base_page_viewset: PageViewSet
+base_page_viewset: PageViewSet[AbstractPage]

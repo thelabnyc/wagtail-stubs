@@ -31,6 +31,8 @@ wagtail\.admin\.urls(\..*)?
 wagtail\.admin\.views\.account(\..*)?
 wagtail\.admin\.views\.chooser(\..*)?
 wagtail\.admin\.views\.generic(\..*)?
+# Runtime default is the stock page class; the stub types `model` with the class's page TypeVar
+wagtail\.admin\.views\.pages\.(choose_parent|history|lock|revisions|unpublish|usage|workflow)\.\w+\.model
 wagtail\.admin\.views\.pages\.bulk_actions\.delete(\..*)?
 wagtail\.admin\.views\.pages\.bulk_actions\.move(\..*)?
 wagtail\.admin\.views\.pages\.bulk_actions\.page_bulk_action(\..*)?
@@ -51,6 +53,8 @@ wagtail\.admin\.views\.workflows(\..*)?
 # Stub-only type aliases
 wagtail\.admin\.viewsets\.listing\.ListDisplayItem
 wagtail\.admin\.viewsets\.listing\.ListFilter
+# Runtime default is the stock page class; the stub types `model` with the viewset's page TypeVar
+wagtail\.admin\.viewsets\.pages\.PageListingViewSet\.model
 wagtail\.admin\.wagtail_hooks(\..*)?
 # MediaDefiningClass adds media at runtime
 wagtail\.admin\.widgets\.tags\.AdminTagWidget(\..*)?
