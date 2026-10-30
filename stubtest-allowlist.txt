@@ -22,7 +22,7 @@ wagtail\.admin\.filters(\..*)?
 wagtail\.admin\.menu(\..*)?
 wagtail\.admin\.models(\..*)?
 wagtail\.admin\.panels(\..*)?
-wagtail\.admin\.rich_text(\..*)?
+wagtail\.admin\.rich_text\.editors(\..*)?
 wagtail\.admin\.search(\..*)?
 wagtail\.admin\.ui\.tables(\..*)?
 wagtail\.admin\.urls(\..*)?

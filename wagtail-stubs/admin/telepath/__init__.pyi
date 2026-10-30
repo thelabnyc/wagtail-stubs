@@ -1,7 +1,9 @@
 from collections.abc import Callable
 
 from django import forms
-from telepath import Adapter, AdapterRegistry, JSContextBase
+from telepath import Adapter as Adapter
+from telepath import AdapterRegistry as AdapterRegistry
+from telepath import JSContextBase as JSContextBase
 
 class WagtailJSContextBase(JSContextBase):
     @property
@@ -11,7 +13,7 @@ class WagtailAdapterRegistry(AdapterRegistry):
     js_context_base_class: type[WagtailJSContextBase]
 
 registry: WagtailAdapterRegistry
-JSContext: type
+JSContext: type[WagtailJSContextBase]
 
 def register(adapter: Adapter, cls: type) -> None: ...
 def adapter(js_constructor: str, base: type[Adapter] = ...) -> Callable[[type], type]: ...
