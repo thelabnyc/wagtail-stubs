@@ -1,13 +1,17 @@
 from typing import Any
 
+from django.db import models
 from django.forms import Form
 from django.http import HttpRequest, HttpResponse
 from django.views import View
+from typing_extensions import TypeVar
 from wagtail.models.workflows import Task, TaskState, WorkflowState
 
 from .base import BaseObjectMixin
 
-class BaseWorkflowFormView(BaseObjectMixin, View):
+_ModelT = TypeVar("_ModelT", bound=models.Model, default=models.Model)
+
+class BaseWorkflowFormView(BaseObjectMixin[_ModelT], View):
     redirect_url_name: str | None
     submit_url_name: str | None
     template_name: str
@@ -34,20 +38,20 @@ class BaseWorkflowFormView(BaseObjectMixin, View):
     def render_modal_form(self, request: HttpRequest, form: Form) -> HttpResponse: ...
     def render_modal_json(self, request: HttpRequest, json_data: dict[str, Any]) -> HttpResponse: ...
 
-class WorkflowAction(BaseWorkflowFormView):
+class WorkflowAction(BaseWorkflowFormView[_ModelT]):
     def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse: ...
 
-class CollectWorkflowActionData(BaseWorkflowFormView):
+class CollectWorkflowActionData(BaseWorkflowFormView[_ModelT]):
     def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse: ...
 
-class ConfirmWorkflowCancellation(BaseObjectMixin, View):
+class ConfirmWorkflowCancellation(BaseObjectMixin[_ModelT], View):
     template_name: str
     workflow_state: WorkflowState | None
     def setup(self, request: HttpRequest, *args: Any, **kwargs: Any) -> None: ...
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse: ...
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
 
-class PreviewRevisionForTask(BaseObjectMixin, View):
+class PreviewRevisionForTask(BaseObjectMixin[_ModelT], View):
     task_id: int
     task: Task
     task_state: TaskState | None

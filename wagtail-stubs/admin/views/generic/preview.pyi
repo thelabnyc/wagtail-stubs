@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Generic
 
 from django.db import models
 from django.db.models import QuerySet
@@ -7,23 +7,26 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.http.request import QueryDict
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView, View
+from typing_extensions import TypeVar
 from wagtail.admin.models import FormState
 from wagtail.blocks.base import Block
 
 from .permissions import PermissionCheckedMixin
 
-class PreviewOnEdit(PermissionCheckedMixin, View):
-    model: type[models.Model] | None
+_ModelT = TypeVar("_ModelT", bound=models.Model, default=models.Model)
+
+class PreviewOnEdit(PermissionCheckedMixin[_ModelT], View):
+    model: type[_ModelT] | None
     form_class: type[Form] | None
     http_method_names: tuple[str, ...]
     permission_required: str
-    object: models.Model
+    object: _ModelT
     @cached_property
     def parent_object_id(self) -> str | int: ...
     def setup(self, request: HttpRequest, *args: Any, **kwargs: Any) -> None: ...
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse: ...
     def remove_old_preview_data(self) -> None: ...
-    def get_object(self) -> models.Model: ...
+    def get_object(self) -> _ModelT: ...
     def get_form_class(self) -> type[Form]: ...
     def get_form(self, query_dict: QueryDict | None) -> Form: ...
     def get_form_state_queryset(self) -> QuerySet[FormState]: ...
@@ -36,20 +39,20 @@ class PreviewOnEdit(PermissionCheckedMixin, View):
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse: ...
     def delete(self, request: HttpRequest, *args: Any, **kwargs: Any) -> JsonResponse: ...
 
-class PreviewOnCreate(PreviewOnEdit):
+class PreviewOnCreate(PreviewOnEdit[_ModelT]):
     permission_required: str
-    def get_object(self) -> models.Model: ...
+    def get_object(self) -> _ModelT: ...
 
-class PreviewRevision(View):
-    model: type[models.Model] | None
+class PreviewRevision(View, Generic[_ModelT]):
+    model: type[_ModelT] | None
     http_method_names: tuple[str, ...]
     pk: str
     revision_id: int
-    object: models.Model
-    revision_object: models.Model
+    object: _ModelT
+    revision_object: _ModelT
     def setup(self, request: HttpRequest, pk: str, revision_id: int, *args: Any, **kwargs: Any) -> None: ...
-    def get_object(self) -> models.Model: ...
-    def get_revision_object(self) -> models.Model: ...
+    def get_object(self) -> _ModelT: ...
+    def get_revision_object(self) -> _ModelT: ...
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse: ...
 
 class StreamFieldBlockPreview(TemplateView):

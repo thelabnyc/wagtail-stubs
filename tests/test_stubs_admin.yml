@@ -172,7 +172,7 @@
 
     reveal_type(CreateView().action_class)  # N: Revealed type is "type[wagtail.actions.create.CreateAction[Any]]"
     reveal_type(EditView().action_class)  # N: Revealed type is "type[wagtail.actions.edit.EditAction[Any]]"
-    reveal_type(DeleteView().action_class)  # N: Revealed type is "type[wagtail.actions.base.BaseAction[Any]]"
+    reveal_type(DeleteView().action_class)  # N: Revealed type is "type[wagtail.actions.delete.DeleteAction[Any]]"
 
 - case: admin_menu_order_and_submenu_hook
   mypy_config: |
@@ -258,6 +258,190 @@
     from wagtail.admin.views.pages.move import MoveChooseDestination  # E: Module "wagtail.admin.views.pages.move" has no attribute "MoveChooseDestination"; maybe "MoveChooseDestinationView"?  [attr-defined]
     from wagtail.admin.auth import page_permission_policy  # E: Module "wagtail.admin.auth" has no attribute "page_permission_policy"; maybe "BasePermissionPolicy"?  [attr-defined]
 
+- case: admin_generic_bare_subclasses_strict
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+    warn_unused_ignores = True
+    warn_redundant_casts = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import Group
+    from django.db.models import QuerySet
+    from django.http import HttpRequest
+    from wagtail.admin.ui.tables import Column
+    from wagtail.admin.views.generic import EditView, IndexView
+    from wagtail.admin.views.generic.chooser import (
+        BaseChooseView,
+        ChooseResultsViewMixin,
+        ChooseViewMixin,
+        ChosenView,
+        CreationFormMixin,
+    )
+    from wagtail.admin.viewsets.chooser import ChooserViewSet
+    from wagtail.admin.viewsets.model import ModelViewSet
+    from wagtail.admin.viewsets.pages import PageListingViewSet
+    from wagtail.admin.widgets.chooser import BaseChooser
+    from wagtail.models import Page
+    from wagtail.snippets.views.snippets import IndexView as SnippetIndexView
+    from wagtail.snippets.views.snippets import SnippetViewSet
+
+    class GroupEditView(EditView):
+        pass
+
+    class GroupViewSet(ModelViewSet):
+        model = Group
+        form_fields = ["name"]
+        edit_view_class = GroupEditView
+        pk_path_converter = "int"
+
+    class GroupSnippetIndexView(SnippetIndexView):
+        def get_filename(self) -> str:
+            return "groups"
+
+    class GroupSnippetViewSet(SnippetViewSet):
+        model = Group
+        index_view_class = GroupSnippetIndexView
+
+        def get_queryset(self, request: HttpRequest) -> QuerySet[Group]:
+            return Group.objects.all()
+
+    class GroupChooseView(BaseChooseView):
+        per_page = 25
+
+    class ChooseView(ChooseViewMixin, CreationFormMixin, GroupChooseView):
+        pass
+
+    class ChooseResultsView(ChooseResultsViewMixin, CreationFormMixin, GroupChooseView):
+        pass
+
+    class GroupChosenView(ChosenView):
+        response_data_title_key = "string"
+
+    class GroupChooser(BaseChooser):
+        model = Group
+
+    class GroupChooserViewSet(ChooserViewSet):
+        model = "auth.Group"
+        register_widget = False
+        base_widget_class: type[GroupChooser] = GroupChooser
+        choose_view_class: type[ChooseView] = ChooseView
+        choose_results_view_class: type[ChooseResultsView] = ChooseResultsView
+        chosen_view_class: type[GroupChosenView] = GroupChosenView
+
+    class BlogPageListingViewSet(PageListingViewSet):
+        model = Page
+        columns = PageListingViewSet.index_view_class.base_columns + [Column("slug")]
+
+    reveal_type(GroupViewSet().edit_view_class)  # N: Revealed type is "def (**kwargs: Any) -> main.GroupEditView"
+    reveal_type(GroupViewSet().pk_path_converter)  # N: Revealed type is "str"
+    reveal_type(GroupEditView().get_object())  # N: Revealed type is "django.db.models.base.Model"
+    reveal_type(GroupEditView().form)  # N: Revealed type is "wagtail.admin.forms.models.WagtailAdminModelForm"
+    reveal_type(GroupEditView().get_form_class())  # N: Revealed type is "type[wagtail.admin.forms.models.WagtailAdminModelForm]"
+    reveal_type(GroupEditView().permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any] | None"
+    reveal_type(IndexView().get_queryset())  # N: Revealed type is "django.db.models.query.QuerySet[django.db.models.base.Model, django.db.models.base.Model]"
+
+- case: admin_generic_bare_subclasses_keep_override_ignores
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+    warn_unused_ignores = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import Any
+
+    from django.contrib.auth.models import Group
+    from django.db.models import QuerySet
+    from wagtail.admin.views.generic import CreateView, DeleteView, EditView
+    from wagtail.snippets.views.snippets import EditView as SnippetEditView
+
+    class GroupEditView(EditView):
+        model = Group
+
+        def get_object(self, queryset: QuerySet[Group] | None = None) -> Group:  # type: ignore[override]
+            return Group.objects.get(pk=self.kwargs["pk"])
+
+        def get_form_kwargs(self) -> dict[str, Any]:
+            self.form.defer_required_fields()
+            return super().get_form_kwargs()
+
+    class GroupDeleteView(DeleteView):
+        def get_object(self, queryset: QuerySet[Group] | None = None) -> Group:  # type: ignore[override]
+            return Group.objects.get(pk=self.kwargs["pk"])
+
+    class GroupSnippetEditView(SnippetEditView):
+        def get_object(self, queryset: QuerySet[Group] | None = None) -> Group:  # type: ignore[override]
+            return Group.objects.get(pk=self.kwargs["pk"])
+
+    reveal_type(CreateView().form)  # N: Revealed type is "wagtail.admin.forms.models.WagtailAdminModelForm"
+    reveal_type(SnippetEditView().form)  # N: Revealed type is "wagtail.admin.forms.models.WagtailAdminModelForm"
+
+- case: admin_generic_model_viewset_parameterized
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import TYPE_CHECKING
+
+    from django.contrib.auth.models import Group
+    from django.forms import ModelForm
+    from wagtail.admin.views.generic import DeleteView, EditView, IndexView
+    from wagtail.admin.views.generic.chooser import ChosenView
+    from wagtail.admin.viewsets.model import ModelViewSet
+    from wagtail.models import Page
+    from wagtail.snippets.views.snippets import SnippetViewSet
+
+    if TYPE_CHECKING:
+        _GroupEditViewBase = EditView[Group]
+        _GroupViewSetBase = ModelViewSet[Group]
+        _GroupSnippetViewSetBase = SnippetViewSet[Group]
+    else:
+        _GroupEditViewBase = EditView
+        _GroupViewSetBase = ModelViewSet
+        _GroupSnippetViewSetBase = SnippetViewSet
+
+    class GroupForm(ModelForm[Group]):
+        pass
+
+    class GroupEditView(_GroupEditViewBase):
+        pass
+
+    class GroupViewSet(_GroupViewSetBase):
+        model = Group
+        edit_view_class = GroupEditView
+
+    class GroupSnippetViewSet(_GroupSnippetViewSetBase):
+        model = Group
+
+    class WrongViewSet(_GroupViewSetBase):
+        model = Page  # E: Incompatible types in assignment (expression has type "type[Page]", base class "ModelViewSet" defined the type as "type[Group]")  [assignment]
+
+    view = GroupEditView()
+    reveal_type(view.model)  # N: Revealed type is "type[django.contrib.auth.models.Group] | None"
+    reveal_type(view.get_object())  # N: Revealed type is "django.contrib.auth.models.Group"
+    reveal_type(view.save_instance())  # N: Revealed type is "django.contrib.auth.models.Group"
+    reveal_type(view.form)  # N: Revealed type is "wagtail.admin.forms.models.WagtailAdminModelForm"
+    reveal_type(view.get_form_class())  # N: Revealed type is "type[wagtail.admin.forms.models.WagtailAdminModelForm]"
+    reveal_type(view.permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any] | None"
+    reveal_type(view.action_class)  # N: Revealed type is "type[wagtail.actions.edit.EditAction[Any]]"
+    reveal_type(EditView[Group, GroupForm]().form)  # N: Revealed type is "main.GroupForm"
+    reveal_type(GroupViewSet().permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any]"
+    reveal_type(GroupViewSet().get_form_class())  # N: Revealed type is "type[django.forms.models.BaseModelForm[django.contrib.auth.models.Group]]"
+    reveal_type(GroupSnippetViewSet().get_queryset)  # N: Revealed type is "def (request: django.http.request.HttpRequest) -> django.db.models.query.QuerySet[django.contrib.auth.models.Group, django.contrib.auth.models.Group] | None"
+    reveal_type(IndexView[Group]().get_queryset())  # N: Revealed type is "django.db.models.query.QuerySet[django.contrib.auth.models.Group, django.contrib.auth.models.Group]"
+    reveal_type(DeleteView[Group]().action_class)  # N: Revealed type is "type[wagtail.actions.delete.DeleteAction[Any]]"
+    reveal_type(ChosenView[Group]().get_object("1"))  # N: Revealed type is "django.contrib.auth.models.Group"
+
 - case: admin_review_fixes
   mypy_config: |
     [mypy]
@@ -279,3 +463,156 @@
         reveal_type(AgingPagesView().decorate_paginated_queryset(pages))  # N: Revealed type is "django.db.models.query.QuerySet[wagtail.models.pages.Page, wagtail.models.pages.Page]"
         reveal_type(PreviewOnEdit().parent_object_id)  # N: Revealed type is "str | int"
         reveal_type(PreviewOnCreateView().parent_object_id)  # N: Revealed type is "int"
+
+- case: admin_generic_views_lazy_page_title
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import Group
+    from django.utils.translation import gettext_lazy
+    from wagtail.admin.views.generic import CreateView, EditView
+    from wagtail.admin.views.generic.history import HistoryView
+    from wagtail.admin.views.generic.usage import UsageView
+
+    class GroupCreateView(CreateView[Group]):
+        page_title = gettext_lazy("Add group")
+
+    class GroupEditView(EditView[Group]):
+        page_title = "Edit group"
+
+    class GroupHistoryView(HistoryView[Group]):
+        page_title = gettext_lazy("Group history")
+
+    class GroupUsageView(UsageView[Group]):
+        page_title = gettext_lazy("Group usage")
+
+    reveal_type(CreateView().page_title)  # N: Revealed type is "str | django.utils.functional._StrPromise"
+
+- case: admin_generic_views_form_callbacks
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import Group
+    from django.forms import ModelForm
+    from wagtail.snippets.views.snippets import EditView
+
+    def check(view: EditView[Group, ModelForm[Group]]) -> None:
+        form = view.get_form()
+        view.is_valid(form)
+        view.form_valid(form)
+        view.form_invalid(form)
+
+- case: admin_generic_views_specialized_form_callback_overrides
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+    warn_unused_ignores = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import Group
+    from django.forms import Form
+    from django.http import HttpResponse
+    from wagtail.admin.forms.models import WagtailAdminModelForm
+    from wagtail.admin.views.generic import CreateView, EditView
+    from wagtail.snippets.views.snippets import CreateView as SnippetCreateView
+    from wagtail.snippets.views.snippets import EditView as SnippetEditView
+
+    class GroupForm(WagtailAdminModelForm):
+        class Meta:
+            model = Group
+            fields = ["name"]
+
+    class GroupCreateView(CreateView[Group, GroupForm]):
+        def is_valid(self, form: GroupForm) -> bool:
+            return super().is_valid(form)
+
+        def form_valid(self, form: GroupForm) -> HttpResponse:
+            return super().form_valid(form)
+
+        def form_invalid(self, form: GroupForm) -> HttpResponse:
+            return super().form_invalid(form)
+
+    class GroupEditView(EditView[Group, GroupForm]):
+        def is_valid(self, form: GroupForm) -> bool:
+            return super().is_valid(form)
+
+        def form_valid(self, form: GroupForm) -> HttpResponse:
+            return super().form_valid(form)
+
+        def form_invalid(self, form: GroupForm) -> HttpResponse:
+            return super().form_invalid(form)
+
+    class GroupSnippetCreateView(SnippetCreateView[Group, GroupForm]):
+        def form_valid(self, form: GroupForm) -> HttpResponse:
+            return super().form_valid(form)
+
+    class GroupSnippetEditView(SnippetEditView[Group, GroupForm]):
+        def is_valid(self, form: GroupForm) -> bool:
+            return super().is_valid(form)
+
+        def form_valid(self, form: GroupForm) -> HttpResponse:
+            return super().form_valid(form)
+
+    def check(view: GroupEditView, snippet_view: GroupSnippetEditView, other: Form) -> None:
+        snippet_view.form_valid(snippet_view.get_form())
+        view.form_valid(other)  # E: Argument 1 to "form_valid" of "GroupEditView" has incompatible type "Form"; expected "GroupForm"  [arg-type]
+
+- case: admin_generic_views_bare_form_callback_overrides
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+    warn_unused_ignores = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import Any
+
+    from django.forms import BaseForm, Form
+    from django.http import HttpResponse
+    from wagtail.admin.views.generic import BeforeAfterHookMixin, CreateView, DeleteView, EditView
+    from wagtail.snippets.views.snippets import EditView as SnippetEditView
+
+    class MyCreateView(CreateView):
+        def is_valid(self, form: BaseForm) -> bool:
+            return True
+
+        def form_valid(self, form: BaseForm) -> HttpResponse:
+            return HttpResponse()
+
+        def form_invalid(self, form: Any) -> HttpResponse:
+            return super().form_invalid(form)
+
+    class MyEditView(EditView):
+        def form_valid(self, form: BaseForm) -> HttpResponse:
+            return HttpResponse()
+
+    class MySnippetEditView(SnippetEditView):
+        def form_invalid(self, form: BaseForm) -> HttpResponse:
+            return HttpResponse()
+
+    class MyDeleteView(DeleteView):
+        def form_valid(self, form: BaseForm) -> HttpResponse:
+            return HttpResponse()
+
+    class MyHookView(BeforeAfterHookMixin):
+        def form_valid(self, form: Form) -> HttpResponse:
+            return super().form_valid(form)
+
+    reveal_type(EditView().form_valid)  # N: Revealed type is "def (form: wagtail.admin.forms.models.WagtailAdminModelForm) -> django.http.response.HttpResponse"
+    reveal_type(DeleteView().form_valid)  # N: Revealed type is "def (form: django.forms.forms.BaseForm) -> django.http.response.HttpResponse"
+    reveal_type(BeforeAfterHookMixin().form_valid)  # N: Revealed type is "def (form: django.forms.forms.Form) -> django.http.response.HttpResponse"

@@ -1,7 +1,8 @@
 from typing import Any
 
 from django.db import models
-from django.utils.functional import cached_property
+from django.utils.functional import _StrOrPromise, cached_property
+from typing_extensions import TypeVar
 from wagtail.admin.ui import tables
 from wagtail.admin.widgets.button import HeaderButton
 from wagtail.models.reference_index import ReferenceGroups
@@ -9,19 +10,21 @@ from wagtail.models.reference_index import ReferenceGroups
 from .base import BaseListingView, BaseObjectMixin
 from .permissions import PermissionCheckedMixin
 
+_ModelT = TypeVar("_ModelT", bound=models.Model, default=models.Model)
+
 class TitleColumn(tables.TitleColumn):
     def get_link_attrs(self, instance: dict[str, Any], parent_context: dict[str, Any]) -> dict[str, Any]: ...
 
-class UsageView(PermissionCheckedMixin, BaseObjectMixin, BaseListingView):
+class UsageView(PermissionCheckedMixin[_ModelT], BaseObjectMixin[_ModelT], BaseListingView):
     paginate_by: int
-    page_title: str
+    page_title: _StrOrPromise
     index_url_name: str | None
     edit_url_name: str | None
     usage_url_name: str | None
     permission_required: str
     @cached_property
     def describe_on_delete(self) -> bool: ...
-    def get_object(self) -> models.Model: ...
+    def get_object(self) -> _ModelT: ...
     def get_edit_url(self, instance: models.Model) -> str | None: ...
     def get_usage_url(self, instance: models.Model) -> str | None: ...
     def get_index_url(self) -> str | None: ...
