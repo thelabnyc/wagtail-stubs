@@ -241,3 +241,39 @@
         site_policy: SitePermissionPolicy = SocialSettings.get_permission_policy()
   installed_apps:
     - main
+
+- case: apps_register_setting_forms_strict
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.db import models
+    from wagtail.contrib.settings.models import BaseGenericSetting, BaseSiteSetting, register_setting
+    from wagtail.contrib.settings.registry import registry
+
+    @register_setting
+    class SocialSettings(BaseSiteSetting):
+        pass
+
+    @register_setting(icon="code")
+    class FooterSettings(BaseGenericSetting):
+        pass
+
+    class HeaderSettings(BaseSiteSetting):
+        pass
+
+    class NotASetting(models.Model):
+        pass
+
+    reveal_type(SocialSettings)  # N: Revealed type is "def (*args: Any, **kwargs: Any) -> main.SocialSettings"
+    reveal_type(FooterSettings)  # N: Revealed type is "def (*args: Any, **kwargs: Any) -> main.FooterSettings"
+    reveal_type(register_setting(HeaderSettings, icon="cog"))  # N: Revealed type is "type[main.HeaderSettings]"
+    reveal_type(registry.register(HeaderSettings))  # N: Revealed type is "type[main.HeaderSettings]"
+    reveal_type(registry.get_by_natural_key("main", "headersettings"))  # N: Revealed type is "type[django.db.models.base.Model] | None"
+    register_setting(NotASetting)  # E: Value of type variable "T" of "register_setting" cannot be "NotASetting"  [type-var]
+  installed_apps:
+    - main
