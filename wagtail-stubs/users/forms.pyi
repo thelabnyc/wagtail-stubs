@@ -1,17 +1,19 @@
+from typing import ClassVar
+
 from django import forms
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import Group, Permission
 from django.db import transaction
 from django.db.models import QuerySet
+from django.utils.functional import _StrPromise
 from wagtail import hooks as hooks
 from wagtail.admin.forms.formsets import BaseFormSetMixin as BaseFormSetMixin
 from wagtail.admin.widgets import AdminPageChooser as AdminPageChooser
-from wagtail.models.pages import PAGE_PERMISSION_CODENAMES as PAGE_PERMISSION_CODENAMES
-from wagtail.models.pages import PAGE_PERMISSION_TYPES as PAGE_PERMISSION_TYPES
+from wagtail.models import AbstractPage
 from wagtail.models.pages import GroupPagePermission as GroupPagePermission
-from wagtail.models.pages import Page as Page
 
 User: type[AbstractBaseUser]
+Page: type[AbstractPage]
 standard_fields: set[str]
 
 class UsernameForm(forms.ModelForm):
@@ -71,7 +73,7 @@ class PagePermissionsForm(forms.Form):
     permissions: forms.ModelMultipleChoiceField
 
 class BaseGroupPagePermissionFormSet(BaseFormSetMixin, forms.BaseFormSet):
-    permission_types = PAGE_PERMISSION_TYPES
+    permission_types: ClassVar[list[tuple[str, _StrPromise, _StrPromise]]]
     instance: Group
     def __init__(self, data=None, files=None, instance=None, prefix: str = "page_permissions") -> None: ...
     def clean(self) -> None: ...

@@ -1,7 +1,7 @@
 from _typeshed import Incomplete
 from django.db import models
 from django.utils.functional import cached_property as cached_property
-from wagtail.models.pages import Page as Page
+from wagtail.models import AbstractPage as AbstractPage
 from wagtail.models.sites import Site as Site
 
 class Redirect(models.Model):

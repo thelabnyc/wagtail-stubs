@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand
-from wagtail.models.pages import Page as Page
+from wagtail.models import AbstractPage
+
+Page: type[AbstractPage]
 
 class Command(BaseCommand):
     help: str
