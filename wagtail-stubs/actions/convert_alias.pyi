@@ -1,20 +1,27 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.exceptions import PermissionDenied
-from wagtail.models.pages import Page
+from django.utils.functional import cached_property
+from typing_extensions import TypeVar
+from wagtail.actions.base import BaseAction
+from wagtail.models.pages import AbstractPage
+from wagtail.permission_policies.pages import PagePermissionPolicy
+
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
 
 class ConvertAliasPageError(RuntimeError): ...
 class ConvertAliasPagePermissionError(PermissionDenied): ...
 
-class ConvertAliasPageAction:
-    page: Page
+class ConvertAliasPageAction(BaseAction[_PageT]):
+    page: _PageT
     log_action: str | None
-    user: AbstractBaseUser | None
     def __init__(
         self,
-        page: Page,
+        page: _PageT,
         *,
         log_action: str | None = "wagtail.convert_alias",
         user: AbstractBaseUser | None = None,
     ) -> None: ...
+    @cached_property
+    def permission_policy(self) -> PagePermissionPolicy[_PageT]: ...
     def check(self, skip_permission_checks: bool = False) -> None: ...
-    def execute(self, skip_permission_checks: bool = False) -> Page: ...
+    def execute(self, skip_permission_checks: bool = False) -> _PageT: ...

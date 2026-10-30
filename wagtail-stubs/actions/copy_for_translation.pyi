@@ -1,26 +1,32 @@
 from collections.abc import Sequence
+from typing import Any
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.exceptions import PermissionDenied
-from django.db import models
-from wagtail.models.i18n import Locale
-from wagtail.models.pages import Page
+from django.utils.functional import cached_property
+from typing_extensions import TypeVar
+from wagtail.actions.base import BaseAction
+from wagtail.models.i18n import Locale, TranslatableMixin
+from wagtail.models.pages import AbstractPage
+from wagtail.permission_policies.pages import PagePermissionPolicy
+
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
+_TranslatableT = TypeVar("_TranslatableT", bound=TranslatableMixin, default=Any)
 
 class ParentNotTranslatedError(Exception): ...
 class CopyForTranslationPermissionError(PermissionDenied): ...
 class CopyPageForTranslationPermissionError(CopyForTranslationPermissionError): ...
 
-class CopyPageForTranslationAction:
-    page: Page
+class CopyPageForTranslationAction(BaseAction[_PageT]):
+    page: _PageT
     locale: Locale
     copy_parents: bool
     alias: bool
     exclude_fields: Sequence[str] | None
-    user: AbstractBaseUser | None
     include_subtree: bool
     def __init__(
         self,
-        page: Page,
+        page: _PageT,
         locale: Locale,
         copy_parents: bool = False,
         alias: bool = False,
@@ -28,21 +34,23 @@ class CopyPageForTranslationAction:
         user: AbstractBaseUser | None = None,
         include_subtree: bool = False,
     ) -> None: ...
+    @cached_property
+    def permission_policy(self) -> PagePermissionPolicy[_PageT]: ...
     def check(self, skip_permission_checks: bool = False) -> None: ...
-    def walk(self, current_page: Page) -> None: ...
-    def execute(self, skip_permission_checks: bool = False) -> Page: ...
+    def walk(self, current_page: AbstractPage) -> None: ...
+    def execute(self, skip_permission_checks: bool = False) -> _PageT: ...
 
-class CopyForTranslationAction:
-    object: models.Model
+class CopyForTranslationAction(BaseAction[_TranslatableT]):
+    object: _TranslatableT
     locale: Locale
     exclude_fields: Sequence[str] | None
-    user: AbstractBaseUser | None
     def __init__(
         self,
-        object: models.Model,
+        object: _TranslatableT,
         locale: Locale,
         exclude_fields: Sequence[str] | None = None,
         user: AbstractBaseUser | None = None,
     ) -> None: ...
+    def user_has_permission(self) -> bool: ...
     def check(self, skip_permission_checks: bool = False) -> None: ...
-    def execute(self, skip_permission_checks: bool = False) -> models.Model: ...
+    def execute(self, skip_permission_checks: bool = False) -> _TranslatableT: ...

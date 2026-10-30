@@ -5,29 +5,34 @@ import uuid
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.exceptions import PermissionDenied
-from wagtail.models.pages import Page
+from django.utils.functional import cached_property
+from typing_extensions import TypeVar
+from wagtail.actions.base import BaseAction
+from wagtail.models.pages import AbstractPage
+from wagtail.permission_policies.pages import PagePermissionPolicy
+
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
 
 logger: logging.Logger
 
 class CopyPageIntegrityError(RuntimeError): ...
 class CopyPagePermissionError(PermissionDenied): ...
 
-class CopyPageAction:
-    page: Page
-    to: Page | None
+class CopyPageAction(BaseAction[_PageT]):
+    page: _PageT
+    to: AbstractPage | None
     update_attrs: dict[str, Any] | None
     exclude_fields: Sequence[str] | None
     recursive: bool
     copy_revisions: bool
     keep_live: bool
-    user: AbstractBaseUser | None
     process_child_object: Callable[..., Any] | None
     log_action: str | None
     reset_translation_key: bool
     def __init__(
         self,
-        page: Page,
-        to: Page | None = None,
+        page: _PageT,
+        to: AbstractPage | None = None,
         update_attrs: dict[str, Any] | None = None,
         exclude_fields: Sequence[str] | None = None,
         recursive: bool = False,
@@ -38,6 +43,8 @@ class CopyPageAction:
         log_action: str | None = "wagtail.copy",
         reset_translation_key: bool = True,
     ) -> None: ...
+    @cached_property
+    def permission_policy(self) -> PagePermissionPolicy[_PageT]: ...
     def generate_translation_key(self, old_uuid: uuid.UUID) -> uuid.UUID: ...
     def check(self, skip_permission_checks: bool = False) -> None: ...
-    def execute(self, skip_permission_checks: bool = False) -> Page: ...
+    def execute(self, skip_permission_checks: bool = False) -> _PageT: ...
