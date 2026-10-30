@@ -86,7 +86,8 @@ wagtail\.contrib\.settings\.views(\..*)?
 wagtail\.contrib\.simple_translation\.models(\..*)?
 wagtail\.contrib\.table_block\.blocks(\..*)?
 wagtail\.contrib\.typed_table_block\.blocks(\..*)?
-wagtail\.coreutils(\..*)?
+# functools.cache wrapper: stub signature has *args/**kwargs, runtime inspect follows __wrapped__
+wagtail\.coreutils\.get_content_languages
 wagtail\.documents(\..*)?
 wagtail\.embeds\.blocks(\..*)?
 wagtail\.embeds\.embeds(\..*)?
@@ -107,10 +108,8 @@ wagtail\.search\.management\.commands\.enable_trigram(\..*)?
 wagtail\.search\.models(\..*)?
 wagtail\.search\.query(\..*)?
 wagtail\.search\.tasks\.insert_or_update_object_task(\..*)?
-wagtail\.signal_handlers\.logger(\..*)?
-wagtail\.signal_handlers\.reference_index_auto_update_disabled(\..*)?
-wagtail\.sites\.views(\..*)?
-wagtail\.sites\.wagtail_hooks(\..*)?
+# MenuItem's media property comes from Django's MediaDefiningClass metaclass
+wagtail\.sites\.wagtail_hooks\.SitesMenuItem\.media
 wagtail\.snippets\.action_menu(\..*)?
 wagtail\.snippets\.blocks(\..*)?
 wagtail\.snippets\.bulk_actions\.delete(\..*)?
