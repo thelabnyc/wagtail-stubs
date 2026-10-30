@@ -1,8 +1,9 @@
-from typing import Any
+from typing import Any, Generic
 
 from django.http import HttpRequest, HttpResponse, HttpResponseBase
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormMixin
+from typing_extensions import TypeVar
 from wagtail import hooks as hooks
 from wagtail.actions.move_page import MovePageAction as MovePageAction
 from wagtail.admin import messages as messages
@@ -11,6 +12,7 @@ from wagtail.models import AbstractPage
 from wagtail.models.pages import PagePermissionTester
 
 Page: type[AbstractPage]
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
 
 class MoveChooseDestinationView(TemplateView, FormMixin[MoveForm]):
     template_name: str
@@ -23,9 +25,9 @@ class MoveChooseDestinationView(TemplateView, FormMixin[MoveForm]):
     def form_valid(self, form: MoveForm) -> HttpResponse: ...
     def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse: ...
 
-class MoveConfirmView(TemplateView):
+class MoveConfirmView(TemplateView, Generic[_PageT]):
     template_name: str
-    page_to_move: AbstractPage
+    page_to_move: _PageT
     destination: AbstractPage
     i18n_enabled: bool
     pages_to_move: list[AbstractPage]

@@ -49,7 +49,7 @@ class FormStateQuerySet(models.QuerySet["FormState"]):
         self,
         user: AbstractBaseUser,
         instance: models.Model,
-        parent_object_id: str = "",
+        parent_object_id: str | int = "",
     ) -> Self: ...
     def stale(self) -> Self: ...
 
@@ -60,13 +60,13 @@ class FormStateManager(models.Manager["FormState"]):
         self,
         user: AbstractBaseUser,
         instance: models.Model,
-        parent_object_id: str = "",
+        parent_object_id: str | int = "",
     ) -> FormStateQuerySet: ...
     def stale(self) -> FormStateQuerySet: ...
     def update_or_create_by_instance(
         self,
         instance: models.Model,
-        parent_object_id: str = "",
+        parent_object_id: str | int = "",
         **kwargs: Any,
     ) -> tuple[FormState, bool]: ...
 

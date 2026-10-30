@@ -12,3 +12,40 @@ Wagtail 8.0 lets a project replace `wagtail.models.Page` with its own base page 
 - `PageQuerySet[Page].type(BlogPage)` and `PageQuerySet[AbstractPage].type(BlogPage)` narrow to `PageQuerySet[BlogPage]`, but `PageQuerySet[BasePage].type(BlogPage)` does not.
 - `PageQuerySet` is invariant (its type parameter comes from `django-treebeard-stubs`), so a `PageQuerySet[Page]` cannot be passed where a `PageQuerySet[AbstractPage]` is expected.
 - `swapper` ships no type information, so `swapper.load_model("wagtailcore", "Page")` is untyped. Annotate the result as `type[AbstractPage]`.
+
+## Generic admin views and viewsets
+
+`ModelViewSet`, `SnippetViewSet`, `ChooserViewSet`, the generic admin views (`wagtail.admin.views.generic`), the chooser views, and the page views with `PageListingViewSet` / `PageViewSet` take the model as a type parameter. The parameter ties `model`, `object`, `get_object()`, `get_queryset()`, `save_instance()` and `action_class` to your model. Create and edit views take the form class as an optional second parameter. Without parameters, model views and viewsets default to `Model`, page views and viewsets default to `AbstractPage`, and the form defaults to `WagtailAdminModelForm`, so existing subclasses keep their current types.
+
+`permission_policy` is not tied to the parameter. Wagtail looks it up in the policy registry, which returns the policy of the nearest registered ancestor model, so it is typed `BasePermissionPolicy[Any]` (or `PagePermissionPolicy[AbstractPage]` on page views).
+
+Wagtail's classes do not support subscripting at runtime, so `class GroupViewSet(ModelViewSet[Group])` raises `TypeError`. Subscript the base class for the type checker only:
+
+```python
+from typing import TYPE_CHECKING
+
+from django.contrib.auth.models import Group
+from wagtail.admin.views.generic import EditView
+from wagtail.admin.viewsets.model import ModelViewSet
+
+if TYPE_CHECKING:
+    _GroupEditViewBase = EditView[Group]
+    _GroupViewSetBase = ModelViewSet[Group]
+else:
+    _GroupEditViewBase = EditView
+    _GroupViewSetBase = ModelViewSet
+
+
+class GroupEditView(_GroupEditViewBase):
+    def get_success_message(self) -> str | None:
+        return f"Saved {self.object.name}"  # self.object is a Group
+
+
+class GroupViewSet(_GroupViewSetBase):
+    model = Group
+    edit_view_class = GroupEditView
+```
+
+If you already call `django_stubs_ext.monkeypatch()`, you can instead pass the classes you subscript, for example `django_stubs_ext.monkeypatch(extra_classes=[ModelViewSet, EditView])`, and write `ModelViewSet[Group]` directly.
+
+The `*_view_class` attributes are not tied to the viewset's parameter, because code such as `PageListingViewSet.index_view_class.base_columns` reads them from the class itself. Parameterize the view classes you assign to them yourself.

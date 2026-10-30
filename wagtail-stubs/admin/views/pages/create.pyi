@@ -1,10 +1,12 @@
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Generic
 
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpRequest, HttpResponse, HttpResponseBase
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from django.views.generic.base import TemplateView, View
+from typing_extensions import TypeVar
 from wagtail.admin import messages as messages
 from wagtail.admin.action_menu import PageActionMenu as PageActionMenu
 from wagtail.admin.forms.pages import WagtailAdminPageForm
@@ -35,6 +37,7 @@ from wagtail.models.view_restrictions import BaseViewRestriction as BaseViewRest
 from wagtail.signals import init_new_page as init_new_page
 
 Page: type[AbstractPage]
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
 
 class AddSubpageView(TemplateView):
     template_name: str
@@ -43,16 +46,16 @@ class AddSubpageView(TemplateView):
     def dispatch(self, request: HttpRequest, parent_page_id: int, *args: Any, **kwargs: Any) -> HttpResponseBase: ...
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
 
-class CreateView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMixin, View):
+class CreateView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMixin, View, Generic[_PageT]):
     template_name: str
-    page_title: str
+    page_title: _StrOrPromise
     edit_url_name: str
     parent_page: AbstractPage
     parent_page_perms: PagePermissionTester
     page_content_type: ContentType
-    page_class: type[AbstractPage]
+    page_class: type[_PageT]
     locale: Locale | None
-    page: AbstractPage
+    page: _PageT
     translations: list[dict[str, Any]]
     edit_handler: Panel
     form_class: type[WagtailAdminPageForm]

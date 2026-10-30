@@ -1,4 +1,8 @@
-from django.utils.functional import cached_property
+from typing import Any
+
+from django.db.models import Model
+from django.utils.functional import _StrOrPromise, cached_property
+from typing_extensions import TypeVar
 from wagtail.admin.ui.tables import LiveStatusTagColumn as LiveStatusTagColumn
 from wagtail.admin.views.generic.chooser import (
     BaseChooseView as BaseChooseView,
@@ -25,9 +29,11 @@ from wagtail.admin.viewsets.chooser import ChooserViewSet as ChooserViewSet
 from wagtail.models.draft_state import DraftStateMixin as DraftStateMixin
 from wagtail.snippets.widgets import AdminSnippetChooser as AdminSnippetChooser
 
-class BaseSnippetChooseView(BaseChooseView):
+_ModelT = TypeVar("_ModelT", bound=Model, default=Model)
+
+class BaseSnippetChooseView(BaseChooseView[_ModelT]):
     filter_form_class: None
-    page_title: str
+    page_title: _StrOrPromise
     results_template_name: str
     per_page: int
     @property
@@ -36,24 +42,24 @@ class BaseSnippetChooseView(BaseChooseView):
     def columns(self): ...
     def get_context_data(self, **kwargs): ...
 
-class ChooseView(ChooseViewMixin, CreationFormMixin, BaseSnippetChooseView): ...
-class ChooseResultsView(ChooseResultsViewMixin, CreationFormMixin, BaseSnippetChooseView): ...
+class ChooseView(ChooseViewMixin, CreationFormMixin[_ModelT], BaseSnippetChooseView[_ModelT]): ...
+class ChooseResultsView(ChooseResultsViewMixin, CreationFormMixin[_ModelT], BaseSnippetChooseView[_ModelT]): ...
 
-class SnippetChosenView(ChosenView):
+class SnippetChosenView(ChosenView[_ModelT]):
     response_data_title_key: str
 
-class SnippetChosenMultipleView(ChosenMultipleView):
+class SnippetChosenMultipleView(ChosenMultipleView[_ModelT]):
     response_data_title_key: str
 
-class SnippetCreateView(CreateView):
+class SnippetCreateView(CreateView[_ModelT]):
     response_data_title_key: str
 
-class SnippetChooserViewSet(ChooserViewSet):
-    choose_view_class: type[ChooseView]
-    choose_results_view_class: type[ChooseResultsView]
-    chosen_view_class: type[SnippetChosenView]
-    chosen_multiple_view_class: type[SnippetChosenMultipleView]
-    create_view_class: type[SnippetCreateView]
+class SnippetChooserViewSet(ChooserViewSet[_ModelT]):
+    choose_view_class: type[ChooseView[Any]]
+    choose_results_view_class: type[ChooseResultsView[Any]]
+    chosen_view_class: type[SnippetChosenView[Any]]
+    chosen_multiple_view_class: type[SnippetChosenMultipleView[Any]]
+    create_view_class: type[SnippetCreateView[Any]]
     base_widget_class: type[AdminSnippetChooser]
     @cached_property
     def widget_class(self) -> type[AdminSnippetChooser]: ...

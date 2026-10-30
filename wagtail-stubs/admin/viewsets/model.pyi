@@ -1,14 +1,16 @@
 from collections.abc import Callable, Sequence
-from typing import Any
+from typing import Any, Generic
 
 from django import forms
 from django.contrib.auth.models import Permission
 from django.db import models
-from django.db.models import Options, QuerySet
+from django.db.models import QuerySet
+from django.db.models.options import Options
 from django.forms import BaseModelForm
 from django.http.response import HttpResponseBase
 from django.urls import URLPattern
 from django.utils.functional import _StrPromise, cached_property
+from typing_extensions import TypeVar
 from wagtail.admin.admin_url_finder import ModelAdminURLFinder
 from wagtail.admin.menu import MenuItem
 from wagtail.admin.panels.group import ObjectList
@@ -18,33 +20,35 @@ from wagtail.admin.viewsets.base import ViewSet, ViewSetGroup, _Undefined
 from wagtail.admin.viewsets.listing import ListingViewSetMixin
 from wagtail.permission_policies.base import BasePermissionPolicy
 
-class ModelViewSet(ListingViewSetMixin, ViewSet):
+_ModelT = TypeVar("_ModelT", bound=models.Model, default=models.Model)
+
+class ModelViewSet(ListingViewSetMixin, ViewSet, Generic[_ModelT]):
     add_to_reference_index: bool
     sort_order_field: str | None | _Undefined
-    @cached_property
-    def pk_path_converter(self) -> str: ...
-    index_view_class: type[generic.IndexView]
-    add_view_class: type[generic.CreateView]
-    edit_view_class: type[generic.EditView]
-    delete_view_class: type[generic.DeleteView]
-    history_view_class: type[history.HistoryView]
-    usage_view_class: type[usage.UsageView]
-    copy_view_class: type[generic.CopyView]
-    inspect_view_class: type[generic.InspectView]
-    reorder_view_class: type[generic.ReorderView]
+    # Overridden with plain strings, which Pyright rejects against a bare cached_property
+    pk_path_converter: str | cached_property[str]
+    index_view_class: type[generic.IndexView[Any]]
+    add_view_class: type[generic.CreateView[Any, Any]]
+    edit_view_class: type[generic.EditView[Any, Any]]
+    delete_view_class: type[generic.DeleteView[Any]]
+    history_view_class: type[history.HistoryView[Any]]
+    usage_view_class: type[usage.UsageView[Any]]
+    copy_view_class: type[generic.CopyView[Any, Any]]
+    inspect_view_class: type[generic.InspectView[Any]]
+    reorder_view_class: type[generic.ReorderView[Any]]
     template_prefix: str
     list_per_page: int
     inspect_view_enabled: bool
     inspect_view_fields: list[str]
     inspect_view_fields_exclude: list[str]
     copy_view_enabled: bool
-    model: type[models.Model]
-    model_opts: Options[models.Model]
+    model: type[_ModelT]
+    model_opts: Options[_ModelT]
     app_label: str
     model_name: str
     def __init__(self, name: str | None = None, **kwargs: Any) -> None: ...
     @cached_property
-    def permission_policy(self) -> BasePermissionPolicy: ...
+    def permission_policy(self) -> BasePermissionPolicy[Any]: ...
     @cached_property
     def name(self) -> str: ...  # type: ignore[override]
     @cached_property
@@ -107,7 +111,7 @@ class ModelViewSet(ListingViewSetMixin, ViewSet):
     @cached_property
     def menu_item_class(self) -> type[MenuItem]: ...
     def formfield_for_dbfield(self, db_field: models.Field[Any, Any], **kwargs: Any) -> forms.Field | None: ...
-    def get_form_class(self, for_update: bool = False) -> type[BaseModelForm]: ...
+    def get_form_class(self, for_update: bool = False) -> type[BaseModelForm[_ModelT]]: ...
     def get_form_fields(self) -> Sequence[str] | None: ...
     def get_exclude_form_fields(self) -> Sequence[str] | None: ...
     def get_edit_handler(self) -> ObjectList | None: ...

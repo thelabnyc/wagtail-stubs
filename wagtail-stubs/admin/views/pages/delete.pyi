@@ -1,7 +1,8 @@
-from typing import Any
+from typing import Any, Generic
 
 from django.http import HttpRequest, HttpResponseBase
 from django.views.generic.base import TemplateView
+from typing_extensions import TypeVar
 from wagtail import hooks as hooks
 from wagtail.actions.delete_page import DeletePageAction as DeletePageAction
 from wagtail.admin import messages as messages
@@ -12,10 +13,11 @@ from wagtail.models.reference_index import ReferenceGroups
 from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
 
 Page: type[AbstractPage]
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
 
-class DeleteView(TemplateView):
+class DeleteView(TemplateView, Generic[_PageT]):
     template_name: str
-    page: AbstractPage
+    page: _PageT
     wagtail_site_name: str
     next_url: str
     pages_to_delete: list[AbstractPage]
