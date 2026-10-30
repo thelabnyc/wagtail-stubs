@@ -7,7 +7,7 @@ from django.http import HttpResponseBase
 from django.urls import URLPattern
 from django.utils.functional import _StrOrPromise, cached_property
 from wagtail.admin.views.generic import chooser as chooser_views
-from wagtail.admin.viewsets.base import ViewSet
+from wagtail.admin.viewsets.base import ViewSet, _Undefined
 from wagtail.admin.widgets.chooser import BaseChooser, BaseChooserAdapter
 from wagtail.blocks import ChooserBlock
 from wagtail.permission_policies import BasePermissionPolicy
@@ -38,7 +38,7 @@ class ChooserViewSet(ViewSet):
     create_action_label: _StrOrPromise
     create_action_clicked_label: _StrOrPromise | None
     creation_tab_label: _StrOrPromise | None
-    permission_policy: BasePermissionPolicy | None
+    permission_policy: BasePermissionPolicy | _Undefined | None
     def __init__(self, name: str | None = None, **kwargs: Any) -> None: ...
     def get_common_view_kwargs(self, **kwargs: Any) -> dict[str, Any]: ...
     @property

@@ -4,7 +4,7 @@ from django.core.paginator import Page, Paginator
 from django.db import models
 from django.db.models.options import Options
 from django.http import HttpRequest, HttpResponse
-from django.utils.functional import cached_property
+from django.utils.functional import _StrOrPromise, cached_property
 from django.views import View
 from django.views.generic.base import ContextMixin, TemplateResponseMixin
 from django.views.generic.list import BaseListView
@@ -15,14 +15,14 @@ from wagtail.admin.widgets.button import Button
 import django_filters
 
 class WagtailAdminTemplateMixin(TemplateResponseMixin, ContextMixin):
-    page_title: str
+    page_title: _StrOrPromise
     page_subtitle: str
     header_icon: str
     breadcrumbs_items: list[dict[str, Any]]
     template_name: str | list[str] | tuple[str, ...]
     header_buttons: list[Button]
     header_more_buttons: list[Button]
-    def get_page_title(self) -> str: ...
+    def get_page_title(self) -> _StrOrPromise: ...
     def get_page_subtitle(self) -> str: ...
     def get_header_title(self) -> str: ...
     def get_header_icon(self) -> str: ...
