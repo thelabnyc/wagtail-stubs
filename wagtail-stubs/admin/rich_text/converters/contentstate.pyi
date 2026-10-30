@@ -1,4 +1,4 @@
-from draftjs_exporter import HTMLExporter
+from draftjs_exporter import HTMLExporter as HTMLExporter
 from draftjs_exporter.types import Element, Props, RenderableConfig, RenderableType
 from wagtail.admin.rich_text.converters.html_to_contentstate import HtmlToContentStateHandler
 

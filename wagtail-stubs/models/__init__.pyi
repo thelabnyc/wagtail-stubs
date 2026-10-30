@@ -170,6 +170,7 @@ from .revisions import (
 from .revisions import (
     RevisionsManager as RevisionsManager,
 )
+from .sites import GroupSitePermission as GroupSitePermission
 from .sites import Site as Site
 from .sites import SiteManager as SiteManager
 from .sites import SiteRootPath as SiteRootPath
