@@ -8,6 +8,7 @@ from wagtail.admin.localization import get_js_translation_strings as get_js_tran
 from wagtail.admin.menu import MenuItem as MenuItem
 from wagtail.admin.menu import admin_menu as admin_menu
 from wagtail.admin.search import admin_search_areas as admin_search_areas
+from wagtail.admin.telepath import JSContext as JSContext
 from wagtail.admin.ui import sidebar as sidebar
 from wagtail.admin.utils import (
     get_admin_base_url as get_admin_base_url,
@@ -38,7 +39,6 @@ from wagtail.coreutils import (
 from wagtail.models.i18n import Locale as Locale
 from wagtail.models.pages import Page as Page
 from wagtail.models.pages import PageViewRestriction as PageViewRestriction
-from wagtail.telepath import JSContext as JSContext
 from wagtail.users.utils import get_gravatar_url as get_gravatar_url
 
 register: template.Library

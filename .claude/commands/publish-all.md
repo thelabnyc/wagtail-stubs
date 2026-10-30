@@ -11,13 +11,14 @@ Never bump major or minor — those are determined by the branch.
 
 ## Supported version policy
 
-We maintain a branch per wagtail minor version (`wagtail-7.0`, `wagtail-7.1`, etc.) and support every version back to (and including) the last LTS release. Wagtail LTS releases happen on a regular cadence — as of March 2026, 7.0 is the current LTS and the next LTS is 7.4. See [Wagtail's Release Notes](https://docs.wagtail.org/en/stable/releases/index.html) for up-to-date info on what the current/LTS versions are. Check this every time you run this command and update the versions noted in the command if you notice they're now out of date.
+We maintain a branch per wagtail minor version (`wagtail-7.0`, `wagtail-7.1`, etc.) and support every version back to (and including) the last LTS release. Wagtail LTS releases happen on a regular cadence — as of October 2026, 7.4 is the current LTS and the next LTS is expected four feature releases after it. See [Wagtail's Release Notes](https://docs.wagtail.org/en/stable/releases/index.html) for up-to-date info on what the current/LTS versions are. Check this every time you run this command and update the versions noted in the command if you notice they're now out of date.
 
-- **Right now (March 2026)** we support: 7.0, 7.1, 7.2, 7.3
-- **When 7.4 (LTS) ships**, we add 7.4 but still keep 7.0–7.3
-- **When the first post-LTS release ships** (7.5 or 8.0), we drop everything before the LTS — so we'd drop 7.0, 7.1, 7.2, 7.3 and only support 7.4+
+- **Right now (October 2026)** we support: 7.4 (LTS), 8.0
+- **When each later feature release ships** (8.1, 8.2, …), we add it and keep 7.4+
+- **When the next LTS ships**, we add it but still keep everything back to 7.4
+- **When the first release after that LTS ships**, we drop everything before the new LTS
 
-The `master` branch must always be identical to the latest (highest) version branch. It is kept in sync by fast-forward merging the latest branch into master after each publish cycle. This means `master` always has the wagtail dependency and version number of the newest supported release — e.g. if the latest branch is `wagtail-7.3`, then `master` pins `wagtail>=7.3,<7.4`. CI/CD pipelines and the default `pip install wagtail-stubs` experience are driven by `master`.
+The `master` branch must always be identical to the latest (highest) version branch. It is kept in sync by fast-forward merging the latest branch into master after each publish cycle. This means `master` always has the wagtail dependency and version number of the newest supported release — e.g. if the latest branch is `wagtail-8.0`, then `master` pins `wagtail>=8.0,<8.1`. CI/CD pipelines and the default `pip install wagtail-stubs` experience are driven by `master`.
 
 ## Process
 
@@ -52,4 +53,4 @@ When merging an older branch into a newer one, the conflicts are always in `pypr
 
 ## Do this now
 
-Publish on all supported version branches using the release type specified above, starting from the oldest. Currently supported: wagtail-7.0, wagtail-7.1, wagtail-7.2, wagtail-7.3.
+Publish on all supported version branches using the release type specified above, starting from the oldest. Currently supported: wagtail-7.4, wagtail-8.0.

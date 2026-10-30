@@ -7,8 +7,8 @@ from django import forms
 from django.db.models import Model
 from django.forms.utils import _DataT, _FilesT
 from django.utils.functional import _StrPromise, cached_property
+from wagtail.admin.telepath import Adapter
 from wagtail.rich_text import RichText
-from wagtail.telepath import Adapter
 
 from .base import Block
 

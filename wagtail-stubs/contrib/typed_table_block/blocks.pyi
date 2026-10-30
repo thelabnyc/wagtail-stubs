@@ -6,6 +6,8 @@ from django.db.models import Model
 from django.forms.utils import ErrorList
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.staticfiles import versioned_static as versioned_static
+from wagtail.admin.telepath import Adapter as Adapter
+from wagtail.admin.telepath import register as register
 from wagtail.blocks.base import (
     Block as Block,
 )
@@ -21,8 +23,6 @@ from wagtail.blocks.base import (
 from wagtail.blocks.base import (
     get_help_icon as get_help_icon,
 )
-from wagtail.telepath import Adapter as Adapter
-from wagtail.telepath import register as register
 
 class TypedTableBlockValidationError(ValidationError):
     cell_errors: dict[int, dict[int, ValidationError]] | None

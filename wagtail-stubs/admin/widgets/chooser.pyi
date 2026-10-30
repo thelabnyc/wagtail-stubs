@@ -10,7 +10,7 @@ from django.utils.datastructures import MultiValueDict
 from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from django.utils.safestring import SafeString
-from wagtail.widget_adapters import WidgetAdapter
+from wagtail.admin.telepath.widgets import WidgetAdapter
 
 class BaseChooser(widgets.Input):
     choose_one_text: _StrOrPromise

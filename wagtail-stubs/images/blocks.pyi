@@ -1,6 +1,7 @@
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.compare import BlockComparison as BlockComparison
 from wagtail.admin.compare import StructBlockComparison as StructBlockComparison
+from wagtail.admin.telepath import register as register
 from wagtail.blocks import (
     BooleanBlock as BooleanBlock,
 )
@@ -20,7 +21,6 @@ from wagtail.blocks.struct_block import (
     StructBlockValidationError as StructBlockValidationError,
 )
 from wagtail.images.models import AbstractImage as AbstractImage
-from wagtail.telepath import register as register
 
 from .shortcuts import get_rendition_or_not_found as get_rendition_or_not_found
 

@@ -153,7 +153,6 @@ wagtail\.search\.backends\.elasticsearch8(\..*)?
 wagtail\.search\.backends\.elasticsearch9(\..*)?
 wagtail\.search\.backends\.opensearch2(\..*)?
 wagtail\.search\.backends\.opensearch3(\..*)?
-wagtail\.search\.backends\.deprecation(\..*)?
 wagtail\.search\.management\.commands\.enable_trigram(\..*)?
 wagtail\.search\.models(\..*)?
 wagtail\.search\.query(\..*)?

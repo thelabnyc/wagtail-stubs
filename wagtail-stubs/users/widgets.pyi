@@ -1,3 +1,0 @@
-from wagtail.admin.widgets.button import ListingButton
-
-class UserListingButton(ListingButton): ...

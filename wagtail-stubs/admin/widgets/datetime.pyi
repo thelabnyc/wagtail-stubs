@@ -2,7 +2,7 @@ from typing import Any
 
 from django import forms
 from django.forms import widgets
-from wagtail.widget_adapters import WidgetAdapter
+from wagtail.admin.telepath.widgets import WidgetAdapter
 
 DEFAULT_DATE_FORMAT: str
 DEFAULT_DATETIME_FORMAT: str

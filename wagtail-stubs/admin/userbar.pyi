@@ -9,7 +9,7 @@ from wagtail.coreutils import accepts_kwarg as accepts_kwarg
 from wagtail.models.pages import Page as Page
 from wagtail.models.revisions import Revision as Revision
 from wagtail.users.models import UserProfile as UserProfile
-from wagtail.utils.deprecation import RemovedInWagtail80Warning as RemovedInWagtail80Warning
+from wagtail.utils.deprecation import RemovedInWagtail90Warning as RemovedInWagtail90Warning
 
 class BaseItem(Component):
     template_name: str
