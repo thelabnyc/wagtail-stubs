@@ -5,4 +5,5 @@ class WagtailSearchAppConfig(AppConfig):
     label: str
     verbose_name: str
     default_auto_field: str
+    backend_setting_name: str
     def ready(self) -> None: ...
