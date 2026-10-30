@@ -1,0 +1,320 @@
+- case: api_field_get_fields_for_model
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.api import APIField
+    from wagtail.models import Page
+
+    class TaggedAPIField(APIField):
+        pass
+
+    reveal_type(APIField("body", writable=True).writable)  # N: Revealed type is "bool"
+    reveal_type(APIField.get_fields_for_model(Page))  # N: Revealed type is "list[wagtail.api.conf.APIField]"
+    reveal_type(TaggedAPIField.get_fields_for_model(Page, db_fields_only=True))  # N: Revealed type is "list[main.TaggedAPIField]"
+    reveal_type(TaggedAPIField.get_writable_fields_for_model(Page))  # N: Revealed type is "list[main.TaggedAPIField]"
+
+- case: api_v2_pages_viewset_subclass
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import Any
+
+    from wagtail.api.v2.views import BaseAPIViewSet, PagesAPIViewSet
+    from wagtail.models import Page
+    from wagtail.query import PageQuerySet
+
+    class RestrictedPagesViewSet(PagesAPIViewSet):
+        def get_base_queryset(self) -> PageQuerySet[Page]:
+            return super().get_base_queryset()
+
+        def get_object(self) -> Page:
+            return super().get_object()
+
+    class CachedViewSet(BaseAPIViewSet):
+        def detail_view(self, request: Any, pk: int) -> Any:
+            return super().detail_view(request, pk)
+
+    reveal_type(PagesAPIViewSet.model)  # N: Revealed type is "type[wagtail.models.pages.Page]"
+    reveal_type(PagesAPIViewSet().resolve_rich_text_format())  # N: Revealed type is "Literal['db_html'] | Literal['html'] | Literal['db_markdown'] | Literal['markdown']"
+
+- case: api_public_pages_queryset
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.api.querysets import get_public_pages_queryset
+    from wagtail.api.v3.querysets import get_pages_queryset
+    from wagtail.models import Page
+
+    class BlogPage(Page):
+        pass
+
+    def check(request: HttpRequest) -> None:
+        reveal_type(get_public_pages_queryset(request))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
+        reveal_type(get_public_pages_queryset(request, BlogPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(get_pages_queryset(request))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.AbstractPage]"
+        reveal_type(get_pages_queryset(request, model=BlogPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(get_pages_queryset(request, model=Page))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
+
+- case: api_rich_text
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.api.rich_text import APIRichText, RichTextOutputFormat
+
+    def check(fmt: RichTextOutputFormat, value: str | None) -> None:
+        reveal_type(APIRichText.resolve_format("markdown"))  # N: Revealed type is "Literal['db_html'] | Literal['html'] | Literal['db_markdown'] | Literal['markdown']"
+        reveal_type(APIRichText.serialize(None, format=fmt))  # N: Revealed type is "None"
+        reveal_type(APIRichText.serialize("<p>x</p>", format=fmt))  # N: Revealed type is "Any"
+        reveal_type(APIRichText.convert_input({"format": "db_markdown", "content": "*x*"}))  # N: Revealed type is "tuple[str, list[wagtail.admin.rich_text.converters.db_html.RichTextRemoval]]"
+        APIRichText.serialize("x", format="rtf")  # E: No overload variant of "serialize" of "APIRichText" matches argument types "str", "str"  [call-overload] # N: Possible overload variants: # N:     def serialize(cls, value: None, *, format: Literal['db_html', 'html', 'db_markdown', 'markdown'], features: list[str] | None = ...) -> None # N:     def serialize(cls, value: str, *, format: Literal['db_html', 'html', 'db_markdown', 'markdown'], features: list[str] | None = ...) -> Any
+
+- case: api_v3_generator_keeps_base
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import Any
+
+    from django.db import models
+    from wagtail.api.v3.schemas import BaseSchema, PageCreateBaseSchema, create_generator, read_generator
+    from wagtail.models import Page
+    from wagtail.snippets.api.v3.schemas import BaseSnippetSchema
+
+    class Advert(models.Model):
+        pass
+
+    reveal_type(read_generator.generate_schema(Advert, base_class=BaseSnippetSchema))  # N: Revealed type is "type[wagtail.snippets.api.v3.schemas.BaseSnippetSchema]"
+    reveal_type(create_generator.generate_schema(Page, base_class=PageCreateBaseSchema, fields=["title"]))  # N: Revealed type is "type[wagtail.api.v3.schemas.pages.PageCreateBaseSchema]"
+    reveal_type(read_generator.extend_schema(BaseSnippetSchema, "AdvertSchema", {"name": (str, ..., None)}))  # N: Revealed type is "type[wagtail.snippets.api.v3.schemas.BaseSnippetSchema]"
+    reveal_type(read_generator.get_foreign_key_schema(Advert))  # N: Revealed type is "type[wagtail.api.v3.schemas.base.BaseSchema]"
+
+- case: api_v3_register_field_schema_generic
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import Any
+
+    from django.db import models
+    from wagtail.api.v3.schemas.generators.read import FieldSchema, SchemaGenerator, read_generator
+    from wagtail.api.v3.schemas.generators.write import InputFieldSchema, InputSchemaGenerator, create_generator
+
+    class ColourField(models.CharField[str, str]):
+        palette: list[str]
+
+    def colour_schema(generator: SchemaGenerator, field: ColourField) -> FieldSchema:
+        return (str, None, None)
+
+    def colour_input_schema(generator: InputSchemaGenerator, field: ColourField) -> InputFieldSchema:
+        return (str, ...)
+
+    read_generator.register_field_schema(ColourField, colour_schema)
+    create_generator.register_field_schema(ColourField, colour_input_schema)
+    read_generator.register_field_schema(models.TextField, colour_schema)  # E: Argument 2 to "register_field_schema" of "SchemaGenerator" has incompatible type "Callable[[SchemaGenerator, ColourField], tuple[Any, Any, Callable[..., Any] | None]]"; expected "Callable[[SchemaGenerator, TextField[Any, Any]], tuple[Any, Any, Callable[..., Any] | None]]"  [arg-type]
+
+- case: api_v3_require_any_permission_preserves_signature
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.db.models import Model
+    from django.http import HttpRequest
+    from wagtail.api.v3.permissions import require_any_permission
+    from wagtail.models import Site
+
+    class TokenRequest(HttpRequest):
+        token_name: str
+
+    @require_any_permission(Site, ["view"])
+    def list_sites(request: HttpRequest, limit: int = 20) -> list[Site]:
+        return []
+
+    def resolve_model(request: HttpRequest, *args: object, type: str, **kwargs: object) -> type[Model]:
+        return Site
+
+    @require_any_permission(resolve_model)
+    def detail(request: TokenRequest, type: str, pk: str) -> Site:
+        return Site()
+
+    reveal_type(list_sites)  # N: Revealed type is "def (request: django.http.request.HttpRequest, limit: int =) -> list[wagtail.models.sites.Site]"
+    reveal_type(detail)  # N: Revealed type is "def (request: main.TokenRequest, type: str, pk: str) -> wagtail.models.sites.Site"
+    list_sites(request=HttpRequest(), limit=10)
+    list_sites(HttpRequest(), limit="x")  # E: Argument "limit" to "list_sites" has incompatible type "str"; expected "int"  [arg-type]
+
+- case: api_v3_whoami_response
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.api.v3.routers.whoami import whoami
+
+    def check(request: HttpRequest) -> None:
+        response = whoami(request)
+        reveal_type(response["user"]["is_superuser"])  # N: Revealed type is "bool"
+        reveal_type(response["profile"]["avatar_url"])  # N: Revealed type is "str | None"
+        reveal_type(response["groups"])  # N: Revealed type is "list[str]"
+        response["roles"]  # E: TypedDict "_WhoAmI" has no key "roles"  [typeddict-item]
+
+- case: api_v3_filter_schema_and_meta_narrowing
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.api.v3.schemas.generators.write import InputSchemaGenerator
+    from wagtail.api.v3.schemas.pages import PageUpdateMetaSchema
+    from wagtail.api.v3.schemas.params import APIFieldFilterSchema, OrderingSchema
+    from wagtail.models import Page
+
+    def check(request: HttpRequest) -> None:
+        reveal_type(APIFieldFilterSchema.with_exclude_schemas((OrderingSchema,), raw_params=request.GET, base_fields=["id"]))  # N: Revealed type is "wagtail.api.v3.schemas.params.APIFieldFilterSchema"
+        APIFieldFilterSchema.with_exclude_schemas((OrderingSchema,), raw_params=request.GET)  # E: Missing named argument "base_fields" for "with_exclude_schemas" of "APIFieldFilterSchema"  [call-arg]  # N: "with_exclude_schemas" defined in "wagtail.api.v3.schemas.params"
+        InputSchemaGenerator._narrowed_meta_schema(PageUpdateMetaSchema | None, Page, "Patch")
+
+- case: api_token_admin_views
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.users.views.api_tokens import APITokenViewSet, EditView, IndexView, RevokeView
+
+    reveal_type(APITokenViewSet().model)  # N: Revealed type is "type[wagtail.models.api.APIToken]"
+    reveal_type(EditView().get_object())  # N: Revealed type is "wagtail.models.api.APIToken"
+    reveal_type(RevokeView().object)  # N: Revealed type is "wagtail.models.api.APIToken"
+    reveal_type(IndexView().get_queryset())  # N: Revealed type is "django.db.models.query.QuerySet[wagtail.models.api.APIToken, wagtail.models.api.APIToken]"
+
+- case: api_v3_auth_and_registry
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.api.v3.auth import BearerTokenAuth
+    from wagtail.api.v3.registry import ContentTypeRegistration, registry
+    from wagtail.api.v3.schemas import PageSchema
+    from wagtail.models import APIToken
+
+    class ScopedTokenAuth(BearerTokenAuth):
+        def authenticate(self, request: HttpRequest, token: str) -> APIToken | None:
+            api_token = super().authenticate(request, token)
+            return api_token if api_token and api_token.name.startswith("scoped") else None
+
+    registry.register(ContentTypeRegistration(name="app.Thing", label="Thing", read_schema=PageSchema))
+    reveal_type(registry.get("app.Thing"))  # N: Revealed type is "wagtail.api.v3.registry.ContentTypeRegistration | None"
+    schemas = registry.get_type_schemas("app.Thing")
+    if schemas is not None:
+        reveal_type(schemas["read"])  # N: Revealed type is "dict[str, Any]"
+
+- case: api_v3_schema_alias
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.api.v3.schemas import SiteInputSchema
+    from wagtail.contrib.redirects.api.v3.router import RedirectInputSchema
+
+    reveal_type(SiteInputSchema(hostname="example.com", root_page_id=1).root_page)  # N: Revealed type is "int"
+    reveal_type(SiteInputSchema.__init__)  # N: Revealed type is "def (self: wagtail.api.v3.schemas.sites.SiteInputSchema, *, hostname: str, port: int =, site_name: str =, root_page_id: int, is_default_site: bool =)"
+    reveal_type(RedirectInputSchema(old_path="/old/", redirect_page_id=None).redirect_page)  # N: Revealed type is "int | None"
+
+- case: api_v3_queryset_param_schemas
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.api.v3.pagination import WagtailLimitOffsetPagination
+    from wagtail.api.v3.routers.pages import PageFilterSchema
+    from wagtail.api.v3.schemas.params import OrderingSchema, SearchSchema, TranslationFilterSchema
+    from wagtail.models import Page
+    from wagtail.query import PageQuerySet
+
+    class BlogPage(Page):
+        pass
+
+    def check(request: HttpRequest, pages: PageQuerySet[BlogPage], pagination: WagtailLimitOffsetPagination.Input) -> None:
+        reveal_type(OrderingSchema().order_queryset(pages, pagination, base_fields=["title"]))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(TranslationFilterSchema().filter_queryset(pages))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(PageFilterSchema().filter(pages, request))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(SearchSchema().search_queryset(request, pages))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage] | wagtail.search.backends.base.BaseSearchResults"
+
+- case: api_bare_subclasses_strict
+  mypy_config: |
+    [mypy]
+    strict = True
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.api.rich_text import APIRichText
+    from wagtail.api.v3.auth import BearerTokenAuth
+    from wagtail.api.v3.schemas.generators.read import SchemaGenerator
+    from wagtail.api.v3.schemas.generators.write import InputSchemaGenerator
+    from wagtail.api.v3.schemas.params import OrderingSchema
+
+    class ProjectRichText(APIRichText):
+        @staticmethod
+        def _serialize_html(value: str, *, features: list[str] | None = None) -> str:
+            return value
+
+    class ProjectGenerator(SchemaGenerator):
+        pass
+
+    class ProjectInputGenerator(InputSchemaGenerator):
+        pass
+
+    class ProjectAuth(BearerTokenAuth):
+        pass
+
+    class ProjectOrdering(OrderingSchema):
+        order: list[str] = []
+
+    generator: SchemaGenerator = ProjectGenerator()
+    input_generator: InputSchemaGenerator = ProjectInputGenerator(for_update=True)

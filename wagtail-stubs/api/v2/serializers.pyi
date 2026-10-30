@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from typing import Any
+import builtins
 
 from rest_framework import relations, serializers
 from rest_framework.fields import Field
@@ -47,6 +48,9 @@ class ChildRelationField(Field):
 class StreamField(Field):
     def to_representation(self, value: Any) -> Any: ...
 
+class RichTextFieldSerializer(serializers.CharField):
+    def to_representation(self, value: Any) -> Any: ...
+
 class TagsField(Field):
     def to_representation(self, value: Any) -> list[str]: ...
 
@@ -56,8 +60,12 @@ class BaseSerializer(serializers.ModelSerializer):
     type: TypeField
     detail_url: DetailUrlField
     def to_representation(self, instance: Any) -> OrderedDict[str, Any]: ...
-    def build_property_field(self, field_name: str, model_class: type) -> tuple[type[Field], dict[str, Any]]: ...
-    def build_relational_field(self, field_name: str, relation_info: Any) -> tuple[type[Field], dict[str, Any]]: ...
+    def build_property_field(
+        self, field_name: str, model_class: builtins.type
+    ) -> tuple[builtins.type[Field], dict[str, Any]]: ...
+    def build_relational_field(
+        self, field_name: str, relation_info: Any
+    ) -> tuple[builtins.type[Field], dict[str, Any]]: ...
 
 class PageSerializer(BaseSerializer):
     type: PageTypeField  # type: ignore[assignment]
@@ -65,7 +73,9 @@ class PageSerializer(BaseSerializer):
     html_url: PageHtmlUrlField
     parent: PageParentField
     alias_of: PageAliasOfField
-    def build_relational_field(self, field_name: str, relation_info: Any) -> tuple[type[Field], dict[str, Any]]: ...
+    def build_relational_field(
+        self, field_name: str, relation_info: Any
+    ) -> tuple[builtins.type[Field], dict[str, Any]]: ...
 
 def get_serializer_class(
     model: type,

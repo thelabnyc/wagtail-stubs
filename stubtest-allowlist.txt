@@ -52,15 +52,28 @@ wagtail\.admin\.viewsets\.listing\.ListFilter
 wagtail\.admin\.wagtail_hooks(\..*)?
 # MediaDefiningClass adds media at runtime
 wagtail\.admin\.widgets\.tags\.AdminTagWidget(\..*)?
-wagtail\.api\.v2\.serializers(\..*)?
-wagtail\.api\.v2\.utils(\..*)?
-wagtail\.api\.v2\.views(\..*)?
+# Multi-value Literal alias: mypy models it as a Union, runtime is a Literal
+wagtail\.api\.rich_text\.RichTextInputFormat
+wagtail\.api\.rich_text\.RichTextOutputFormat
+# DRF ships no types, so the serializer metaclass cannot be declared
+wagtail\.api\.v2\.serializers\.BaseSerializer
+wagtail\.api\.v2\.serializers\.PageSerializer
+# Literal/Annotated aliases built at import time from project models
+wagtail\.api\.v3\.routers\.pages\.IntPKFilter(\..*)?
+# Multi-value Literal alias: mypy models it as a Union, runtime is a Literal
+wagtail\.api\.v3\.routers\.pages\.PagePositionLiteral
+# Literal/Annotated aliases built at import time from project models
+wagtail\.api\.v3\.routers\.pages\.PageTypeLiteral
+# Inherits pydantic FieldInfo's runtime __final__ flag but is subclassed
+wagtail\.api\.v3\.schemas\.pages\.PageTypeInjectingBody
+wagtail\.api\.v3\.schemas\.params\.TypeInjectingBody
 wagtail\.blocks(\..*)?
 wagtail\.contrib\.forms\.models(\..*)?
 wagtail\.contrib\.forms\.views(\..*)?
 wagtail\.contrib\.forms\.wagtail_hooks\.FormsMenuItem\.media
 wagtail\.contrib\.frontend_cache\.tasks(\..*)?
-wagtail\.contrib\.redirects\.api(\..*)?
+# DRF ships no types, so the serializer metaclass cannot be declared
+wagtail\.contrib\.redirects\.api\.v2\.RedirectSerializer
 wagtail\.contrib\.redirects\.filters(\..*)?
 wagtail\.contrib\.redirects\.models(\..*)?
 wagtail\.contrib\.redirects\.views\.(RedirectPermissionPolicyChecker\.policy|RedirectTargetColumn\.media)
@@ -98,6 +111,10 @@ wagtail\.search\.tasks\.insert_or_update_object_task(\..*)?
 # MenuItem's media property comes from Django's MediaDefiningClass metaclass
 wagtail\.sites\.wagtail_hooks\.SitesMenuItem\.media
 wagtail\.snippets\.action_menu\.WorkflowMenuItem\.name
+# Literal/Annotated aliases built at import time from project models
+wagtail\.snippets\.api\.v3\.router\.SnippetTypeLiteral
+# Inherits pydantic FieldInfo's runtime __final__ flag but is subclassed
+wagtail\.snippets\.api\.v3\.schemas\.ParamTypeInjectingBody
 wagtail\.snippets\.blocks\.SnippetChooserBlock\.Meta
 wagtail\.snippets\.bulk_actions\.delete(\..*)?
 wagtail\.snippets\.bulk_actions\.snippet_bulk_action(\..*)?
@@ -106,6 +123,8 @@ wagtail\.snippets\.widgets\.AdminSnippetChooser\.model
 wagtail\.tasks\.delete_file_from_storage_task(\..*)?
 wagtail\.tasks\.update_reference_index_task(\..*)?
 wagtail\.users\.models(\..*)?
+# django-filter ships no types, so the FilterSet metaclass cannot be declared
+wagtail\.users\.views\.api_tokens\.APITokenFilterSet
 wagtail\.users\.views\.bulk_actions\.assign_role(\..*)?
 wagtail\.users\.views\.bulk_actions\.delete(\..*)?
 wagtail\.users\.views\.bulk_actions\.set_active_state(\..*)?
