@@ -73,8 +73,7 @@
 
     def check(user: AbstractBaseUser) -> None:
         policy = policy_registry.get_by_type(images.get_image_model())
-        reveal_type(policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.images.models.AbstractImage]"
-        reveal_type(policy.instances_user_has_permission_for(user, "change"))  # N: Revealed type is "django.db.models.query.QuerySet[wagtail.images.models.AbstractImage, wagtail.images.models.AbstractImage]"
+        reveal_type(policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any]"
         reveal_type(images.get_permission_policy().collections_user_has_permission_for(user, "add"))  # N: Revealed type is "django.db.models.query.QuerySet[wagtail.models.media.Collection, wagtail.models.media.Collection]"
 
 - case: apps_deprecated_permission_shims

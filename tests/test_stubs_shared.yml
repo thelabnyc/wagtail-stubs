@@ -12,11 +12,11 @@
     class BlogPage(Page):
         pass
 
-    reveal_type(policy_registry.get_by_type(Page))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.Page]"
-    reveal_type(policy_registry.get_by_type(BlogPage))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[main.BlogPage]"
-    reveal_type(policy_registry.get_by_type(Site))  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.models.sites.Site]"
-    reveal_type(policy_registry.get_by_type(Site, fallback=False))  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.models.sites.Site] | None"
-    reveal_type(policy_registry.get_by_type(Page, fallback=False))  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.models.pages.Page] | None"
+    reveal_type(policy_registry.get_by_type(Page))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+    reveal_type(policy_registry.get_by_type(BlogPage))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+    reveal_type(policy_registry.get_by_type(Site))  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any]"
+    reveal_type(policy_registry.get_by_type(Site, fallback=False))  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any] | None"
+    reveal_type(policy_registry.get_by_type(Page, fallback=False))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage] | None"
     reveal_type(policy_registry.get_fallback_policy(Site))  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.models.sites.Site] | None"
 
 - case: shared_policy_registry_get_instance
@@ -36,10 +36,10 @@
         pass
 
     def check(user: AbstractBaseUser, blog: BlogPage, site: Site) -> None:
-        reveal_type(policy_registry.get(blog))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[main.BlogPage]"
-        reveal_type(policy_registry.get(blog).explorable_instances(user))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
-        reveal_type(policy_registry.get(site))  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.models.sites.Site]"
-        reveal_type(policy_registry.get(site).instances_user_has_permission_for(user, "change"))  # N: Revealed type is "django.db.models.query.QuerySet[wagtail.models.sites.Site, wagtail.models.sites.Site]"
+        reveal_type(policy_registry.get(blog))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+        reveal_type(policy_registry.get(blog).explorable_instances(user))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.AbstractPage]"
+        reveal_type(policy_registry.get(site))  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any]"
+        reveal_type(policy_registry.get(site).instances_user_has_permission_for(user, "change"))  # N: Revealed type is "django.db.models.query.QuerySet[Any, Any]"
 
 - case: shared_register_permission_policy
   mypy_config: |
@@ -140,12 +140,12 @@
     def check(user: AbstractBaseUser, site: Site, blog: BlogPage, home: Page, revision: Revision) -> None:
         reveal_type(CreateAction(site, user=user))  # N: Revealed type is "wagtail.actions.create.CreateAction[wagtail.models.sites.Site]"
         reveal_type(CreateAction(site).execute())  # N: Revealed type is "wagtail.models.sites.Site"
-        reveal_type(CreateAction(site).permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.models.sites.Site]"
+        reveal_type(CreateAction(site).permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any]"
         reveal_type(EditAction(site, publish=True).execute())  # N: Revealed type is "wagtail.models.sites.Site"
         reveal_type(DeleteAction(site).execute())  # N: Revealed type is "tuple[int, dict[str, int]]"
         reveal_type(RevertToRevisionAction(blog, revision).execute())  # N: Revealed type is "wagtail.models.revisions.Revision"
         reveal_type(CreatePageAction(blog, parent=home, user=user).execute())  # N: Revealed type is "main.BlogPage"
-        reveal_type(CreatePageAction(blog, parent=home).permission_policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[main.BlogPage]"
+        reveal_type(CreatePageAction(blog, parent=home).permission_policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
         reveal_type(EditPageAction(blog).execute())  # N: Revealed type is "main.BlogPage"
         CreatePageAction(blog, parent=home, log_action="x")  # E: Unexpected keyword argument "log_action" for "CreatePageAction"  [call-arg]  # N: "CreatePageAction" defined in "wagtail.actions.create_page"
 

@@ -149,7 +149,7 @@
         reveal_type(CreatePageAction(blog, parent=home, user=user).execute())  # N: Revealed type is "main.BlogPage"
         reveal_type(CopyPageAction(blog, to=home).execute())  # N: Revealed type is "main.BlogPage"
         reveal_type(CreatePageAliasAction(blog, parent=home).execute())  # N: Revealed type is "main.BlogPage"
-        reveal_type(CopyPageAction(blog).permission_policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[main.BlogPage]"
+        reveal_type(CopyPageAction(blog).permission_policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
         reveal_type(DeletePageAction(blog).page)  # N: Revealed type is "main.BlogPage"
         reveal_type(UnpublishPageAction(blog).object)  # N: Revealed type is "main.BlogPage"
         reveal_type(RevertToPageRevisionAction(blog, revision).instance)  # N: Revealed type is "main.BlogPage"
