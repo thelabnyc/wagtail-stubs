@@ -61,9 +61,12 @@ wagtail\.admin\.views\.workflows(\..*)?
 wagtail\.admin\.viewsets(\..*)?
 wagtail\.admin\.wagtail_hooks(\..*)?
 wagtail\.admin\.widgets(\..*)?
-wagtail\.api\.v2\.serializers(\..*)?
-wagtail\.api\.v2\.utils(\..*)?
-wagtail\.api\.v2\.views(\..*)?
+# Multi-value Literal alias: mypy models it as a Union, runtime is a Literal
+wagtail\.api\.rich_text\.RichTextInputFormat
+wagtail\.api\.rich_text\.RichTextOutputFormat
+# DRF ships no types, so the serializer metaclass cannot be declared
+wagtail\.api\.v2\.serializers\.BaseSerializer
+wagtail\.api\.v2\.serializers\.PageSerializer
 wagtail\.blocks(\..*)?
 wagtail\.contrib\.forms\.models(\..*)?
 wagtail\.contrib\.forms\.views(\..*)?
