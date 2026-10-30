@@ -1,6 +1,7 @@
 from collections.abc import Collection
 from typing import Any, NamedTuple
 
+from django.contrib.auth.models import Group, Permission
 from django.db import models
 from django.http import HttpRequest
 
@@ -28,7 +29,7 @@ class Site(models.Model):
     hostname: models.CharField[str, str]
     port: models.IntegerField[int, int]
     site_name: models.CharField[str, str]
-    # FK type uses Any to avoid circular import with wagtail.models.pages
+    # Any, not AbstractPage: the target is the swappable page model, and stock projects rely on it being a Page.
     root_page: models.ForeignKey[Any, Any]
     is_default_site: models.BooleanField[bool, bool]
     objects: SiteManager  # type: ignore[assignment]
@@ -44,3 +45,14 @@ class Site(models.Model):
     def get_site_root_paths() -> list[SiteRootPath]: ...
     @staticmethod
     def clear_site_root_paths_cache() -> None: ...
+
+class GroupSitePermissionManager(models.Manager["GroupSitePermission"]):
+    def get_by_natural_key(self, group: Group, site: Site, permission: Permission) -> GroupSitePermission: ...
+
+class GroupSitePermission(models.Model):
+    group: models.ForeignKey[Group, Group]
+    site: models.ForeignKey[Site, Site]
+    permission: models.ForeignKey[Permission, Permission]
+    objects: GroupSitePermissionManager  # type: ignore[assignment]
+
+    def natural_key(self) -> tuple[Group, Site, Permission]: ...
