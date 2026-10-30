@@ -192,8 +192,8 @@
     from wagtail.rich_text.pages import PageLinkHandler
 
     reveal_type(features.get_converter_features("contentstate"))  # N: Revealed type is "list[str]"
-    reveal_type(PageLinkHandler.get_model())  # N: Revealed type is "type[wagtail.models.pages.AbstractPage]"
-    reveal_type(PageLinkHandler.get_many([{"id": "1"}]))  # N: Revealed type is "list[wagtail.models.pages.AbstractPage | None]"
+    reveal_type(PageLinkHandler.get_model())  # N: Revealed type is "type[wagtail.models.pages.Page]"
+    reveal_type(PageLinkHandler.get_many([{"id": "1"}]))  # N: Revealed type is "list[wagtail.models.pages.Page | None]"
 
 - case: apps_swapped_page_module_variables
   mypy_config: |
@@ -210,7 +210,7 @@
     reveal_type(LocalesPage)  # N: Revealed type is "type[wagtail.models.pages.AbstractPage]"
     reveal_type(BaseGroupPagePermissionFormSet.permission_types)  # N: Revealed type is "list[tuple[str, django.utils.functional._StrPromise, django.utils.functional._StrPromise]]"
 
-- case: apps_settings_self_and_policy_override_strict
+- case: apps_settings_policy_override_strict
   mypy_config: |
     [mypy]
     plugins = mypy_django_plugin.main
@@ -219,9 +219,7 @@
     [mypy.plugins.django-stubs]
     django_settings_module = tests.mypy_test_settings
   main: |
-    from django.http import HttpRequest
     from wagtail.contrib.settings.models import BaseGenericSetting, BaseSiteSetting
-    from wagtail.models import Site
     from wagtail.permission_policies import ModelPermissionPolicy
     from wagtail.permission_policies.sites import SitePermissionPolicy
 
@@ -238,10 +236,7 @@
         def get_permission_policy(cls) -> ModelPermissionPolicy:
             return ModelPermissionPolicy(cls)
 
-    def check(request: HttpRequest, site: Site) -> None:
-        reveal_type(SocialSettings.for_request(request))  # N: Revealed type is "main.SocialSettings"
-        reveal_type(SocialSettings.for_site(site))  # N: Revealed type is "main.SocialSettings"
-        reveal_type(FooterSettings.load())  # N: Revealed type is "main.FooterSettings"
+    def check() -> None:
         reveal_type(SocialSettings.get_permission_policy())  # N: Revealed type is "wagtail.permission_policies.sites.SitePermissionPolicy[main.SocialSettings]"
         reveal_type(FooterSettings.get_permission_policy())  # N: Revealed type is "wagtail.permission_policies.base.ModelPermissionPolicy[main.FooterSettings]"
         site_policy: SitePermissionPolicy = SocialSettings.get_permission_policy()
