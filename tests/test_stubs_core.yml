@@ -36,6 +36,14 @@
         reveal_type(page.show_in_menus)  # N: Revealed type is "bool"
         reveal_type(Page.PERMISSION_CODENAMES.PUBLISH)  # N: Revealed type is "str"
         descendants: PageQuerySet[Page] = blog.get_descendants()
+        reveal_type(BlogPage.allowed_subpage_models())  # N: Revealed type is "list[type[wagtail.models.pages.Page]]"
+        reveal_type(BlogPage.creatable_subpage_models())  # N: Revealed type is "list[type[wagtail.models.pages.Page]]"
+
+    def subpage_models() -> list[type[Page]]:
+        return BlogPage.allowed_subpage_models()
+
+    def parent_page_models() -> list[type[Page]]:
+        return BlogPage.allowed_parent_page_models() + BlogPage.clean_parent_page_models() + BlogPage.clean_subpage_models()
 
 - case: core_custom_base_page
   mypy_config: |

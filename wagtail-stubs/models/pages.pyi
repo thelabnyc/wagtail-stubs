@@ -477,6 +477,16 @@ class Page(AbstractPage, DefaultBasePageMixin):
     def get_prev_siblings(self, inclusive: bool = False) -> PageQuerySet[Page]: ...  # type: ignore[override]
     def get_children(self) -> PageQuerySet[Page]: ...  # type: ignore[override]
     def get_parent(self, update: bool = False) -> Page | None: ...
+    @classmethod
+    def clean_subpage_models(cls) -> list[type[Page]]: ...  # type: ignore[override]
+    @classmethod
+    def clean_parent_page_models(cls) -> list[type[Page]]: ...  # type: ignore[override]
+    @classmethod
+    def allowed_parent_page_models(cls) -> list[type[Page]]: ...  # type: ignore[override]
+    @classmethod
+    def allowed_subpage_models(cls) -> list[type[Page]]: ...  # type: ignore[override]
+    @classmethod
+    def creatable_subpage_models(cls) -> list[type[Page]]: ...  # type: ignore[override]
 
     class Meta(AbstractPageMeta):
         swappable: str
