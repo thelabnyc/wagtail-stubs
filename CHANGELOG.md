@@ -1,3 +1,42 @@
+## v8.0.0 (2026-11-02)
+
+### Feat
+
+- parameterize page views and page viewsets by page model
+- parameterize generic admin views and viewsets by model
+- stub API token admin views and management command
+- add v3 API routers for documents, images, locales, redirects and snippets
+- add wagtail.api.v3 stubs
+- stub wagtail.api 8.0 helpers and v2 API changes
+- add admin report view stubs
+- class-based page views and PageViewSet view classes
+- admin permission_policy from the registry, action_class, menu_order
+- add 8.0 block, rich text, form page and locale app members
+- snippet chooser widget class and URL finder for 8.0
+- type swappable Page sites in app modules as AbstractPage
+- resolve app permission policies through the 8.0 registry
+- make existing page actions generic over the page type
+- move the page model body to AbstractPage for swappable Page
+- shared 8.0 interfaces (permission registry, actions, api token)
+
+### Fix
+
+- address admin review findings
+- run stubtest on images and documents API modules
+- correct API v3 filter, form builder and warning types
+- add Fuzzy.unaccent attribute
+- type register_setting direct, keyword and factory forms
+- return JsonResponse from document chosen views
+- accept Site instances in SitePermissionPolicy instance checks
+- re-export GroupSitePermission and HTMLExporter
+- keep stock Page in Page subpage and parent model helpers
+- stop narrowing registry and action permission policies to the queried model
+- admin stubtest drift and narrower allowlist
+- admin stubs follow the swappable page model and policy registry
+- keep consumer-visible PageLinkHandler and setting lookup types
+- correct embeds, search and settings form drift and narrow allowlist
+- type swapper Page sites and page parameters as AbstractPage
+
 ## v7.4.2 (2026-05-24)
 
 ### Fix
