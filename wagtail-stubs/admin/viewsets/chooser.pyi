@@ -1,19 +1,22 @@
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Generic
 
 from django import forms
 from django.db import models
 from django.http import HttpResponseBase
 from django.urls import URLPattern
 from django.utils.functional import _StrOrPromise, cached_property
+from typing_extensions import TypeVar
 from wagtail.admin.views.generic import chooser as chooser_views
-from wagtail.admin.viewsets.base import ViewSet
+from wagtail.admin.viewsets.base import ViewSet, _Undefined
 from wagtail.admin.widgets.chooser import BaseChooser, BaseChooserAdapter
 from wagtail.blocks import ChooserBlock
 from wagtail.permission_policies import BasePermissionPolicy
 
-class ChooserViewSet(ViewSet):
-    model: type[models.Model] | str | None
+_ModelT = TypeVar("_ModelT", bound=models.Model, default=models.Model)
+
+class ChooserViewSet(ViewSet, Generic[_ModelT]):
+    model: type[_ModelT] | str | None
     icon: str
     choose_one_text: _StrOrPromise
     page_title: _StrOrPromise | None
@@ -22,11 +25,11 @@ class ChooserViewSet(ViewSet):
     per_page: int
     preserve_url_parameters: list[str]
     url_filter_parameters: list[str]
-    choose_view_class: type[chooser_views.BaseChooseView]
-    choose_results_view_class: type[chooser_views.BaseChooseView]
-    chosen_view_class: type[chooser_views.ChosenView]
-    chosen_multiple_view_class: type[chooser_views.ChosenMultipleView]
-    create_view_class: type[chooser_views.CreateView]
+    choose_view_class: type[chooser_views.BaseChooseView[Any]]
+    choose_results_view_class: type[chooser_views.BaseChooseView[Any]]
+    chosen_view_class: type[chooser_views.ChosenView[Any]]
+    chosen_multiple_view_class: type[chooser_views.ChosenMultipleView[Any]]
+    create_view_class: type[chooser_views.CreateView[Any]]
     base_widget_class: type[BaseChooser]
     widget_telepath_adapter_class: type[BaseChooserAdapter] | None
     base_block_class: type[ChooserBlock]
@@ -38,7 +41,7 @@ class ChooserViewSet(ViewSet):
     create_action_label: _StrOrPromise
     create_action_clicked_label: _StrOrPromise | None
     creation_tab_label: _StrOrPromise | None
-    permission_policy: BasePermissionPolicy | None
+    permission_policy: BasePermissionPolicy[Any] | _Undefined | None
     def __init__(self, name: str | None = None, **kwargs: Any) -> None: ...
     def get_common_view_kwargs(self, **kwargs: Any) -> dict[str, Any]: ...
     @property

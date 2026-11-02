@@ -1,0 +1,279 @@
+- case: apps_snippet_chooser_widget_class_is_type
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import Site
+    from wagtail.snippets.views.chooser import SnippetChooserViewSet
+    from wagtail.snippets.widgets import AdminSnippetChooser
+
+    viewset = SnippetChooserViewSet("site_chooser", model=Site)
+    reveal_type(viewset.widget_class)  # N: Revealed type is "type[wagtail.snippets.widgets.AdminSnippetChooser]"
+    reveal_type(viewset.base_widget_class)  # N: Revealed type is "type[wagtail.snippets.widgets.AdminSnippetChooser]"
+    reveal_type(viewset.widget_class())  # N: Revealed type is "wagtail.snippets.widgets.AdminSnippetChooser"
+    AdminSnippetChooser()
+    AdminSnippetChooser(Site)
+    AdminSnippetChooser(model=Site, attrs={"class": "x"})
+
+- case: apps_snippet_viewset_hooks
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.admin_url_finder import ModelAdminURLFinder
+    from wagtail.snippets.models import SnippetAdminURLFinder
+    from wagtail.snippets.views.snippets import SnippetViewSet
+
+    def check(viewset: SnippetViewSet) -> None:
+        reveal_type(viewset.attach_model_edit_handler())  # N: Revealed type is "None"
+        reveal_type(viewset.get_menu_order())  # N: Revealed type is "int | None"
+        reveal_type(viewset.url_finder_class)  # N: Revealed type is "type[wagtail.snippets.models.SnippetAdminURLFinder]"
+        finder: ModelAdminURLFinder = SnippetAdminURLFinder(None)
+
+- case: apps_register_snippet_preserves_class
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.db import models
+    from wagtail.snippets.models import register_snippet
+
+    @register_snippet
+    class Advert(models.Model):
+        url = models.URLField()
+
+    reveal_type(Advert)  # N: Revealed type is "def (*args: Any, **kwargs: Any) -> main.Advert"
+  installed_apps:
+    - main
+
+- case: apps_media_permission_policy_factories
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import AbstractBaseUser
+    from wagtail import documents, images
+    from wagtail.permissions import policy_registry
+
+    reveal_type(images.get_image_model())  # N: Revealed type is "type[wagtail.images.models.AbstractImage]"
+    reveal_type(images.get_permission_policy())  # N: Revealed type is "wagtail.permission_policies.collections.CollectionOwnershipPermissionPolicy[wagtail.images.models.AbstractImage]"
+    reveal_type(documents.get_permission_policy())  # N: Revealed type is "wagtail.permission_policies.collections.CollectionOwnershipPermissionPolicy[wagtail.documents.models.AbstractDocument]"
+
+    def check(user: AbstractBaseUser) -> None:
+        policy = policy_registry.get_by_type(images.get_image_model())
+        reveal_type(policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any]"
+        reveal_type(images.get_permission_policy().collections_user_has_permission_for(user, "add"))  # N: Revealed type is "django.db.models.query.QuerySet[wagtail.models.media.Collection, wagtail.models.media.Collection]"
+
+- case: apps_deprecated_permission_shims
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.redirects.permissions import permission_policy as redirect_policy
+    from wagtail.documents.permissions import permission_policy as document_policy
+    from wagtail.images.permissions import permission_policy as image_policy
+    from wagtail.images.permissions import ImagesPermissionPolicyGetter  # E: Module "wagtail.images.permissions" has no attribute "ImagesPermissionPolicyGetter"  [attr-defined]
+
+    reveal_type(image_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.images.models.AbstractImage]"
+    reveal_type(document_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.documents.models.AbstractDocument]"
+    reveal_type(redirect_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any]"
+
+- case: apps_media_view_permission_policies
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.redirects.views import permission_checker
+    from wagtail.documents.forms import BaseDocumentForm
+    from wagtail.documents.views.chooser import DocumentChooserViewSet, DocumentChosenMultipleView, DocumentChosenView
+    from wagtail.images.forms import BaseImageForm
+    from wagtail.images.views.chooser import ImageChosenMultipleView, ImageSelectFormatView
+    from wagtail.documents.models import Document
+    from wagtail.permission_policies.collections import CollectionOwnershipPermissionPolicy
+
+    class OwnedDocumentForm(BaseDocumentForm):
+        permission_policy = CollectionOwnershipPermissionPolicy(Document)
+
+    def check(
+        image_form: BaseImageForm,
+        document_form: BaseDocumentForm,
+        image_multi: ImageChosenMultipleView,
+        image_format: ImageSelectFormatView,
+        document_chosen: DocumentChosenView,
+        document_multi: DocumentChosenMultipleView,
+    ) -> None:
+        reveal_type(image_form.permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.images.models.AbstractImage]"
+        reveal_type(document_form.permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.documents.models.AbstractDocument]"
+        reveal_type(image_multi.permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.images.models.AbstractImage]"
+        reveal_type(image_multi.get_objects(["1"]))  # N: Revealed type is "django.db.models.query.QuerySet[wagtail.images.models.AbstractImage, wagtail.images.models.AbstractImage]"
+        reveal_type(image_format.get_object(1))  # N: Revealed type is "wagtail.images.models.AbstractImage"
+        reveal_type(document_chosen.permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.documents.models.AbstractDocument]"
+        reveal_type(document_multi.get_objects(["1"]))  # N: Revealed type is "django.db.models.query.QuerySet[wagtail.documents.models.AbstractDocument, wagtail.documents.models.AbstractDocument]"
+
+    reveal_type(DocumentChooserViewSet.chosen_multiple_view_class)  # N: Revealed type is "def (**kwargs: Any) -> wagtail.documents.views.chooser.DocumentChosenMultipleView"
+    reveal_type(permission_checker.policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.contrib.redirects.models.Redirect]"
+
+- case: apps_get_image_and_document_form_fields
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.documents import get_document_model
+    from wagtail.documents.forms import get_document_form
+    from wagtail.images import get_image_model
+    from wagtail.images.forms import get_image_form
+
+    reveal_type(get_image_form(get_image_model()))  # N: Revealed type is "type[wagtail.images.forms.BaseImageForm]"
+    reveal_type(get_image_form(get_image_model(), fields=["title", "file"]))  # N: Revealed type is "type[wagtail.images.forms.BaseImageForm]"
+    reveal_type(get_document_form(get_document_model(), fields=(f for f in ["title"])))  # N: Revealed type is "type[wagtail.documents.forms.BaseDocumentForm]"
+    get_image_form(get_image_model(), fields=None)
+    get_document_form(get_document_model(), fields=("title",))
+
+- case: apps_deprecation_warning_classes
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.utils.deprecation import RemovedInWagtail90Warning, RemovedInWagtail100Warning, removed_in_next_version_warning
+    from wagtail.utils.deprecation import RemovedInWagtail80Warning  # E: Module "wagtail.utils.deprecation" has no attribute "RemovedInWagtail80Warning"; maybe "RemovedInWagtail90Warning" or "RemovedInWagtail100Warning"?  [attr-defined]
+
+    deprecated: type[DeprecationWarning] = RemovedInWagtail90Warning
+    pending: type[PendingDeprecationWarning] = RemovedInWagtail100Warning
+    reveal_type(removed_in_next_version_warning)  # N: Revealed type is "def (*args: object) -> wagtail.utils.deprecation.RemovedInWagtail90Warning"
+
+- case: apps_removed_shim_modules
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    import wagtail.telepath  # E: Skipping analyzing "wagtail.telepath": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+    import wagtail.widget_adapters  # E: Skipping analyzing "wagtail.widget_adapters": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+    import wagtail.users.widgets  # E: Skipping analyzing "wagtail.users.widgets": module is installed, but missing library stubs or py.typed marker  [import-untyped] # N: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+    from wagtail.admin.telepath import Adapter, register
+    from wagtail.snippets.widgets import SnippetListingButton  # E: Module "wagtail.snippets.widgets" has no attribute "SnippetListingButton"  [attr-defined]
+
+- case: apps_rich_text_registry_and_page_links
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.rich_text import features
+    from wagtail.rich_text.pages import PageLinkHandler
+
+    reveal_type(features.get_converter_features("contentstate"))  # N: Revealed type is "list[str]"
+    reveal_type(PageLinkHandler.get_model())  # N: Revealed type is "type[wagtail.models.pages.Page]"
+    reveal_type(PageLinkHandler.get_many([{"id": "1"}]))  # N: Revealed type is "list[wagtail.models.pages.Page | None]"
+
+- case: apps_swapped_page_module_variables
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.locales.utils import Page as LocalesPage
+    from wagtail.users.forms import BaseGroupPagePermissionFormSet
+    from wagtail.users.forms import PAGE_PERMISSION_TYPES  # E: Module "wagtail.users.forms" has no attribute "PAGE_PERMISSION_TYPES"  [attr-defined]
+
+    reveal_type(LocalesPage)  # N: Revealed type is "type[wagtail.models.pages.AbstractPage]"
+    reveal_type(BaseGroupPagePermissionFormSet.permission_types)  # N: Revealed type is "list[tuple[str, django.utils.functional._StrPromise, django.utils.functional._StrPromise]]"
+
+- case: apps_settings_policy_override_strict
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.settings.models import BaseGenericSetting, BaseSiteSetting
+    from wagtail.permission_policies import ModelPermissionPolicy
+    from wagtail.permission_policies.sites import SitePermissionPolicy
+
+    class SocialSettings(BaseSiteSetting):
+        pass
+
+    class FooterSettings(BaseGenericSetting):
+        @classmethod
+        def get_permission_policy(cls) -> ModelPermissionPolicy["FooterSettings"]:
+            return ModelPermissionPolicy(cls)
+
+    class BarePolicySettings(BaseGenericSetting):
+        @classmethod
+        def get_permission_policy(cls) -> ModelPermissionPolicy:
+            return ModelPermissionPolicy(cls)
+
+    def check() -> None:
+        reveal_type(SocialSettings.get_permission_policy())  # N: Revealed type is "wagtail.permission_policies.sites.SitePermissionPolicy[main.SocialSettings]"
+        reveal_type(FooterSettings.get_permission_policy())  # N: Revealed type is "wagtail.permission_policies.base.ModelPermissionPolicy[main.FooterSettings]"
+        site_policy: SitePermissionPolicy = SocialSettings.get_permission_policy()
+  installed_apps:
+    - main
+
+- case: apps_register_setting_forms_strict
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.db import models
+    from wagtail.contrib.settings.models import BaseGenericSetting, BaseSiteSetting, register_setting
+    from wagtail.contrib.settings.registry import registry
+
+    @register_setting
+    class SocialSettings(BaseSiteSetting):
+        pass
+
+    @register_setting(icon="code")
+    class FooterSettings(BaseGenericSetting):
+        pass
+
+    class HeaderSettings(BaseSiteSetting):
+        pass
+
+    class NotASetting(models.Model):
+        pass
+
+    reveal_type(SocialSettings)  # N: Revealed type is "def (*args: Any, **kwargs: Any) -> main.SocialSettings"
+    reveal_type(FooterSettings)  # N: Revealed type is "def (*args: Any, **kwargs: Any) -> main.FooterSettings"
+    reveal_type(register_setting(HeaderSettings, icon="cog"))  # N: Revealed type is "type[main.HeaderSettings]"
+    reveal_type(registry.register(HeaderSettings))  # N: Revealed type is "type[main.HeaderSettings]"
+    reveal_type(registry.get_by_natural_key("main", "headersettings"))  # N: Revealed type is "type[django.db.models.base.Model] | None"
+    register_setting(NotASetting)  # E: Value of type variable "T" of "register_setting" cannot be "NotASetting"  [type-var]
+  installed_apps:
+    - main

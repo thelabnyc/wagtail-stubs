@@ -1,8 +1,9 @@
-from typing import Any
+from typing import Any, Generic
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
-from django.utils.functional import cached_property
+from django.utils.functional import _StrOrPromise, cached_property
+from typing_extensions import TypeVar
 from wagtail.admin.filters import MultipleUserFilter, WagtailFilterSet
 from wagtail.admin.ui.tables import Column, UserColumn
 from wagtail.admin.views.generic.base import BaseListingView, BaseObjectMixin, WagtailAdminTemplateMixin
@@ -12,6 +13,8 @@ from wagtail.models.audit_log import BaseLogEntry
 from wagtail.models.revisions import Revision
 from wagtail.models.workflows import Task, TaskState, WorkflowState
 import django_filters
+
+_ModelT = TypeVar("_ModelT", bound=models.Model, default=models.Model)
 
 def get_actions_for_filter(queryset: models.QuerySet[BaseLogEntry]) -> list[tuple[str, str]]: ...
 
@@ -47,9 +50,9 @@ class LogEntryUserColumn(UserColumn):
     def __init__(self, name: str, **kwargs: Any) -> None: ...
     def get_cell_context_data(self, instance: BaseLogEntry, parent_context: dict[str, Any]) -> dict[str, Any]: ...
 
-class HistoryView(PermissionCheckedMixin, BaseObjectMixin, BaseListingView):
+class HistoryView(PermissionCheckedMixin[_ModelT], BaseObjectMixin[_ModelT], BaseListingView[BaseLogEntry]):
     any_permission_required: list[str]
-    page_title: str
+    page_title: _StrOrPromise
     header_icon: str
     paginate_by: int
     filterset_class: type[HistoryFilterSet]
@@ -62,14 +65,14 @@ class HistoryView(PermissionCheckedMixin, BaseObjectMixin, BaseListingView):
     revisions_unschedule_url_name: str | None
     @cached_property
     def columns(self) -> list[Column]: ...
-    def get_base_object_queryset(self) -> models.QuerySet[models.Model]: ...
+    def get_base_object_queryset(self) -> models.QuerySet[_ModelT]: ...
     def get_page_subtitle(self) -> str: ...
     def get_breadcrumbs_items(self) -> list[dict[str, Any]]: ...
     @cached_property
     def header_buttons(self) -> list[HeaderButton]: ...
-    def get_edit_url(self, instance: models.Model) -> str | None: ...
-    def get_history_url(self, instance: models.Model) -> str | None: ...
-    def get_history_results_url(self, instance: models.Model) -> str | None: ...
+    def get_edit_url(self, instance: _ModelT) -> str | None: ...
+    def get_history_url(self, instance: _ModelT) -> str | None: ...
+    def get_history_results_url(self, instance: _ModelT) -> str | None: ...
     def get_index_url(self) -> str | None: ...
     def get_index_results_url(self) -> str | None: ...
     def user_can_unschedule(self) -> bool: ...
@@ -82,14 +85,14 @@ class HistoryView(PermissionCheckedMixin, BaseObjectMixin, BaseListingView):
     def _annotate_queryset(self, queryset: models.QuerySet[BaseLogEntry]) -> models.QuerySet[BaseLogEntry]: ...
     def get_filterset_kwargs(self) -> dict[str, Any]: ...
 
-class WorkflowHistoryView(BaseObjectMixin, BaseListingView):
+class WorkflowHistoryView(BaseObjectMixin[_ModelT], BaseListingView[WorkflowState]):
     template_name: str
     results_template_name: str
     paginate_by: int
     index_url_name: str | None
     edit_url_name: str | None
     workflow_history_detail_url_name: str | None
-    page_title: str
+    page_title: _StrOrPromise
     context_object_name: str
     @cached_property
     def index_url(self) -> str | None: ...
@@ -102,13 +105,13 @@ class WorkflowHistoryView(BaseObjectMixin, BaseListingView):
     def get_base_queryset(self) -> models.QuerySet[WorkflowState]: ...
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
 
-class WorkflowHistoryDetailView(BaseObjectMixin, WagtailAdminTemplateMixin):
+class WorkflowHistoryDetailView(BaseObjectMixin[_ModelT], WagtailAdminTemplateMixin, Generic[_ModelT]):
     template_name: str
     index_url_name: str | None
     edit_url_name: str | None
     workflow_state_url_kwarg: str
     workflow_history_url_name: str | None
-    page_title: str
+    page_title: _StrOrPromise
     header_icon: str
     object_icon: str
     @cached_property

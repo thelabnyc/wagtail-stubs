@@ -6,7 +6,7 @@ from wagtail.admin import messages as messages
 from wagtail.admin.localization import get_localized_response as get_localized_response
 from wagtail.log_actions import LogContext as LogContext
 from wagtail.permission_policies.base import BasePermissionPolicy
-from wagtail.permissions import page_permission_policy as page_permission_policy
+from wagtail.permissions import policy_registry as policy_registry
 
 type _ViewFunc = Callable[..., HttpResponse]
 type _TestFunc = Callable[[AbstractBaseUser], bool]

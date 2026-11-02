@@ -1,5 +1,6 @@
 from html.parser import HTMLParser
 from typing import Any
+import re
 
 from wagtail.admin.rich_text.converters.contentstate_models import (
     Block,
@@ -7,10 +8,15 @@ from wagtail.admin.rich_text.converters.contentstate_models import (
     Entity,
 )
 from wagtail.admin.rich_text.converters.html_ruleset import HTMLRuleset
+from wagtail.models import AbstractPage
+
+Page: type[AbstractPage]
 
 STRIP_WHITESPACE: int
 KEEP_WHITESPACE: int
 FORCE_WHITESPACE: int
+WHITESPACE_RE: re.Pattern[str]
+BLOCK_KEY_NAME: str
 
 class HandlerState:
     current_block: Block | None
@@ -45,7 +51,7 @@ class BlockElementHandler:
     def handle_starttag(
         self, name: str, attrs: list[tuple[str, str | None]], state: HandlerState, contentstate: ContentState
     ) -> None: ...
-    def handle_endtag(self, name: str, state: HandlerState, contentstate: ContentState) -> None: ...
+    def handle_endtag(self, name: str, state: HandlerState, contentState: ContentState) -> None: ...
 
 class ListItemElementHandler(BlockElementHandler):
     def __init__(self) -> None: ...
@@ -86,9 +92,6 @@ class AtomicBlockEntityElementHandler:
         self, name: str, attrs: list[tuple[str, str | None]], state: HandlerState, contentstate: ContentState
     ) -> None: ...
     def handle_endtag(self, name: str, state: HandlerState, contentstate: ContentState) -> None: ...
-    def create_entity(
-        self, name: str, attrs: dict[str, str], state: HandlerState, contentstate: ContentState
-    ) -> Entity: ...
 
 class HorizontalRuleHandler(AtomicBlockEntityElementHandler):
     def create_entity(

@@ -127,8 +127,9 @@ class PopularTagsFilter(django_filters.MultipleChoiceFilter):
     def filter(self, qs: models.QuerySet[models.Model], value: list[str]) -> models.QuerySet[models.Model]: ...
 
 class BaseMediaFilterSet(WagtailFilterSet):
-    permission_policy: BasePermissionPolicy | None
-    usage_count: bool
+    @cached_property
+    def permission_policy(self) -> BasePermissionPolicy | None: ...
+    usage_count: django_filters.RangeFilter
     def __init__(
         self,
         data: QueryDict | dict[str, str] | None = None,

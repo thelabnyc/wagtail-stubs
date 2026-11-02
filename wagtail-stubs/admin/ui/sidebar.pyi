@@ -6,8 +6,8 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.search import SearchArea
 from wagtail.admin.staticfiles import versioned_static as versioned_static
-from wagtail.telepath import Adapter as Adapter
-from wagtail.telepath import adapter as adapter
+from wagtail.admin.telepath import Adapter as Adapter
+from wagtail.admin.telepath import adapter as adapter
 
 class BaseSidebarAdapter(Adapter):
     @cached_property

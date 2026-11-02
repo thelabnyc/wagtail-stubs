@@ -1,5 +1,7 @@
 from typing import Any
 
+ALPHANUM: str
+
 class Block:
     type: str
     depth: int

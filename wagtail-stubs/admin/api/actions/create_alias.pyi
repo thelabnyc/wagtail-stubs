@@ -7,9 +7,11 @@ from wagtail.actions.create_alias import (
     CreatePageAliasIntegrityError as CreatePageAliasIntegrityError,
 )
 from wagtail.api.v2.utils import BadRequestError as BadRequestError
-from wagtail.models.pages import Page as Page
+from wagtail.models import AbstractPage
 
 from .base import APIAction as APIAction
+
+Page: type[AbstractPage]
 
 class CreatePageAliasAPIActionSerializer(Serializer):
     destination_page_id: IntegerField

@@ -84,13 +84,14 @@ class WagtailMenuRegisterable:
     menu_icon: str
     menu_label: _StrOrPromise
     menu_name: str
-    menu_order: int
+    menu_order: int | None
     menu_url: str | None
     add_to_admin_menu: bool
     add_to_settings_menu: bool
     @cached_property
     def menu_item_class(self) -> type[MenuItem]: ...
     def get_menu_item(self, order: int | None = None) -> MenuItem: ...
+    def get_menu_item_order(self, order: int | None = None) -> int: ...
     @cached_property
     def menu_hook(self) -> str | None: ...
     def register_menu_item(self) -> None: ...
@@ -100,6 +101,7 @@ class WagtailMenuRegisterableGroup(WagtailMenuRegisterable):
     menu_icon: str
     add_to_admin_menu: bool
     registerables: list[WagtailMenuRegisterable]
+    submenu_hook: str | None
     def __init__(self) -> None: ...
     def get_submenu_items(self) -> list[MenuItem]: ...
     def get_menu_item(self, order: int | None = None) -> SubmenuMenuItem: ...  # type: ignore[override]

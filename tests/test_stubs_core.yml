@@ -1,0 +1,240 @@
+- case: core_stock_page_keeps_page_types
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.models import Locale, Page
+    from wagtail.models.pages import PageQuerySet
+
+    class BlogPage(Page):
+        class Meta:
+            app_label = "test"
+
+    def check(page: Page, blog: BlogPage, request: HttpRequest, locale: Locale) -> None:
+        reveal_type(page.get_children())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
+        reveal_type(blog.get_ancestors())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
+        reveal_type(blog.get_descendants(inclusive=True))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
+        reveal_type(blog.get_siblings())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
+        reveal_type(blog.get_next_siblings())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
+        reveal_type(blog.get_prev_siblings())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
+        reveal_type(blog.get_parent())  # N: Revealed type is "wagtail.models.pages.Page | None"
+        reveal_type(blog.get_base_page())  # N: Revealed type is "wagtail.models.pages.Page"
+        reveal_type(blog.alias_of)  # N: Revealed type is "wagtail.models.pages.Page | None"
+        reveal_type(Page.base_page_model)  # N: Revealed type is "type[wagtail.models.pages.Page]"
+        reveal_type(Page.find_for_request(request, "/"))  # N: Revealed type is "wagtail.models.pages.Page | None"
+        reveal_type(blog.copy())  # N: Revealed type is "wagtail.models.pages.Page"
+        reveal_type(blog.create_alias())  # N: Revealed type is "wagtail.models.pages.Page"
+        reveal_type(blog.copy_for_translation(locale))  # N: Revealed type is "wagtail.models.pages.Page"
+        reveal_type(blog.get_latest_revision_as_object())  # N: Revealed type is "wagtail.models.pages.Page"
+        reveal_type(blog.get_translations())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(page.seo_title)  # N: Revealed type is "str"
+        reveal_type(page.search_description)  # N: Revealed type is "str"
+        reveal_type(page.show_in_menus)  # N: Revealed type is "bool"
+        reveal_type(Page.PERMISSION_CODENAMES.PUBLISH)  # N: Revealed type is "str"
+        descendants: PageQuerySet[Page] = blog.get_descendants()
+        reveal_type(BlogPage.allowed_subpage_models())  # N: Revealed type is "list[type[wagtail.models.pages.Page]]"
+        reveal_type(BlogPage.creatable_subpage_models())  # N: Revealed type is "list[type[wagtail.models.pages.Page]]"
+
+    def subpage_models() -> list[type[Page]]:
+        return BlogPage.allowed_subpage_models()
+
+    def parent_page_models() -> list[type[Page]]:
+        return BlogPage.allowed_parent_page_models() + BlogPage.clean_parent_page_models() + BlogPage.clean_subpage_models()
+
+- case: core_custom_base_page
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from django.utils.translation import gettext_lazy
+    from wagtail.models import AbstractPage, Locale, ShowInMenusMixin
+    from wagtail.models.pages import AbstractPageMeta
+
+    class BasePage(AbstractPage):
+        class Meta(AbstractPageMeta):
+            abstract = True
+            verbose_name = gettext_lazy("base page")
+
+    class NewsPage(BasePage):
+        class Meta:
+            app_label = "test"
+
+    class MenuPage(AbstractPage, ShowInMenusMixin):
+        class Meta(AbstractPageMeta):
+            abstract = True
+            verbose_name = "menu page"
+            verbose_name_plural = "menu pages"
+
+    def check(news: NewsPage, menu: MenuPage, request: HttpRequest, locale: Locale) -> None:
+        reveal_type(news.get_children())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.AbstractPage]"
+        reveal_type(news.get_parent())  # N: Revealed type is "wagtail.models.pages.AbstractPage | None"
+        reveal_type(news.get_base_page())  # N: Revealed type is "wagtail.models.pages.AbstractPage"
+        reveal_type(NewsPage.base_page_model)  # N: Revealed type is "type[wagtail.models.pages.AbstractPage]"
+        reveal_type(NewsPage.find_for_request(request, "/"))  # N: Revealed type is "wagtail.models.pages.AbstractPage | None"
+        reveal_type(news.copy())  # N: Revealed type is "main.NewsPage"
+        reveal_type(news.create_alias())  # N: Revealed type is "main.NewsPage"
+        reveal_type(news.copy_for_translation(locale))  # N: Revealed type is "main.NewsPage"
+        reveal_type(news.get_latest_revision_as_object())  # N: Revealed type is "main.NewsPage"
+        reveal_type(news.with_content_json({}))  # N: Revealed type is "main.NewsPage"
+        reveal_type(news.title)  # N: Revealed type is "str"
+        reveal_type(menu.show_in_menus_default)  # N: Revealed type is "bool"
+        news.seo_title  # E: "NewsPage" has no attribute "seo_title"  [attr-defined]
+        news.can_move_to(menu)
+
+- case: core_page_queryset_type_narrowing
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import AbstractPage, Page
+    from wagtail.models.pages import AbstractPageMeta, PageQuerySet
+
+    class BlogPage(Page):
+        class Meta:
+            app_label = "test"
+
+    class BasePage(AbstractPage):
+        class Meta(AbstractPageMeta):
+            abstract = True
+
+    class NewsPage(BasePage):
+        class Meta:
+            app_label = "test"
+
+    def check(
+        page_qs: PageQuerySet[Page],
+        abstract_qs: PageQuerySet[AbstractPage],
+        news: NewsPage,
+    ) -> None:
+        reveal_type(page_qs.type(BlogPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(page_qs.exact_type(BlogPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(abstract_qs.type(NewsPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.NewsPage]"
+        reveal_type(abstract_qs.exact_type(NewsPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.NewsPage]"
+        reveal_type(news.get_children().type(NewsPage))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.NewsPage]"
+        reveal_type(page_qs.page(news))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
+
+- case: core_page_actions_generic
+  mypy_config: |
+    [mypy]
+    strict = True
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import AbstractBaseUser
+    from wagtail.actions import (
+        BaseAction,
+        CopyPageAction,
+        CreatePageAction,
+        CreatePageAliasAction,
+        DeletePageAction,
+        MovePageAction,
+        RevertToPageRevisionAction,
+        UnpublishPageAction,
+    )
+    from wagtail.models import Page, Revision
+
+    class BlogPage(Page):
+        class Meta:
+            app_label = "test"
+
+    class MyCopyAction(CopyPageAction):
+        pass
+
+    def check(blog: BlogPage, home: Page, user: AbstractBaseUser, revision: Revision) -> None:
+        reveal_type(CreatePageAction(blog, parent=home, user=user).execute())  # N: Revealed type is "main.BlogPage"
+        reveal_type(CopyPageAction(blog, to=home).execute())  # N: Revealed type is "main.BlogPage"
+        reveal_type(CreatePageAliasAction(blog, parent=home).execute())  # N: Revealed type is "main.BlogPage"
+        reveal_type(CopyPageAction(blog).permission_policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+        reveal_type(DeletePageAction(blog).page)  # N: Revealed type is "main.BlogPage"
+        reveal_type(UnpublishPageAction(blog).object)  # N: Revealed type is "main.BlogPage"
+        reveal_type(RevertToPageRevisionAction(blog, revision).instance)  # N: Revealed type is "main.BlogPage"
+        reveal_type(RevertToPageRevisionAction(blog, revision).execute())  # N: Revealed type is "wagtail.models.revisions.Revision"
+        MovePageAction(blog, home).check(home)
+        action: BaseAction = MyCopyAction(blog)
+        reveal_type(MyCopyAction(blog).page)  # N: Revealed type is "wagtail.models.pages.AbstractPage"
+        reveal_type(MyCopyAction(blog).execute())  # N: Revealed type is "wagtail.models.pages.AbstractPage"
+
+    def check_bare(copy: CopyPageAction, delete: DeletePageAction) -> None:
+        reveal_type(copy.page)  # N: Revealed type is "wagtail.models.pages.AbstractPage"
+        reveal_type(delete.page)  # N: Revealed type is "wagtail.models.pages.AbstractPage"
+
+- case: core_page_manager_reusable_page_inputs
+  mypy_config: |
+    [mypy]
+    strict = True
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import Page
+
+    class BlogPage(Page):
+        class Meta:
+            app_label = "test"
+
+    def check(blog: BlogPage, home: Page) -> None:
+        Page.objects.first_common_ancestor_of([blog, home])
+        Page.objects.first_common_ancestor_of(BlogPage.objects.live(), include_self=True, strict=True)
+        Page.objects.annotate_parent_page(Page.objects.all())
+        Page.objects.annotate_parent_page(Page.objects.live().search("news"))
+        Page.objects.annotate_parent_page((blog,))
+        Page.objects.annotate_parent_page(Page.objects.iterator())  # E: Argument 1 to "annotate_parent_page" of "BasePageManager" has incompatible type "Iterator[Any]"; expected "Sequence[AbstractPage] | QuerySet[AbstractPage, AbstractPage] | BaseSearchResults"  [arg-type]
+        Page.objects.first_common_ancestor_of(p for p in [blog])  # E: Argument 1 to "first_common_ancestor_of" of "BasePageManager" has incompatible type "Generator[BlogPage, None, None]"; expected "Sequence[AbstractPage] | QuerySet[AbstractPage, AbstractPage] | BaseSearchResults"  [arg-type]
+
+- case: core_page_module_exports
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import DefaultBasePageMixin, ShowInMenusMixin
+    from wagtail.models.sites import GroupSitePermission
+    from wagtail.models.pages import BASE_PAGE_MODEL_NAME, PAGE_PERMISSION_TYPES
+    from wagtail.models import PAGE_PERMISSION_CODENAMES  # E: Module "wagtail.models" has no attribute "PAGE_PERMISSION_CODENAMES"  [attr-defined]
+    from wagtail.models import PAGE_PERMISSION_TYPE_CHOICES  # E: Module "wagtail.models" has no attribute "PAGE_PERMISSION_TYPE_CHOICES"; maybe "PAGE_PERMISSION_TYPES"?  [attr-defined]
+    from wagtail.signal_handlers import Page
+
+    reveal_type(BASE_PAGE_MODEL_NAME)  # N: Revealed type is "str"
+    reveal_type(GroupSitePermission().site)  # N: Revealed type is "wagtail.models.sites.Site"
+    reveal_type(Page)  # N: Revealed type is "type[wagtail.models.pages.AbstractPage]"
+    reveal_type(DefaultBasePageMixin().seo_title)  # N: Revealed type is "str"
+
+- case: core_page_get_template_override_still_needs_ignore
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import Any, NamedTuple
+    from django.http import HttpRequest
+    from wagtail.models import Page
+
+    class BlogPageTemplate(NamedTuple):
+        title: str
+
+    class BlogPage(Page):
+        class Meta:
+            app_label = "test"
+
+        def get_template(self, request: HttpRequest, *args: Any, **kwargs: Any) -> type[BlogPageTemplate]:
+            return BlogPageTemplate
+  out: |
+    main:12: error: Return type "type[BlogPageTemplate]" of "get_template" incompatible with return type "Sequence[str] | _EngineTemplate | str" in supertype "wagtail.models.pages.AbstractPage"  [override]

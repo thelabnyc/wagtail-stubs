@@ -5,11 +5,11 @@ from django.db.models import QuerySet
 from django.forms import Form
 from django.http import HttpRequest, HttpResponse, HttpResponseBase
 from django.http.request import QueryDict
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 from wagtail.admin import messages as messages
-from wagtail.admin.auth import PermissionPolicyChecker as PermissionPolicyChecker
 from wagtail.admin.filters import (
     MultipleContentTypeFilter as MultipleContentTypeFilter,
 )
@@ -53,26 +53,19 @@ from wagtail.admin.views.generic.permissions import PermissionCheckedMixin as Pe
 from wagtail.admin.views.pages.listing import PageListingMixin as PageListingMixin
 from wagtail.admin.widgets.button import Button
 from wagtail.coreutils import resolve_model_string as resolve_model_string
-from wagtail.models.pages import Page as Page
+from wagtail.models import AbstractPage
 from wagtail.models.workflows import Task as Task
 from wagtail.models.workflows import TaskState as TaskState
 from wagtail.models.workflows import Workflow as Workflow
 from wagtail.models.workflows import WorkflowState as WorkflowState
 from wagtail.models.workflows import WorkflowTask as WorkflowTask
-from wagtail.permissions import (
-    page_permission_policy as page_permission_policy,
-)
-from wagtail.permissions import (
-    task_permission_policy as task_permission_policy,
-)
-from wagtail.permissions import (
-    workflow_permission_policy as workflow_permission_policy,
-)
+from wagtail.permission_policies.base import BasePermissionPolicy
+from wagtail.permissions import policy_registry as policy_registry
 from wagtail.snippets.models import get_workflow_enabled_models as get_workflow_enabled_models
 from wagtail.workflows import get_task_types as get_task_types
 import django_filters
 
-task_permission_checker: PermissionPolicyChecker
+Page: type[AbstractPage]
 
 class WorkflowTitleColumn(TitleColumn):
     cell_template_name: str
@@ -104,7 +97,6 @@ class WorkflowFilterSet(BaseWorkflowFilterSet):
         fields: list[str]
 
 class Index(IndexView):
-    permission_policy = workflow_permission_policy
     model = Workflow
     context_object_name: str
     template_name: str
@@ -113,7 +105,7 @@ class Index(IndexView):
     edit_url_name: str
     index_url_name: str
     index_results_url_name: str
-    page_title: str
+    page_title: _StrOrPromise
     add_item_label: str
     header_icon: str
     columns: list[TitleColumn | BaseColumn]
@@ -126,9 +118,8 @@ class Index(IndexView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
 
 class Create(CreateView):
-    permission_policy = workflow_permission_policy
     model = Workflow
-    page_title: str
+    page_title: _StrOrPromise
     template_name: str
     success_message: str
     add_url_name: str
@@ -151,9 +142,8 @@ class Create(CreateView):
     def form_valid(self, form: Form) -> HttpResponseBase: ...
 
 class Edit(EditView):
-    permission_policy = workflow_permission_policy
     model = Workflow
-    page_title: str
+    page_title: _StrOrPromise
     template_name: str
     success_message: str
     add_url_name: str
@@ -171,7 +161,7 @@ class Edit(EditView):
     def get_form_class(self) -> type[Form]: ...
     def get_pages_formset(self) -> WorkflowPagesFormSet: ...
     def get_content_type_form(self) -> WorkflowContentTypeForm: ...
-    def get_paginated_pages(self) -> PaginatorPage[Page]: ...
+    def get_paginated_pages(self) -> PaginatorPage[AbstractPage]: ...
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
     @property
     def get_enable_url(self) -> str: ...
@@ -184,9 +174,8 @@ class Edit(EditView):
     def form_valid(self, form: Form) -> HttpResponseBase: ...
 
 class Disable(DeleteView):
-    permission_policy = workflow_permission_policy
     model = Workflow
-    page_title: str
+    page_title: _StrOrPromise
     template_name: str
     success_message: str
     add_url_name: str
@@ -200,14 +189,15 @@ class Disable(DeleteView):
     def delete_action(self) -> None: ...
 
 class WorkflowUsageView(PageListingMixin, PermissionCheckedMixin, BaseListingView):
-    permission_policy = workflow_permission_policy
+    @cached_property
+    def permission_policy(self) -> BasePermissionPolicy[Workflow]: ...
     any_permission_required: set[str]
     pk_url_kwarg: str
     index_url_name: str
     index_results_url_name: str
     paginate_by: int
     header_icon: str
-    page_title: str
+    page_title: _StrOrPromise
     object: Workflow
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponseBase: ...
     def get_page_subtitle(self) -> str: ...
@@ -215,7 +205,7 @@ class WorkflowUsageView(PageListingMixin, PermissionCheckedMixin, BaseListingVie
     def get_index_url(self) -> str: ...
     def get_index_results_url(self) -> str: ...
     def get_object(self) -> Workflow: ...
-    def get_base_queryset(self) -> QuerySet[Page]: ...
+    def get_base_queryset(self) -> QuerySet[AbstractPage]: ...
 
 @require_POST
 def enable_workflow(request: HttpRequest, pk: int) -> HttpResponse: ...
@@ -242,7 +232,6 @@ class TaskFilterSet(BaseWorkflowFilterSet):
         fields: list[str]
 
 class TaskIndex(IndexView):
-    permission_policy = task_permission_policy
     model = Task
     context_object_name: str
     template_name: str
@@ -251,7 +240,7 @@ class TaskIndex(IndexView):
     edit_url_name: str
     index_url_name: str
     index_results_url_name: str
-    page_title: str
+    page_title: _StrOrPromise
     add_item_label: str
     header_icon: str
     columns: list[TitleColumn | Column]
@@ -266,8 +255,7 @@ class TaskIndex(IndexView):
 def select_task_type(request: HttpRequest) -> HttpResponse: ...
 
 class CreateTask(CreateView):
-    permission_policy = task_permission_policy
-    page_title: str
+    page_title: _StrOrPromise
     template_name: str
     success_message: str
     add_url_name: str
@@ -281,7 +269,6 @@ class CreateTask(CreateView):
     def get_breadcrumbs_items(self) -> list[dict[str, str]]: ...
 
 class EditTask(EditView):
-    permission_policy = task_permission_policy
     template_name: str
     success_message: str
     add_url_name: str
@@ -306,9 +293,8 @@ class EditTask(EditView):
     def get_enable_url(self) -> str: ...
 
 class DisableTask(DeleteView):
-    permission_policy = task_permission_policy
     model = Task
-    page_title: str
+    page_title: _StrOrPromise
     template_name: str
     success_message: str
     add_url_name: str

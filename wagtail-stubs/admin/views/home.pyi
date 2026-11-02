@@ -4,6 +4,7 @@ from typing import Any
 from django.contrib.auth.models import AbstractBaseUser
 from django.forms import Media
 from django.http import HttpRequest, HttpResponse
+from django.utils.functional import _StrOrPromise, cached_property
 from django.views.generic.base import TemplateView
 from wagtail import hooks as hooks
 from wagtail.admin.forms.search import SearchForm as SearchForm
@@ -12,14 +13,16 @@ from wagtail.admin.navigation import get_site_for_user as get_site_for_user
 from wagtail.admin.site_summary import SiteSummaryPanel as SiteSummaryPanel
 from wagtail.admin.ui.components import Component as Component
 from wagtail.admin.views.generic import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
+from wagtail.models import AbstractPage
 from wagtail.models.content_types import get_default_page_content_type as get_default_page_content_type
-from wagtail.models.pages import Page as Page
 from wagtail.models.pages import PageLogEntry as PageLogEntry
 from wagtail.models.revisions import Revision as Revision
 from wagtail.models.workflows import TaskState as TaskState
 from wagtail.models.workflows import WorkflowState as WorkflowState
-from wagtail.permissions import page_permission_policy as page_permission_policy
+from wagtail.permission_policies.pages import PagePermissionPolicy
+from wagtail.permissions import policy_registry as policy_registry
 
+Page: type[AbstractPage]
 User: type[AbstractBaseUser]
 
 class UpgradeNotificationPanel(Component):
@@ -67,8 +70,9 @@ class RecentEditsPanel(Component):
 
 class HomeView(WagtailAdminTemplateMixin, TemplateView):
     template_name: str
-    page_title: str
-    permission_policy = page_permission_policy
+    page_title: _StrOrPromise
+    @cached_property
+    def permission_policy(self) -> PagePermissionPolicy[AbstractPage]: ...
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
     def get_media(self, panels: Sequence[Component] | None = None) -> Media: ...
     def get_panels(self) -> list[Component]: ...

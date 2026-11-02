@@ -11,7 +11,7 @@ class LocaleManager(models.Manager["Locale"]):
 
 class Locale(models.Model):
     language_code: models.CharField[str, str]
-    objects: LocaleManager  # type: ignore[assignment]
+    objects: LocaleManager
     all_objects: models.Manager[Locale]
 
     class Meta:
@@ -72,6 +72,12 @@ class TranslatableMixin(models.Model):
     def get_translation_model(cls) -> type[TranslatableMixin]: ...
 
 def bootstrap_translatable_model(model: type[models.Model], locale: Locale) -> None: ...
+
+class BootstrapLocaleField(migrations.AddField):
+    def __init__(self, model_string: str) -> None: ...
+
+class BootstrapTranslationKeyField(migrations.AddField):
+    def __init__(self, model_string: str) -> None: ...
 
 class BootstrapTranslatableModel(migrations.RunPython):
     def __init__(self, model_string: str, language_code: str | None = None) -> None: ...

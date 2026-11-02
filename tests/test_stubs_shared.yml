@@ -1,0 +1,265 @@
+- case: shared_policy_registry_get_by_type
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import Page, Site
+    from wagtail.permissions import policy_registry
+
+    class BlogPage(Page):
+        pass
+
+    reveal_type(policy_registry.get_by_type(Page))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+    reveal_type(policy_registry.get_by_type(BlogPage))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+    reveal_type(policy_registry.get_by_type(Site))  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any]"
+    reveal_type(policy_registry.get_by_type(Site, fallback=False))  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any] | None"
+    reveal_type(policy_registry.get_by_type(Page, fallback=False))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage] | None"
+    reveal_type(policy_registry.get_fallback_policy(Site))  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[wagtail.models.sites.Site] | None"
+
+- case: shared_policy_registry_get_instance
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import AbstractBaseUser
+    from wagtail.models import Page, Site
+
+    from wagtail.permissions import policy_registry
+
+    class BlogPage(Page):
+        pass
+
+    def check(user: AbstractBaseUser, blog: BlogPage, site: Site) -> None:
+        reveal_type(policy_registry.get(blog))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+        reveal_type(policy_registry.get(blog).explorable_instances(user))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.AbstractPage]"
+        reveal_type(policy_registry.get(site))  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any]"
+        reveal_type(policy_registry.get(site).instances_user_has_permission_for(user, "change"))  # N: Revealed type is "django.db.models.query.QuerySet[Any, Any]"
+
+- case: shared_register_permission_policy
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import Page, Site
+    from wagtail.permission_policies import ModelPermissionPolicy
+    from wagtail.permission_policies.pages import PagePermissionPolicy
+    from wagtail.permissions import page_permission_policy, policy_registry, register_permission_policy
+
+    class BlogPage(Page):
+        pass
+
+    register_permission_policy(Site)
+    register_permission_policy(Site, ModelPermissionPolicy(Site), exact_class=True)
+    register_permission_policy(BlogPage, PagePermissionPolicy.for_model(BlogPage))
+    register_permission_policy(BlogPage, page_permission_policy)
+    policy_registry.register(Site, ModelPermissionPolicy(Site))
+    register_permission_policy(Site, ModelPermissionPolicy(Page))  # E: Cannot infer value of type parameter "M" of "register_permission_policy"  [misc]
+
+- case: shared_page_permission_policy_generic
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import AbstractBaseUser
+    from wagtail.models import Page
+    from wagtail.permission_policies.pages import PagePermissionPolicy
+    from wagtail.permissions import page_permission_policy, site_permission_policy
+
+    class BlogPage(Page):
+        pass
+
+    def check(user: AbstractBaseUser) -> None:
+        reveal_type(page_permission_policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+        reveal_type(PagePermissionPolicy())  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+        reveal_type(PagePermissionPolicy(BlogPage))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[main.BlogPage]"
+        reveal_type(PagePermissionPolicy("wagtailcore.Page"))  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[Any]"
+        policy = PagePermissionPolicy.for_model(BlogPage)
+        reveal_type(policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[main.BlogPage]"
+        reveal_type(policy.model)  # N: Revealed type is "type[main.BlogPage]"
+        reveal_type(policy.instances_user_has_permission_for(user, "change"))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(policy.explorable_root_instance(user))  # N: Revealed type is "wagtail.models.pages.AbstractPage | None"
+        reveal_type(site_permission_policy.model)  # N: Revealed type is "type[wagtail.models.sites.Site]"
+
+- case: shared_policy_bare_subclass_and_annotation_strict
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import AbstractBaseUser
+    from wagtail.models import Page
+    from wagtail.permission_policies import BasePermissionPolicy, ModelPermissionPolicy
+    from wagtail.permission_policies.pages import PagePermissionPolicy
+    from wagtail.permissions import policy_registry
+
+    class MyPolicy(ModelPermissionPolicy):
+        def user_has_permission(self, user: AbstractBaseUser, action: str) -> bool:
+            return True
+
+    class MyPagePolicy(PagePermissionPolicy):
+        pass
+
+    class TypedPolicy(ModelPermissionPolicy[Page]):
+        pass
+
+    bare: BasePermissionPolicy = policy_registry.get_by_type(Page)
+    model_bare: ModelPermissionPolicy = MyPolicy(Page)
+    reveal_type(MyPolicy(Page))  # N: Revealed type is "main.MyPolicy"
+    reveal_type(TypedPolicy(Page).model)  # N: Revealed type is "type[wagtail.models.pages.Page]"
+
+- case: shared_actions_generic
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import AbstractBaseUser
+    from wagtail.actions import CreateAction, CreatePageAction, DeleteAction, EditAction, EditPageAction, RevertToRevisionAction
+    from wagtail.models import Page, Revision, Site
+
+    class BlogPage(Page):
+        pass
+
+    def check(user: AbstractBaseUser, site: Site, blog: BlogPage, home: Page, revision: Revision) -> None:
+        reveal_type(CreateAction(site, user=user))  # N: Revealed type is "wagtail.actions.create.CreateAction[wagtail.models.sites.Site]"
+        reveal_type(CreateAction(site).execute())  # N: Revealed type is "wagtail.models.sites.Site"
+        reveal_type(CreateAction(site).permission_policy)  # N: Revealed type is "wagtail.permission_policies.base.BasePermissionPolicy[Any]"
+        reveal_type(EditAction(site, publish=True).execute())  # N: Revealed type is "wagtail.models.sites.Site"
+        reveal_type(DeleteAction(site).execute())  # N: Revealed type is "tuple[int, dict[str, int]]"
+        reveal_type(RevertToRevisionAction(blog, revision).execute())  # N: Revealed type is "wagtail.models.revisions.Revision"
+        reveal_type(CreatePageAction(blog, parent=home, user=user).execute())  # N: Revealed type is "main.BlogPage"
+        reveal_type(CreatePageAction(blog, parent=home).permission_policy)  # N: Revealed type is "wagtail.permission_policies.pages.PagePermissionPolicy[wagtail.models.pages.AbstractPage]"
+        reveal_type(EditPageAction(blog).execute())  # N: Revealed type is "main.BlogPage"
+        CreatePageAction(blog, parent=home, log_action="x")  # E: Unexpected keyword argument "log_action" for "CreatePageAction"  [call-arg]  # N: "CreatePageAction" defined in "wagtail.actions.create_page"
+
+- case: shared_action_registry
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import Any
+    from django.contrib.auth.models import AbstractBaseUser
+    from wagtail.actions import BaseAction, CreateAction, action_registry
+    from wagtail.models import Page, Revision, Site
+
+    class ArchiveAction(BaseAction[Site]):
+        action_name = "archive"
+
+        def execute(self, skip_permission_checks: bool = False) -> None: ...
+
+    reveal_type(action_registry.register(Site, ArchiveAction)(Site()))  # N: Revealed type is "main.ArchiveAction"
+    reveal_type(action_registry.get_actions_for_model(Site))  # N: Revealed type is "dict[str, type[wagtail.actions.base.BaseAction[Any]]]"
+    reveal_type(action_registry.get_action_class(Site, "create"))  # N: Revealed type is "type[wagtail.actions.base.BaseAction[Any]] | None"
+
+    def publish(revision: Revision, user: AbstractBaseUser) -> None:
+        action_class = action_registry.get_action_class(Page, "publish")
+        assert action_class is not None
+        action = action_class(revision, user=user)
+        reveal_type(action)  # N: Revealed type is "wagtail.actions.base.BaseAction[Any]"
+        reveal_type(action.execute())  # N: Revealed type is "Any"
+
+- case: shared_action_bare_subclass_strict
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.actions import BaseAction, CreateAction
+    from wagtail.models import Site
+
+    class MyAction(BaseAction):
+        action_name = "mine"
+
+    class MyCreate(CreateAction):
+        pass
+
+    action: BaseAction = CreateAction(Site())
+    reveal_type(MyAction(Site()).instance)  # N: Revealed type is "Any"
+
+- case: shared_api_token_create
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import AbstractBaseUser
+    from wagtail.models import APIToken
+
+    def check(user: AbstractBaseUser) -> None:
+        reveal_type(APIToken.create_token(user=user, name="n"))  # N: Revealed type is "tuple[wagtail.models.api.APIToken, str]"
+        reveal_type(APIToken.hash_token("t"))  # N: Revealed type is "str"
+
+- case: shared_form_validation_error_from_form
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django import forms
+    from wagtail.utils.forms import FormValidationError
+
+    class MyError(FormValidationError):
+        pass
+
+    def check(form: forms.Form) -> None:
+        reveal_type(FormValidationError.from_form(form))  # N: Revealed type is "wagtail.utils.forms.FormValidationError"
+        reveal_type(MyError.from_form(form))  # N: Revealed type is "main.MyError"
+        reveal_type(MyError.from_form(form).loc_errors)  # N: Revealed type is "list[tuple[tuple[str | int, ...], list[tuple[str, str]]]]"
+
+- case: shared_models_exports
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.models import BootstrapLocaleField, BootstrapTranslationKeyField
+    from wagtail.models import PAGE_PERMISSION_CODENAMES  # E: Module "wagtail.models" has no attribute "PAGE_PERMISSION_CODENAMES"  [attr-defined]
+    BootstrapLocaleField("app.Model")
+    BootstrapTranslationKeyField("app.Model")
+
+- case: shared_rich_text_converters
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.rich_text.converters.db_html import DbHTMLConverter
+    from wagtail.admin.rich_text.converters.markdown_db import MarkdownConverter
+    from wagtail.admin.telepath import Adapter, JSContext
+
+    html, removals = DbHTMLConverter(["bold"]).clean("<b>x</b>")
+    reveal_type(html)  # N: Revealed type is "str"
+    reveal_type(removals[0].reason)  # N: Revealed type is "Literal['feature_disabled'] | Literal['unknown_linktype'] | Literal['unknown_embedtype'] | Literal['missing_attribute']"
+    reveal_type(MarkdownConverter().from_database_format("<p>x</p>", resolved=True))  # N: Revealed type is "str"
+    reveal_type(JSContext)  # N: Revealed type is "type[wagtail.admin.telepath.WagtailJSContextBase]"

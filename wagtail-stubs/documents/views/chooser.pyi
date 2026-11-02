@@ -4,7 +4,7 @@ from django import forms
 from django.db import models
 from django.db.models import QuerySet
 from django.forms import Form
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.utils.functional import cached_property as cached_property
 from django.views.generic.base import View
 from wagtail.admin.staticfiles import versioned_static as versioned_static
@@ -19,6 +19,9 @@ from wagtail.admin.views.generic.chooser import (
 )
 from wagtail.admin.views.generic.chooser import (
     ChooseViewMixin as ChooseViewMixin,
+)
+from wagtail.admin.views.generic.chooser import (
+    ChosenMultipleViewMixin as ChosenMultipleViewMixin,
 )
 from wagtail.admin.views.generic.chooser import (
     ChosenResponseMixin as ChosenResponseMixin,
@@ -42,8 +45,10 @@ from wagtail.documents import (
 from wagtail.documents import (
     get_document_model_string as get_document_model_string,
 )
-from wagtail.documents.permissions import permission_policy as permission_policy
+from wagtail.documents.models import AbstractDocument
 from wagtail.models.media import Collection
+from wagtail.permission_policies.base import BasePermissionPolicy
+from wagtail.permissions import policy_registry as policy_registry
 
 class DocumentChosenResponseMixin(ChosenResponseMixin):
     def get_chosen_response_data(self, document: models.Model) -> dict[str, Any]: ...
@@ -75,7 +80,17 @@ class DocumentChooseResultsView(ChooseResultsViewMixin, DocumentCreationFormMixi
 
 class DocumentChosenView(ChosenViewMixin, DocumentChosenResponseMixin, View):
     model: type
-    def get(self, request: HttpRequest, *args: Any, pk: int | str, **kwargs: Any) -> HttpResponse: ...
+    @cached_property
+    def permission_policy(self) -> BasePermissionPolicy[AbstractDocument]: ...
+    def get_object(self, pk: str) -> AbstractDocument: ...
+    def get(self, request: HttpRequest, *args: Any, pk: int | str, **kwargs: Any) -> JsonResponse: ...
+
+class DocumentChosenMultipleView(ChosenMultipleViewMixin, DocumentChosenResponseMixin, View):
+    model: type
+    @cached_property
+    def permission_policy(self) -> BasePermissionPolicy[AbstractDocument]: ...
+    def get_objects(self, pks: list[str]) -> QuerySet[AbstractDocument]: ...
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> JsonResponse: ...
 
 class DocumentChooserUploadView(CreateViewMixin, DocumentCreationFormMixin, DocumentChosenResponseMixin, View):
     model: type
@@ -101,11 +116,11 @@ class DocumentChooserViewSet(ChooserViewSet):
     choose_view_class = DocumentChooseView
     choose_results_view_class = DocumentChooseResultsView
     chosen_view_class = DocumentChosenView
+    chosen_multiple_view_class = DocumentChosenMultipleView
     create_view_class = DocumentChooserUploadView
     base_widget_class = BaseAdminDocumentChooser
     widget_telepath_adapter_class = DocumentChooserAdapter
     base_block_class = BaseDocumentChooserBlock
-    permission_policy = permission_policy
     icon: str
     choose_one_text: str
     create_action_label: str

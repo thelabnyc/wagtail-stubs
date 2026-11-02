@@ -18,169 +18,143 @@ wagtail\.admin\.api\.actions\.unpublish(\..*)?
 wagtail\.admin\.api\.serializers(\..*)?
 wagtail\.admin\.api\.urls(\..*)?
 wagtail\.admin\.api\.views(\..*)?
-wagtail\.admin\.blocks(\..*)?
 wagtail\.admin\.filters(\..*)?
-wagtail\.admin\.mail(\..*)?
+# functools.cache wrapper: stub signature has *args/**kwargs, runtime inspect follows __wrapped__
+wagtail\.admin\.localization\.get_available_admin_time_zones
 wagtail\.admin\.menu(\..*)?
 wagtail\.admin\.models(\..*)?
-wagtail\.admin\.paginator(\..*)?
 wagtail\.admin\.panels(\..*)?
-wagtail\.admin\.rich_text(\..*)?
-wagtail\.admin\.search(\..*)?
-wagtail\.admin\.signal_handlers(\..*)?
-wagtail\.admin\.site_summary(\..*)?
-wagtail\.admin\.templatetags\.wagtailadmin_tags(\..*)?
-wagtail\.admin\.templatetags\.wagtailuserbar(\..*)?
-wagtail\.admin\.ui\.side_panels(\..*)?
-wagtail\.admin\.ui\.sidebar(\..*)?
+# MediaDefiningClass adds media at runtime
+wagtail\.admin\.search\.SearchArea\.media
 wagtail\.admin\.ui\.tables(\..*)?
 wagtail\.admin\.urls(\..*)?
-wagtail\.admin\.userbar(\..*)?
 wagtail\.admin\.views\.account(\..*)?
-wagtail\.admin\.views\.bulk_action\.mixins(\..*)?
 wagtail\.admin\.views\.chooser(\..*)?
-wagtail\.admin\.views\.collection_privacy(\..*)?
-wagtail\.admin\.views\.collections(\..*)?
-wagtail\.admin\.views\.dismissibles(\..*)?
-wagtail\.admin\.views\.editing_sessions(\..*)?
 wagtail\.admin\.views\.generic(\..*)?
-wagtail\.admin\.views\.home(\..*)?
-wagtail\.admin\.views\.mixins(\..*)?
-wagtail\.admin\.views\.page_privacy(\..*)?
+# Runtime default is the stock page class; the stub types `model` with the class's page TypeVar
+wagtail\.admin\.views\.pages\.(choose_parent|history|lock|revisions|unpublish|usage|workflow)\.\w+\.model
 wagtail\.admin\.views\.pages\.bulk_actions\.delete(\..*)?
 wagtail\.admin\.views\.pages\.bulk_actions\.move(\..*)?
 wagtail\.admin\.views\.pages\.bulk_actions\.page_bulk_action(\..*)?
 wagtail\.admin\.views\.pages\.bulk_actions\.publish(\..*)?
 wagtail\.admin\.views\.pages\.bulk_actions\.unpublish(\..*)?
-wagtail\.admin\.views\.pages\.choose_parent(\..*)?
-wagtail\.admin\.views\.pages\.convert_alias(\..*)?
-wagtail\.admin\.views\.pages\.copy(\..*)?
-wagtail\.admin\.views\.pages\.create(\..*)?
-wagtail\.admin\.views\.pages\.delete(\..*)?
-wagtail\.admin\.views\.pages\.edit(\..*)?
-wagtail\.admin\.views\.pages\.history(\..*)?
+# django-filter FilterSet metaclass attributes
+wagtail\.admin\.views\.pages\.history\.PageHistoryFilterSet(\..*)?
 wagtail\.admin\.views\.pages\.listing(\..*)?
-wagtail\.admin\.views\.pages\.lock(\..*)?
-wagtail\.admin\.views\.pages\.move(\..*)?
-wagtail\.admin\.views\.pages\.ordering(\..*)?
-wagtail\.admin\.views\.pages\.preview(\..*)?
-wagtail\.admin\.views\.pages\.revisions(\..*)?
-wagtail\.admin\.views\.pages\.search(\..*)?
-wagtail\.admin\.views\.pages\.unpublish(\..*)?
-wagtail\.admin\.views\.pages\.usage(\..*)?
-wagtail\.admin\.views\.pages\.utils(\..*)?
-wagtail\.admin\.views\.pages\.workflow(\..*)?
-wagtail\.admin\.views\.reports\.aging_pages(\..*)?
+# django-filter FilterSet metaclass attributes
+wagtail\.admin\.views\.reports\.aging_pages\.AgingPagesReportFilterSet(\..*)?
 wagtail\.admin\.views\.reports\.audit_logging(\..*)?
-wagtail\.admin\.views\.reports\.base(\..*)?
-wagtail\.admin\.views\.reports\.locked_pages(\..*)?
-wagtail\.admin\.views\.reports\.page_types_usage(\..*)?
+# django-filter FilterSet metaclass attributes
+wagtail\.admin\.views\.reports\.locked_pages\.LockedPagesReportFilterSet(\..*)?
+# django-filter FilterSet metaclass attributes
+wagtail\.admin\.views\.reports\.page_types_usage\.PageTypesUsageReportFilterSet(\..*)?
 wagtail\.admin\.views\.reports\.workflows(\..*)?
 wagtail\.admin\.views\.workflows(\..*)?
-wagtail\.admin\.viewsets(\..*)?
+# Stub-only type aliases
+wagtail\.admin\.viewsets\.listing\.ListDisplayItem
+wagtail\.admin\.viewsets\.listing\.ListFilter
+# Runtime default is the stock page class; the stub types `model` with the viewset's page TypeVar
+wagtail\.admin\.viewsets\.pages\.PageListingViewSet\.model
 wagtail\.admin\.wagtail_hooks(\..*)?
-wagtail\.admin\.widgets(\..*)?
-wagtail\.api\.v2\.filters(\..*)?
-wagtail\.api\.v2\.serializers(\..*)?
-wagtail\.api\.v2\.utils(\..*)?
-wagtail\.api\.v2\.views(\..*)?
+# MediaDefiningClass adds media at runtime
+wagtail\.admin\.widgets\.tags\.AdminTagWidget(\..*)?
+# Multi-value Literal alias: mypy models it as a Union, runtime is a Literal
+wagtail\.api\.rich_text\.RichTextInputFormat
+wagtail\.api\.rich_text\.RichTextOutputFormat
+# DRF ships no types, so the serializer metaclass cannot be declared
+wagtail\.api\.v2\.serializers\.BaseSerializer
+wagtail\.api\.v2\.serializers\.PageSerializer
+# Literal/Annotated aliases built at import time from project models
+wagtail\.api\.v3\.routers\.pages\.IntPKFilter(\..*)?
+# Multi-value Literal alias: mypy models it as a Union, runtime is a Literal
+wagtail\.api\.v3\.routers\.pages\.PagePositionLiteral
+# Literal/Annotated aliases built at import time from project models
+wagtail\.api\.v3\.routers\.pages\.PageTypeLiteral
+# Inherits pydantic FieldInfo's runtime __final__ flag but is subclassed
+wagtail\.api\.v3\.schemas\.pages\.PageTypeInjectingBody
+wagtail\.api\.v3\.schemas\.params\.TypeInjectingBody
 wagtail\.blocks(\..*)?
-wagtail\.compat(\..*)?
 wagtail\.contrib\.forms\.models(\..*)?
-wagtail\.contrib\.forms\.panels(\..*)?
 wagtail\.contrib\.forms\.views(\..*)?
-wagtail\.contrib\.forms\.wagtail_hooks(\..*)?
+# MediaDefiningClass adds media at runtime
+wagtail\.contrib\.forms\.wagtail_hooks\.FormsMenuItem\.media
 wagtail\.contrib\.frontend_cache\.tasks(\..*)?
-wagtail\.contrib\.redirects\.api(\..*)?
+# DRF ships no types, so the serializer metaclass cannot be declared
+wagtail\.contrib\.redirects\.api\.v2\.RedirectSerializer
 wagtail\.contrib\.redirects\.filters(\..*)?
-wagtail\.contrib\.redirects\.forms(\..*)?
-wagtail\.contrib\.redirects\.management\.commands\.import_redirects(\..*)?
-wagtail\.contrib\.redirects\.middleware(\..*)?
 wagtail\.contrib\.redirects\.models(\..*)?
-wagtail\.contrib\.redirects\.permissions(\..*)?
-wagtail\.contrib\.redirects\.signal_handlers(\..*)?
-wagtail\.contrib\.redirects\.views(\..*)?
-wagtail\.contrib\.redirects\.wagtail_hooks(\..*)?
+# MediaDefiningClass adds media at runtime
+wagtail\.contrib\.redirects\.views\.RedirectTargetColumn\.media
+wagtail\.contrib\.redirects\.wagtail_hooks\.RedirectsMenuItem\.media
 wagtail\.contrib\.routable_page\.models(\..*)?
-wagtail\.contrib\.routable_page\.templatetags\.wagtailroutablepage_tags(\..*)?
-wagtail\.contrib\.search_promotions\.forms(\..*)?
 wagtail\.contrib\.search_promotions\.models(\..*)?
-wagtail\.contrib\.search_promotions\.templatetags\.wagtailsearchpromotions_tags(\..*)?
 wagtail\.contrib\.search_promotions\.views\.reports(\..*)?
 wagtail\.contrib\.search_promotions\.views\.settings(\..*)?
-wagtail\.contrib\.search_promotions\.wagtail_hooks(\..*)?
-wagtail\.contrib\.settings\.context_processors(\..*)?
-wagtail\.contrib\.settings\.forms(\..*)?
-wagtail\.contrib\.settings\.jinja2tags(\..*)?
+# MediaDefiningClass adds media at runtime
+wagtail\.contrib\.search_promotions\.wagtail_hooks\.SearchPicksMenuItem\.media
 wagtail\.contrib\.settings\.models(\..*)?
-wagtail\.contrib\.settings\.registry(\..*)?
-wagtail\.contrib\.settings\.templatetags\.wagtailsettings_tags(\..*)?
+# MediaDefiningClass adds media at runtime
+wagtail\.contrib\.settings\.registry\.SettingMenuItem\.media
 wagtail\.contrib\.settings\.views(\..*)?
-wagtail\.contrib\.simple_translation\.forms(\..*)?
 wagtail\.contrib\.simple_translation\.models(\..*)?
-wagtail\.contrib\.simple_translation\.views(\..*)?
-wagtail\.contrib\.simple_translation\.wagtail_hooks(\..*)?
-wagtail\.contrib\.styleguide\.views(\..*)?
-wagtail\.contrib\.styleguide\.wagtail_hooks(\..*)?
 wagtail\.contrib\.table_block\.blocks(\..*)?
 wagtail\.contrib\.typed_table_block\.blocks(\..*)?
-wagtail\.coreutils(\..*)?
-wagtail\.documents(\..*)?
+# functools.cache wrapper: stub signature has *args/**kwargs, runtime inspect follows __wrapped__
+wagtail\.coreutils\.get_content_languages
+wagtail\.documents(?!\.api(\.|$))(\..*)?
+# DRF ViewSetMixin.as_view() sets these on the class when the admin API URLs are built
+wagtail\.documents\.api\.admin\.views\.DocumentsAdminAPIViewSet\.(basename|description|detail|name|suffix)
+# DRF ships no types, so the serializer metaclass cannot be declared
+wagtail\.documents\.api\.v2\.serializers\.DocumentSerializer
 wagtail\.embeds\.blocks(\..*)?
-wagtail\.embeds\.embeds(\..*)?
 wagtail\.embeds\.models(\..*)?
 wagtail\.embeds\.rich_text(\..*)?
-wagtail\.images(\..*)?
-wagtail\.locales\.forms(\..*)?
-wagtail\.locales\.utils(\..*)?
-wagtail\.locales\.views(\..*)?
-wagtail\.locales\.wagtail_hooks(\..*)?
-wagtail\.management\.commands\.convert_mariadb_uuids(\..*)?
-wagtail\.management\.commands\.create_log_entries_from_revisions(\..*)?
-wagtail\.management\.commands\.fixtree(\..*)?
-wagtail\.management\.commands\.move_pages(\..*)?
-wagtail\.management\.commands\.publish_scheduled(\..*)?
-wagtail\.management\.commands\.purge_embeds(\..*)?
-wagtail\.management\.commands\.purge_revisions(\..*)?
-wagtail\.management\.commands\.rebuild_references_index(\..*)?
-wagtail\.management\.commands\.set_url_paths(\..*)?
-wagtail\.management\.commands\.show_references_index(\..*)?
+wagtail\.images(?!\.api(\.|$))(\..*)?
+# DRF ships no types, so the serializer metaclass cannot be declared
+wagtail\.images\.api\.admin\.serializers\.AdminImageSerializer
+# DRF ViewSetMixin.as_view() sets these on the class when the admin API URLs are built
+wagtail\.images\.api\.admin\.views\.ImagesAdminAPIViewSet\.(basename|description|detail|name|suffix)
+# typing_extensions.TypedDict adds PEP 728 attributes that typeshed does not declare
+wagtail\.images\.api\.fields\.ImageRendition(Error)?Dict\.__(closed|extra_items|mutable_keys|readonly_keys)__
+# DRF ships no types, so the serializer metaclass cannot be declared
+wagtail\.images\.api\.v2\.serializers\.ImageSerializer
+# MediaDefiningClass adds media at runtime
+wagtail\.locales\.views\.(LanguageTitleColumn|LocaleUsageColumn)\.media
+wagtail\.locales\.wagtail_hooks\.LocalesMenuItem\.media
 wagtail\.models(\..*)?
-wagtail\.search\.apps(\..*)?
 wagtail\.search\.backends\.database(\..*)?
 wagtail\.search\.backends\.elasticsearch7(\..*)?
 wagtail\.search\.backends\.elasticsearch8(\..*)?
 wagtail\.search\.backends\.elasticsearch9(\..*)?
 wagtail\.search\.backends\.opensearch2(\..*)?
 wagtail\.search\.backends\.opensearch3(\..*)?
-wagtail\.search\.backends\.deprecation(\..*)?
 wagtail\.search\.management\.commands\.enable_trigram(\..*)?
 wagtail\.search\.models(\..*)?
-wagtail\.search\.query(\..*)?
 wagtail\.search\.tasks\.insert_or_update_object_task(\..*)?
-wagtail\.signal_handlers\.logger(\..*)?
-wagtail\.signal_handlers\.reference_index_auto_update_disabled(\..*)?
-wagtail\.sites\.forms(\..*)?
-wagtail\.sites\.views(\..*)?
-wagtail\.sites\.wagtail_hooks(\..*)?
-wagtail\.snippets\.action_menu(\..*)?
-wagtail\.snippets\.blocks(\..*)?
+# MenuItem's media property comes from Django's MediaDefiningClass metaclass
+wagtail\.sites\.wagtail_hooks\.SitesMenuItem\.media
+# Class default is None; __init__ always sets it
+wagtail\.snippets\.action_menu\.WorkflowMenuItem\.name
+# Literal/Annotated aliases built at import time from project models
+wagtail\.snippets\.api\.v3\.router\.SnippetTypeLiteral
+# Inherits pydantic FieldInfo's runtime __final__ flag but is subclassed
+wagtail\.snippets\.api\.v3\.schemas\.ParamTypeInjectingBody
+# The block metaclass consumes Meta at class creation
+wagtail\.snippets\.blocks\.SnippetChooserBlock\.Meta
 wagtail\.snippets\.bulk_actions\.delete(\..*)?
 wagtail\.snippets\.bulk_actions\.snippet_bulk_action(\..*)?
-wagtail\.snippets\.views\.chooser(\..*)?
-wagtail\.snippets\.views\.snippets(\..*)?
-wagtail\.snippets\.wagtail_hooks(\..*)?
-wagtail\.snippets\.widgets(\..*)?
+# MediaDefiningClass adds media at runtime
+wagtail\.snippets\.wagtail_hooks\.SnippetsMenuItem\.media
+# Class default is None; __init__ requires a model from the argument or a subclass
+wagtail\.snippets\.widgets\.AdminSnippetChooser\.model
 wagtail\.tasks\.delete_file_from_storage_task(\..*)?
 wagtail\.tasks\.update_reference_index_task(\..*)?
-wagtail\.users\.forms(\..*)?
 wagtail\.users\.models(\..*)?
-wagtail\.users\.templatetags\.wagtailusers_tags(\..*)?
+# django-filter ships no types, so the FilterSet metaclass cannot be declared
+wagtail\.users\.views\.api_tokens\.APITokenFilterSet
 wagtail\.users\.views\.bulk_actions\.assign_role(\..*)?
 wagtail\.users\.views\.bulk_actions\.delete(\..*)?
 wagtail\.users\.views\.bulk_actions\.set_active_state(\..*)?
 wagtail\.users\.views\.bulk_actions\.user_bulk_action(\..*)?
-wagtail\.users\.views\.groups(\..*)?
 wagtail\.users\.views\.users(\..*)?
 wagtail\.users\.wagtail_hooks\.action_class(\..*)?
-wagtail\.utils\.decorators(\..*)?

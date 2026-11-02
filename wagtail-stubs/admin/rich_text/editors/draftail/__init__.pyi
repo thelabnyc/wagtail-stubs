@@ -3,7 +3,7 @@ from typing import Any
 from django.forms import Media, widgets
 from django.utils.functional import cached_property
 from wagtail.admin.rich_text.converters.contentstate import ContentstateConverter
-from wagtail.widget_adapters import WidgetAdapter
+from wagtail.admin.telepath.widgets import WidgetAdapter
 
 class DraftailRichTextArea(widgets.HiddenInput):
     template_name: str

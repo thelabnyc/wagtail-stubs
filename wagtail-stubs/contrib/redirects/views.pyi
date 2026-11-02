@@ -28,7 +28,6 @@ from wagtail.contrib.redirects.forms import (
     RedirectForm as RedirectForm,
 )
 from wagtail.contrib.redirects.models import Redirect as Redirect
-from wagtail.contrib.redirects.permissions import permission_policy as permission_policy
 from wagtail.contrib.redirects.utils import (
     get_file_storage as get_file_storage,
 )
@@ -46,8 +45,15 @@ from wagtail.contrib.redirects.utils import (
 )
 from wagtail.log_actions import log as log
 from wagtail.models.sites import Site as Site
+from wagtail.permission_policies.base import BasePermissionPolicy
+from wagtail.permissions import policy_registry as policy_registry
 
-permission_checker: Incomplete
+class RedirectPermissionPolicyChecker(PermissionPolicyChecker):
+    @cached_property
+    def policy(self) -> BasePermissionPolicy[Redirect]: ...  # type: ignore[override]
+    def __init__(self) -> None: ...
+
+permission_checker: RedirectPermissionPolicyChecker
 
 class RedirectTargetColumn(Column):
     cell_template_name: str
@@ -59,7 +65,6 @@ class RedirectTargetColumn(Column):
 class IndexView(generic.IndexView):
     template_name: str
     results_template_name: str
-    permission_policy = permission_policy
     model = Redirect
     header_icon: str
     add_item_label: Incomplete
@@ -84,7 +89,6 @@ class IndexView(generic.IndexView):
 class EditView(generic.EditView):
     model = Redirect
     form_class = RedirectForm
-    permission_policy = permission_policy
     template_name: str
     index_url_name: str
     edit_url_name: str
@@ -98,7 +102,6 @@ class EditView(generic.EditView):
 class DeleteView(generic.DeleteView):
     model = Redirect
     pk_url_kwarg: str
-    permission_policy = permission_policy
     template_name: str
     index_url_name: str
     delete_url_name: str
@@ -109,7 +112,6 @@ class DeleteView(generic.DeleteView):
 class CreateView(generic.CreateView):
     model = Redirect
     form_class = RedirectForm
-    permission_policy = permission_policy
     template_name: str
     add_url_name: str
     index_url_name: str

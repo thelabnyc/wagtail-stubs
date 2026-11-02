@@ -1,3 +1,4 @@
+from django.utils.functional import _StrOrPromise
 from wagtail.admin.views.generic.base import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
 from wagtail.admin.views.generic.multiple_upload import (
     AddView as BaseAddView,
@@ -17,12 +18,6 @@ from wagtail.admin.views.generic.multiple_upload import (
 from wagtail.images import get_image_model as get_image_model
 from wagtail.images.forms import get_image_form as get_image_form
 from wagtail.images.forms import get_image_multi_form as get_image_multi_form
-from wagtail.images.permissions import (
-    ImagesPermissionPolicyGetter as ImagesPermissionPolicyGetter,
-)
-from wagtail.images.permissions import (
-    permission_policy as permission_policy,
-)
 from wagtail.images.utils import (
     find_image_duplicates as find_image_duplicates,
 )
@@ -34,10 +29,9 @@ from wagtail.images.utils import (
 )
 
 class AddView(WagtailAdminTemplateMixin, BaseAddView):
-    permission_policy: ImagesPermissionPolicyGetter
     template_name: str
     header_icon: str
-    page_title: str
+    page_title: _StrOrPromise
     index_url_name: str
     edit_object_url_name: str
     delete_object_url_name: str
@@ -59,7 +53,6 @@ class AddView(WagtailAdminTemplateMixin, BaseAddView):
     def get_context_data(self, **kwargs): ...
 
 class EditView(BaseEditView):
-    permission_policy = permission_policy
     pk_url_kwarg: str
     edit_object_form_prefix: str
     context_object_name: str
@@ -70,7 +63,6 @@ class EditView(BaseEditView):
     def get_edit_form_class(self): ...
 
 class DeleteView(BaseDeleteView):
-    permission_policy = permission_policy
     pk_url_kwarg: str
     context_object_id_name: str
     def get_model(self): ...

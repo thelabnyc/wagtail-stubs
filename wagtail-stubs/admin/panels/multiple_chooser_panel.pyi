@@ -2,7 +2,7 @@ from typing import Any
 
 from django import forms
 from django.forms import Media
-from wagtail.telepath import WagtailJSContextBase
+from wagtail.admin.telepath import WagtailJSContextBase
 
 from .inline_panel import InlinePanel
 

@@ -2,7 +2,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.functional import cached_property
 from wagtail.admin.ui.menus import MenuItem as MenuItem
 from wagtail.admin.widgets.button import Button
-from wagtail.models import Page
+from wagtail.models import AbstractPage
 
 class PageMenuItem(MenuItem):
     url_name: str | None
@@ -10,7 +10,7 @@ class PageMenuItem(MenuItem):
     icon_name: str | None
     priority: int | None
     link_rel: None
-    page: Page
+    page: AbstractPage
     next_url: str | None
     def __init__(
         self,
@@ -19,14 +19,14 @@ class PageMenuItem(MenuItem):
         icon_name: str | None = None,
         priority: int | None = None,
         *,
-        page: Page,
+        page: AbstractPage,
         next_url: str | None = None,
     ) -> None: ...
     @cached_property
     def url(self) -> str | None: ...
 
 def get_page_header_buttons(
-    page: Page,
+    page: AbstractPage,
     user: AbstractBaseUser,
     next_url: str | None,
     view_name: str,

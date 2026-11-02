@@ -1,9 +1,11 @@
-from typing import Any, TypedDict
+from typing import Any, Generic, TypedDict
 
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponseBase
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from django_filters.filters import ChoiceFilter, DateFromToRangeFilter, ModelMultipleChoiceFilter
+from typing_extensions import TypeVar
 from wagtail import hooks as hooks
 from wagtail.admin.filters import (
     DateRangePickerWidget as DateRangePickerWidget,
@@ -44,13 +46,16 @@ from wagtail.admin.ui.tables.pages import (
 )
 from wagtail.admin.views import generic as generic
 from wagtail.admin.widgets.button import Button, HeaderButton
+from wagtail.models import AbstractPage
 from wagtail.models.i18n import Locale as Locale
-from wagtail.models.pages import Page as Page
 from wagtail.models.pages import PageLogEntry as PageLogEntry
 from wagtail.models.pages import PagePermissionTester as PagePermissionTester
 from wagtail.models.pages import get_page_content_types as get_page_content_types
 from wagtail.models.sites import Site as Site
-from wagtail.permissions import page_permission_policy as page_permission_policy
+from wagtail.permission_policies.pages import PagePermissionPolicy
+
+Page: type[AbstractPage]
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
 
 class PageTranslation(TypedDict):
     locale: Locale
@@ -60,10 +65,10 @@ class SiteFilter(ModelMultipleChoiceFilter):
     def get_filter_predicate(self, v: Site) -> dict[str, str]: ...
 
 class HasChildPagesFilter(ChoiceFilter):
-    def filter(self, qs: QuerySet[Page], value: str) -> QuerySet[Page]: ...
+    def filter(self, qs: QuerySet[AbstractPage], value: str) -> QuerySet[AbstractPage]: ...
 
 class EditedByFilter(MultipleUserFilter):
-    def filter(self, qs: QuerySet[Page], value: list[Any]) -> QuerySet[Page]: ...
+    def filter(self, qs: QuerySet[AbstractPage], value: list[Any]) -> QuerySet[AbstractPage]: ...
 
 class PageFilterSet(WagtailFilterSet):
     latest_revision_created_at: DateFromToRangeFilter
@@ -72,35 +77,35 @@ class PageFilterSet(WagtailFilterSet):
     site: SiteFilter
     has_child_pages: HasChildPagesFilter
     class Meta:
-        model = Page
+        model: type[AbstractPage]
         fields: list[str]
 
 class GenericPageFilterSet(PageFilterSet):
     content_type: MultipleContentTypeFilter
 
-class PageListingMixin:
+class PageListingMixin(Generic[_PageT]):
     template_name: str
     context_object_name: str
     table_class = PageTable
     default_ordering: str | None
-    model = Page
+    model: type[_PageT]
     is_searchable: bool
     base_columns: list[BaseColumn]
-    columns: list[BaseColumn]
     @cached_property
     def i18n_enabled(self) -> bool: ...
     @cached_property
     def show_locale_labels(self) -> bool: ...
     def get_valid_orderings(self) -> list[str]: ...
     def get_ordering(self) -> str | None: ...
-    def annotate_queryset(self, pages: QuerySet[Page]) -> QuerySet[Page]: ...
-    def order_queryset(self, queryset: QuerySet[Page]) -> QuerySet[Page]: ...
-    def search_queryset(self, queryset: QuerySet[Page]) -> QuerySet[Page]: ...
+    def annotate_queryset(self, pages: QuerySet[_PageT]) -> QuerySet[_PageT]: ...
+    def order_queryset(self, queryset: QuerySet[_PageT]) -> QuerySet[_PageT]: ...
+    def search_queryset(self, queryset: QuerySet[_PageT]) -> QuerySet[_PageT]: ...
     def get_table_kwargs(self) -> dict[str, Any]: ...
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
 
-class IndexView(PageListingMixin, generic.IndexView):
-    permission_policy = page_permission_policy
+class IndexView(PageListingMixin[_PageT], generic.IndexView[_PageT]):
+    @cached_property
+    def permission_policy(self) -> PagePermissionPolicy[AbstractPage]: ...
     any_permission_required: set[str]
     template_name: str
     results_template_name: str
@@ -112,28 +117,30 @@ class IndexView(PageListingMixin, generic.IndexView):
     def columns(self) -> list[BaseColumn]: ...
     @cached_property
     def filterset_class(self) -> type[PageFilterSet]: ...
-    def get_base_queryset(self) -> QuerySet[Page]: ...
+    def get_base_queryset(self) -> QuerySet[_PageT]: ...
 
-class ExplorableIndexView(IndexView):
+class ExplorableIndexView(IndexView[_PageT]):
     template_name: str
     results_template_name: str
     index_url_name: str
     index_results_url_name: str
-    page_title: str
+    page_title: _StrOrPromise
     base_filterset_class = GenericPageFilterSet
     sort_order_field: str
     add_item_label: str
     add_url_name: str
     reorder_button: None
     base_columns: list[BaseColumn]
-    parent_page: Page
+    parent_page: AbstractPage
     permissions: PagePermissionTester
-    scheduled_page: Page | None
-    locale: Locale | None
-    translations: list[PageTranslation]
+    scheduled_page: AbstractPage | None
+    @cached_property
+    def locale(self) -> Locale | None: ...
+    @cached_property
+    def translations(self) -> list[PageTranslation]: ...
     @cached_property
     def explorable_columns(self) -> list[BaseColumn]: ...
-    def get_table(self, object_list: QuerySet[Page]) -> PageTable: ...
+    def get_table(self, object_list: QuerySet[_PageT]) -> PageTable: ...
     def get(self, request: HttpRequest, parent_page_id: int | None = None) -> HttpResponseBase: ...
     @cached_property
     def is_searching_whole_tree(self) -> bool: ...
@@ -143,8 +150,8 @@ class ExplorableIndexView(IndexView):
     def add_button(self) -> HeaderButton | None: ...
     @cached_property
     def header_more_buttons(self) -> list[Button]: ...
-    def get_base_queryset(self) -> QuerySet[Page]: ...
-    def search_queryset(self, queryset: QuerySet[Page]) -> QuerySet[Page]: ...
+    def get_base_queryset(self) -> QuerySet[_PageT]: ...
+    def search_queryset(self, queryset: QuerySet[_PageT]) -> QuerySet[_PageT]: ...
     def get_index_url(self) -> str: ...
     def get_index_results_url(self) -> str: ...
     def get_add_url(self) -> str | None: ...

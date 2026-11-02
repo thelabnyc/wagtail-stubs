@@ -1,12 +1,11 @@
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from wagtail.hooks import search_for_hooks as search_for_hooks
-from wagtail.permission_policies.base import BasePermissionPolicy
+from wagtail.permissions import policy_registry as policy_registry
 from wagtail.utils.registry import ObjectTypeRegistry as ObjectTypeRegistry
 
 class ModelAdminURLFinder:
     edit_url_name: str | None
-    permission_policy: BasePermissionPolicy | None
     user: AbstractBaseUser | None
     def __init__(self, user: AbstractBaseUser | None = None) -> None: ...
     def construct_edit_url(self, instance: models.Model) -> str: ...

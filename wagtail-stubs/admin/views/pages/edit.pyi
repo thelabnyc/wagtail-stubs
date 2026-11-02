@@ -1,10 +1,11 @@
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Generic
 
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpRequest, HttpResponse, HttpResponseBase
 from django.utils.functional import cached_property as cached_property
 from django.views.generic.base import View
+from typing_extensions import TypeVar
 from wagtail.actions.publish_page_revision import PublishPageRevisionAction as PublishPageRevisionAction
 from wagtail.admin import messages as messages
 from wagtail.admin.action_menu import PageActionMenu as PageActionMenu
@@ -44,12 +45,12 @@ from wagtail.locks import (
 from wagtail.locks import (
     WorkflowLock as WorkflowLock,
 )
+from wagtail.models import AbstractPage
 from wagtail.models.content_types import get_default_page_content_type as get_default_page_content_type
 from wagtail.models.i18n import Locale as Locale
 from wagtail.models.pages import COMMENTS_RELATION_NAME as COMMENTS_RELATION_NAME
 from wagtail.models.pages import Comment as Comment
 from wagtail.models.pages import CommentReply as CommentReply
-from wagtail.models.pages import Page as Page
 from wagtail.models.pages import PagePermissionTester
 from wagtail.models.pages import PageSubscription as PageSubscription
 from wagtail.models.revisions import Revision as Revision
@@ -57,7 +58,10 @@ from wagtail.models.workflows import Task as Task
 from wagtail.models.workflows import WorkflowState as WorkflowState
 from wagtail.utils.timestamps import render_timestamp as render_timestamp
 
-class EditView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMixin, View):
+Page: type[AbstractPage]
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
+
+class EditView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMixin, View, Generic[_PageT]):
     partials_template_name: str
     def get_page_title(self) -> str: ...
     def get_page_subtitle(self) -> str: ...
@@ -74,20 +78,20 @@ class EditView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMix
     def get_view_draft_message_button(self) -> messages.button: ...
     def get_view_live_message_button(self) -> messages.button: ...
     def get_compare_with_live_message_button(self) -> messages.button: ...
-    def get_page_for_status(self) -> Page: ...
-    def get_object(self) -> Page: ...
+    def get_page_for_status(self) -> _PageT: ...
+    def get_object(self) -> _PageT: ...
     def get_edit_url(self) -> str: ...
-    real_page_record: Page
+    real_page_record: AbstractPage
     latest_revision: Revision | None
     scheduled_revision: Revision | None
     page_content_type: ContentType
-    page_class: type[Page] | None
+    page_class: type[_PageT] | None
     revision_id: str | None
     is_reverting: bool
     previous_revision: Revision | None
-    page: Page
-    parent: Page
-    scheduled_page: Page | None
+    page: _PageT
+    parent: AbstractPage
+    scheduled_page: _PageT | None
     page_perms: PagePermissionTester
     lock: BaseLock | None
     locked_for_user: bool
@@ -113,7 +117,7 @@ class EditView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMix
     @cached_property
     def is_out_of_date(self) -> bool: ...
     def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse: ...
-    workflow_action: str
+    workflow_action: str | None
     def workflow_action_is_valid(self) -> bool: ...
     @cached_property
     def action_name_and_method(self) -> tuple[str, Callable[[], HttpResponseBase | None]]: ...

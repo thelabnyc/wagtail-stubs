@@ -5,8 +5,6 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from wagtail.admin import panels as panels
-from wagtail.models.pages import Page as Page
 
 class Admin(models.Model):
     class Meta:
@@ -51,7 +49,7 @@ class FormStateQuerySet(models.QuerySet["FormState"]):
         self,
         user: AbstractBaseUser,
         instance: models.Model,
-        parent_object_id: str = "",
+        parent_object_id: str | int = "",
     ) -> Self: ...
     def stale(self) -> Self: ...
 
@@ -62,13 +60,13 @@ class FormStateManager(models.Manager["FormState"]):
         self,
         user: AbstractBaseUser,
         instance: models.Model,
-        parent_object_id: str = "",
+        parent_object_id: str | int = "",
     ) -> FormStateQuerySet: ...
     def stale(self) -> FormStateQuerySet: ...
     def update_or_create_by_instance(
         self,
         instance: models.Model,
-        parent_object_id: str = "",
+        parent_object_id: str | int = "",
         **kwargs: Any,
     ) -> tuple[FormState, bool]: ...
 

@@ -18,7 +18,7 @@ from wagtail.admin.views import (
 )
 from wagtail.admin.views.generic.preview import StreamFieldBlockPreview as StreamFieldBlockPreview
 from wagtail.admin.views.i18n import localized_js_catalog as localized_js_catalog
-from wagtail.admin.views.pages import listing as listing
+from wagtail.admin.viewsets.pages import page_viewset_registry as page_viewset_registry
 from wagtail.utils.urlpatterns import decorate_urlpatterns as decorate_urlpatterns
 
 urlpatterns: list[URLPattern | URLResolver]

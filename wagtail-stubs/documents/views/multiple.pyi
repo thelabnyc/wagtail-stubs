@@ -2,6 +2,7 @@ from typing import Any
 
 from django.db import models
 from django.forms import Form
+from django.utils.functional import _StrOrPromise
 from wagtail.admin.views.generic.base import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
 from wagtail.admin.views.generic.multiple_upload import (
     AddView as BaseAddView,
@@ -22,13 +23,11 @@ from wagtail.admin.views.generic.multiple_upload import (
 from .. import get_document_model as get_document_model
 from ..forms import get_document_form as get_document_form
 from ..forms import get_document_multi_form as get_document_multi_form
-from ..permissions import permission_policy as permission_policy
 
 class AddView(WagtailAdminTemplateMixin, BaseAddView):
-    permission_policy = permission_policy
     template_name: str
     header_icon: str
-    page_title: str
+    page_title: _StrOrPromise
     index_url_name: str
     edit_object_url_name: str
     delete_object_url_name: str
@@ -48,7 +47,6 @@ class AddView(WagtailAdminTemplateMixin, BaseAddView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
 
 class EditView(BaseEditView):
-    permission_policy = permission_policy
     pk_url_kwarg: str
     edit_object_form_prefix: str
     context_object_name: str
@@ -59,7 +57,6 @@ class EditView(BaseEditView):
     def get_edit_form_class(self) -> type[Form]: ...
 
 class DeleteView(BaseDeleteView):
-    permission_policy = permission_policy
     pk_url_kwarg: str
     context_object_id_name: str
     def get_model(self) -> type[models.Model]: ...

@@ -8,7 +8,7 @@
   main: |
     from wagtail.models import Page
     page = Page()
-    reveal_type(page.title)  # N: Revealed type is "builtins.str"
+    reveal_type(page.title)  # N: Revealed type is "str"
 
 - case: stream_field
   mypy_config: |
@@ -264,7 +264,7 @@
     mixin = EmailFormMixin()
     form = BaseForm()
     result = mixin.render_email(form)
-    reveal_type(result)  # N: Revealed type is "builtins.str"
+    reveal_type(result)  # N: Revealed type is "str"
 
 - case: rendition_img_tag_typed
   mypy_config: |
@@ -276,7 +276,7 @@
   main: |
     from wagtail.images.models import AbstractRendition
     # img_tag should have a return type annotation (SafeString)
-    reveal_type(AbstractRendition.img_tag)  # N: Revealed type is "def (self: wagtail.images.models.AbstractRendition, extra_attributes: builtins.dict[builtins.str, Any] =) -> django.utils.safestring.SafeString"
+    reveal_type(AbstractRendition.img_tag)  # N: Revealed type is "def (self: wagtail.images.models.AbstractRendition, extra_attributes: dict[str, Any] =) -> django.utils.safestring.SafeString"
 
 - case: choice_block_accepts_integer_choices
   mypy_config: |
@@ -307,7 +307,7 @@
   main: |
     from wagtail.admin.staticfiles import versioned_static
     result = versioned_static("wagtailadmin/js/core.js")
-    reveal_type(result)  # N: Revealed type is "builtins.str"
+    reveal_type(result)  # N: Revealed type is "str"
 
 - case: base_chooser_accepts_lazy_strings
   mypy_config: |
@@ -367,7 +367,7 @@
     from wagtail.blocks import Block
     block = Block()
     path, args, kwargs = block.deconstruct()
-    reveal_type(args)  # N: Revealed type is "builtins.list[Any]"
+    reveal_type(args)  # N: Revealed type is "list[Any]"
 
 - case: raw_html_block_returns_str
   mypy_config: |
@@ -379,8 +379,8 @@
   main: |
     from wagtail.blocks import RawHTMLBlock
     block = RawHTMLBlock()
-    reveal_type(block.to_python("test"))  # N: Revealed type is "builtins.str"
-    reveal_type(block.get_default())  # N: Revealed type is "builtins.str"
+    reveal_type(block.to_python("test"))  # N: Revealed type is "str"
+    reveal_type(block.get_default())  # N: Revealed type is "str"
 
 - case: regex_block_keyword_regex
   mypy_config: |
@@ -539,7 +539,7 @@
 
     page = Page()
     ctx = page.get_context(None)
-    reveal_type(ctx)  # N: Revealed type is "builtins.dict[builtins.str, Any]"
+    reveal_type(ctx)  # N: Revealed type is "dict[str, Any]"
 
 - case: wagtail_74_page_viewset_listing_options
   mypy_config: |
@@ -567,7 +567,7 @@
 
     viewset = BlogPageViewSet()
     page_viewset_registry.register(BlogPage, viewset, parent_models=(Page,))
-    reveal_type(base_page_viewset)  # N: Revealed type is "wagtail.admin.viewsets.pages.PageViewSet"
+    reveal_type(base_page_viewset)  # N: Revealed type is "wagtail.admin.viewsets.pages.PageViewSet[wagtail.models.pages.AbstractPage]"
 
 - case: wagtail_74_content_checker_userbar_item
   mypy_config: |
@@ -581,7 +581,7 @@
 
     item = ContentCheckerItem(in_editor=True)
     old_name = AccessibilityItem()
-    reveal_type(item.in_editor)  # N: Revealed type is "builtins.bool"
+    reveal_type(item.in_editor)  # N: Revealed type is "bool"
 
 - case: wagtail_74_deferred_block_validation
   mypy_config: |
@@ -615,4 +615,4 @@
 
     field = WagtailDocumentField(required=False)
     url = routablefullpageurl({}, None, "url_name")
-    reveal_type(url)  # N: Revealed type is "builtins.str"
+    reveal_type(url)  # N: Revealed type is "str"

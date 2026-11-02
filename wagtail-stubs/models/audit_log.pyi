@@ -6,7 +6,7 @@ import uuid
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.utils.functional import cached_property
+from django.utils.functional import _StrOrPromise, cached_property
 from wagtail.log_actions import LogFormatter
 from wagtail.models.revisions import Revision
 
@@ -61,7 +61,7 @@ class BaseLogEntry(models.Model):
     @cached_property
     def user_display_name(self) -> str: ...
     @cached_property
-    def object_verbose_name(self) -> str: ...
+    def object_verbose_name(self) -> _StrOrPromise | int: ...
     def object_id(self) -> str: ...
     @cached_property
     def formatter(self) -> LogFormatter | None: ...

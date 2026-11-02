@@ -2,6 +2,7 @@ from collections.abc import Generator
 from typing import Any
 
 from django.utils.dateformat import Formatter
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
 from wagtail.admin.widgets.button import Button as Button
 from wagtail.coreutils import multigetattr as multigetattr
@@ -23,7 +24,7 @@ class SpreadsheetExportMixin:
     list_export: list[str]
     custom_field_preprocess: dict[str, dict[str, Any]]
     custom_value_preprocess: dict[type | tuple[type, ...], dict[str, Any]]
-    export_headings: dict[str, str]
+    export_headings: dict[str, _StrOrPromise]
     export_buttons_template_name: str
     export_filename: str
     is_export: bool

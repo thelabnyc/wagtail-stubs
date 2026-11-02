@@ -1,10 +1,12 @@
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Generic
 
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpRequest, HttpResponse, HttpResponseBase
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
-from django.views.generic.base import View
+from django.views.generic.base import TemplateView, View
+from typing_extensions import TypeVar
 from wagtail.admin import messages as messages
 from wagtail.admin.action_menu import PageActionMenu as PageActionMenu
 from wagtail.admin.forms.pages import WagtailAdminPageForm
@@ -24,27 +26,36 @@ from wagtail.admin.ui.side_panels import (
 )
 from wagtail.admin.utils import get_valid_next_url_from_request as get_valid_next_url_from_request
 from wagtail.admin.views.generic import HookResponseMixin as HookResponseMixin
+from wagtail.admin.views.generic import JsonPostResponseMixin as JsonPostResponseMixin
 from wagtail.admin.views.generic.base import WagtailAdminTemplateMixin as WagtailAdminTemplateMixin
+from wagtail.models import AbstractPage
 from wagtail.models.i18n import Locale as Locale
-from wagtail.models.pages import Page as Page
 from wagtail.models.pages import PagePermissionTester
 from wagtail.models.pages import PageSubscription as PageSubscription
 from wagtail.models.pages import PageViewRestriction as PageViewRestriction
 from wagtail.models.view_restrictions import BaseViewRestriction as BaseViewRestriction
 from wagtail.signals import init_new_page as init_new_page
 
-def add_subpage(request: HttpRequest, parent_page_id: int) -> HttpResponseBase: ...
+Page: type[AbstractPage]
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
 
-class CreateView(WagtailAdminTemplateMixin, HookResponseMixin, View):
+class AddSubpageView(TemplateView):
     template_name: str
-    page_title: str
+    parent_page: AbstractPage
+    page_types: list[tuple[str, str, str, str]]
+    def dispatch(self, request: HttpRequest, parent_page_id: int, *args: Any, **kwargs: Any) -> HttpResponseBase: ...
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
+
+class CreateView(WagtailAdminTemplateMixin, HookResponseMixin, JsonPostResponseMixin, View, Generic[_PageT]):
+    template_name: str
+    page_title: _StrOrPromise
     edit_url_name: str
-    parent_page: Page
+    parent_page: AbstractPage
     parent_page_perms: PagePermissionTester
     page_content_type: ContentType
-    page_class: type[Page]
+    page_class: type[_PageT]
     locale: Locale | None
-    page: Page
+    page: _PageT
     translations: list[dict[str, Any]]
     edit_handler: Panel
     form_class: type[WagtailAdminPageForm]

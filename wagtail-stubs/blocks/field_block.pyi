@@ -7,8 +7,8 @@ from django import forms
 from django.db.models import Model
 from django.forms.utils import _DataT, _FilesT
 from django.utils.functional import _StrPromise, cached_property
+from wagtail.admin.telepath import Adapter
 from wagtail.rich_text import RichText
-from wagtail.telepath import Adapter
 
 from .base import Block
 
@@ -284,6 +284,7 @@ class RichTextBlock(FieldBlock):
     ) -> None: ...
     def to_python(self, value: str | RichText) -> RichText: ...
     def get_prep_value(self, value: RichText) -> str: ...
+    def get_api_representation(self, value: RichText, context: dict[str, Any] | None = None) -> Any: ...
     def normalize(self, value: str | RichText) -> RichText: ...
     @cached_property
     def field(self) -> forms.CharField: ...  # type: ignore[override]

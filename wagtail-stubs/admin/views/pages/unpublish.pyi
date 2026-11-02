@@ -1,11 +1,15 @@
+from typing_extensions import TypeVar
 from wagtail import hooks as hooks
 from wagtail.actions.unpublish_page import UnpublishPageAction as UnpublishPageAction
 from wagtail.admin.utils import get_valid_next_url_from_request as get_valid_next_url_from_request
-from wagtail.admin.views.generic.models import UnpublishView as UnpublishView
-from wagtail.models.pages import Page as Page
+from wagtail.admin.views.generic.models import UnpublishView as GenericUnpublishView
+from wagtail.models import AbstractPage
 
-class Unpublish(UnpublishView):
-    model = Page
+Page: type[AbstractPage]
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
+
+class UnpublishView(GenericUnpublishView[_PageT]):
+    model: type[_PageT]
     index_url_name: str
     edit_url_name: str
     unpublish_url_name: str
@@ -14,7 +18,7 @@ class Unpublish(UnpublishView):
     template_name: str
     header_icon: str
     def setup(self, request, page_id, *args, **kwargs): ...
-    def get_object(self, queryset=None): ...
+    def get_object(self, queryset=None) -> _PageT: ...
     def get_object_display_title(self): ...
     def dispatch(self, request, *args, **kwargs): ...
     def get_success_message(self): ...

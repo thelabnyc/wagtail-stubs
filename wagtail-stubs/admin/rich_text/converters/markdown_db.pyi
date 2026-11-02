@@ -1,0 +1,13 @@
+from collections.abc import Iterable
+
+REFERENCE_SCHEME: str
+ENTITY_TYPE_DOCUMENT: str
+ENTITY_TYPE_MEDIA: str
+
+def wagtail_ref(kind: str, **params: object) -> str: ...
+
+class MarkdownConverter:
+    features: list[str]
+    def __init__(self, features: Iterable[str] | None = None) -> None: ...
+    def to_database_format(self, markdown: str) -> str: ...
+    def from_database_format(self, html: str, *, resolved: bool) -> str: ...

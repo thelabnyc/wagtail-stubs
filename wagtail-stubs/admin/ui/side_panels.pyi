@@ -6,10 +6,10 @@ from wagtail.admin.ui.components import Component as Component
 from wagtail.admin.userbar import AccessibilityItem as AccessibilityItem
 from wagtail.admin.userbar import apply_userbar_hooks as apply_userbar_hooks
 from wagtail.locks import BaseLock
+from wagtail.models import AbstractPage as AbstractPage
 from wagtail.models.draft_state import DraftStateMixin as DraftStateMixin
 from wagtail.models.i18n import Locale as Locale
 from wagtail.models.locking import LockableMixin as LockableMixin
-from wagtail.models.pages import Page as Page
 from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
 from wagtail.models.view_restrictions import BaseViewRestriction as BaseViewRestriction
 
@@ -73,7 +73,8 @@ class StatusSidePanel(BaseSidePanel):
     def get_context_data(self, parent_context: dict[str, Any]) -> dict[str, Any]: ...
 
 class PageStatusSidePanel(StatusSidePanel):
-    parent_page: Page | None
+    base_page_model: type[AbstractPage]
+    parent_page: AbstractPage | None
     usage_url: str
     history_url: str | None
     def __init__(self, *args: Any, **kwargs: Any) -> None: ...

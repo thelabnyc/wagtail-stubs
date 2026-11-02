@@ -1,30 +1,18 @@
-import datetime
+from django.utils.functional import cached_property
+from typing_extensions import TypeVar
+from wagtail.actions.revert_to_revision import (
+    RevertToRevisionAction,
+    RevertToRevisionPermissionError,
+)
+from wagtail.models.pages import AbstractPage
+from wagtail.permission_policies.pages import PagePermissionPolicy
 
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.core.exceptions import PermissionDenied
-from wagtail.models.pages import Page
-from wagtail.models.revisions import Revision
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
 
 class RevertToPageRevisionError(RuntimeError): ...
-class RevertToPageRevisionPermissionError(PermissionDenied): ...
+class RevertToPageRevisionPermissionError(RevertToRevisionPermissionError): ...
 
-class RevertToPageRevisionAction:
-    page: Page
-    revision: Revision
-    user: AbstractBaseUser | None
-    log_action: str
-    approved_go_live_at: datetime.datetime | None
-    changed: bool
-    clean: bool
-    def __init__(
-        self,
-        page: Page,
-        revision: Revision,
-        user: AbstractBaseUser | None = None,
-        log_action: str = "wagtail.revert",
-        approved_go_live_at: datetime.datetime | None = None,
-        changed: bool = True,
-        clean: bool = True,
-    ) -> None: ...
+class RevertToPageRevisionAction(RevertToRevisionAction[_PageT]):
+    @cached_property
+    def permission_policy(self) -> PagePermissionPolicy[AbstractPage]: ...
     def check(self, skip_permission_checks: bool = False) -> None: ...
-    def execute(self, skip_permission_checks: bool = False) -> Revision: ...

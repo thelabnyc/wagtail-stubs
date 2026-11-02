@@ -2,14 +2,17 @@ from collections.abc import Callable, Iterable
 from hashlib import _Hash
 from typing import Any
 import functools
+import logging
 import re
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Model
 from django.db.models.base import ModelBase
 from django.http import HttpRequest
-from wagtail.models.pages import Page
+from wagtail.models.pages import AbstractPage
 from wagtail.models.sites import Site
+
+logger: logging.Logger
 
 WAGTAIL_APPEND_SLASH: bool
 
@@ -31,7 +34,7 @@ class InvokeViaAttributeShortcut:
     def __init__(self, obj: Any, method_name: str) -> None: ...
     def __getattr__(self, name: str) -> Any: ...
 
-def find_available_slug(parent: Page, requested_slug: str, ignore_page_id: int | None = None) -> str: ...
+def find_available_slug(parent: AbstractPage, requested_slug: str, ignore_page_id: int | None = None) -> str: ...
 @functools.cache
 def get_content_languages() -> dict[str, str]: ...
 def get_supported_content_language_variant(lang_code: str, strict: bool = False) -> str: ...
@@ -64,5 +67,9 @@ class BatchCreator(BatchProcessor):
     def get_summary(self) -> str: ...
 
 def make_wagtail_template_fragment_key(
-    fragment_name: str, page: Page, site: Site, vary_on: list[str] | None = None
+    fragment_name: str, page: AbstractPage, site: Site, vary_on: list[str] | None = None
 ) -> str: ...
+def get_js_regex(
+    regex: re.Pattern[str] | re.Pattern[bytes] | str | bytes | None = None,
+    base_js_flags: str | None = "gu",
+) -> list[str]: ...

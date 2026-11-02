@@ -1,9 +1,27 @@
+from typing import Any, Generic
+
+from django.http import HttpRequest, HttpResponseBase
+from django.views.generic.base import TemplateView
+from typing_extensions import TypeVar
 from wagtail import hooks as hooks
 from wagtail.actions.delete_page import DeletePageAction as DeletePageAction
 from wagtail.admin import messages as messages
 from wagtail.admin.utils import get_valid_next_url_from_request as get_valid_next_url_from_request
 from wagtail.admin.views.pages.utils import type_to_delete_confirmation as type_to_delete_confirmation
-from wagtail.models.pages import Page as Page
+from wagtail.models import AbstractPage
+from wagtail.models.reference_index import ReferenceGroups
 from wagtail.models.reference_index import ReferenceIndex as ReferenceIndex
 
-def delete(request, page_id): ...
+Page: type[AbstractPage]
+_PageT = TypeVar("_PageT", bound=AbstractPage, default=AbstractPage)
+
+class DeleteView(TemplateView, Generic[_PageT]):
+    template_name: str
+    page: _PageT
+    wagtail_site_name: str
+    next_url: str
+    pages_to_delete: list[AbstractPage]
+    usage: ReferenceGroups
+    def dispatch(self, request: HttpRequest, page_id: int, *args: Any, **kwargs: Any) -> HttpResponseBase: ...
+    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponseBase: ...
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...

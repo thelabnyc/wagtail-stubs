@@ -6,3 +6,5 @@ class Orderable(models.Model):
     class Meta:
         abstract: bool
         ordering: list[str]
+
+def set_max_order(instance: models.Model, sort_order_field: str) -> None: ...

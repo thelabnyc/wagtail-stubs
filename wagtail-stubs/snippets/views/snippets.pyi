@@ -1,10 +1,14 @@
 from typing import Any
 
 from django.db import models
+from django.forms import BaseModelForm
 from django.http import HttpRequest
+from django.utils.functional import _StrOrPromise
 from django.utils.functional import cached_property as cached_property
+from typing_extensions import TypeVar
 from wagtail import hooks as hooks
 from wagtail.admin.checks import check_panels_in_model as check_panels_in_model
+from wagtail.admin.forms.models import WagtailAdminModelForm
 from wagtail.admin.menu import MenuItem as MenuItem
 from wagtail.admin.panels import (
     ObjectList as ObjectList,
@@ -55,8 +59,11 @@ from wagtail.models.locking import LockableMixin as LockableMixin
 from wagtail.models.preview import PreviewableMixin as PreviewableMixin
 from wagtail.models.revisions import RevisionMixin as RevisionMixin
 from wagtail.models.workflows import WorkflowMixin as WorkflowMixin
-from wagtail.permissions import ModelPermissionPolicy as ModelPermissionPolicy
+from wagtail.permissions import policy_registry as policy_registry
 from wagtail.snippets.action_menu import SnippetActionMenu as SnippetActionMenu
+from wagtail.snippets.models import (
+    SNIPPET_MODELS as SNIPPET_MODELS,
+)
 from wagtail.snippets.models import (
     SnippetAdminURLFinder as SnippetAdminURLFinder,
 )
@@ -66,11 +73,14 @@ from wagtail.snippets.models import (
 from wagtail.snippets.side_panels import SnippetStatusSidePanel as SnippetStatusSidePanel
 from wagtail.snippets.views.chooser import SnippetChooserViewSet as SnippetChooserViewSet
 
+_ModelT = TypeVar("_ModelT", bound=models.Model, default=models.Model)
+_ModelFormT = TypeVar("_ModelFormT", bound=BaseModelForm[Any], default=WagtailAdminModelForm)
+
 def get_snippet_model_from_url_params(app_name, model_name): ...
 def get_snippet_models_for_index_view(): ...
 
 class ModelIndexView(generic.BaseListingView):
-    page_title: str
+    page_title: _StrOrPromise
     header_icon: str
     index_url_name: str
     default_ordering: str
@@ -84,7 +94,7 @@ class ModelIndexView(generic.BaseListingView):
     def get_context_data(self, **kwargs): ...
     def get_template_names(self): ...
 
-class IndexView(generic.IndexViewOptionalFeaturesMixin, generic.IndexView):
+class IndexView(generic.IndexViewOptionalFeaturesMixin[_ModelT], generic.IndexView[_ModelT]):
     view_name: str
     queryset: Any
     def get_base_queryset(self): ...
@@ -92,7 +102,9 @@ class IndexView(generic.IndexViewOptionalFeaturesMixin, generic.IndexView):
     def columns(self): ...
     def get_list_buttons(self, instance): ...
 
-class CreateView(generic.CreateEditViewOptionalFeaturesMixin, generic.CreateView):
+class CreateView(
+    generic.CreateEditViewOptionalFeaturesMixin[_ModelT, _ModelFormT], generic.CreateView[_ModelT, _ModelFormT]
+):
     view_name: str
     template_name: str
     def run_before_hook(self): ...
@@ -100,9 +112,11 @@ class CreateView(generic.CreateEditViewOptionalFeaturesMixin, generic.CreateView
     def get_side_panels(self): ...
     def get_context_data(self, **kwargs): ...
 
-class CopyView(generic.CopyViewMixin, CreateView): ...
+class CopyView(generic.CopyViewMixin[_ModelT], CreateView[_ModelT, _ModelFormT]): ...
 
-class EditView(generic.CreateEditViewOptionalFeaturesMixin, generic.EditView):
+class EditView(
+    generic.CreateEditViewOptionalFeaturesMixin[_ModelT, _ModelFormT], generic.EditView[_ModelT, _ModelFormT]
+):
     view_name: str
     template_name: str
     def run_before_hook(self): ...
@@ -110,89 +124,89 @@ class EditView(generic.CreateEditViewOptionalFeaturesMixin, generic.EditView):
     def get_side_panels(self): ...
     def get_context_data(self, **kwargs): ...
 
-class DeleteView(generic.DeleteView):
+class DeleteView(generic.DeleteView[_ModelT]):
     view_name: str
     def run_before_hook(self): ...
     def run_after_hook(self): ...
 
-class UsageView(generic.UsageView):
+class UsageView(generic.UsageView[_ModelT]):
     view_name: str
 
-class HistoryView(history.HistoryView):
+class HistoryView(history.HistoryView[_ModelT]):
     view_name: str
 
-class InspectView(generic.InspectView):
+class InspectView(generic.InspectView[_ModelT]):
     view_name: str
 
-class PreviewOnCreateView(PreviewOnCreate): ...
-class PreviewOnEditView(PreviewOnEdit): ...
+class PreviewOnCreateView(PreviewOnCreate[_ModelT]): ...
+class PreviewOnEditView(PreviewOnEdit[_ModelT]): ...
 
-class PreviewRevisionView(PermissionCheckedMixin, PreviewRevision):
+class PreviewRevisionView(PermissionCheckedMixin[_ModelT], PreviewRevision[_ModelT]):
     permission_required: str
 
-class RevisionsCompareView(PermissionCheckedMixin, generic.RevisionsCompareView):
+class RevisionsCompareView(PermissionCheckedMixin[_ModelT], generic.RevisionsCompareView[_ModelT]):
     permission_required: str
 
-class UnpublishView(PermissionCheckedMixin, generic.UnpublishView):
+class UnpublishView(PermissionCheckedMixin[_ModelT], generic.UnpublishView[_ModelT]):
     permission_required: str
 
-class RevisionsUnscheduleView(PermissionCheckedMixin, generic.RevisionsUnscheduleView):
+class RevisionsUnscheduleView(PermissionCheckedMixin[_ModelT], generic.RevisionsUnscheduleView[_ModelT]):
     permission_required: str
 
-class LockView(PermissionCheckedMixin, lock.LockView):
+class LockView(PermissionCheckedMixin[_ModelT], lock.LockView[_ModelT]):
     permission_required: str
     def user_has_permission(self, permission): ...
 
-class UnlockView(PermissionCheckedMixin, lock.UnlockView):
+class UnlockView(PermissionCheckedMixin[_ModelT], lock.UnlockView[_ModelT]):
     permission_required: str
     def user_has_permission(self, permission): ...
 
-class WorkflowActionView(workflow.WorkflowAction): ...
-class CollectWorkflowActionDataView(workflow.CollectWorkflowActionData): ...
-class ConfirmWorkflowCancellationView(workflow.ConfirmWorkflowCancellation): ...
-class WorkflowPreviewView(workflow.PreviewRevisionForTask): ...
+class WorkflowActionView(workflow.WorkflowAction[_ModelT]): ...
+class CollectWorkflowActionDataView(workflow.CollectWorkflowActionData[_ModelT]): ...
+class ConfirmWorkflowCancellationView(workflow.ConfirmWorkflowCancellation[_ModelT]): ...
+class WorkflowPreviewView(workflow.PreviewRevisionForTask[_ModelT]): ...
 
-class WorkflowHistoryView(PermissionCheckedMixin, history.WorkflowHistoryView):
+class WorkflowHistoryView(PermissionCheckedMixin[_ModelT], history.WorkflowHistoryView[_ModelT]):
     permission_required: str
 
-class WorkflowHistoryDetailView(PermissionCheckedMixin, history.WorkflowHistoryDetailView):
+class WorkflowHistoryDetailView(PermissionCheckedMixin[_ModelT], history.WorkflowHistoryDetailView[_ModelT]):
     permission_required: str
 
-class ReorderView(generic.ReorderView):
+class ReorderView(generic.ReorderView[_ModelT]):
     @cached_property
     def permission_required(self): ...
 
-class SnippetViewSet(ModelViewSet):
-    model: type[models.Model] | None
+class SnippetViewSet(ModelViewSet[_ModelT]):
+    model: type[_ModelT] | None
     chooser_per_page: int
     admin_url_namespace: str | None
     base_url_path: str | None
     chooser_admin_url_namespace: str | None
     chooser_base_url_path: str | None
-    index_view_class: type[IndexView]
-    add_view_class: type[CreateView]
-    copy_view_class: type[CopyView]
-    edit_view_class: type[EditView]
-    delete_view_class: type[DeleteView]
-    usage_view_class: type[UsageView]
-    history_view_class: type[HistoryView]
-    inspect_view_class: type[InspectView]
-    reorder_view_class: type[ReorderView]
-    revisions_view_class: type[PreviewRevisionView]
-    revisions_compare_view_class: type[RevisionsCompareView]
-    revisions_unschedule_view_class: type[RevisionsUnscheduleView]
-    unpublish_view_class: type[UnpublishView]
-    preview_on_add_view_class: type[PreviewOnCreateView]
-    preview_on_edit_view_class: type[PreviewOnEditView]
-    lock_view_class: type[LockView]
-    unlock_view_class: type[UnlockView]
-    workflow_action_view_class: type[WorkflowActionView]
-    collect_workflow_action_data_view_class: type[CollectWorkflowActionDataView]
-    confirm_workflow_cancellation_view_class: type[ConfirmWorkflowCancellationView]
-    workflow_preview_view_class: type[WorkflowPreviewView]
-    workflow_history_view_class: type[WorkflowHistoryView]
-    workflow_history_detail_view_class: type[WorkflowHistoryDetailView]
-    chooser_viewset_class: type[SnippetChooserViewSet]
+    index_view_class: type[IndexView[Any]]
+    add_view_class: type[CreateView[Any, Any]]
+    copy_view_class: type[CopyView[Any, Any]]
+    edit_view_class: type[EditView[Any, Any]]
+    delete_view_class: type[DeleteView[Any]]
+    usage_view_class: type[UsageView[Any]]
+    history_view_class: type[HistoryView[Any]]
+    inspect_view_class: type[InspectView[Any]]
+    reorder_view_class: type[ReorderView[Any]]
+    revisions_view_class: type[PreviewRevisionView[Any]]
+    revisions_compare_view_class: type[RevisionsCompareView[Any]]
+    revisions_unschedule_view_class: type[RevisionsUnscheduleView[Any]]
+    unpublish_view_class: type[UnpublishView[Any]]
+    preview_on_add_view_class: type[PreviewOnCreateView[Any]]
+    preview_on_edit_view_class: type[PreviewOnEditView[Any]]
+    lock_view_class: type[LockView[Any]]
+    unlock_view_class: type[UnlockView[Any]]
+    workflow_action_view_class: type[WorkflowActionView[Any]]
+    collect_workflow_action_data_view_class: type[CollectWorkflowActionDataView[Any]]
+    confirm_workflow_cancellation_view_class: type[ConfirmWorkflowCancellationView[Any]]
+    workflow_preview_view_class: type[WorkflowPreviewView[Any]]
+    workflow_history_view_class: type[WorkflowHistoryView[Any]]
+    workflow_history_detail_view_class: type[WorkflowHistoryDetailView[Any]]
+    chooser_viewset_class: type[SnippetChooserViewSet[Any]]
     template_prefix: str
     model_opts: Any
     app_label: str
@@ -210,8 +224,6 @@ class SnippetViewSet(ModelViewSet):
     def url_namespace(self): ...
     @property
     def revisions_revert_view_class(self): ...
-    @property
-    def permission_policy(self): ...
     def get_common_view_kwargs(self, **kwargs): ...
     def get_index_view_kwargs(self, **kwargs): ...
     def get_add_view_kwargs(self, **kwargs): ...
@@ -264,12 +276,12 @@ class SnippetViewSet(ModelViewSet):
     def menu_icon(self): ...
     def get_menu_icon(self): ...
     @cached_property
-    def menu_order(self): ...
-    def get_menu_order(self): ...
+    def menu_order(self) -> int | None: ...
+    def get_menu_order(self) -> int | None: ...
     def get_menu_item_is_registered(self): ...
     @property
     def breadcrumbs_items(self): ...
-    def get_queryset(self, request: HttpRequest) -> models.QuerySet[models.Model] | None: ...
+    def get_queryset(self, request: HttpRequest) -> models.QuerySet[_ModelT] | None: ...
     @cached_property
     def index_template_name(self): ...
     def get_index_template(self): ...
@@ -296,12 +308,13 @@ class SnippetViewSet(ModelViewSet):
     def get_chooser_admin_url_namespace(self): ...
     def get_chooser_admin_base_path(self): ...
     @property
-    def url_finder_class(self): ...
+    def url_finder_class(self) -> type[SnippetAdminURLFinder]: ...
     def get_urlpatterns(self): ...
     def get_edit_handler(self): ...
     def register_chooser_viewset(self) -> None: ...
     def register_model_check(self): ...
     def register_snippet_model(self): ...
+    def attach_model_edit_handler(self) -> None: ...
     def on_register(self) -> None: ...
 
 class SnippetViewSetGroup(ModelViewSetGroup):
