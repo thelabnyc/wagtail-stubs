@@ -20,6 +20,7 @@ class RedirectSchema(Schema):
     redirect_link: str
     automatically_created: bool
     created_at: datetime | None
+    location: str | None = Field(alias="link")  # noqa: PYI015
 
 class RedirectInputSchema(Schema):
     old_path: str
