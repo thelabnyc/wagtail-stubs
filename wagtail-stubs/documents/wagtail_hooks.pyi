@@ -11,7 +11,6 @@ from wagtail.admin.search import SearchArea as SearchArea
 from wagtail.admin.site_summary import SummaryItem as SummaryItem
 from wagtail.documents import admin_urls as admin_urls
 from wagtail.documents import get_document_model as get_document_model
-from wagtail.documents.api.admin.views import DocumentsAdminAPIViewSet as DocumentsAdminAPIViewSet
 from wagtail.documents.forms import GroupDocumentPermissionFormSet as GroupDocumentPermissionFormSet
 from wagtail.documents.models import AbstractDocument
 from wagtail.documents.rich_text import DocumentLinkHandler as DocumentLinkHandler
@@ -37,7 +36,6 @@ from wagtail.wagtail_hooks import require_wagtail_login as require_wagtail_login
 Document: type[AbstractDocument]
 
 def register_admin_urls(): ...
-def construct_admin_api(router) -> None: ...
 
 class DocumentsMenuItem(MenuItem):
     def is_shown(self, request): ...

@@ -1,4 +1,4 @@
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 from typing import Any
 
@@ -39,9 +39,10 @@ class ContentTypeSummarySchema(Schema):
     label: str
 
 def discriminate_meta_type(value: Any) -> str | None: ...
-def build_discriminated_union(
-    models: list[type[Model]],
-    schema_for: Callable[[type[Model]], type[BaseModel] | None],
+def build_discriminated_union[M: Model](
+    models: Sequence[type[M]],
+    schema_for: Callable[[type[M]], type[BaseModel] | None],
+    name: str | None = None,
 ) -> object: ...
 
 @dataclass(frozen=True)
@@ -50,4 +51,4 @@ class DiscriminatedUnionSchemas:
     create: object
     update: object
 
-def build_union_schemas(models: Iterable[type[Model]]) -> DiscriminatedUnionSchemas: ...
+def build_union_schemas(models: Iterable[type[Model]], name: str | None = None) -> DiscriminatedUnionSchemas: ...

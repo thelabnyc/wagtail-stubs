@@ -18,7 +18,6 @@ from wagtail.images import (
 from wagtail.images import (
     image_operations as image_operations,
 )
-from wagtail.images.api.admin.views import ImagesAdminAPIViewSet as ImagesAdminAPIViewSet
 from wagtail.images.forms import GroupImagePermissionFormSet as GroupImagePermissionFormSet
 from wagtail.images.rich_text import ImageEmbedHandler as ImageEmbedHandler
 from wagtail.images.rich_text.contentstate import ContentstateImageConversionRule as ContentstateImageConversionRule
@@ -35,7 +34,6 @@ from wagtail.images.views.bulk_actions import (
 from wagtail.permissions import policy_registry as policy_registry
 
 def register_admin_urls(): ...
-def construct_admin_api(router) -> None: ...
 
 class ImagesMenuItem(MenuItem):
     def is_shown(self, request): ...
