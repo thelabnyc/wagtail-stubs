@@ -75,9 +75,11 @@ class PageFilterSchema(FilterSchema):
 
 def list_pages(
     request: HttpRequest,
+    *,
     filters: PageFilterSchema | _QueryParam = ...,
     ordering: OrderingSchema | _QueryParam = ...,
     search: SearchSchema | _QueryParam = ...,
+    ninja_pagination: WagtailLimitOffsetPagination.Input | None = None,
     **kwargs: Any,
 ) -> dict[str, Any]: ...
 def find_page(
@@ -106,8 +108,10 @@ def update_page(
 ) -> AbstractPage: ...
 def list_page_revisions(
     request: HttpRequest,
+    *,
     page_id: int,
     filters: RevisionFilterSchema | _QueryParam = ...,
+    ninja_pagination: WagtailLimitOffsetPagination.Input | None = None,
     **kwargs: Any,
 ) -> dict[str, Any]: ...
 def get_page_revision(request: HttpRequest, page_id: int, revision_id: int) -> Revision: ...

@@ -4,6 +4,7 @@ from typing import Any
 from django.http import HttpRequest, HttpResponseRedirect
 from ninja import Field, Router, Schema, Status
 from ninja.params.models import Query as _QueryParam
+from wagtail.api.v3.pagination import WagtailLimitOffsetPagination
 from wagtail.api.v3.schemas.params import OrderingSchema
 from wagtail.contrib.redirects.models import Redirect
 
@@ -31,7 +32,11 @@ class RedirectInputSchema(Schema):
     redirect_link: str = ...
 
 def list_redirects(
-    request: HttpRequest, ordering: OrderingSchema | _QueryParam = ..., **kwargs: Any
+    request: HttpRequest,
+    *,
+    ordering: OrderingSchema | _QueryParam = ...,
+    ninja_pagination: WagtailLimitOffsetPagination.Input | None = None,
+    **kwargs: Any,
 ) -> dict[str, Any]: ...
 def find_redirect(
     request: HttpRequest, id: int | None = None, html_path: str | None = None

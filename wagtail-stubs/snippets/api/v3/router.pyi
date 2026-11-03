@@ -43,11 +43,13 @@ class SnippetRevisionDetailSchema(RevisionDetailSchema):
 
 def list_snippets(
     request: HttpRequest,
+    *,
     type: SnippetTypeLiteral,
     translation_filter: TranslationFilterSchema | _QueryParam = ...,
     ordering: OrderingSchema | _QueryParam = ...,
     search: SearchSchema | _QueryParam = ...,
     rich_text_format: RichTextOutputFormat | _QueryParam | None = ...,
+    ninja_pagination: WagtailLimitOffsetPagination.Input | None = None,
     **kwargs: Any,
 ) -> dict[str, Any]: ...
 def get_snippet(
@@ -73,9 +75,11 @@ def update_snippet(
 def delete_snippet(request: HttpRequest, type: SnippetTypeLiteral, pk: str) -> Status[None]: ...
 def list_snippet_revisions(
     request: HttpRequest,
+    *,
     type: SnippetTypeLiteral,
     pk: str,
     filters: RevisionFilterSchema | _QueryParam = ...,
+    ninja_pagination: WagtailLimitOffsetPagination.Input | None = None,
 ) -> dict[str, Any]: ...
 def get_snippet_revision(request: HttpRequest, type: SnippetTypeLiteral, pk: str, revision_id: int) -> Revision: ...
 def publish_snippet(request: HttpRequest, type: SnippetTypeLiteral, pk: str) -> Model: ...

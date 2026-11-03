@@ -8,6 +8,7 @@ from ninja.params.models import File as _FileParam
 from ninja.params.models import Form as _FormParam
 from ninja.params.models import Query as _QueryParam
 from pydantic import BaseModel
+from wagtail.api.v3.pagination import WagtailLimitOffsetPagination
 from wagtail.api.v3.registry import ContentTypeRegistration
 from wagtail.api.v3.schemas.params import OrderingSchema, SearchSchema
 from wagtail.documents.api.v3.schemas import DocumentSchema
@@ -26,8 +27,10 @@ BASE_DOCUMENT_READ_FIELDS: list[str]
 def get_documents_queryset(request: HttpRequest) -> QuerySet[AbstractDocument]: ...
 def list_documents(
     request: HttpRequest,
+    *,
     ordering: OrderingSchema | _QueryParam = ...,
     search: SearchSchema | _QueryParam = ...,
+    ninja_pagination: WagtailLimitOffsetPagination.Input | None = None,
     **kwargs: Any,
 ) -> dict[str, Any]: ...
 def get_document(request: HttpRequest, document_id: int) -> AbstractDocument: ...

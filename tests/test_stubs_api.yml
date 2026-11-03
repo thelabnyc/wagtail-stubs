@@ -631,3 +631,42 @@
     purge_image_from_cache(Image(), created=False)
     purge_redirect_from_cache(Redirect())
     purge_document_from_cache(Image())  # E: Argument 1 to "purge_document_from_cache" has incompatible type "Image"; expected "AbstractDocument"  [arg-type]
+
+- case: api_v3_paginated_endpoints_keyword_only
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.api.v3.pagination import WagtailLimitOffsetPagination
+    from wagtail.api.v3.routers.pages import PageFilterSchema, list_page_revisions, list_pages
+    from wagtail.api.v3.schemas.params import OrderingSchema
+    from wagtail.contrib.redirects.api.v3.router import list_redirects
+    from wagtail.documents.api.v3.router import list_documents
+    from wagtail.images.api.v3.router import list_images
+    from wagtail.snippets.api.v3.router import list_snippet_revisions, list_snippets
+
+    def check(
+        request: HttpRequest,
+        filters: PageFilterSchema,
+        ordering: OrderingSchema,
+        pagination: WagtailLimitOffsetPagination.Input,
+    ) -> None:
+        reveal_type(list_pages(request, ordering=ordering, ninja_pagination=pagination))  # N: Revealed type is "dict[str, Any]"
+        reveal_type(list_page_revisions(request, page_id=1))  # N: Revealed type is "dict[str, Any]"
+        reveal_type(list_redirects(request, ninja_pagination=pagination))  # N: Revealed type is "dict[str, Any]"
+        reveal_type(list_snippet_revisions(request, type="app.Advert", pk="1", ninja_pagination=pagination))  # N: Revealed type is "dict[str, Any]"
+        reveal_type(list_snippets(request, type="app.Advert", ninja_pagination=pagination))  # N: Revealed type is "dict[str, Any]"
+        reveal_type(list_images(request, ordering=ordering, ninja_pagination=pagination))  # N: Revealed type is "dict[str, Any]"
+        reveal_type(list_documents(request, ninja_pagination=pagination))  # N: Revealed type is "dict[str, Any]"
+        list_pages(request, filters)  # E: Too many positional arguments for "list_pages"  [call-arg]  # N: "list_pages" defined in "wagtail.api.v3.routers.pages"
+        list_page_revisions(request, 1)  # E: Too many positional arguments for "list_page_revisions"  [call-arg]  # N: "list_page_revisions" defined in "wagtail.api.v3.routers.pages"
+        list_redirects(request, ordering)  # E: Too many positional arguments for "list_redirects"  [call-arg]  # N: "list_redirects" defined in "wagtail.contrib.redirects.api.v3.router"
+        list_snippet_revisions(request, "app.Advert", "1")  # E: Too many positional arguments for "list_snippet_revisions"  [call-arg]  # N: "list_snippet_revisions" defined in "wagtail.snippets.api.v3.router"
+        list_snippets(request, "app.Advert")  # E: Too many positional arguments for "list_snippets"  [call-arg]  # N: "list_snippets" defined in "wagtail.snippets.api.v3.router"
+        list_images(request, ordering)  # E: Too many positional arguments for "list_images"  [call-arg]  # N: "list_images" defined in "wagtail.images.api.v3.router"
+        list_documents(request, ordering)  # E: Too many positional arguments for "list_documents"  [call-arg]  # N: "list_documents" defined in "wagtail.documents.api.v3.router"
+        list_snippet_revisions(request, type="app.Advert", pk="1", ninja_pagination=ordering)  # E: Argument "ninja_pagination" to "list_snippet_revisions" has incompatible type "OrderingSchema"; expected "Input | None"  [arg-type]

@@ -62,7 +62,7 @@ wagtail\.api\.v3\.routers\.pages\.PagePositionLiteral
 # Literal/Annotated aliases built at import time from project models
 wagtail\.api\.v3\.routers\.pages\.PageTypeLiteral
 # ninja's @paginate wrapper only takes keyword arguments; stubtest follows __wrapped__ to the undecorated signature
-wagtail\.api\.v3\.routers\.pages\.list_page_workflow_history
+wagtail\.api\.v3\.routers\.pages\.list_(pages|page_revisions|page_workflow_history)
 # Inherits pydantic FieldInfo's runtime __final__ flag but is subclassed
 wagtail\.api\.v3\.schemas\.pages\.PageTypeInjectingBody
 wagtail\.api\.v3\.schemas\.params\.TypeInjectingBody
@@ -74,6 +74,8 @@ wagtail\.contrib\.forms\.wagtail_hooks\.FormsMenuItem\.media
 wagtail\.contrib\.frontend_cache\.tasks(\..*)?
 # DRF ships no types, so the serializer metaclass cannot be declared
 wagtail\.contrib\.redirects\.api\.v2\.RedirectSerializer
+# ninja's @paginate wrapper only takes keyword arguments; stubtest follows __wrapped__ to the undecorated signature
+wagtail\.contrib\.redirects\.api\.v3\.router\.list_redirects
 wagtail\.contrib\.redirects\.filters(\..*)?
 wagtail\.contrib\.redirects\.models(\..*)?
 # MediaDefiningClass adds media at runtime
@@ -98,6 +100,8 @@ wagtail\.coreutils\.get_content_languages
 wagtail\.documents(?!\.api(\.|$)|\.wagtail_hooks(\.|$))(\..*)?
 # DRF ships no types, so the serializer metaclass cannot be declared
 wagtail\.documents\.api\.v2\.serializers\.DocumentSerializer
+# ninja's @paginate wrapper only takes keyword arguments; stubtest follows __wrapped__ to the undecorated signature
+wagtail\.documents\.api\.v3\.router\.list_documents
 # Loop variable left behind by the bulk action registration
 wagtail\.documents\.wagtail_hooks\.action_class
 # MediaDefiningClass adds media at runtime
@@ -110,6 +114,8 @@ wagtail\.images(?!\.api(\.|$)|\.wagtail_hooks(\.|$))(\..*)?
 wagtail\.images\.api\.fields\.ImageRendition(Error)?Dict\.__(closed|extra_items|mutable_keys|readonly_keys)__
 # DRF ships no types, so the serializer metaclass cannot be declared
 wagtail\.images\.api\.v2\.serializers\.ImageSerializer
+# ninja's @paginate wrapper only takes keyword arguments; stubtest follows __wrapped__ to the undecorated signature
+wagtail\.images\.api\.v3\.router\.list_images
 # Loop variable left behind by the bulk action registration
 wagtail\.images\.wagtail_hooks\.action_class
 # MediaDefiningClass adds media at runtime
@@ -134,7 +140,7 @@ wagtail\.snippets\.action_menu\.WorkflowMenuItem\.name
 # Literal/Annotated aliases built at import time from project models
 wagtail\.snippets\.api\.v3\.router\.SnippetTypeLiteral
 # ninja's @paginate wrapper only takes keyword arguments; stubtest follows __wrapped__ to the undecorated signature
-wagtail\.snippets\.api\.v3\.router\.list_snippet_workflow_history
+wagtail\.snippets\.api\.v3\.router\.list_snippet(s|_revisions|_workflow_history)
 # Inherits pydantic FieldInfo's runtime __final__ flag but is subclassed
 wagtail\.snippets\.api\.v3\.schemas\.ParamTypeInjectingBody
 # The block metaclass consumes Meta at class creation
