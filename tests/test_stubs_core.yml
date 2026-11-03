@@ -296,3 +296,29 @@
         reveal_type(page.get_response_media_type(request))  # N: Revealed type is "str"
         reveal_type(news.get_vary_headers(request))  # N: Revealed type is "list[str]"
 
+- case: core_8_1_names
+  mypy_config: |
+    [mypy]
+    strict = True
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.actions import CopyPageAction
+    from wagtail.blocks import PageChooserBlock
+    from wagtail.coreutils import LANGUAGE_CODE_MAX_LENGTH
+    from wagtail.snippets.blocks import SnippetChooserBlock
+    from wagtail.templatetags.wagtailcore_tags import Page  # E: Module "wagtail.templatetags.wagtailcore_tags" has no attribute "Page"  [attr-defined]
+
+    class SmallChunkCopy(CopyPageAction):
+        revision_copy_chunk_size = 100
+
+    class BadChunkCopy(CopyPageAction):
+        revision_copy_chunk_size = "100"  # E: Incompatible types in assignment (expression has type "str", base class "CopyPageAction" defined the type as "int")  [assignment]
+
+    def check(copy: CopyPageAction, block: PageChooserBlock, snippet_block: SnippetChooserBlock) -> None:
+        reveal_type(copy.revision_copy_chunk_size)  # N: Revealed type is "int"
+        reveal_type(LANGUAGE_CODE_MAX_LENGTH)  # N: Revealed type is "int"
+        reveal_type(block.pk_field)  # N: Revealed type is "django.db.models.fields.Field[Any, Any]"
+        reveal_type(snippet_block.pk_field.is_relation)  # N: Revealed type is "bool"

@@ -4,7 +4,7 @@ from typing import Any
 import datetime
 
 from django import forms
-from django.db.models import Model
+from django.db.models import Field, Model
 from django.forms.utils import _DataT, _FilesT
 from django.utils.functional import _StrPromise, cached_property
 from wagtail.admin.telepath import Adapter
@@ -329,6 +329,8 @@ class ChooserBlock(FieldBlock):
     def widget(self) -> forms.Widget: ...
     @cached_property
     def field(self) -> forms.ModelChoiceField: ...  # type: ignore[override]
+    @cached_property
+    def pk_field(self) -> Field[Any, Any]: ...
     def to_python(self, value: int | str | None) -> Model | None: ...
     def bulk_to_python(self, values: list[int | str | None]) -> list[Model | None]: ...
     def get_prep_value(self, value: Model | None) -> int | str | None: ...
