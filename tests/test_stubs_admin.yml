@@ -747,3 +747,20 @@
     send_mail("Subject", "Body", ["a@example.com"], using=1)  # E: Argument "using" to "send_mail" has incompatible type "int"; expected "str | None"  [arg-type]
     send_mail("Subject", "Body", ["a@example.com"], usng="forms")  # E: Unexpected keyword argument "usng" for "send_mail"; did you mean "using"?  [call-arg]  # N: "send_mail" defined in "wagtail.admin.mail"
     send_mail("Subject", "Body", ["a@example.com"], None, None)  # E: Too many positional arguments for "send_mail"  [call-arg]  # N: "send_mail" defined in "wagtail.admin.mail"
+
+- case: admin_wagtailuserbar
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.template import Context
+    from wagtail.admin.templatetags.wagtailuserbar import get_page_instance, wagtailuserbar
+
+    reveal_type(get_page_instance({"page": None}))  # N: Revealed type is "wagtail.models.pages.AbstractPage | None"
+    reveal_type(wagtailuserbar(Context({}), position="top-left"))  # N: Revealed type is "str"
+    from wagtail.admin.templatetags.wagtailuserbar import Userbar  # E: Module "wagtail.admin.templatetags.wagtailuserbar" has no attribute "Userbar"  [attr-defined]
+    from wagtail.admin.templatetags.wagtailuserbar import PAGE_TEMPLATE_VAR  # E: Module "wagtail.admin.templatetags.wagtailuserbar" has no attribute "PAGE_TEMPLATE_VAR"  [attr-defined]
