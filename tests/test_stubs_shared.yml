@@ -199,6 +199,83 @@
     action: BaseAction = CreateAction(Site())
     reveal_type(MyAction(Site()).instance)  # N: Revealed type is "Any"
 
+- case: shared_workflow_actions_generic
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from collections.abc import Sequence
+    from django.contrib.auth.models import AbstractBaseUser
+    from django.db import models
+    from wagtail.actions import (
+        ApproveTaskStateAction,
+        CancelWorkflowAction,
+        RejectTaskStateAction,
+        ResumeWorkflowAction,
+        SubmitWorkflowAction,
+        WorkflowStateError,
+        can_edit_instance,
+        get_available_workflow_transitions,
+    )
+    from wagtail.models import DraftStateMixin, Page, RevisionMixin, Site, TaskState, WorkflowMixin
+
+    class BlogPage(Page):
+        pass
+
+    class Advert(WorkflowMixin, DraftStateMixin, RevisionMixin, models.Model):
+        class Meta:
+            app_label = "test"
+
+    def check(blog: BlogPage, advert: Advert, user: AbstractBaseUser, task_state: TaskState, site: Site) -> None:
+        action = SubmitWorkflowAction(blog, user=user)
+        reveal_type(action)  # N: Revealed type is "wagtail.actions.workflow.SubmitWorkflowAction[main.BlogPage]"
+        reveal_type(action.instance)  # N: Revealed type is "main.BlogPage"
+        reveal_type(action.execute())  # N: Revealed type is "wagtail.models.workflows.WorkflowState"
+        reveal_type(action.can_execute())  # N: Revealed type is "bool"
+        reveal_type(SubmitWorkflowAction(advert).instance)  # N: Revealed type is "main.Advert"
+        reveal_type(ResumeWorkflowAction(blog).execute())  # N: Revealed type is "wagtail.models.workflows.WorkflowState"
+        reveal_type(CancelWorkflowAction(advert, user=user).execute())  # N: Revealed type is "wagtail.models.workflows.WorkflowState"
+        approve = ApproveTaskStateAction(task_state, user=user, data={"comment": "Looks good"})
+        reveal_type(approve.execute())  # N: Revealed type is "wagtail.models.workflows.TaskState"
+        reveal_type(approve.get_form_cleaned_data())  # N: Revealed type is "dict[str, Any]"
+        reveal_type(RejectTaskStateAction(task_state).instance)  # N: Revealed type is "wagtail.models.workflows.TaskState"
+        reveal_type(get_available_workflow_transitions(blog, user))  # N: Revealed type is "list[Literal['submit'] | Literal['approve'] | Literal['reject'] | Literal['resume'] | Literal['cancel']]"
+        names: Sequence[str] = get_available_workflow_transitions(advert)
+        reveal_type(can_edit_instance(advert, user))  # N: Revealed type is "bool"
+        SubmitWorkflowAction(site)  # E: Value of type variable "_WorkflowT" of "SubmitWorkflowAction" cannot be "Site"  [type-var]
+        ApproveTaskStateAction(blog)  # E: Argument 1 to "ApproveTaskStateAction" has incompatible type "BlogPage"; expected "TaskState"  [arg-type]
+
+    def handle(exc: WorkflowStateError) -> Exception:
+        return exc
+
+- case: shared_workflow_models
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.db import models
+    from wagtail.models import DraftStateMixin, Page, RevisionMixin, TaskState, Workflow, WorkflowMixin, WorkflowState
+
+    class Advert(WorkflowMixin, DraftStateMixin, RevisionMixin, models.Model):
+        class Meta:
+            app_label = "test"
+
+    def as_model(obj: WorkflowMixin) -> models.Model:
+        return obj
+
+    def check(page: Page, advert: Advert, workflow: Workflow, task_state: TaskState) -> None:
+        reveal_type(page.workflow_states.prefetch_task_states())  # N: Revealed type is "wagtail.models.workflows.WorkflowStateQuerySet[wagtail.models.workflows.WorkflowState, wagtail.models.workflows.WorkflowState]"
+        reveal_type(WorkflowState.objects.prefetch_task_states())  # N: Revealed type is "wagtail.models.workflows.WorkflowStateQuerySet[wagtail.models.workflows.WorkflowState, wagtail.models.workflows.WorkflowState]"
+        reveal_type(advert.current_workflow_state)  # N: Revealed type is "wagtail.models.workflows.WorkflowState | None"
+        reveal_type(workflow.start(advert, None))  # N: Revealed type is "wagtail.models.workflows.WorkflowState"
+        task_state.task.on_action(task_state, None, "approve", comment="")
+
 - case: shared_api_token_create
   mypy_config: |
     [mypy]

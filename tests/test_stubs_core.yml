@@ -238,3 +238,107 @@
             return BlogPageTemplate
   out: |
     main:12: error: Return type "type[BlogPageTemplate]" of "get_template" incompatible with return type "Sequence[str] | _EngineTemplate | str" in supertype "wagtail.models.pages.AbstractPage"  [override]
+
+- case: core_page_varying_responses
+  mypy_config: |
+    [mypy]
+    strict = True
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.models import AbstractPage, Page
+    from wagtail.models.pages import AbstractPageMeta
+
+    class BlogPage(Page):
+        response_media_types = ["text/html", "text/markdown"]
+
+        class Meta:
+            app_label = "test"
+
+        def get_vary_headers(self, request: HttpRequest) -> list[str]:
+            headers = super().get_vary_headers(request)
+            headers.remove("Accept")
+            return [*headers, "Cookie"]
+
+    class BasePage(AbstractPage):
+        response_media_types = ("text/html", "application/json")
+
+        class Meta(AbstractPageMeta):
+            abstract = True
+
+    class NewsPage(BasePage):
+        class Meta:
+            app_label = "test"
+
+        def get_response_media_type(self, request: HttpRequest) -> str:
+            return "text/markdown" if request.GET.get("format") == "md" else super().get_response_media_type(request)
+
+    class BadPage(Page):
+        response_media_types = "text/html"  # E: Incompatible types in assignment (expression has type "str", base class "AbstractPage" defined the type as "list[str] | tuple[str, ...]")  [assignment]
+
+        class Meta:
+            app_label = "test"
+
+    class TupleVaryPage(Page):
+        class Meta:
+            app_label = "test"
+
+        def get_vary_headers(self, request: HttpRequest) -> tuple[str, ...]:  # E: Return type "tuple[str, ...]" of "get_vary_headers" incompatible with return type "list[str]" in supertype "wagtail.models.pages.AbstractPage"  [override]
+            return ()
+
+    def check(page: Page, blog: BlogPage, news: NewsPage, request: HttpRequest) -> None:
+        reveal_type(page.response_media_types)  # N: Revealed type is "list[str] | tuple[str, ...]"
+        reveal_type(blog.response_media_types)  # N: Revealed type is "list[str]"
+        reveal_type(news.response_media_types)  # N: Revealed type is "tuple[str, str]"
+        reveal_type(page.get_response_media_type(request))  # N: Revealed type is "str"
+        reveal_type(news.get_vary_headers(request))  # N: Revealed type is "list[str]"
+
+- case: core_8_1_names
+  mypy_config: |
+    [mypy]
+    strict = True
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.actions import CopyPageAction
+    from wagtail.blocks import PageChooserBlock
+    from wagtail.coreutils import LANGUAGE_CODE_MAX_LENGTH
+    from wagtail.snippets.blocks import SnippetChooserBlock
+    from wagtail.templatetags.wagtailcore_tags import Page  # E: Module "wagtail.templatetags.wagtailcore_tags" has no attribute "Page"  [attr-defined]
+
+    class SmallChunkCopy(CopyPageAction):
+        revision_copy_chunk_size = 100
+
+    class BadChunkCopy(CopyPageAction):
+        revision_copy_chunk_size = "100"  # E: Incompatible types in assignment (expression has type "str", base class "CopyPageAction" defined the type as "int")  [assignment]
+
+    def check(copy: CopyPageAction, block: PageChooserBlock, snippet_block: SnippetChooserBlock) -> None:
+        reveal_type(copy.revision_copy_chunk_size)  # N: Revealed type is "int"
+        reveal_type(LANGUAGE_CODE_MAX_LENGTH)  # N: Revealed type is "int"
+        reveal_type(block.pk_field)  # N: Revealed type is "django.db.models.fields.Field[Any, Any]"
+        reveal_type(snippet_block.pk_field.is_relation)  # N: Revealed type is "bool"
+
+- case: core_optional_request_and_language
+  mypy_config: |
+    [mypy]
+    strict = True
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from django.utils.translation import get_language
+    from wagtail.coreutils import get_supported_content_language_variant
+    from wagtail.models import Site
+
+    def check(request: HttpRequest) -> None:
+        reveal_type(get_supported_content_language_variant(get_language()))  # N: Revealed type is "str"
+        reveal_type(get_supported_content_language_variant("en", strict=True))  # N: Revealed type is "str"
+        reveal_type(Site.find_for_request(request))  # N: Revealed type is "wagtail.models.sites.Site | None"
+        reveal_type(Site.find_for_request(None))  # N: Revealed type is "wagtail.models.sites.Site | None"

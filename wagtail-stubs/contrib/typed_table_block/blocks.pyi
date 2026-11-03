@@ -1,4 +1,6 @@
-from collections.abc import Generator, Iterator
+from collections import OrderedDict
+from collections.abc import Callable, Generator, Iterator, Mapping
+from typing import Any, TypedDict
 
 from _typeshed import Incomplete
 from django.core.exceptions import ValidationError
@@ -34,6 +36,18 @@ class TypedTableBlockValidationError(ValidationError):
     ) -> None: ...
     def as_json_data(self): ...
 
+class _TypedTableColumnData(TypedDict):
+    type: str
+    heading: str
+
+class _TypedTableRowData(TypedDict):
+    values: list[Any]
+
+class _TypedTableData(TypedDict):
+    columns: list[_TypedTableColumnData]
+    rows: list[_TypedTableRowData]
+    caption: str
+
 class TypedTable:
     template: str
     columns: Incomplete
@@ -52,6 +66,9 @@ class BaseTypedTableBlock(Block):
     def construct_from_lookup(cls, lookup, child_blocks, **kwargs): ...
     def value_from_datadict(self, data, files, prefix): ...
     def get_prep_value(self, table): ...
+    def map_child_values(
+        self, value: Mapping[str, Any] | None, func: Callable[[Block, Any, str], Any]
+    ) -> _TypedTableData: ...
     def get_api_representation(self, table, context=None): ...
     def normalize(self, value): ...
     def to_python(self, value): ...
@@ -67,7 +84,9 @@ class BaseTypedTableBlock(Block):
         default: Incomplete
         icon: str
 
-class TypedTableBlock(BaseTypedTableBlock, metaclass=DeclarativeSubBlocksMetaclass): ...
+class TypedTableBlock(BaseTypedTableBlock, metaclass=DeclarativeSubBlocksMetaclass):
+    base_blocks: OrderedDict[str, Block]
+    declared_blocks: OrderedDict[str, Block]
 
 class TypedTableBlockAdapter(Adapter):
     js_constructor: str

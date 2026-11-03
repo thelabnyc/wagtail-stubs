@@ -7,7 +7,6 @@ from wagtail.models.pages import AbstractPage
 from wagtail.models.sites import Site
 from wagtail.rich_text import RichText
 
-Page: type[AbstractPage]
 register: template.Library
 
 def pageurl(context: Context, page: AbstractPage | None, fallback: str | None = ...) -> str | None: ...

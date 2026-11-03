@@ -22,9 +22,20 @@ from wagtail.actions.revert_to_page_revision import RevertToPageRevisionAction a
 from wagtail.actions.revert_to_revision import RevertToRevisionAction as RevertToRevisionAction
 from wagtail.actions.unpublish import UnpublishAction as UnpublishAction
 from wagtail.actions.unpublish_page import UnpublishPageAction as UnpublishPageAction
+from wagtail.actions.workflow import ApproveTaskStateAction as ApproveTaskStateAction
+from wagtail.actions.workflow import CancelWorkflowAction as CancelWorkflowAction
+from wagtail.actions.workflow import RejectTaskStateAction as RejectTaskStateAction
+from wagtail.actions.workflow import ResumeWorkflowAction as ResumeWorkflowAction
+from wagtail.actions.workflow import SubmitWorkflowAction as SubmitWorkflowAction
+from wagtail.actions.workflow import WorkflowAction as WorkflowAction
+from wagtail.actions.workflow import WorkflowStateError as WorkflowStateError
+from wagtail.actions.workflow import can_edit_instance as can_edit_instance
+from wagtail.actions.workflow import get_available_workflow_transitions as get_available_workflow_transitions
 
 __all__ = [
     "BaseAction",
+    "ApproveTaskStateAction",
+    "CancelWorkflowAction",
     "ConvertAliasPageAction",
     "CopyForTranslationAction",
     "CopyPageAction",
@@ -44,8 +55,15 @@ __all__ = [
     "PublishPageRevisionAction",
     "RevertToPageRevisionAction",
     "RevertToRevisionAction",
+    "RejectTaskStateAction",
+    "ResumeWorkflowAction",
+    "SubmitWorkflowAction",
     "UnpublishAction",
     "UnpublishPageAction",
+    "WorkflowAction",
+    "WorkflowStateError",
+    "can_edit_instance",
+    "get_available_workflow_transitions",
     "ActionRegistry",
     "action_registry",
 ]

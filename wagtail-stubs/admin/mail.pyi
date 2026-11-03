@@ -1,8 +1,9 @@
-from typing import Any
+from collections.abc import Sequence
 import logging
 import types
 
-from django.core.mail import EmailBackend
+from django.core.mail.backends.base import BaseEmailBackend
+from django.utils.functional import _StrOrPromise
 from wagtail.coreutils import camelcase_to_underscore as camelcase_to_underscore
 from wagtail.models import AbstractPage as AbstractPage
 from wagtail.models.workflows import AbstractGroupApprovalTask as AbstractGroupApprovalTask
@@ -12,17 +13,32 @@ from wagtail.users.models import UserProfile as UserProfile
 
 logger: logging.Logger
 
+def get_default_connection() -> BaseEmailBackend: ...
+
 class OpenedConnection:
-    connection: EmailBackend
-    def __init__(self, connection) -> None: ...
-    def __enter__(self): ...
+    connection: BaseEmailBackend
+    def __init__(self, connection: BaseEmailBackend) -> None: ...
+    def __enter__(self) -> BaseEmailBackend: ...
     def __exit__(
         self, type: type[BaseException] | None, value: BaseException | None, traceback: types.TracebackType | None
-    ): ...
+    ) -> BaseEmailBackend: ...
 
 def send_mail(
-    subject: str, message: str, recipient_list: list[str], from_email: str | None = None, **kwargs: Any
-) -> None: ...
+    subject: _StrOrPromise,
+    message: _StrOrPromise,
+    recipient_list: Sequence[str],
+    from_email: str | None = None,
+    *,
+    connection: BaseEmailBackend | None = None,
+    using: str | None = None,
+    auth_user: str | None = None,
+    auth_password: str | None = None,
+    fail_silently: bool = False,
+    html_message: str | None = None,
+    cc: Sequence[str] | None = None,
+    bcc: Sequence[str] | None = None,
+    reply_to: Sequence[str] | None = None,
+) -> int: ...
 def send_notification(recipient_users, notification, extra_context): ...
 
 class Notifier:

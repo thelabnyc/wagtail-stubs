@@ -1,14 +1,11 @@
 from django import template
-from wagtail.images.models import Filter as Filter
-from wagtail.images.models import Picture as Picture
-from wagtail.images.models import ResponsiveImage as ResponsiveImage
+from wagtail.images.models import Filter
 from wagtail.images.shortcuts import (
     get_rendition_or_not_found as get_rendition_or_not_found,
 )
 from wagtail.images.shortcuts import (
     get_renditions_or_not_found as get_renditions_or_not_found,
 )
-from wagtail.images.views.serve import generate_image_url as generate_image_url
 
 register: template.Library
 
@@ -20,12 +17,12 @@ class ImageNode(template.Node):
     attrs: dict[str, template.base.FilterExpression]
     filter_specs: list[str]
     def __init__(self, image_expr, filter_specs, output_var_name=None, attrs=None) -> None: ...
-    def get_filter(self): ...
+    def get_filter(self) -> Filter: ...
     def validate_image(self, context): ...
     def render(self, context): ...
 
 class SrcsetImageNode(ImageNode):
-    def get_filters(self): ...
+    def get_filters(self) -> list[Filter]: ...
     def render(self, context): ...
 
 class PictureNode(SrcsetImageNode):

@@ -671,3 +671,126 @@
     reveal_type(EditView().form_valid)  # N: Revealed type is "def (form: wagtail.admin.forms.models.WagtailAdminModelForm) -> django.http.response.HttpResponse"
     reveal_type(DeleteView().form_valid)  # N: Revealed type is "def (form: django.forms.forms.BaseForm) -> django.http.response.HttpResponse"
     reveal_type(BeforeAfterHookMixin().form_valid)  # N: Revealed type is "def (form: django.forms.forms.Form) -> django.http.response.HttpResponse"
+
+- case: admin_html_to_markdown_converter
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.utils.safestring import mark_safe
+    from wagtail.admin.rich_text.converters.html_markdown import (
+        INGEST_FEATURES,
+        HTMLToMarkdownConverter,
+        IngestHtmlToContentStateHandler,
+        html_to_markdown,
+    )
+
+    converter = HTMLToMarkdownConverter(base_url="https://example.com/blog/", content_selector="article")
+    reveal_type(converter.convert("<main><p>x</p></main>"))  # N: Revealed type is "str"
+    reveal_type(converter.convert(mark_safe("<p>x</p>")))  # N: Revealed type is "str"
+    reveal_type(converter.base_url)  # N: Revealed type is "str | None"
+    reveal_type(html_to_markdown("<p>x</p>", content_selector=None))  # N: Revealed type is "str"
+    IngestHtmlToContentStateHandler(INGEST_FEATURES)
+    HTMLToMarkdownConverter("https://example.com/")  # E: Too many positional arguments for "HTMLToMarkdownConverter"  [call-arg]  # N: "HTMLToMarkdownConverter" defined in "wagtail.admin.rich_text.converters.html_markdown"
+    converter.convert(b"<p>x</p>")  # E: Argument 1 to "convert" of "HTMLToMarkdownConverter" has incompatible type "bytes"; expected "str"  [arg-type]
+
+- case: admin_content_state_draftjs_types
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from draftjs_exporter import ContentState as DraftContentState
+    from wagtail.admin.rich_text.converters.contentstate import ContentstateConverter
+    from wagtail.admin.rich_text.converters.contentstate_models import Entity, EntityRange, InlineStyleRange
+    from wagtail.admin.rich_text.converters.html_to_contentstate import HtmlToContentStateHandler
+    from wagtail.admin.rich_text.converters.markdown_db import markdown_exporter, strip_trailing_line_breaks
+
+    HtmlToContentStateHandler(["bold", "italic"])
+    handler = ContentstateConverter(["bold"]).html_to_contentstate_handler
+    handler.reset()
+    handler.feed("<p><b>x</b><br/></p>")
+    handler.close()
+    content_state: DraftContentState = handler.contentstate.as_dict()
+    reveal_type(InlineStyleRange("BOLD").as_dict()["offset"])  # N: Revealed type is "int | None"
+    reveal_type(EntityRange(0).as_dict()["length"])  # N: Revealed type is "int | None"
+    reveal_type(Entity("LINK", "CUSTOM", {}).as_dict()["mutability"])  # N: Revealed type is "str"
+    strip_trailing_line_breaks(content_state)
+    reveal_type(markdown_exporter(resolved=True).render(content_state))  # N: Revealed type is "str"
+    handler.contentstate.as_dict()["entityMap"][0]  # E: Invalid index type "int" for "dict[str, Entity]"; expected type "str"  [index]
+
+- case: admin_mail_send_mail
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.utils.translation import gettext_lazy
+    from wagtail.admin.mail import OpenedConnection, get_default_connection, send_mail
+
+    reveal_type(get_default_connection())  # N: Revealed type is "django.core.mail.backends.base.BaseEmailBackend"
+    reveal_type(send_mail("Subject", "Body", ["a@example.com"], using="forms"))  # N: Revealed type is "int"
+    send_mail(gettext_lazy("Subject"), "Body", ("a@example.com",), "from@example.com", html_message="<p>x</p>", cc=["c@example.com"])
+    send_mail("Subject", "Body", ["a@example.com"], "from@example.com", reply_to=["r@example.com"])
+    with OpenedConnection(get_default_connection()) as connection:
+        reveal_type(connection)  # N: Revealed type is "django.core.mail.backends.base.BaseEmailBackend"
+        send_mail("Subject", "Body", ["a@example.com"], connection=connection)
+    send_mail("Subject", "Body", ["a@example.com"], using=1)  # E: Argument "using" to "send_mail" has incompatible type "int"; expected "str | None"  [arg-type]
+    send_mail("Subject", "Body", ["a@example.com"], usng="forms")  # E: Unexpected keyword argument "usng" for "send_mail"; did you mean "using"?  [call-arg]  # N: "send_mail" defined in "wagtail.admin.mail"
+    send_mail("Subject", "Body", ["a@example.com"], None, None)  # E: Too many positional arguments for "send_mail"  [call-arg]  # N: "send_mail" defined in "wagtail.admin.mail"
+
+- case: admin_page_edit_view_workflow_action_unavailable
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.views.pages.edit import EditView
+
+    reveal_type(EditView().workflow_action_unavailable)  # N: Revealed type is "bool"
+
+- case: admin_produced_error_message
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.views.workflows import Create, Edit
+    from wagtail.users.views.groups import CreateView
+
+    reveal_type(Create().produced_error_message)  # N: Revealed type is "str | None"
+    reveal_type(Edit().produced_error_message)  # N: Revealed type is "str | None"
+    reveal_type(CreateView().produced_error_message)  # N: Revealed type is "str | None"
+
+- case: admin_wagtailuserbar
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.template import Context
+    from wagtail.admin.templatetags.wagtailuserbar import get_page_instance, wagtailuserbar
+
+    reveal_type(get_page_instance({"page": None}))  # N: Revealed type is "wagtail.models.pages.AbstractPage | None"
+    reveal_type(wagtailuserbar(Context({}), position="top-left"))  # N: Revealed type is "str"
+    from wagtail.admin.templatetags.wagtailuserbar import Userbar  # E: Module "wagtail.admin.templatetags.wagtailuserbar" has no attribute "Userbar"  [attr-defined]
+    from wagtail.admin.templatetags.wagtailuserbar import PAGE_TEMPLATE_VAR  # E: Module "wagtail.admin.templatetags.wagtailuserbar" has no attribute "PAGE_TEMPLATE_VAR"  [attr-defined]

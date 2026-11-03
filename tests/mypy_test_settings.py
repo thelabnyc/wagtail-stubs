@@ -6,6 +6,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "wagtail",
     "wagtail.admin",
+    "wagtail.api.v3",
     "wagtail.documents",
     "wagtail.images",
     "wagtail.search",
