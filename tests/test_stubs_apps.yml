@@ -565,3 +565,20 @@
     reveal_type(field.allowed_document_extensions)  # N: Revealed type is "typing.Sequence[str] | None"
     reveal_type(field.supported_formats_text)  # N: Revealed type is "str | None"
     reveal_type(field.max_upload_size)  # N: Revealed type is "int | None"
+
+- case: apps_table_block_app_configs
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.table_block.apps import WagtailTableBlockAppConfig
+    from wagtail.contrib.typed_table_block.apps import WagtailTypedTableBlockAppConfig
+
+    def check(table: WagtailTableBlockAppConfig, typed_table: WagtailTypedTableBlockAppConfig) -> None:
+        reveal_type(table.ready())  # N: Revealed type is "None"
+        reveal_type(typed_table.ready())  # N: Revealed type is "None"
+        reveal_type(typed_table.label)  # N: Revealed type is "str"
+        reveal_type(typed_table.verbose_name)  # N: Revealed type is "str | django.utils.functional._StrPromise"
