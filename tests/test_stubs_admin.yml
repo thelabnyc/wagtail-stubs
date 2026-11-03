@@ -724,3 +724,26 @@
     strip_trailing_line_breaks(content_state)
     reveal_type(markdown_exporter(resolved=True).render(content_state))  # N: Revealed type is "str"
     handler.contentstate.as_dict()["entityMap"][0]  # E: Invalid index type "int" for "dict[str, Entity]"; expected type "str"  [index]
+
+- case: admin_mail_send_mail
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.utils.translation import gettext_lazy
+    from wagtail.admin.mail import OpenedConnection, get_default_connection, send_mail
+
+    reveal_type(get_default_connection())  # N: Revealed type is "django.core.mail.backends.base.BaseEmailBackend"
+    reveal_type(send_mail("Subject", "Body", ["a@example.com"], using="forms"))  # N: Revealed type is "int"
+    send_mail(gettext_lazy("Subject"), "Body", ("a@example.com",), "from@example.com", html_message="<p>x</p>", cc=["c@example.com"])
+    send_mail("Subject", "Body", ["a@example.com"], "from@example.com", reply_to=["r@example.com"])
+    with OpenedConnection(get_default_connection()) as connection:
+        reveal_type(connection)  # N: Revealed type is "django.core.mail.backends.base.BaseEmailBackend"
+        send_mail("Subject", "Body", ["a@example.com"], connection=connection)
+    send_mail("Subject", "Body", ["a@example.com"], using=1)  # E: Argument "using" to "send_mail" has incompatible type "int"; expected "str | None"  [arg-type]
+    send_mail("Subject", "Body", ["a@example.com"], usng="forms")  # E: Unexpected keyword argument "usng" for "send_mail"; did you mean "using"?  [call-arg]  # N: "send_mail" defined in "wagtail.admin.mail"
+    send_mail("Subject", "Body", ["a@example.com"], None, None)  # E: Too many positional arguments for "send_mail"  [call-arg]  # N: "send_mail" defined in "wagtail.admin.mail"
