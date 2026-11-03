@@ -61,6 +61,8 @@ wagtail\.api\.v3\.routers\.pages\.IntPKFilter(\..*)?
 wagtail\.api\.v3\.routers\.pages\.PagePositionLiteral
 # Literal/Annotated aliases built at import time from project models
 wagtail\.api\.v3\.routers\.pages\.PageTypeLiteral
+# ninja's @paginate wrapper only takes keyword arguments; stubtest follows __wrapped__ to the undecorated signature
+wagtail\.api\.v3\.routers\.pages\.list_page_workflow_history
 # Inherits pydantic FieldInfo's runtime __final__ flag but is subclassed
 wagtail\.api\.v3\.schemas\.pages\.PageTypeInjectingBody
 wagtail\.api\.v3\.schemas\.params\.TypeInjectingBody
@@ -122,6 +124,8 @@ wagtail\.sites\.wagtail_hooks\.SitesMenuItem\.media
 wagtail\.snippets\.action_menu\.WorkflowMenuItem\.name
 # Literal/Annotated aliases built at import time from project models
 wagtail\.snippets\.api\.v3\.router\.SnippetTypeLiteral
+# ninja's @paginate wrapper only takes keyword arguments; stubtest follows __wrapped__ to the undecorated signature
+wagtail\.snippets\.api\.v3\.router\.list_snippet_workflow_history
 # Inherits pydantic FieldInfo's runtime __final__ flag but is subclassed
 wagtail\.snippets\.api\.v3\.schemas\.ParamTypeInjectingBody
 # The block metaclass consumes Meta at class creation
