@@ -748,6 +748,19 @@
     send_mail("Subject", "Body", ["a@example.com"], usng="forms")  # E: Unexpected keyword argument "usng" for "send_mail"; did you mean "using"?  [call-arg]  # N: "send_mail" defined in "wagtail.admin.mail"
     send_mail("Subject", "Body", ["a@example.com"], None, None)  # E: Too many positional arguments for "send_mail"  [call-arg]  # N: "send_mail" defined in "wagtail.admin.mail"
 
+- case: admin_page_edit_view_workflow_action_unavailable
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.views.pages.edit import EditView
+
+    reveal_type(EditView().workflow_action_unavailable)  # N: Revealed type is "bool"
+
 - case: admin_wagtailuserbar
   mypy_config: |
     [mypy]
