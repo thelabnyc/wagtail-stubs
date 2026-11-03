@@ -29,6 +29,7 @@ class CopyPageAction(BaseAction[_PageT]):
     process_child_object: Callable[..., Any] | None
     log_action: str | None
     reset_translation_key: bool
+    revision_copy_chunk_size: int
     def __init__(
         self,
         page: _PageT,
