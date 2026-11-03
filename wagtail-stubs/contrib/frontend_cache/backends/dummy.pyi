@@ -1,8 +1,9 @@
-from _typeshed import Incomplete
+from typing import ClassVar
 
 from .base import BaseBackend as BaseBackend
 
 class DummyBackend(BaseBackend):
-    urls: Incomplete
-    def __init__(self) -> None: ...
-    def purge(self, url) -> None: ...
+    urls: ClassVar[list[str]]
+    def purge(self, url: str) -> None: ...
+    @classmethod
+    def reset(cls) -> None: ...

@@ -449,3 +449,84 @@
 
     reveal_type(PageSitemap(None).items())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
     reveal_type(PageSitemap(None).location)  # N: Revealed type is "def (obj: wagtail.models.pages.Page) -> str"
+
+- case: apps_frontend_cache_backends
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.frontend_cache.backends import BaseBackend, CloudflareBackend, CloudfrontBackend, HTTPBackend
+    from wagtail.contrib.frontend_cache.backends.dummy import DummyBackend
+
+    backend = CloudflareBackend({"BEARER_TOKEN": "t", "ZONEID": "z", "PURGE_BATCH_SIZE": 100})
+    reveal_type(backend.purge_batch_size)  # N: Revealed type is "int"
+    reveal_type(backend.cloudflare_token)  # N: Revealed type is "str | None"
+    reveal_type(CloudflareBackend.CHUNK_SIZE)  # N: Revealed type is "int"
+    backend.purge_batch(["https://example.com/"])
+    backend.purge_batch(("https://example.com/",))
+    backend.purge_batch({"https://example.com/"})  # E: Argument 1 to "purge_batch" of "CloudflareBackend" has incompatible type "set[str]"; expected "Sequence[str]"  [arg-type]
+    reveal_type(HTTPBackend({"LOCATION": "http://localhost:8000"}).hostnames)  # N: Revealed type is "list[str]"
+    CloudfrontBackend({"DISTRIBUTION_ID": "abc"}).purge("https://example.com/")
+
+    DummyBackend({})
+    DummyBackend()  # E: Missing positional argument "params" in call to "DummyBackend"  [call-arg]
+    reveal_type(DummyBackend.reset())  # N: Revealed type is "None"
+    reveal_type(DummyBackend.urls)  # N: Revealed type is "list[str]"
+
+    def check(backend: BaseBackend) -> None:
+        reveal_type(backend.invalidates_hostname("example.com"))  # N: Revealed type is "bool"
+
+- case: apps_frontend_cache_tsicommon_override_strict
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+    warn_unused_ignores = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from collections.abc import Iterable
+    from typing import Any
+
+    from wagtail.contrib.frontend_cache.backends import BaseBackend
+    from wagtail.contrib.frontend_cache.backends import CloudfrontBackend as WagtailCloudfrontBackend
+
+    def warmable(urls: list[str]) -> list[str]:
+        return urls
+
+    class CloudfrontBackend(WagtailCloudfrontBackend):
+        def purge_batch(self, urls: Iterable[str]) -> None:
+            urls = list(urls)
+            super().purge_batch(urls)
+            warmable(urls)
+
+    class LoggingBackend(BaseBackend):
+        def __init__(self, params: dict[str, Any]) -> None:
+            super().__init__(params)
+            self.prefix = params.pop("PREFIX", "")
+
+        def purge(self, url: str) -> None:
+            print(self.prefix + url)
+
+- case: apps_frontend_cache_signal_handlers
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.frontend_cache.signal_handlers import (
+        page_slug_changed_signal_handler,
+        post_page_move_signal_handler,
+    )
+    from wagtail.contrib.frontend_cache.signal_handlers import purge_page_from_cache  # E: Module "wagtail.contrib.frontend_cache.signal_handlers" has no attribute "purge_page_from_cache"; maybe "purge_pages_from_cache"?  [attr-defined]
+    from wagtail.models import Page
+
+    def check(page: Page, before: Page) -> None:
+        reveal_type(page_slug_changed_signal_handler(instance=page, instance_before=before))  # N: Revealed type is "None"
+        reveal_type(post_page_move_signal_handler(page, before, sender=Page))  # N: Revealed type is "None"
