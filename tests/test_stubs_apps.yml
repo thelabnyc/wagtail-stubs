@@ -582,3 +582,36 @@
         reveal_type(typed_table.ready())  # N: Revealed type is "None"
         reveal_type(typed_table.label)  # N: Revealed type is "str"
         reveal_type(typed_table.verbose_name)  # N: Revealed type is "str | django.utils.functional._StrPromise"
+
+- case: apps_image_shortcuts_and_tags
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.images.models import AbstractImage, Filter
+    from wagtail.images.shortcuts import get_rendition_or_not_found, get_renditions_or_not_found
+    from wagtail.images.templatetags.wagtailimages_tags import ImageNode, SrcsetImageNode
+
+    def check(image: AbstractImage, node: ImageNode, srcset: SrcsetImageNode) -> None:
+        reveal_type(get_rendition_or_not_found(image, "fill-100x100"))  # N: Revealed type is "wagtail.images.models.AbstractRendition"
+        reveal_type(get_renditions_or_not_found(image, ["width-400", Filter("width-800")]))  # N: Revealed type is "dict[str, wagtail.images.models.AbstractRendition]"
+        reveal_type(image.get_rendition_model())  # N: Revealed type is "type[wagtail.images.models.AbstractRendition]"
+        reveal_type(node.get_filter())  # N: Revealed type is "wagtail.images.models.Filter"
+        reveal_type(srcset.get_filters())  # N: Revealed type is "list[wagtail.images.models.Filter]"
+        get_rendition_or_not_found(image, 100)  # E: Argument 2 to "get_rendition_or_not_found" has incompatible type "int"; expected "Filter | str"  [arg-type]
+
+- case: apps_stale_reexports_removed
+  main: |
+    from wagtail.images.shortcuts import SourceImageIOError  # E: Module "wagtail.images.shortcuts" has no attribute "SourceImageIOError"  [attr-defined]
+    from wagtail.images.jinja2tags import Filter  # E: Module "wagtail.images.jinja2tags" has no attribute "Filter"  [attr-defined]
+    from wagtail.images.jinja2tags import get_rendition_or_not_found  # E: Module "wagtail.images.jinja2tags" has no attribute "get_rendition_or_not_found"  [attr-defined]
+    from wagtail.images.templatetags.wagtailimages_tags import generate_image_url  # E: Module "wagtail.images.templatetags.wagtailimages_tags" has no attribute "generate_image_url"  [attr-defined]
+    from wagtail.images.templatetags.wagtailimages_tags import Picture  # E: Module "wagtail.images.templatetags.wagtailimages_tags" has no attribute "Picture"; maybe "PictureNode"?  [attr-defined]
+    from wagtail.contrib.settings.jinja2tags import registry  # E: Module "wagtail.contrib.settings.jinja2tags" has no attribute "registry"  [attr-defined]
+    from wagtail.contrib.settings.jinja2tags import BaseSiteSetting  # E: Module "wagtail.contrib.settings.jinja2tags" has no attribute "BaseSiteSetting"  [attr-defined]
+    from wagtail.images.jinja2tags import image_url
+    from wagtail.images.templatetags.wagtailimages_tags import get_renditions_or_not_found
+    from wagtail.images.models import SourceImageIOError as SourceImageIOErrorOk
