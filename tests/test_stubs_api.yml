@@ -353,3 +353,281 @@
 
     generator: SchemaGenerator = ProjectGenerator()
     input_generator: InputSchemaGenerator = ProjectInputGenerator(for_update=True)
+
+- case: api_v3_field_serializer_in_api_field
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.api import APIField
+    from wagtail.api.v3.fields import FieldSerializer
+    from wagtail.images.api.fields import ImageRenditionDict, ImageRenditionErrorDict
+    from wagtail.images.api.fields import ImageRenditionField as V2ImageRenditionField
+    from wagtail.images.api.v3.fields import ImageRenditionField
+    from wagtail.images.models import Image
+
+    class TitleLength(FieldSerializer):
+        def to_representation(self, value: str) -> int:
+            return len(value)
+
+    APIField("title_length", serializer=TitleLength(source="title"))
+    APIField("thumbnail", serializer=ImageRenditionField("fill-300x300", source="feed_image"))
+    APIField("thumbnail", serializer=V2ImageRenditionField("fill-300x300", source="feed_image"))
+    reveal_type(APIField("title").serializer)  # N: Revealed type is "Any | wagtail.api.v3.fields.FieldSerializer | None"
+
+    field = ImageRenditionField("width-400", preserve_svg=True)
+    result: ImageRenditionDict | ImageRenditionErrorDict = field.to_representation(Image())
+    reveal_type(field.source)  # N: Revealed type is "str | None"
+    reveal_type(field.filter_spec)  # N: Revealed type is "str"
+    ImageRenditionField("width-400", max_length=3)  # E: Unexpected keyword argument "max_length" for "ImageRenditionField"  [call-arg]  # N: "ImageRenditionField" defined in "wagtail.images.api.v3.fields"
+
+- case: api_v3_register_block_schema_generic
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import Any
+
+    from wagtail import blocks
+    from wagtail.api.v3.schemas.generators import read, write
+    from wagtail.api.v3.schemas.generators.blocks import BlockSchemaBuilder, fixed_schema, struct_block_schema
+    from wagtail.contrib.table_block.api.v3.schemas import table_block_schema
+    from wagtail.contrib.table_block.blocks import TableBlock
+
+    class ColourBlock(blocks.CharBlock):
+        palette: list[str]
+
+    def colour_schema(builder: BlockSchemaBuilder, block: ColourBlock, name: str) -> Any:
+        return str | None
+
+    read.block_schema_builder.register_block_schema(ColourBlock, colour_schema)
+    write.block_schema_builder.register_block_schema(ColourBlock, fixed_schema(str))
+    read.block_schema_builder.register_block_schema(blocks.StructBlock, struct_block_schema)
+    read.block_schema_builder.register_block_schema(TableBlock, table_block_schema)
+    reveal_type(write.block_schema_builder.for_input)  # N: Revealed type is "bool"
+    reveal_type(read.block_schema_builder.block_schemas)  # N: Revealed type is "dict[type[wagtail.blocks.base.Block], def (wagtail.api.v3.schemas.generators.blocks.BlockSchemaBuilder, wagtail.blocks.base.Block, str) -> Any]"
+    read.block_schema_builder.register_block_schema(blocks.TextBlock, colour_schema)  # E: Argument 2 to "register_block_schema" of "BlockSchemaBuilder" has incompatible type "Callable[[BlockSchemaBuilder, ColourBlock, str], Any]"; expected "Callable[[BlockSchemaBuilder, TextBlock, str], Any]"  [arg-type]
+
+- case: api_v3_page_workflow_endpoints
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.auth.models import AbstractBaseUser, AnonymousUser
+    from django.http import HttpRequest
+    from wagtail.api.v3.pagination import WagtailLimitOffsetPagination
+    from wagtail.api.v3.routers.pages import (
+        PageFilterSchema,
+        approve_workflow,
+        get_page_workflow,
+        list_page_workflow_history,
+        submit_workflow,
+    )
+    from wagtail.api.v3.schemas.workflows import WorkflowStateSchema, WorkflowStatusSchema, WorkflowTaskActionSchema
+    from wagtail.api.v3.workflows import check_can_view_workflow, resolve_task_state
+    from wagtail.models import Page, WorkflowState
+
+    def check(page: Page, user: AbstractBaseUser | AnonymousUser, request: HttpRequest, state: WorkflowState) -> None:
+        check_can_view_workflow(page, user)
+        reveal_type(resolve_task_state(page, None))  # N: Revealed type is "wagtail.models.workflows.TaskState"
+        data = WorkflowTaskActionSchema(comment="Looks good", task_state_id=3)
+        reveal_type(data.get_form_data())  # N: Revealed type is "dict[str, Any]"
+        WorkflowTaskActionSchema(comment="Looks good", sign_off=True)
+        reveal_type(get_page_workflow(request, 1))  # N: Revealed type is "wagtail.models.pages.AbstractPage"
+        reveal_type(list_page_workflow_history(request, page_id=1))  # N: Revealed type is "dict[str, Any]"
+        list_page_workflow_history(request, page_id=1, ninja_pagination=WagtailLimitOffsetPagination.Input(limit=5, offset=0))
+        list_page_workflow_history(request, 1)  # E: Too many positional arguments for "list_page_workflow_history"  [call-arg]  # N: "list_page_workflow_history" defined in "wagtail.api.v3.routers.pages"
+        reveal_type(submit_workflow(request, 1))  # N: Revealed type is "wagtail.models.pages.AbstractPage"
+        reveal_type(approve_workflow(request, 1, data))  # N: Revealed type is "wagtail.models.pages.AbstractPage"
+        reveal_type(WorkflowStatusSchema.resolve_workflow_state(page))  # N: Revealed type is "wagtail.models.workflows.WorkflowState | None"
+        reveal_type(WorkflowStatusSchema.resolve_allowed_actions(page, {"request": request}))  # N: Revealed type is "list[str]"
+        reveal_type(WorkflowStateSchema.resolve_task_states(state))  # N: Revealed type is "list[wagtail.models.workflows.TaskState]"
+        reveal_type(PageFilterSchema.get_page(1, "child_of"))  # N: Revealed type is "wagtail.models.pages.AbstractPage"
+        reveal_type(PageFilterSchema.get_page_or_root(request, "root", "child_of"))  # N: Revealed type is "wagtail.models.pages.AbstractPage"
+        check_can_view_workflow(request, user)  # E: Argument 1 to "check_can_view_workflow" has incompatible type "HttpRequest"; expected "WorkflowMixin"  [arg-type]
+        WorkflowTaskActionSchema(task_state_id="x")  # E: Argument "task_state_id" to "WorkflowTaskActionSchema" has incompatible type "str"; expected "int | None"  [arg-type]
+        PageFilterSchema.get_public_page(request, 1, "x")  # E: "type[PageFilterSchema]" has no attribute "get_public_page"  [attr-defined]
+
+- case: api_v3_snippet_workflow_endpoints
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.models import WorkflowMixin
+    from wagtail.snippets.api.v3.router import (
+        approve_snippet_workflow,
+        get_snippet_workflow,
+        literals_by_mixin,
+        list_snippet_workflow_history,
+        mixins,
+        submit_snippet_workflow,
+    )
+
+    def check(request: HttpRequest) -> None:
+        reveal_type(get_snippet_workflow(request, "app.Advert", "1").current_workflow_state)  # N: Revealed type is "wagtail.models.workflows.WorkflowState | None"
+        reveal_type(submit_snippet_workflow(request, "app.Advert", "1"))  # N: Revealed type is "wagtail.models.workflows.WorkflowMixin"
+        reveal_type(approve_snippet_workflow(request, "app.Advert", "1").pk)  # N: Revealed type is "Any"
+        reveal_type(list_snippet_workflow_history(request, type="app.Advert", pk="1"))  # N: Revealed type is "dict[str, Any]"
+        list_snippet_workflow_history(request, "app.Advert", "1")  # E: Too many positional arguments for "list_snippet_workflow_history"  [call-arg]  # N: "list_snippet_workflow_history" defined in "wagtail.snippets.api.v3.router"
+        reveal_type(mixins[3])  # N: Revealed type is "type[wagtail.models.workflows.WorkflowMixin]"
+        reveal_type(literals_by_mixin[WorkflowMixin])  # N: Revealed type is "object"
+
+- case: api_v3_schema_generator_8_1_signatures
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.db import models
+    from wagtail.api.v3.schemas import BaseSchema
+    from wagtail.api.v3.schemas.base import build_discriminated_union, build_union_schemas
+    from wagtail.api.v3.schemas.generators.read import read_generator
+    from wagtail.models import Page
+
+    class Advert(models.Model):
+        pass
+
+    class BlogPage(Page):
+        pass
+
+    def blog_schema(model: type[BlogPage]) -> type[BaseSchema] | None:
+        return None
+
+    reveal_type(read_generator.get_foreign_key_reference_schema(Advert))  # N: Revealed type is "type[wagtail.api.v3.schemas.base.BaseSchema]"
+    reveal_type(read_generator.build_schema(Advert, name="AdvertSchema", base_class=BaseSchema, nested=True))  # N: Revealed type is "type[wagtail.api.v3.schemas.base.BaseSchema]"
+    read_generator.build_schema(Advert, name="AdvertSchema", base_class=BaseSchema)  # E: Missing named argument "nested" for "build_schema" of "SchemaGenerator"  [call-arg]  # N: "build_schema" defined in "wagtail.api.v3.schemas.generators.read"
+    build_union_schemas([Page], name="Page")
+    blog_models: list[type[BlogPage]] = [BlogPage]
+    build_discriminated_union(blog_models, blog_schema, name="BlogPageUnion")
+    build_discriminated_union((BlogPage,), blog_schema)
+    build_discriminated_union([Advert], blog_schema)  # E: Argument 2 to "build_discriminated_union" has incompatible type "Callable[[type[BlogPage]], type[BaseSchema] | None]"; expected "Callable[[type[Advert]], type[BaseModel] | None]"  [arg-type]
+
+- case: api_v3_redirect_schema_location_alias
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.redirects.api.v3.router import RedirectSchema
+
+    schema = RedirectSchema(
+        id=1,
+        old_path="/a/",
+        site_id=None,
+        is_permanent=True,
+        redirect_page_id=None,
+        redirect_page_route_path="",
+        redirect_link="/b/",
+        automatically_created=False,
+        created_at=None,
+        link="/b/",
+    )
+    reveal_type(schema.location)  # N: Revealed type is "str | None"
+
+- case: api_v3_form_data_block_values
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import Any
+
+    from django.forms import Form
+    from django.utils.datastructures import MultiValueDict
+    from wagtail import blocks
+    from wagtail.api.v3.form_data import APIBlockWidget, to_native_block_value, to_prep_block_value, use_api_block_widgets
+    from wagtail.contrib.typed_table_block.blocks import TypedTableBlock
+
+    def check(data: MultiValueDict[str, Any]) -> None:
+        use_api_block_widgets(Form)
+        reveal_type(APIBlockWidget().value_omitted_from_data(data, MultiValueDict(), "body"))  # N: Revealed type is "bool"
+        reveal_type(to_prep_block_value(blocks.CharBlock(), "x", "body-0-value", data))  # N: Revealed type is "Any"
+        reveal_type(to_native_block_value(blocks.CharBlock(), "x", "body-0-value", data))  # N: Revealed type is "Any"
+        table = TypedTableBlock([("text", blocks.CharBlock())]).map_child_values(
+            {"columns": [{"type": "text"}], "rows": [{"values": ["a"]}]},
+            lambda child_block, child_value, child_path: child_value,
+        )
+        reveal_type(table["columns"][0]["heading"])  # N: Revealed type is "str"
+        reveal_type(table["rows"][0]["values"])  # N: Revealed type is "list[Any]"
+
+    from wagtail.api.v3.form_data import flatten_block_value  # E: Module "wagtail.api.v3.form_data" has no attribute "flatten_block_value"  [attr-defined]
+
+- case: api_v3_admin_explorer
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.http import HttpRequest
+    from wagtail.admin.api.urls import api
+    from wagtail.admin.api.v3.explorer import explorer, get_children, get_explorer_queryset, get_translations
+    from wagtail.models import AbstractPage, Page
+    from wagtail.query import PageQuerySet
+
+    class BlogPage(Page):
+        pass
+
+    def check(request: HttpRequest, page: Page, pages: PageQuerySet[BlogPage]) -> None:
+        reveal_type(api)  # N: Revealed type is "ninja.main.NinjaAPI"
+        reveal_type(get_explorer_queryset(pages))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(get_children(request, page, pages))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage]"
+        reveal_type(get_translations(page, pages))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[main.BlogPage] | wagtail.models.pages.PageQuerySet[wagtail.models.pages.AbstractPage]"
+        result = explorer(request, page.pk)
+        reveal_type(result["children"]["count"])  # N: Revealed type is "int"
+        reveal_type(result["page"])  # N: Revealed type is "wagtail.models.pages.AbstractPage"
+
+- case: api_removed_admin_api
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.api.urls import admin_api  # E: Module "wagtail.admin.api.urls" has no attribute "admin_api"  [attr-defined]
+    from wagtail.images.wagtail_hooks import construct_admin_api  # E: Module "wagtail.images.wagtail_hooks" has no attribute "construct_admin_api"  [attr-defined]
+    from wagtail.documents.wagtail_hooks import construct_admin_api as construct_documents_admin_api  # E: Module "wagtail.documents.wagtail_hooks" has no attribute "construct_admin_api"  [attr-defined]
+
+- case: api_v3_signal_handlers
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.api.v3.signal_handlers import purge_api_url_from_cache, purge_page_from_cache, use_frontend_cache
+    from wagtail.contrib.redirects.api.v3.signal_handlers import purge_redirect_from_cache
+    from wagtail.contrib.redirects.models import Redirect
+    from wagtail.documents.api.v3.signal_handlers import purge_document_from_cache
+    from wagtail.images.api.v3.signal_handlers import purge_image_from_cache
+    from wagtail.images.models import Image
+    from wagtail.models import Page
+
+    reveal_type(use_frontend_cache())  # N: Revealed type is "bool"
+    purge_api_url_from_cache("detail_page", page_id=1)
+    purge_page_from_cache(Page())
+    purge_image_from_cache(Image(), created=False)
+    purge_redirect_from_cache(Redirect())
+    purge_document_from_cache(Image())  # E: Argument 1 to "purge_document_from_cache" has incompatible type "Image"; expected "AbstractDocument"  [arg-type]
