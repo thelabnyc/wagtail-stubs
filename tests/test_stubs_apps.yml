@@ -615,3 +615,26 @@
     from wagtail.images.jinja2tags import image_url
     from wagtail.images.templatetags.wagtailimages_tags import get_renditions_or_not_found
     from wagtail.images.models import SourceImageIOError as SourceImageIOErrorOk
+
+- case: apps_form_mixin_landing_page_template
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.forms.models import AbstractEmailForm, FormMixin
+
+    class ContactPage(AbstractEmailForm):
+        landing_page_template = "contact_landing.html"
+
+    class BrokenPage(AbstractEmailForm):
+        landing_page_template = 1  # E: Incompatible types in assignment (expression has type "int", base class "FormMixin" defined the type as "str")  [assignment]
+
+    def check(page: FormMixin) -> None:
+        reveal_type(page.get_landing_page_template())  # N: Revealed type is "str"
+        reveal_type(page.landing_page_template)  # N: Revealed type is "str"
+        reveal_type(FormMixin.__init__)  # N: Revealed type is "def (self: object)"
+  installed_apps:
+    - main
