@@ -530,3 +530,23 @@
     def check(page: Page, before: Page) -> None:
         reveal_type(page_slug_changed_signal_handler(instance=page, instance_before=before))  # N: Revealed type is "None"
         reveal_type(post_page_move_signal_handler(page, before, sender=Page))  # N: Revealed type is "None"
+
+- case: apps_redirects_should_autocreate
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.redirects.forms import ConfirmImportManagementForm
+    from wagtail.contrib.redirects.signal_handlers import (
+        autocreate_redirects_on_slug_change,
+        should_autocreate_redirects,
+    )
+    from wagtail.models import Page
+
+    def check(page: Page, before: Page, form: ConfirmImportManagementForm) -> None:
+        reveal_type(should_autocreate_redirects(page))  # N: Revealed type is "bool"
+        reveal_type(autocreate_redirects_on_slug_change(instance_before=before, instance=page, sender=Page))  # N: Revealed type is "None"
+        reveal_type(form.clean())  # N: Revealed type is "dict[str, Any]"

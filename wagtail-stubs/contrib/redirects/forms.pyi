@@ -1,3 +1,5 @@
+from typing import Any
+
 from _typeshed import Incomplete
 from django import forms
 from wagtail.admin.forms.models import WagtailAdminModelForm as WagtailAdminModelForm
@@ -23,7 +25,7 @@ class ConfirmImportManagementForm(forms.Form):
     input_format: Incomplete
     signer: Incomplete
     def __init__(self, *args, **kwargs) -> None: ...
-    def clean(self): ...
+    def clean(self) -> dict[str, Any]: ...
 
 class ConfirmImportForm(ConfirmImportManagementForm):
     from_index: Incomplete
