@@ -20,7 +20,8 @@ wagtail\.admin\.search\.SearchArea\.media
 wagtail\.admin\.ui\.tables(\..*)?
 wagtail\.admin\.urls(\..*)?
 wagtail\.admin\.views\.account(\..*)?
-wagtail\.admin\.views\.chooser(\..*)?
+# MediaDefiningClass adds media at runtime
+wagtail\.admin\.views\.chooser\.(PageCheckboxSelectColumn|PageNavigateToChildrenColumn|PageStatusColumn|PageTitleColumn|ParentPageColumn)\.media
 wagtail\.admin\.views\.generic(\..*)?
 # Runtime default is the stock page class; the stub types `model` with the class's page TypeVar
 wagtail\.admin\.views\.pages\.(choose_parent|history|lock|revisions|unpublish|usage|workflow)\.\w+\.model
@@ -97,7 +98,7 @@ wagtail\.contrib\.table_block\.blocks(\..*)?
 wagtail\.contrib\.typed_table_block\.blocks\.BaseTypedTableBlock\.Meta
 # functools.cache wrapper: stub signature has *args/**kwargs, runtime inspect follows __wrapped__
 wagtail\.coreutils\.get_content_languages
-wagtail\.documents(?!\.api(\.|$)|\.wagtail_hooks(\.|$))(\..*)?
+wagtail\.documents(?!\.(api|wagtail_hooks|apps|fields)(\.|$))(\..*)?
 # DRF ships no types, so the serializer metaclass cannot be declared
 wagtail\.documents\.api\.v2\.serializers\.DocumentSerializer
 # ninja's @paginate wrapper only takes keyword arguments; stubtest follows __wrapped__ to the undecorated signature
@@ -109,7 +110,7 @@ wagtail\.documents\.wagtail_hooks\.(DocsSearchArea|DocumentsMenuItem)\.media
 wagtail\.embeds\.blocks(\..*)?
 wagtail\.embeds\.models(\..*)?
 wagtail\.embeds\.rich_text(\..*)?
-wagtail\.images(?!\.api(\.|$)|\.wagtail_hooks(\.|$))(\..*)?
+wagtail\.images(?!\.(api|wagtail_hooks|apps|shortcuts|jinja2tags|templatetags\.wagtailimages_tags)(\.|$))(\..*)?
 # typing_extensions.TypedDict adds PEP 728 attributes that typeshed does not declare
 wagtail\.images\.api\.fields\.ImageRendition(Error)?Dict\.__(closed|extra_items|mutable_keys|readonly_keys)__
 # DRF ships no types, so the serializer metaclass cannot be declared
