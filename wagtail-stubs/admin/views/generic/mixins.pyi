@@ -82,6 +82,8 @@ class CreateEditViewOptionalFeaturesMixin(Generic[_ModelT, _ModelFormT]):
     form: _ModelFormT
     new_revision: Revision | None
     workflow_action: str | None
+    produced_error_code: str
+    produced_error_message: str | None
     def setup(self, request: HttpRequest, *args: Any, **kwargs: Any) -> None: ...
     @cached_property
     def workflow(self) -> Workflow | None: ...

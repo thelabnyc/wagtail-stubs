@@ -761,6 +761,22 @@
 
     reveal_type(EditView().workflow_action_unavailable)  # N: Revealed type is "bool"
 
+- case: admin_produced_error_message
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.admin.views.workflows import Create, Edit
+    from wagtail.users.views.groups import CreateView
+
+    reveal_type(Create().produced_error_message)  # N: Revealed type is "str | None"
+    reveal_type(Edit().produced_error_message)  # N: Revealed type is "str | None"
+    reveal_type(CreateView().produced_error_message)  # N: Revealed type is "str | None"
+
 - case: admin_wagtailuserbar
   mypy_config: |
     [mypy]

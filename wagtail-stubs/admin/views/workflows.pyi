@@ -135,7 +135,7 @@ class Create(CreateView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]: ...
     pages_formset: WorkflowPagesFormSet
     content_type_form: WorkflowContentTypeForm
-    produced_error_message: bool
+    produced_error_message: str | None
     def is_valid(self, form: Form) -> bool: ...
     form: Form
     object: Workflow
@@ -167,7 +167,7 @@ class Edit(EditView):
     def get_enable_url(self) -> str: ...
     pages_formset: WorkflowPagesFormSet
     content_type_form: WorkflowContentTypeForm
-    produced_error_message: bool
+    produced_error_message: str | None
     def is_valid(self, form: Form) -> bool: ...
     form: Form
     object: Workflow
