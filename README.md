@@ -12,6 +12,7 @@ Wagtail 8.0 lets a project replace `wagtail.models.Page` with its own base page 
 - `PageQuerySet[Page].type(BlogPage)` and `PageQuerySet[AbstractPage].type(BlogPage)` narrow to `PageQuerySet[BlogPage]`, but `PageQuerySet[BasePage].type(BlogPage)` does not.
 - `PageQuerySet` is invariant (its type parameter comes from `django-treebeard-stubs`), so a `PageQuerySet[Page]` cannot be passed where a `PageQuerySet[AbstractPage]` is expected.
 - `swapper` ships no type information, so `swapper.load_model("wagtailcore", "Page")` is untyped. Annotate the result as `type[AbstractPage]`.
+- `wagtail.contrib.sitemaps.Sitemap` takes the page model as an optional type parameter, which types `items()`, `location()`, `lastmod()` and `self.paginator`. Without it the page type is `Any`, so existing subclasses keep working unchanged. Like the admin views below, subscript it for the type checker only: `_SitemapBase = Sitemap[BasePage]` inside `if TYPE_CHECKING:`.
 
 ## Generic admin views and viewsets
 

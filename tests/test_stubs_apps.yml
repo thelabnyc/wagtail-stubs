@@ -277,3 +277,175 @@
     register_setting(NotASetting)  # E: Value of type variable "T" of "register_setting" cannot be "NotASetting"  [type-var]
   installed_apps:
     - main
+
+- case: apps_sitemap_alternates_and_views
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.contrib.sitemaps import Sitemap as DjangoSitemap
+    from django.http import HttpRequest
+    from wagtail.contrib.sitemaps import Sitemap
+    from wagtail.contrib.sitemaps.views import index, prepare_sitemaps, sitemap
+    from wagtail.models import Page, Site
+
+    class StaticSitemap(DjangoSitemap[str]):
+        def items(self) -> list[str]:
+            return ["/about/"]
+
+    def check(request: HttpRequest, sm: "Sitemap[Page]", page: Page, pages: list[Page]) -> None:
+        s = Sitemap(request, alternates=True)
+        reveal_type(s.alternates)  # N: Revealed type is "bool"
+        reveal_type(s.chunk_size)  # N: Revealed type is "int"
+        reveal_type(s.request)  # N: Revealed type is "django.http.request.HttpRequest | None"
+        reveal_type(s.get_wagtail_site())  # N: Revealed type is "wagtail.models.sites.Site"
+        reveal_type(s.items())  # N: Revealed type is "typing.Iterable[Any]"
+        reveal_type(sm.items())  # N: Revealed type is "typing.Iterable[wagtail.models.pages.Page]"
+        reveal_type(sm.location(page))  # N: Revealed type is "str | None"
+        reveal_type(sm.lastmod(page))  # N: Revealed type is "datetime.datetime | None"
+        reveal_type(sm.get_translations(pages))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.AbstractPage] | None"
+        reveal_type(sm.translated_iterator(iter(pages)))  # N: Revealed type is "typing.Iterator[wagtail.models.pages.Page]"
+        reveal_type(sm.prefetch_translated_objects(pages))  # N: Revealed type is "None"
+        Sitemap(None)
+        Sitemap(request, alternates="yes")  # E: Argument "alternates" to "Sitemap" has incompatible type "str"; expected "bool"  [arg-type]
+        sm.translated_iterator(pages)  # E: Argument 1 to "translated_iterator" of "Sitemap" has incompatible type "list[Page]"; expected "Iterator[Never]"  [arg-type]
+
+        reveal_type(sitemap(request))  # N: Revealed type is "django.template.response.TemplateResponse"
+        reveal_type(sitemap(request, {"pages": Sitemap, "static": StaticSitemap()}, alternates=None, section="pages"))  # N: Revealed type is "django.template.response.TemplateResponse"
+        reveal_type(index(request, {"pages": Sitemap}, sitemap_url_name="sitemap"))  # N: Revealed type is "django.template.response.TemplateResponse"
+        reveal_type(prepare_sitemaps(request, {"pages": Sitemap}, alternates=True))  # N: Revealed type is "dict[str, type[django.contrib.sitemaps.Sitemap[Any]] | django.contrib.sitemaps.Sitemap[Any]]"
+        sitemap(request, alternates="yes")  # E: Argument "alternates" to "sitemap" has incompatible type "str"; expected "bool | None"  [arg-type]
+
+    bad: "Sitemap[Site]"  # E: Type argument "Site" of "Sitemap" must be a subtype of "AbstractPage"  [type-var]
+
+- case: apps_sitemap_proxy_page_translations
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.contrib.sitemaps import Sitemap
+    from wagtail.models import PageQuerySet
+    from wagtail.models import Page
+
+    class ReviewPage(Page):
+        class Meta:
+            proxy = True
+
+    def check(bare: Sitemap, typed: "Sitemap[ReviewPage]", reviews: list[ReviewPage]) -> None:
+        reveal_type(bare.translated_iterator(iter(reviews)))  # N: Revealed type is "typing.Iterator[main.ReviewPage]"
+        reveal_type(typed.translated_iterator(iter(reviews)))  # N: Revealed type is "typing.Iterator[main.ReviewPage]"
+        reveal_type(typed.get_translations(reviews))  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.AbstractPage] | None"
+        reveal_type(bare.prefetch_translated_objects(reviews))  # N: Revealed type is "None"
+        translations: PageQuerySet[ReviewPage] | None = typed.get_translations(reviews)  # E: Incompatible types in assignment (expression has type "PageQuerySet[AbstractPage] | None", variable has type "PageQuerySet[ReviewPage] | None")  [assignment]
+  installed_apps:
+    - main
+
+- case: apps_sitemap_thelabui_override_strict
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    disallow_subclassing_any = True
+    disallow_any_generics = True
+    disallow_untyped_defs = True
+    disallow_incomplete_defs = True
+    check_untyped_defs = True
+    no_implicit_optional = True
+    warn_redundant_casts = True
+    warn_unused_ignores = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from datetime import datetime
+    from typing import NotRequired, TypedDict
+
+    from django.db.models import Q
+    from wagtail.contrib.sitemaps.sitemap_generator import Sitemap as WagtailSitemap
+    from wagtail.models import Page
+
+    class SitemapAltLink(TypedDict):
+        location: str
+        lang_code: str
+
+    class SitemapURL(TypedDict):
+        location: str
+        lastmod: NotRequired[datetime]
+        changefreq: NotRequired[str]
+        priority: NotRequired[str]
+        alternates: NotRequired[list[SitemapAltLink]]
+
+    class Sitemap(WagtailSitemap):
+        def items(self) -> list[Page]:
+            default_root: Page = self.get_wagtail_site().root_page
+            roots = [default_root] + list(default_root.get_translations())
+            path_filter = Q()
+            for root in roots:
+                path_filter |= Q(path__startswith=root.path) & Q(depth__gte=root.depth)
+            qs = (
+                Page.objects.filter(path_filter)
+                .live()
+                .public()
+                .defer_streamfields()
+                .specific()
+                .prefetch_related("locale")
+                .order_by("depth", "path")
+            )
+            pages: list[Page] = [*qs.all()]
+            for page in pages:
+                page._sitemap_translations = []  # type: ignore[attr-defined]
+            return pages
+
+        def _urls(self, page: int, protocol: str, domain: str) -> list[SitemapURL]:
+            urls: list[SitemapURL] = []
+            last_mods: set[datetime] = set()
+
+            for item in self.paginator.page(page).object_list:
+                url_info_items = item.get_sitemap_urls(self.request)
+                for url_info in url_info_items:
+                    urls.append(url_info)
+                    last_mods.add(url_info.get("lastmod"))
+
+            if last_mods and None not in last_mods:
+                self.latest_lastmod = max(last_mods)
+            return urls
+
+- case: apps_sitemap_custom_page_type
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+    warn_unused_ignores = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from typing import TYPE_CHECKING
+
+    from wagtail.contrib.sitemaps import Sitemap
+    from wagtail.models import Page, PageQuerySet
+
+    if TYPE_CHECKING:
+        _PageSitemapBase = Sitemap[Page]
+    else:
+        _PageSitemapBase = Sitemap
+
+    class PageSitemap(_PageSitemapBase):
+        chunk_size = 500
+
+        def items(self) -> PageQuerySet[Page]:
+            return Page.objects.live()
+
+        def location(self, obj: Page) -> str:
+            return obj.get_full_url(self.request) or "/"
+
+        def first_page_titles(self) -> list[str]:
+            return [item.title for item in self.paginator.page(1).object_list]
+
+    reveal_type(PageSitemap(None).items())  # N: Revealed type is "wagtail.models.pages.PageQuerySet[wagtail.models.pages.Page]"
+    reveal_type(PageSitemap(None).location)  # N: Revealed type is "def (obj: wagtail.models.pages.Page) -> str"
