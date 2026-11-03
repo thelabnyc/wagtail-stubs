@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from collections.abc import Callable, Generator, Iterator, Mapping
 from typing import Any, TypedDict
 
@@ -83,7 +84,9 @@ class BaseTypedTableBlock(Block):
         default: Incomplete
         icon: str
 
-class TypedTableBlock(BaseTypedTableBlock, metaclass=DeclarativeSubBlocksMetaclass): ...
+class TypedTableBlock(BaseTypedTableBlock, metaclass=DeclarativeSubBlocksMetaclass):
+    base_blocks: OrderedDict[str, Block]
+    declared_blocks: OrderedDict[str, Block]
 
 class TypedTableBlockAdapter(Adapter):
     js_constructor: str

@@ -91,20 +91,29 @@ wagtail\.contrib\.settings\.registry\.SettingMenuItem\.media
 wagtail\.contrib\.settings\.views(\..*)?
 wagtail\.contrib\.simple_translation\.models(\..*)?
 wagtail\.contrib\.table_block\.blocks(\..*)?
-wagtail\.contrib\.typed_table_block\.blocks(\..*)?
+# The block metaclass consumes Meta at class creation
+wagtail\.contrib\.typed_table_block\.blocks\.BaseTypedTableBlock\.Meta
 # functools.cache wrapper: stub signature has *args/**kwargs, runtime inspect follows __wrapped__
 wagtail\.coreutils\.get_content_languages
-wagtail\.documents(?!\.api(\.|$))(\..*)?
+wagtail\.documents(?!\.api(\.|$)|\.wagtail_hooks(\.|$))(\..*)?
 # DRF ships no types, so the serializer metaclass cannot be declared
 wagtail\.documents\.api\.v2\.serializers\.DocumentSerializer
+# Loop variable left behind by the bulk action registration
+wagtail\.documents\.wagtail_hooks\.action_class
+# MediaDefiningClass adds media at runtime
+wagtail\.documents\.wagtail_hooks\.(DocsSearchArea|DocumentsMenuItem)\.media
 wagtail\.embeds\.blocks(\..*)?
 wagtail\.embeds\.models(\..*)?
 wagtail\.embeds\.rich_text(\..*)?
-wagtail\.images(?!\.api(\.|$))(\..*)?
+wagtail\.images(?!\.api(\.|$)|\.wagtail_hooks(\.|$))(\..*)?
 # typing_extensions.TypedDict adds PEP 728 attributes that typeshed does not declare
 wagtail\.images\.api\.fields\.ImageRendition(Error)?Dict\.__(closed|extra_items|mutable_keys|readonly_keys)__
 # DRF ships no types, so the serializer metaclass cannot be declared
 wagtail\.images\.api\.v2\.serializers\.ImageSerializer
+# Loop variable left behind by the bulk action registration
+wagtail\.images\.wagtail_hooks\.action_class
+# MediaDefiningClass adds media at runtime
+wagtail\.images\.wagtail_hooks\.(ImagesMenuItem|ImagesSearchArea)\.media
 # MediaDefiningClass adds media at runtime
 wagtail\.locales\.views\.(LanguageTitleColumn|LocaleUsageColumn)\.media
 wagtail\.locales\.wagtail_hooks\.LocalesMenuItem\.media
