@@ -672,6 +672,32 @@
     reveal_type(DeleteView().form_valid)  # N: Revealed type is "def (form: django.forms.forms.BaseForm) -> django.http.response.HttpResponse"
     reveal_type(BeforeAfterHookMixin().form_valid)  # N: Revealed type is "def (form: django.forms.forms.Form) -> django.http.response.HttpResponse"
 
+- case: admin_html_to_markdown_converter
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+    strict = True
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from django.utils.safestring import mark_safe
+    from wagtail.admin.rich_text.converters.html_markdown import (
+        INGEST_FEATURES,
+        HTMLToMarkdownConverter,
+        IngestHtmlToContentStateHandler,
+        html_to_markdown,
+    )
+
+    converter = HTMLToMarkdownConverter(base_url="https://example.com/blog/", content_selector="article")
+    reveal_type(converter.convert("<main><p>x</p></main>"))  # N: Revealed type is "str"
+    reveal_type(converter.convert(mark_safe("<p>x</p>")))  # N: Revealed type is "str"
+    reveal_type(converter.base_url)  # N: Revealed type is "str | None"
+    reveal_type(html_to_markdown("<p>x</p>", content_selector=None))  # N: Revealed type is "str"
+    IngestHtmlToContentStateHandler(INGEST_FEATURES)
+    HTMLToMarkdownConverter("https://example.com/")  # E: Too many positional arguments for "HTMLToMarkdownConverter"  [call-arg]  # N: "HTMLToMarkdownConverter" defined in "wagtail.admin.rich_text.converters.html_markdown"
+    converter.convert(b"<p>x</p>")  # E: Argument 1 to "convert" of "HTMLToMarkdownConverter" has incompatible type "bytes"; expected "str"  [arg-type]
+
 - case: admin_content_state_draftjs_types
   mypy_config: |
     [mypy]
