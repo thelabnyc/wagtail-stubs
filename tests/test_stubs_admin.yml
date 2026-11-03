@@ -708,9 +708,8 @@
     django_settings_module = tests.mypy_test_settings
   main: |
     from draftjs_exporter import ContentState as DraftContentState
-    from draftjs_exporter import Entity as DraftEntity
     from wagtail.admin.rich_text.converters.contentstate import ContentstateConverter
-    from wagtail.admin.rich_text.converters.contentstate_models import Entity
+    from wagtail.admin.rich_text.converters.contentstate_models import Entity, EntityRange, InlineStyleRange
     from wagtail.admin.rich_text.converters.html_to_contentstate import HtmlToContentStateHandler
     from wagtail.admin.rich_text.converters.markdown_db import markdown_exporter, strip_trailing_line_breaks
 
@@ -720,7 +719,9 @@
     handler.feed("<p><b>x</b><br/></p>")
     handler.close()
     content_state: DraftContentState = handler.contentstate.as_dict()
-    entity: DraftEntity = Entity("LINK", "MUTABLE", {}).as_dict()
+    reveal_type(InlineStyleRange("BOLD").as_dict()["offset"])  # N: Revealed type is "int | None"
+    reveal_type(EntityRange(0).as_dict()["length"])  # N: Revealed type is "int | None"
+    reveal_type(Entity("LINK", "CUSTOM", {}).as_dict()["mutability"])  # N: Revealed type is "str"
     strip_trailing_line_breaks(content_state)
     reveal_type(markdown_exporter(resolved=True).render(content_state))  # N: Revealed type is "str"
     handler.contentstate.as_dict()["entityMap"][0]  # E: Invalid index type "int" for "dict[str, Entity]"; expected type "str"  [index]

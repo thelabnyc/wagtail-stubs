@@ -1,12 +1,24 @@
-from typing import Any
+from typing import Any, TypedDict
 
 from draftjs_exporter import Block as _DraftBlock
 from draftjs_exporter import ContentState as _DraftContentState
-from draftjs_exporter import Entity as _DraftEntity
-from draftjs_exporter import EntityRange as _DraftEntityRange
-from draftjs_exporter import InlineStyleRange as _DraftInlineStyleRange
 
 ALPHANUM: str
+
+class _InlineStyleRangeDict(TypedDict):
+    offset: int | None
+    length: int | None
+    style: str
+
+class _EntityRangeDict(TypedDict):
+    key: int
+    offset: int | None
+    length: int | None
+
+class _EntityDict(TypedDict):
+    mutability: str
+    type: str
+    data: dict[str, Any]
 
 class Block:
     type: str
@@ -25,7 +37,7 @@ class InlineStyleRange:
     length: int | None
 
     def __init__(self, style: str) -> None: ...
-    def as_dict(self) -> _DraftInlineStyleRange: ...
+    def as_dict(self) -> _InlineStyleRangeDict: ...
 
 class Entity:
     entity_type: str
@@ -33,7 +45,7 @@ class Entity:
     data: dict[str, Any]
 
     def __init__(self, entity_type: str, mutability: str, data: dict[str, Any]) -> None: ...
-    def as_dict(self) -> _DraftEntity: ...
+    def as_dict(self) -> _EntityDict: ...
 
 class EntityRange:
     key: int
@@ -41,7 +53,7 @@ class EntityRange:
     length: int | None
 
     def __init__(self, key: int) -> None: ...
-    def as_dict(self) -> _DraftEntityRange: ...
+    def as_dict(self) -> _EntityRangeDict: ...
 
 class ContentState:
     blocks: list[Block]
