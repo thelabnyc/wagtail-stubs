@@ -550,3 +550,18 @@
         reveal_type(should_autocreate_redirects(page))  # N: Revealed type is "bool"
         reveal_type(autocreate_redirects_on_slug_change(instance_before=before, instance=page, sender=Page))  # N: Revealed type is "None"
         reveal_type(form.clean())  # N: Revealed type is "dict[str, Any]"
+
+- case: apps_document_field_extensions
+  mypy_config: |
+    [mypy]
+    plugins = mypy_django_plugin.main
+
+    [mypy.plugins.django-stubs]
+    django_settings_module = tests.mypy_test_settings
+  main: |
+    from wagtail.documents.fields import WagtailDocumentField
+
+    field = WagtailDocumentField()
+    reveal_type(field.allowed_document_extensions)  # N: Revealed type is "typing.Sequence[str] | None"
+    reveal_type(field.supported_formats_text)  # N: Revealed type is "str | None"
+    reveal_type(field.max_upload_size)  # N: Revealed type is "int | None"
