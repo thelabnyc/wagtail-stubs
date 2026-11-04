@@ -1,3 +1,34 @@
+## v8.1.0 (2026-11-04)
+
+### Feat
+
+- add v3 API stubs for images, documents, redirects and tables
+- add API v3 workflow, field serializer and block schema stubs
+- replace the removed admin API stubs with wagtail.admin.api.v3
+- add wagtail.actions.workflow stubs and workflow model updates
+- add typed table block app config stub
+- add WagtailDocumentField supported format attributes
+- add should_autocreate_redirects stub
+- type frontend cache backends and new signal handlers
+- make wagtail sitemaps generic and add alternates
+- add EditView.workflow_action_unavailable
+- add wagtail.admin.rich_text.converters.html_markdown stubs
+- type content state dicts with draftjs_exporter TypedDicts
+- add wagtail 8.1 core names and drop wagtailcore_tags.Page
+- type AbstractPage varying page responses
+
+### Fix
+
+- allow unset offsets in content state range dicts
+- make paginated v3 list endpoints keyword-only
+- run stubtest on image and document hooks and typed table blocks
+- drop FormMixin.__init__ removed in wagtail 8.1
+- drop image and settings re-exports removed in wagtail 8.1
+- type produced_error_message as str | None
+- drop wagtailuserbar re-exports removed in wagtail 8.1
+- type send_mail keywords and add get_default_connection
+- accept None in find_for_request and language variant lookup
+
 ## v8.0.0 (2026-11-02)
 
 ### Feat
